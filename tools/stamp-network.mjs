@@ -33,14 +33,29 @@ const CONCEPTS = [
   { key: 'umsuka',    name: 'UMSUKA Collection',    sector: 'Boutique hospitality', url: 'https://umsuka-concept.phuturedigital.co.za' },
   { key: 'thatha',    name: 'THATHA',               sector: 'Micro-retail units',   url: 'https://thatha-concept.phuturedigital.co.za' },
   { key: 'africrest', name: 'Africrest',            sector: 'Built-to-rent property', url: 'https://africrest-concept.phuturedigital.co.za' },
-  { key: 'insurespr', name: 'InsureSPR Health',     sector: 'Bone & muscle health', url: 'https://insurespr-concept.phuturedigital.co.za' },
+  /* `name` and `sector` are interpolated straight into markup — write entities,
+     not raw characters. A bare `&` renders fine and is still invalid HTML. */
+  { key: 'insurespr', name: 'InsureSPR Health',     sector: 'Bone &amp; muscle health', url: 'https://insurespr-concept.phuturedigital.co.za' },
 ];
 
-/* Each site's own closing disclaimer. These are NOT interchangeable: africrest
- * and insurespr are aimed at real companies and must say so; the rest are
- * invented brands and must say that instead. */
+/* Fallback disclaimer, used ONLY when a page has no pd-network block yet.
+ *
+ * ⚠️ If a page already carries one, its EXISTING disclaimer wins and is copied
+ * through verbatim — see `existingMark()`. That is deliberate. These strings
+ * were authored per site and are stronger and more specific than anything
+ * regenerated from here: Khanya's cites HPCSA registration, Africrest's carries
+ * the full "not affiliated with, endorsed by or connected to" reframing that
+ * must never be reverted. Overwriting them from this file would be a silent
+ * regression on live sites.
+ *
+ * These are NOT interchangeable: africrest and insurespr are aimed at real
+ * companies and must say so; the rest are invented brands and must say that. */
 const SITES = [
-  { key: 'khanya', dir: 'khanya', nested: true,
+  /* Khanya's pages nest inside `.shell`, where every band is a rounded card
+     floating on mist — full-bleed would read as foreign. It handles that in its
+     own base `.pd-network` rule (border-radius + margin-top), NOT via a
+     modifier class, so the markup here stays identical across all six sites. */
+  { key: 'khanya', dir: 'khanya',
     mark: '<strong>Concept demo.</strong> Khanya Dental Studio is an invented brand, created by Phuture Digital to demonstrate design and build work. It is not a real practice and no service shown is offered.' },
   { key: 'hamba', dir: 'hamba',
     mark: '<strong>Concept demo.</strong> Hamba Freight is an invented brand, created by Phuture Digital to demonstrate design and build work. No deliveries are carried and every figure shown is illustrative.' },
@@ -66,8 +81,13 @@ const card = (c) => `        <li class="pd-network-card">
           </a>
         </li>`;
 
-const block = (site) => `<!-- pd-network:start -->
-<section class="pd-network${site.nested ? ' pd-network--nested' : ''}" aria-labelledby="pd-network-title">
+/* Pull the disclaimer already on the page, so a re-stamp preserves authored
+ * wording instead of overwriting it with this file's fallback. */
+const MARK_RE = /<p class="pd-network-mark">([\s\S]*?)<\/p>/;
+const existingMark = (html) => (html.match(MARK_RE) || [])[1] || null;
+
+const block = (site, mark) => `<!-- pd-network:start -->
+<section class="pd-network" aria-labelledby="pd-network-title">
   <div class="pd-network-inner">
     <p class="pd-network-eyebrow">Phuture Digital &middot; Concept work</p>
     <h2 class="pd-network-title" id="pd-network-title">More concepts by Phuture Digital</h2>
@@ -80,7 +100,7 @@ ${CONCEPTS.filter((c) => c.key !== site.key).map(card).join('\n')}
       <a class="pd-network-btn" href="mailto:hello@phuturedigital.co.za">hello@phuturedigital.co.za</a>
       <a class="pd-network-link" href="https://www.phuturedigital.co.za" rel="noopener">phuturedigital.co.za</a>
     </div>
-    <p class="pd-network-mark">${site.mark}</p>
+    <p class="pd-network-mark">${mark}</p>
   </div>
 </section>
 <!-- pd-network:end -->`;
@@ -188,13 +208,25 @@ for (const site of SITES) {
 
   const pages = readdirSync(dir).filter((f) => f.endsWith('.html'));
   let n = 0;
+  let kept = 0;
   for (const page of pages) {
     const path = join(dir, page);
     let html = readFileSync(path, 'utf8');
     if (!/<footer/i.test(html)) continue;          // not a full page
+    const mark = existingMark(html);                // authored wording wins
+    if (mark) kept++;
     html = html.replace(FENCE_HTML, '\n');          // strip old fence first
-    const at = html.search(/<footer/i);
-    html = `${html.slice(0, at)}${block(site)}\n${html.slice(at)}`;
+    /* Insert ABOVE the chrome fence where one exists.
+     *
+     * insurespr templates its banner/header/footer with tools/stamp-chrome.mjs,
+     * which REPLACES everything between `footer:start` and `footer:end`. A block
+     * placed just before `<footer` lands INSIDE that region and is silently
+     * destroyed the next time the chrome is stamped. The other five sites
+     * hand-maintain their footers and have no such fence, which is why the
+     * plain `<footer` anchor was safe there. */
+    const fence = html.search(/<!--\s*footer:start\s*-->/i);
+    const at = fence !== -1 ? fence : html.search(/<footer/i);
+    html = `${html.slice(0, at)}${block(site, mark || site.mark)}\n${html.slice(at)}`;
     if (WRITE) writeFileSync(path, html);
     n++;
   }
@@ -213,7 +245,8 @@ for (const site of SITES) {
       }
     }
   }
-  console.log(`${WRITE ? 'WROTE' : 'DRY  '} ${site.key.padEnd(10)} ${String(n).padStart(2)} pages · ${cssNote}`);
+  const markNote = kept === n ? 'disclaimers preserved' : `⚠️ ${n - kept} page(s) used the FALLBACK disclaimer`;
+  console.log(`${WRITE ? 'WROTE' : 'DRY  '} ${site.key.padEnd(10)} ${String(n).padStart(2)} pages · ${markNote} · ${cssNote}`);
   touched += n;
 }
 console.log(`\n${WRITE ? 'Stamped' : 'Would stamp'} ${touched} pages across ${ONLY ? 1 : SITES.length} site(s).`);
