@@ -94,11 +94,16 @@
      opacity 1). Bailing out here as well would be wrong: without the observer
      the elements would keep whatever the stylesheet gave them, and any future
      change to that rule would silently blank the page. */
+  /* The vertebrae nodes fill as their section is reached. Observing the
+     sections alongside .reveal keeps one observer rather than two, and means
+     the dots cannot drift out of step with the content beside them. */
+  var sections = document.querySelectorAll('.spine-sec');
   var targets = document.querySelectorAll('.reveal');
 
   if (!('IntersectionObserver' in window)) {
     /* No observer — show everything rather than hide it. */
     for (var i = 0; i < targets.length; i++) targets[i].classList.add('in');
+    for (var s2 = 0; s2 < sections.length; s2++) sections[s2].classList.add('in');
     return;
   }
 
@@ -121,4 +126,5 @@
   }, { rootMargin: '0px 0px -60px 0px', threshold: 0 });
 
   targets.forEach(function (el) { io.observe(el); });
+  sections.forEach(function (el) { io.observe(el); });
 })();

@@ -79,8 +79,14 @@
      actual personality, which is the point: the previous Fraunces/Inter pairing
      read as dry. Plus Jakarta runs the body: warm, open apertures, and highly
      legible at the sizes this audience needs. */
-  --font-display: 'Bricolage Grotesque', 'Archivo', system-ui, sans-serif;
-  --font-body: 'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  /* IBM Plex, one superfamily. Genuinely a healthcare/scientific face rather
+     than a generic modern sans, humanist enough to stay warm for a 50+ reader,
+     and — the reason it wins here — it ships a Mono cut. Measurements, the
+     vertebrae numbers and data labels set in mono read like a clinical
+     readout, which is exactly what "Precision Healthcare" claims. */
+  --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-display: 'IBM Plex Sans', system-ui, sans-serif;
+  --font-body: 'IBM Plex Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
 
   --wrap: 1220px;
   --measure: 62ch;
@@ -148,18 +154,15 @@ h1, h2, h3, h4, .display {
   letter-spacing: -.03em;
   margin: 0 0 .5em;
   text-wrap: balance;
-  /* Bricolage is variable on optical size and width. Letting opsz track the
-     rendered size is what stops the big display cuts looking like a blown-up
-     text face — the detail tightens as the size grows. */
-  font-variation-settings: 'opsz' 24, 'wdth' 100;
+  /* IBM Plex Sans has no optical-size axis; presence at display sizes comes
+     from weight and negative tracking instead. */
 }
 
 h1 {
   font-size: clamp(2.6rem, 7vw, 5.1rem);
   letter-spacing: -.042em;
-  font-variation-settings: 'opsz' 48, 'wdth' 100;
 }
-h2 { font-size: clamp(2rem, 4.6vw, 3.15rem); letter-spacing: -.035em; font-variation-settings: 'opsz' 36, 'wdth' 100; }
+h2 { font-size: clamp(2rem, 4.6vw, 3.15rem); letter-spacing: -.035em; }
 h3 { font-size: clamp(1.3rem, 2.3vw, 1.7rem); letter-spacing: -.022em; }
 h4 { font-size: 1.15rem; line-height: 1.25; letter-spacing: -.016em; }
 
@@ -283,7 +286,12 @@ section { padding-block: calc(var(--step) * 1.7); }
 /* ------------------------------------------------------------------- hero -- */
 .hero { position: relative; background: var(--ink); overflow: hidden; }
 .hero-media { position: absolute; inset: 0; }
-.hero-media img { width: 100%; height: 100%; object-fit: cover; object-position: 68% 38%; }
+/* Each hero frame has its subject in a different place, and the copy always
+   sits in the left third — so the crop has to be set per photograph, not once
+   globally. Pages override with `style="--focal: X% Y%"` on .hero-media.
+   The rule this enforces: NO FACE UNDER TEXT. A headline across someone's eyes
+   reads as carelessness, and the face is the first thing anyone looks at. */
+.hero-media img { width: 100%; height: 100%; object-fit: cover; object-position: var(--focal, 68% 38%); }
 
 /* The chosen hero frame has open grass on the left and the subject
    right-of-centre, so the scrim is DIRECTIONAL — heavy where the words sit,
@@ -473,7 +481,12 @@ section { padding-block: calc(var(--step) * 1.7); }
    being reduced to a thumbnail beside a paragraph. */
 .band { position: relative; background: var(--ink); overflow: hidden; isolation: isolate; }
 .band-media { position: absolute; inset: 0; z-index: -1; }
-.band-media img { width: 100%; height: 100%; object-fit: cover; }
+/* Per-photograph focal point, set by each page as `style="--focal: X% Y%"`.
+   NO FACE UNDER TEXT: an audit found the scan headline running straight across
+   the radiographer's eyes and the contact lede across the nurse's face. The
+   copy always occupies the left ~55%, so a subject's face must land right of
+   that or be moved out of the band. See tools/audit-faces.mjs. */
+.band-media img { width: 100%; height: 100%; object-fit: cover; object-position: var(--focal, 50% 50%); }
 /* Scrim falls off fast once it clears the text column (which ends near 50%),
    so the subject of the photograph stays properly visible. The brief asked for
    photography you can actually see; a flat 70% overlay across the whole frame
@@ -510,9 +523,60 @@ section { padding-block: calc(var(--step) * 1.7); }
 
 /* Compact band used as an inner-page header. Same machinery as the full band,
    just shorter — inner pages need to get to their content quickly. */
-.band--head .band-in { min-height: clamp(300px, 38vh, 420px); }
+/* PAGE HEADS DO NOT OVERLAY TEXT ON PHOTOGRAPHS.
+   Two problems, one fix. An audit (tools/audit-faces.mjs) found the scan
+   headline running across the radiographer's eyes and the contact lede across
+   the nurse's face — and object-position could not rescue either, because these
+   frames are narrower in aspect than the band, so `cover` overflows vertically
+   and the X value does nothing at all.
+   The deeper problem was that six pages all opened with the same full-bleed
+   photo + dark scrim + white headline, which is the most templated hero on the
+   web and read as generic. So the head becomes a split: copy in its own column,
+   photograph in a contained tile beside it. Nothing overlaps, no face can be
+   covered, and the homepage keeps the single full-bleed moment — which makes it
+   read as a deliberate opening rather than a house style. */
+.band--head {
+  background: var(--ink);
+  padding-block: calc(var(--step) * 1.6);
+}
+.band--head .band-in { min-height: clamp(300px, 34vh, 400px); display: flex; align-items: center; }
 .band--head h1 { color: #fff; }
-.band--head .band-copy { max-width: 44rem; }
+/* The copy is capped at just under half the band. That cap is what guarantees
+   the fix: text physically cannot reach the picture, so no crop, no focal
+   point and no future photograph can put a face under a headline. */
+.band--head .band-copy { max-width: min(34rem, 46%); }
+
+/* The photograph occupies the right half as an inset tile rather than sitting
+   behind everything. `.band-media` is a SIBLING of `.band-in`, not a child, so
+   a grid on the inner wrapper never contained it — pinning it is what actually
+   works with this markup. */
+.band--head .band-media {
+  left: auto; right: clamp(20px, 4vw, 56px);
+  top: clamp(20px, 3vw, 40px); bottom: clamp(20px, 3vw, 40px);
+  width: min(46%, 620px);
+  z-index: 0;
+  border-radius: var(--radius); overflow: hidden; background: var(--ink-2);
+}
+/* height:100% must be restated at this specificity. These <img>s carry width
+   and height ATTRIBUTES, so the base `img[width][height] { height: auto }` rule
+   wins over the generic `.band-media img { height: 100% }` and leaves a strip
+   of tile background showing under the photograph. Same trap the base rule was
+   written for, biting from the other direction. */
+.band--head .band-media img { border-radius: inherit; height: 100%; }
+/* No scrim. It only ever existed to make overlaid text legible, and there is
+   no longer any text over the picture to rescue. */
+.band--head .band-media::after { content: none; }
+
+@media (max-width: 860px) {
+  /* Stacked: the media is first in the DOM, so static positioning puts the
+     picture above the copy, which is the right order on a phone. */
+  .band--head .band-media {
+    position: static; width: auto; aspect-ratio: 16 / 10;
+    margin-bottom: 1.5rem;
+  }
+  .band--head .band-in { display: block; min-height: 0; }
+  .band--head .band-copy { max-width: none; }
+}
 
 /* Numbered explainer rows — a big brand numeral beside a block of copy. Used
    where a process has to be walked through rather than listed. */
@@ -794,7 +858,7 @@ figcaption { padding: .85rem 0 0; font-size: .9375rem; color: var(--muted); }
   .contact-grid, .field-row, .choice-grid { grid-template-columns: 1fr; }
   .foot-top { grid-template-columns: 1fr; gap: 1.75rem; }
   .hero-in { min-height: auto; padding-block: calc(var(--step) * 2.2); }
-  .hero-media img { object-position: 62% 30%; }
+  .hero-media img { object-position: var(--focal-sm, 62% 30%); }
   /* On a narrow screen the directional scrim stops working — the copy and the
      subject occupy the same column — so it becomes a vertical one instead. */
   .hero-media::after {
@@ -1169,7 +1233,6 @@ figcaption { padding: .85rem 0 0; font-size: .9375rem; color: var(--muted); }
   margin: 0; font-family: var(--font-display); font-weight: 700;
   font-size: clamp(4rem, 11vw, 7rem); line-height: .84; letter-spacing: -.05em;
   color: var(--cyan-ink);
-  font-variation-settings: 'opsz' 96, 'wdth' 100;
 }
 .specimen-huge--body { font-family: var(--font-body); font-variation-settings: normal; color: var(--ink-2); }
 .specimen-line { margin: 0; font-family: var(--font-display); font-size: 1.3rem; line-height: 1.25; color: var(--ink); letter-spacing: -.02em; max-width: none; }
@@ -1256,6 +1319,98 @@ figcaption { padding: .85rem 0 0; font-size: .9375rem; color: var(--muted); }
 @media (max-width: 520px) {
   .swatches { grid-template-columns: 1fr; }
   .processlist li { grid-template-columns: 1fr; gap: .9rem; padding: 1.35rem 1.25rem; }
+}
+
+/* ============================================================================
+   THE VERTEBRAE COLUMN — this site's signature device.
+   ----------------------------------------------------------------------------
+   Lifted directly out of the practice's own logo, where the mark is a torso in
+   profile built around a column of vertebrae dots. Here that column is scaled
+   up to become the page's own spine: a rail down the left edge with a node at
+   every section, numbered in mono like a clinical readout.
+
+   The point is that nothing else could wear it. A full-bleed photo with a dark
+   scrim and a white headline is the same hero every template ships; a dotted
+   vertebral rail derived from the client's mark is not.
+
+   Density is the second idea: the nodes are hollow until their section has been
+   reached, then fill — bone density made literal as you move down the page.
+   ========================================================================= */
+.spine { position: relative; }
+
+/* The rail itself. A repeating-gradient of dots rather than a solid line, so it
+   reads as vertebrae rather than a border. */
+/* The rail must line up with the centred .wrap, not the full-bleed section, or
+   the numbers hang off the left edge of the viewport on wide screens. */
+.spine { --wrap-inset: max(1.25rem, calc((100% - var(--wrap)) / 2)); }
+.spine::before {
+  content: "";
+  position: absolute; top: 0; bottom: 0;
+  left: calc(var(--wrap-inset) + var(--spine-x) - 1px);
+  width: 2px;
+  background: repeating-linear-gradient(
+    to bottom,
+    var(--line-2) 0 6px,
+    transparent 6px 13px
+  );
+  pointer-events: none;
+}
+.spine-sec { position: relative; }
+
+/* The node + its number sit in the gutter the rail runs through. */
+.spine-node {
+  position: absolute; left: var(--wrap-inset); top: calc(var(--step) * 1.7);
+  width: var(--spine-x); display: flex; align-items: center; gap: .75rem;
+  pointer-events: none;
+}
+.spine-dot {
+  position: relative; z-index: 1; flex: none;
+  width: 15px; height: 15px; border-radius: 50%;
+  margin-left: calc(var(--spine-x) - 25px);
+  background: var(--bone);
+  border: 2px solid var(--line-2);
+  transition: background .4s ease, border-color .4s ease, transform .4s ease;
+}
+.spine-num {
+  font-family: var(--font-mono); font-size: .75rem; font-weight: 500;
+  letter-spacing: .06em; color: var(--muted);
+  order: -1; margin-left: auto;
+  transition: color .4s ease;
+}
+/* Filled once the section has been reached. `.in` is the same class the scroll
+   reveal already sets, so this needs no second observer. */
+.spine-sec.in .spine-dot,
+.spine-sec .reveal.in ~ .spine-node .spine-dot { background: var(--cyan); border-color: var(--cyan); }
+.spine-sec.in .spine-num { color: var(--cyan-ink); }
+
+/* Dark bands invert the rail. */
+.ink-section.spine-sec .spine-dot { background: var(--ink); border-color: rgb(255 255 255 / .3); }
+.ink-section.spine-sec.in .spine-dot { background: var(--cyan-lift); border-color: var(--cyan-lift); }
+.ink-section.spine-sec .spine-num { color: #7f92ad; }
+.ink-section.spine-sec.in .spine-num { color: var(--cyan-lift); }
+
+/* The gutter width is the whole layout contract: content shifts right by this
+   much, so it is defined once and everything keys off it. */
+.spine { --spine-x: clamp(56px, 7vw, 104px); }
+.spine .wrap, .spine .wrap--narrow { padding-left: var(--spine-x); }
+
+/* Full-bleed media inside a spined section must NOT be pushed in — only the
+   text column shifts. */
+.spine .band-media, .spine .hero-media { left: 0; right: 0; }
+
+@media (max-width: 860px) {
+  /* Below this the gutter costs more than it gives: the rail goes, and the
+     number moves inline above the heading where it still does its job. */
+  .spine { --spine-x: 0px; }
+  .spine::before { display: none; }
+  .spine-node { position: static; width: auto; margin-bottom: .6rem; }
+  .spine-dot { margin-left: 0; width: 11px; height: 11px; }
+  .spine-num { order: 0; margin-left: 0; }
+  .spine .wrap, .spine .wrap--narrow { padding-left: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spine-dot, .spine-num { transition: none; }
 }
 
 /* pd-network:start */
