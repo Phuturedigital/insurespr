@@ -1,0 +1,426 @@
+<!doctype html>
+<html lang="en-ZA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Book a scan — InsureSPR Health concept by Phuture Digital</title>
+<meta name="description" content="Request a bone density and body composition scan at InsureSPR Health in Randburg. Design concept by Phuture Digital — this form does not submit anywhere.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="styles.css">
+<script>document.documentElement.className += ' js';</script>
+</head>
+<body>
+<!-- icons:start -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true" focusable="false"><defs>
+<!-- Icon sprite. Single source of truth: edit here, then run
+     `node tools/stamp-icons.mjs` to push it into every page between the
+     icons:start / icons:end markers.
+
+     Drawn at 24x24 on a 1.7px stroke with round caps and joins. That weight
+     matches the thin-stroke line art of the practice's own brand mark, so the
+     icons read as part of the same hand rather than a stock set bolted on.
+     Brand-glyph icons at the end are filled, since the social marks are
+     supplied as solids and stroking them would misrepresent them. -->
+<g>
+  <symbol id="i-scan" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8V5.5A2.5 2.5 0 0 1 5.5 3H8M16 3h2.5A2.5 2.5 0 0 1 21 5.5V8M21 16v2.5a2.5 2.5 0 0 1-2.5 2.5H16M8 21H5.5A2.5 2.5 0 0 1 3 18.5V16M3.5 12h17"/></symbol>
+  <symbol id="i-bone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M9.6 14.4 14.4 9.6"/><circle cx="6.9" cy="15.3" r="2.3"/><circle cx="8.7" cy="17.1" r="2.3"/><circle cx="15.3" cy="6.9" r="2.3"/><circle cx="17.1" cy="8.7" r="2.3"/></symbol>
+  <symbol id="i-weight" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5v5M7 7v10M17 7v10M20 9.5v5M7 12h10"/></symbol>
+  <symbol id="i-balance" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4.2" r="2.2"/><path d="M12 6.6v6.6M4.6 9.6 12 8.4l7.4 1.2M12 13.2 8.8 20M12 13.2 15.2 20"/></symbol>
+  <symbol id="i-lungs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5v10"/><path d="M9.6 8.6C7.2 9 5.3 11.2 4.9 14c-.3 2.2-.1 4.1.3 5.3.3.9 1.4 1.1 2.1.5l2.7-2.3c.6-.5.9-1.2.9-2v-5.4c0-.8-.6-1.5-1.3-1.5Z"/><path d="M14.4 8.6c2.4.4 4.3 2.6 4.7 5.4.3 2.2.1 4.1-.3 5.3-.3.9-1.4 1.1-2.1.5l-2.7-2.3c-.6-.5-.9-1.2-.9-2v-5.4c0-.8.6-1.5 1.3-1.5Z"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.2 5 6.1v5.4c0 4.2 2.9 8.1 7 9.3 4.1-1.2 7-5.1 7-9.3V6.1l-7-2.9Z"/><path d="m9.2 12.1 2 2 3.6-4"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.6"/><path d="M12 7.2V12l3.2 2"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 4.6H4A1.6 1.6 0 0 0 2.4 6.2v8.6A1.6 1.6 0 0 0 4 16.4h2.8v4.2l4.6-4.2H20a1.6 1.6 0 0 0 1.6-1.6V6.2A1.6 1.6 0 0 0 20 4.6Z"/><path d="M7.4 10.5h9.2"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20.5h18M6.5 20.5v-5.8M11.5 20.5V7.4M16.5 20.5v-9.2M21 20.5V4"/></symbol>
+  <symbol id="i-move" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.2v17.6M3.2 12h17.6"/><path d="m9 6.2 3-3 3 3M9 17.8l3 3 3-3M6.2 9l-3 3 3 3M17.8 9l3 3-3 3"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="m4.6 12.4 5 5 9.8-10.8"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15m-6-6 6 6-6 6"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M6.4 3.4h3.1l1.5 3.9-2 1.5a12.2 12.2 0 0 0 6.2 6.2l1.5-2 3.9 1.5v3.1a2 2 0 0 1-2.2 2A17.2 17.2 0 0 1 4.4 5.6a2 2 0 0 1 2-2.2Z"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="2.6" y="5" width="18.8" height="14" rx="2.2"/><path d="m3.2 6.6 8.8 5.8 8.8-5.8"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21.2s7-5.7 7-11.1a7 7 0 1 0-14 0c0 5.4 7 11.1 7 11.1Z"/><circle cx="12" cy="9.9" r="2.6"/></symbol>
+  <symbol id="i-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3.2" y="5" width="17.6" height="15.8" rx="2.4"/><path d="M3.2 10h17.6M8.2 3.2v3.6M15.8 3.2v3.6"/></symbol>
+  <symbol id="i-spine" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M14.6 3.2c2.2 2.7 2.4 5.1.6 7.5-1.4 1.9-1.4 3.3 0 5.2 1.8 2.4 1.7 4.9-.4 7.5"/><circle cx="9.4" cy="7.2" r="1.5"/><circle cx="8.8" cy="12.1" r="1.6"/><circle cx="9.4" cy="17" r="1.7"/></symbol>
+  <symbol id="i-target" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.6"/><circle cx="12" cy="12" r="4.4"/><circle cx="12" cy="12" r=".9" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-refresh" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 11.6a8.6 8.6 0 1 1-2.5-5.8"/><path d="M20.9 3.6v4.5h-4.5"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.6"/><path d="M12 11.2v5.4"/><circle cx="12" cy="7.9" r=".95" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.6 2.5 20.4h19L12 3.6Z"/><path d="M12 9.8v4.4"/><circle cx="12" cy="17.4" r=".95" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.4S3.4 15.4 3.4 9.3A4.9 4.9 0 0 1 12 6a4.9 4.9 0 0 1 8.6 3.3c0 6.1-8.6 11.1-8.6 11.1Z"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7.8" r="3.4"/><path d="M2.4 20.2c0-3.6 3-6.4 6.6-6.4s6.6 2.8 6.6 6.4"/><path d="M16.2 5a3.4 3.4 0 0 1 0 6.2M18.2 14.2c2 .9 3.4 2.8 3.4 5.3"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.6A1.6 1.6 0 0 1 5.6 4H20v16H5.6A1.6 1.6 0 0 1 4 18.4V5.6Z"/><path d="M8.2 4v16M11.4 9h5.4M11.4 13h5.4"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M3.6 7h16.8M3.6 12h16.8M3.6 17h16.8"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+  <symbol id="i-apple" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7.6c-1-1.4-2.5-2.1-4-1.9C5.4 6 3.6 8.3 3.6 11.6c0 4.4 3.3 9 5.8 9 1 0 1.8-.5 2.6-.5s1.6.5 2.6.5c2.5 0 5.8-4.6 5.8-9 0-3.3-1.8-5.6-4.4-5.9-1.5-.2-3 .5-4 1.9Z"/><path d="M12 7.6V5.2c0-1.4 1.2-2.6 2.8-2.8"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.2M12 19.2v2.2M4.4 4.4l1.6 1.6M18 18l1.6 1.6M2.6 12h2.2M19.2 12h2.2M4.4 19.6 6 18M18 6l1.6-1.6"/></symbol>
+</g>
+<g>
+  <symbol id="i-facebook" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M14.1 8.6V6.9c0-.8.5-1 .9-1h2.1V2.7h-2.8c-3 0-3.7 2.2-3.7 3.7v2.2H8.8v3.3h1.8V21h3.3v-9.1h2.5l.3-3.3h-2.6Z"/></symbol>
+  <symbol id="i-linkedin" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M6.3 8.9H3.1V21h3.2V8.9ZM4.7 3a1.9 1.9 0 1 0 0 3.9 1.9 1.9 0 0 0 0-3.9ZM21 14.3c0-3.5-1.9-5.6-4.6-5.6-1.6 0-2.7.9-3.2 1.7V8.9h-3.1V21h3.2v-6.4c0-1.7.9-2.6 2.1-2.6s2.1.9 2.1 2.6V21H21v-6.7Z"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M17.4 3h3.2l-7 8 8.2 10.9h-6.4L10.4 15l-5.7 6.9H1.5l7.5-8.6L1.6 3h6.6l4.5 6L17.4 3Zm-1.1 17h1.8L7.8 4.8H5.9l10.4 15.2Z"/></symbol>
+  <symbol id="i-whatsapp" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12.04 2.5A9.44 9.44 0 0 0 4 16.85L2.6 21.5l4.8-1.36A9.44 9.44 0 1 0 12.04 2.5Zm0 1.86a7.58 7.58 0 1 1-3.9 14.06l-.28-.17-2.85.81.83-2.78-.18-.29a7.58 7.58 0 0 1 6.38-11.63Zm-3.4 3.5c-.17 0-.45.06-.68.31-.24.25-.9.87-.9 2.13s.92 2.47 1.05 2.64c.13.17 1.8 2.86 4.44 3.9 2.2.86 2.64.69 3.12.65.48-.05 1.55-.63 1.77-1.24.22-.62.22-1.14.15-1.25-.06-.11-.24-.17-.5-.3-.26-.13-1.55-.77-1.79-.85-.24-.09-.41-.13-.59.13-.17.26-.67.85-.82 1.02-.15.18-.3.2-.56.07-.26-.13-1.1-.41-2.1-1.3-.78-.69-1.3-1.55-1.45-1.81-.15-.26-.02-.4.11-.53.12-.12.26-.3.39-.46.13-.15.17-.26.26-.44.09-.17.04-.33-.02-.46-.07-.13-.58-1.42-.8-1.94-.2-.5-.4-.43-.55-.44h-.5Z"/></symbol>
+</g>
+</defs></svg>
+<!-- icons:end -->
+
+<a class="skip" href="#main">Skip to content</a>
+
+<!-- banner:start -->
+<div class="concept-banner">
+  <div class="wrap">
+    <svg class="icon" aria-hidden="true"><use href="#i-info"></use></svg>
+    <p><strong>This is a design concept, not a real clinic website.</strong> Phuture Digital built it to show how InsureSPR Health's own content could be presented. It is not affiliated with, endorsed by, or operated by the practice, and nothing here is medical advice.</p>
+  </div>
+</div>
+<!-- banner:end -->
+
+<!-- header:start -->
+<header class="head">
+  <div class="wrap head-in">
+    <a class="brand" href="index.html">
+      <img src="assets/mark.svg" alt="" width="30" height="40">
+      <span>
+        <span class="brand-name">Insure<span>SPR</span> Health</span>
+        <span class="brand-sub">Bone &amp; muscle health</span>
+      </span>
+    </a>
+
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+      <svg class="icon" aria-hidden="true"><use href="#i-menu"></use></svg>
+      <span class="nav-toggle-label">Menu</span>
+    </button>
+
+    <nav class="nav" id="site-nav" aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="scan.html">The scan</a>
+      <a href="services.html">Services</a>
+      <a href="about.html">About</a>
+      <a href="learn.html">Learn</a>
+      <a href="contact.html">Contact</a>
+      <a class="btn btn-primary" href="book.html">
+        <svg class="icon" aria-hidden="true"><use href="#i-calendar"></use></svg>
+        Book a scan
+      </a>
+    </nav>
+  </div>
+</header>
+<!-- header:end -->
+
+<main id="main">
+
+  <section class="band band--head">
+    <div class="band-media">
+      <img src="assets/clinic.webp" alt="A bright, modern clinic reception area with a patient checking in." width="1400" height="933" fetchpriority="high">
+    </div>
+    <div class="wrap band-in">
+      <div class="band-copy">
+        <p class="eyebrow eyebrow--light">Book</p>
+        <h1>Book a scan</h1>
+        <p class="lede">Tell us roughly what you need and when suits you. Someone from the practice comes back to confirm a time.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="split split--wide">
+
+        <!-- ------------------------------------------------------ form -- -->
+        <div class="form-card reveal">
+          <h2>Request an appointment</h2>
+
+          <!-- Stated BEFORE any field, not after. Someone is about to type
+               their name, phone number and health concerns into this; they
+               are entitled to know where it goes first. -->
+          <div class="form-notice">
+            <svg class="icon" aria-hidden="true"><use href="#i-alert"></use></svg>
+            <p><strong>This form does not go anywhere.</strong> This is a design concept, so nothing you type here is sent, stored or seen by anyone — including us. To book a real appointment, call the practice on <a href="tel:+27834507861">083 450 7861</a>.</p>
+          </div>
+
+          <form id="book-form" novalidate>
+            <div class="field-row">
+              <div class="field">
+                <label for="name">Your name</label>
+                <input type="text" id="name" name="name" autocomplete="name">
+              </div>
+              <div class="field">
+                <label for="phone">Phone number</label>
+                <input type="tel" id="phone" name="phone" autocomplete="tel">
+                <span class="hint">The practice usually phones back rather than emails.</span>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="email">Email address</label>
+              <input type="email" id="email" name="email" autocomplete="email">
+            </div>
+
+            <fieldset style="border:0;padding:0;margin:0 0 .4rem">
+              <legend style="font-weight:600;color:var(--ink);padding:0;margin-bottom:.55rem">What are you coming in for?</legend>
+              <div class="choice-grid">
+                <label class="choice">
+                  <input type="radio" name="reason" value="bone">
+                  <span><strong>A bone density scan</strong>Checking how strong my bones are.</span>
+                </label>
+                <label class="choice">
+                  <input type="radio" name="reason" value="composition">
+                  <span><strong>Body composition</strong>Muscle and fat, measured properly.</span>
+                </label>
+                <label class="choice">
+                  <input type="radio" name="reason" value="both">
+                  <span><strong>Both, in one visit</strong>The full picture.</span>
+                </label>
+                <label class="choice">
+                  <input type="radio" name="reason" value="unsure">
+                  <span><strong>I am not sure yet</strong>Happy to be pointed the right way.</span>
+                </label>
+              </div>
+            </fieldset>
+
+            <div class="field-row">
+              <div class="field">
+                <label for="when">Roughly when suits you?</label>
+                <select id="when" name="when">
+                  <option>As soon as possible</option>
+                  <option>Within the next two weeks</option>
+                  <option>Sometime this month</option>
+                  <option>I am flexible</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="time">Morning or afternoon?</label>
+                <select id="time" name="time">
+                  <option>Morning</option>
+                  <option>Afternoon</option>
+                  <option>Either is fine</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="notes">Anything they should know?</label>
+              <textarea id="notes" name="notes" placeholder="Previous fractures, medication you take, a family history of osteoporosis, a referral from your doctor — whatever seems relevant."></textarea>
+              <span class="hint">Optional. It only helps them prepare for your visit.</span>
+            </div>
+
+            <button class="btn btn-primary" type="submit">
+              <svg class="icon" aria-hidden="true"><use href="#i-calendar"></use></svg>
+              Request an appointment
+            </button>
+
+            <!-- Filled in by site.js on submit. Kept in the markup with
+                 aria-live so the message is announced rather than silently
+                 appearing below the fold. -->
+            <p class="form-status" id="book-status" role="status" aria-live="polite" hidden></p>
+          </form>
+        </div>
+
+        <!-- --------------------------------------------------- sidebar -- -->
+        <div class="reveal reveal-d1">
+          <div class="plainly" style="margin-bottom:1.1rem">
+            <p class="plainly-term"><svg class="icon" aria-hidden="true"><use href="#i-clock"></use></svg> How long to set aside</p>
+            <p class="plainly-plain">About <strong>an hour</strong> in total. The scan itself is ten minutes of that — the rest is talking, before and after.</p>
+          </div>
+
+          <div class="compare-card" style="margin-bottom:1.1rem">
+            <h3 style="font-size:1.25rem">What to bring</h3>
+            <ul class="checks">
+              <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg><span>A list of your <strong>medication</strong></span></li>
+              <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg><span>Any <strong>previous bone scan results</strong></span></li>
+              <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg><span>A <strong>referral letter</strong>, if a doctor sent you</span></li>
+              <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg><span>Your <strong>medical aid details</strong></span></li>
+              <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg><span>Someone with you, if you would like a second pair of ears</span></li>
+            </ul>
+          </div>
+
+          <div class="compare-card compare-card--warn">
+            <h3 style="font-size:1.25rem">Tell them beforehand if…</h3>
+            <ul class="checks">
+              <li><svg class="icon" aria-hidden="true"><use href="#i-alert"></use></svg><span>You <strong>might be pregnant</strong> — the scan is not done during pregnancy.</span></li>
+              <li><svg class="icon" aria-hidden="true"><use href="#i-alert"></use></svg><span>You have had a scan <strong>using contrast dye</strong> in the last week or so.</span></li>
+              <li><svg class="icon" aria-hidden="true"><use href="#i-alert"></use></svg><span>You have <strong>metal implants</strong> in your hip or spine.</span></li>
+            </ul>
+          </div>
+
+          <div class="contact-item" style="margin-top:1.1rem">
+            <span class="icon-badge icon-badge--sm"><svg class="icon" aria-hidden="true"><use href="#i-phone"></use></svg></span>
+            <div>
+              <h4>Rather just phone?</h4>
+              <a href="tel:+27834507861">083 450 7861</a>
+              <p style="font-size:.9375rem;color:var(--muted);margin-top:.3rem">Monday to Friday, 08:00 – 17:00</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ------------------------------------------------------------ FAQ -- -->
+  <section class="bone-2-section">
+    <div class="wrap wrap--narrow">
+      <div class="section-head section-head--center reveal">
+        <p class="eyebrow">Before you come in</p>
+        <h2>Practical questions</h2>
+      </div>
+
+      <div class="faq reveal">
+        <details>
+          <summary>Do I need a referral from a doctor?</summary>
+          <div class="faq-body"><p>Not necessarily — but whether your medical aid pays often depends on having one, and on the clinical reason for the scan. Worth asking the practice and your scheme before you book.</p></div>
+        </details>
+        <details>
+          <summary>Can I eat beforehand?</summary>
+          <div class="faq-body"><p>Yes. There is no fasting involved. If you take calcium supplements, ask whether to skip them on the day — some services prefer that, since supplements can affect the reading.</p></div>
+        </details>
+        <details>
+          <summary>How soon do I get my results?</summary>
+          <div class="faq-body"><p>The scan produces its measurements immediately, which is why they can be gone through with you in the same visit rather than posted out weeks later.</p></div>
+        </details>
+        <details>
+          <summary>Where exactly is the practice?</summary>
+          <div class="faq-body"><p>7 Malibongwe Drive, EmedCentre, Randburg. There is a map and directions on the <a href="contact.html">contact page</a>.</p></div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- footer:start -->
+<!-- pd-network:start -->
+<section class="pd-network" aria-labelledby="pd-network-title">
+  <div class="pd-network-inner">
+    <p class="pd-network-eyebrow">Phuture Digital &middot; Concept work</p>
+    <h2 class="pd-network-title" id="pd-network-title">More concepts by Phuture Digital</h2>
+    <p class="pd-network-lede">Each of these is a complete site we designed and built to show what the finished thing looks like before anyone commits. Have a look at the others.</p>
+    <ul class="pd-network-grid">
+        <li class="pd-network-card">
+          <a href="https://khanya-concept.phuturedigital.co.za">
+            <img class="pd-network-thumb" src="/pd-concepts/khanya.webp" alt=""
+                 width="640" height="400" loading="lazy" decoding="async">
+            <span class="pd-network-body">
+              <span class="pd-network-name">Khanya Dental Studio</span>
+              <span class="pd-network-sector">Dental practice</span>
+              <span class="pd-network-go">View concept &rarr;</span>
+            </span>
+          </a>
+        </li>
+        <li class="pd-network-card">
+          <a href="https://hamba-concept.phuturedigital.co.za">
+            <img class="pd-network-thumb" src="/pd-concepts/hamba.webp" alt=""
+                 width="640" height="400" loading="lazy" decoding="async">
+            <span class="pd-network-body">
+              <span class="pd-network-name">Hamba Freight</span>
+              <span class="pd-network-sector">Last-mile logistics</span>
+              <span class="pd-network-go">View concept &rarr;</span>
+            </span>
+          </a>
+        </li>
+        <li class="pd-network-card">
+          <a href="https://umsuka-concept.phuturedigital.co.za">
+            <img class="pd-network-thumb" src="/pd-concepts/umsuka.webp" alt=""
+                 width="640" height="400" loading="lazy" decoding="async">
+            <span class="pd-network-body">
+              <span class="pd-network-name">UMSUKA Collection</span>
+              <span class="pd-network-sector">Boutique hospitality</span>
+              <span class="pd-network-go">View concept &rarr;</span>
+            </span>
+          </a>
+        </li>
+        <li class="pd-network-card">
+          <a href="https://thatha-concept.phuturedigital.co.za">
+            <img class="pd-network-thumb" src="/pd-concepts/thatha.webp" alt=""
+                 width="640" height="400" loading="lazy" decoding="async">
+            <span class="pd-network-body">
+              <span class="pd-network-name">THATHA</span>
+              <span class="pd-network-sector">Micro-retail units</span>
+              <span class="pd-network-go">View concept &rarr;</span>
+            </span>
+          </a>
+        </li>
+        <li class="pd-network-card">
+          <a href="https://africrest-concept.phuturedigital.co.za">
+            <img class="pd-network-thumb" src="/pd-concepts/africrest.webp" alt=""
+                 width="640" height="400" loading="lazy" decoding="async">
+            <span class="pd-network-body">
+              <span class="pd-network-name">Africrest</span>
+              <span class="pd-network-sector">Built-to-rent property</span>
+              <span class="pd-network-go">View concept &rarr;</span>
+            </span>
+          </a>
+        </li>
+    </ul>
+    <div class="pd-network-cta">
+      <p>Want a site like this for your business?</p>
+      <a class="pd-network-btn" href="mailto:hello@phuturedigital.co.za">hello@phuturedigital.co.za</a>
+      <a class="pd-network-link" href="https://www.phuturedigital.co.za" rel="noopener">phuturedigital.co.za</a>
+    </div>
+    <p class="pd-network-mark"><strong>Concept redesign.</strong> InsureSPR Health is a real practice. This is Phuture Digital&rsquo;s own take on their site, built to demonstrate design and build work. It is not their official site, is not affiliated with them, and nothing here is medical advice.</p>
+  </div>
+</section>
+<!-- pd-network:end -->
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot-top">
+      <div>
+        <a class="brand" href="index.html">
+          <img src="assets/mark-light.svg" alt="" width="30" height="40">
+          <span>
+            <span class="brand-name">Insure<span>SPR</span> Health</span>
+            <span class="brand-sub">A confident movement for life</span>
+          </span>
+        </a>
+        <p style="margin-top:1rem">Bone and muscle health for confident, independent living — measured properly, explained plainly.</p>
+        <div class="foot-social">
+          <a href="https://www.facebook.com/InsureSPR/" aria-label="InsureSPR Health on Facebook" rel="noopener noreferrer" target="_blank"><svg class="icon" aria-hidden="true"><use href="#i-facebook"></use></svg></a>
+          <a href="https://www.linkedin.com/company/InsureSPR" aria-label="InsureSPR Health on LinkedIn" rel="noopener noreferrer" target="_blank"><svg class="icon" aria-hidden="true"><use href="#i-linkedin"></use></svg></a>
+          <a href="https://twitter.com/Bonevitalityc" aria-label="InsureSPR Health on X" rel="noopener noreferrer" target="_blank"><svg class="icon" aria-hidden="true"><use href="#i-x"></use></svg></a>
+        </div>
+      </div>
+
+      <div>
+        <h4>Explore</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="scan.html">The scan explained</a></li>
+          <li><a href="services.html">Services</a></li>
+          <li><a href="about.html">About the practice</a></li>
+          <li><a href="learn.html">Learn</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Programmes</h4>
+        <ul>
+          <li><a href="services.html#strong">InsureStrong</a></li>
+          <li><a href="services.html#prevent">InsurePrevent</a></li>
+          <li><a href="services.html#reclaim">InsureReclaim</a></li>
+          <li><a href="book.html">Book a scan</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Find the practice</h4>
+        <ul>
+          <li><a href="https://maps.google.com/?q=7+Malibongwe+Drive+EmedCentre+Randburg" rel="noopener noreferrer" target="_blank">7 Malibongwe Drive, EmedCentre, Randburg</a></li>
+          <li><a href="tel:+27834507861">083 450 7861</a></li>
+          <li><a href="mailto:health@insuresprhealth.co.za">health@insuresprhealth.co.za</a></li>
+          <li><a href="contact.html">Monday to Friday, 08:00 – 17:00</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="foot-bottom">
+      <p><strong style="color:#cdd9ec">Concept site.</strong> Designed and built by <a href="https://phuturedigital.co.za" rel="noopener noreferrer" target="_blank">Phuture Digital</a> as an independent redesign concept for InsureSPR Health. Not affiliated with or endorsed by the practice. Nothing on this site is medical advice — speak to a qualified healthcare professional.</p>
+      <p>© 2026 Phuture Digital. Practice name, contact details and article titles belong to InsureSPR Health.</p>
+    </div>
+  </div>
+</footer>
+<!-- footer:end -->
+
+<script src="site.js" defer></script>
+</body>
+</html>

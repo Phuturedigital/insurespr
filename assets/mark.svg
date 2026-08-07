@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 64" fill="none" role="img" aria-label="InsureSPR Health">
+  <title>InsureSPR Health</title>
+  <!-- Redrawn as clean paths. The supplied brand mark is a raster PNG, so it
+       cannot serve a favicon or a 2x nav lockup; this keeps its idea — a side
+       profile torso built around a vertebral column — as real vector geometry.
+       Gradient stops are the three blues sampled out of that original file. -->
+  <defs>
+    <linearGradient id="sprSpine" x1="8" y1="4" x2="42" y2="60" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00ADEF"/>
+      <stop offset=".52" stop-color="#0253A5"/>
+      <stop offset="1" stop-color="#213F9A"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Back line: cervical curve at the top, thoracic round-out, lumbar hollow.
+       Reading anatomically is what stops it becoming a generic swoosh. -->
+  <path d="M30.5 4.5c4.6 4.1 5.6 9.4 3 14.6-2.4 4.8-2.9 8.2-.4 12.3 3.4 5.6 4 10.2 1.6 15.4-1.9 4.1-2.2 7.4-.9 11.7"
+        stroke="url(#sprSpine)" stroke-width="3.4" stroke-linecap="round"/>
+
+  <!-- Front line: shoulder, ribcage, waist. Deliberately lighter and shorter
+       than the back line so the eye reads the spine as the subject. -->
+  <path d="M17.5 12.2c-4.7 3.3-7.3 8-7.6 13.7-.2 4.6 1 8.4 3.6 12.3 2.4 3.6 3.3 7 2.8 10.8"
+        stroke="url(#sprSpine)" stroke-width="2.6" stroke-linecap="round" opacity=".72"/>
+
+  <!-- Vertebrae. Sized down toward the top to follow real column taper. -->
+  <circle cx="24.6" cy="21.4" r="2.35" fill="url(#sprSpine)"/>
+  <circle cx="23.9" cy="29.3" r="2.55" fill="url(#sprSpine)"/>
+  <circle cx="24.4" cy="37.4" r="2.75" fill="url(#sprSpine)"/>
+  <circle cx="25.4" cy="45.6" r="2.95" fill="url(#sprSpine)"/>
+  <circle cx="26.2" cy="53.9" r="3.1" fill="url(#sprSpine)"/>
+</svg>

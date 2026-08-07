@@ -1,0 +1,25 @@
+# Dependencies (none required — this is a zero-build static site). Playwright is
+# borrowed from a sibling repo via createRequire, so nothing installs here.
+node_modules/
+package-lock.json
+
+# Vercel
+.vercel
+
+# Playwright + image-pipeline output — ~77MB, all regenerable on demand.
+# The scripts under tools/ ARE committed; the pixels they produce are not.
+tools/shots/
+tools/sheets/
+tools/previews/
+
+# Backups only — assets/ is committed (the shipped site imagery)
+*.html.bak
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp

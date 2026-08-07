@@ -1,0 +1,471 @@
+<!doctype html>
+<html lang="en-ZA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Services — InsureSPR Health concept by Phuture Digital</title>
+<meta name="description" content="Every service InsureSPR Health offers — bone density scanning, body composition, osteoporosis care, fall prevention, mobility work, Breatheez and health coaching — explained in plain English. Concept site by Phuture Digital.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="styles.css">
+<script>document.documentElement.className += ' js';</script>
+</head>
+<body>
+<!-- icons:start -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true" focusable="false"><defs>
+<!-- Icon sprite. Single source of truth: edit here, then run
+     `node tools/stamp-icons.mjs` to push it into every page between the
+     icons:start / icons:end markers.
+
+     Drawn at 24x24 on a 1.7px stroke with round caps and joins. That weight
+     matches the thin-stroke line art of the practice's own brand mark, so the
+     icons read as part of the same hand rather than a stock set bolted on.
+     Brand-glyph icons at the end are filled, since the social marks are
+     supplied as solids and stroking them would misrepresent them. -->
+<g>
+  <symbol id="i-scan" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8V5.5A2.5 2.5 0 0 1 5.5 3H8M16 3h2.5A2.5 2.5 0 0 1 21 5.5V8M21 16v2.5a2.5 2.5 0 0 1-2.5 2.5H16M8 21H5.5A2.5 2.5 0 0 1 3 18.5V16M3.5 12h17"/></symbol>
+  <symbol id="i-bone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M9.6 14.4 14.4 9.6"/><circle cx="6.9" cy="15.3" r="2.3"/><circle cx="8.7" cy="17.1" r="2.3"/><circle cx="15.3" cy="6.9" r="2.3"/><circle cx="17.1" cy="8.7" r="2.3"/></symbol>
+  <symbol id="i-weight" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5v5M7 7v10M17 7v10M20 9.5v5M7 12h10"/></symbol>
+  <symbol id="i-balance" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4.2" r="2.2"/><path d="M12 6.6v6.6M4.6 9.6 12 8.4l7.4 1.2M12 13.2 8.8 20M12 13.2 15.2 20"/></symbol>
+  <symbol id="i-lungs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5v10"/><path d="M9.6 8.6C7.2 9 5.3 11.2 4.9 14c-.3 2.2-.1 4.1.3 5.3.3.9 1.4 1.1 2.1.5l2.7-2.3c.6-.5.9-1.2.9-2v-5.4c0-.8-.6-1.5-1.3-1.5Z"/><path d="M14.4 8.6c2.4.4 4.3 2.6 4.7 5.4.3 2.2.1 4.1-.3 5.3-.3.9-1.4 1.1-2.1.5l-2.7-2.3c-.6-.5-.9-1.2-.9-2v-5.4c0-.8.6-1.5 1.3-1.5Z"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.2 5 6.1v5.4c0 4.2 2.9 8.1 7 9.3 4.1-1.2 7-5.1 7-9.3V6.1l-7-2.9Z"/><path d="m9.2 12.1 2 2 3.6-4"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.6"/><path d="M12 7.2V12l3.2 2"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 4.6H4A1.6 1.6 0 0 0 2.4 6.2v8.6A1.6 1.6 0 0 0 4 16.4h2.8v4.2l4.6-4.2H20a1.6 1.6 0 0 0 1.6-1.6V6.2A1.6 1.6 0 0 0 20 4.6Z"/><path d="M7.4 10.5h9.2"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20.5h18M6.5 20.5v-5.8M11.5 20.5V7.4M16.5 20.5v-9.2M21 20.5V4"/></symbol>
+  <symbol id="i-move" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.2v17.6M3.2 12h17.6"/><path d="m9 6.2 3-3 3 3M9 17.8l3 3 3-3M6.2 9l-3 3 3 3M17.8 9l3 3-3 3"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="m4.6 12.4 5 5 9.8-10.8"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15m-6-6 6 6-6 6"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M6.4 3.4h3.1l1.5 3.9-2 1.5a12.2 12.2 0 0 0 6.2 6.2l1.5-2 3.9 1.5v3.1a2 2 0 0 1-2.2 2A17.2 17.2 0 0 1 4.4 5.6a2 2 0 0 1 2-2.2Z"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="2.6" y="5" width="18.8" height="14" rx="2.2"/><path d="m3.2 6.6 8.8 5.8 8.8-5.8"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21.2s7-5.7 7-11.1a7 7 0 1 0-14 0c0 5.4 7 11.1 7 11.1Z"/><circle cx="12" cy="9.9" r="2.6"/></symbol>
+  <symbol id="i-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3.2" y="5" width="17.6" height="15.8" rx="2.4"/><path d="M3.2 10h17.6M8.2 3.2v3.6M15.8 3.2v3.6"/></symbol>
+  <symbol id="i-spine" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M14.6 3.2c2.2 2.7 2.4 5.1.6 7.5-1.4 1.9-1.4 3.3 0 5.2 1.8 2.4 1.7 4.9-.4 7.5"/><circle cx="9.4" cy="7.2" r="1.5"/><circle cx="8.8" cy="12.1" r="1.6"/><circle cx="9.4" cy="17" r="1.7"/></symbol>
+  <symbol id="i-target" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.6"/><circle cx="12" cy="12" r="4.4"/><circle cx="12" cy="12" r=".9" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-refresh" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 11.6a8.6 8.6 0 1 1-2.5-5.8"/><path d="M20.9 3.6v4.5h-4.5"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.6"/><path d="M12 11.2v5.4"/><circle cx="12" cy="7.9" r=".95" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.6 2.5 20.4h19L12 3.6Z"/><path d="M12 9.8v4.4"/><circle cx="12" cy="17.4" r=".95" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.4S3.4 15.4 3.4 9.3A4.9 4.9 0 0 1 12 6a4.9 4.9 0 0 1 8.6 3.3c0 6.1-8.6 11.1-8.6 11.1Z"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7.8" r="3.4"/><path d="M2.4 20.2c0-3.6 3-6.4 6.6-6.4s6.6 2.8 6.6 6.4"/><path d="M16.2 5a3.4 3.4 0 0 1 0 6.2M18.2 14.2c2 .9 3.4 2.8 3.4 5.3"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.6A1.6 1.6 0 0 1 5.6 4H20v16H5.6A1.6 1.6 0 0 1 4 18.4V5.6Z"/><path d="M8.2 4v16M11.4 9h5.4M11.4 13h5.4"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M3.6 7h16.8M3.6 12h16.8M3.6 17h16.8"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+  <symbol id="i-apple" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7.6c-1-1.4-2.5-2.1-4-1.9C5.4 6 3.6 8.3 3.6 11.6c0 4.4 3.3 9 5.8 9 1 0 1.8-.5 2.6-.5s1.6.5 2.6.5c2.5 0 5.8-4.6 5.8-9 0-3.3-1.8-5.6-4.4-5.9-1.5-.2-3 .5-4 1.9Z"/><path d="M12 7.6V5.2c0-1.4 1.2-2.6 2.8-2.8"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.2M12 19.2v2.2M4.4 4.4l1.6 1.6M18 18l1.6 1.6M2.6 12h2.2M19.2 12h2.2M4.4 19.6 6 18M18 6l1.6-1.6"/></symbol>
+</g>
+<g>
+  <symbol id="i-facebook" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M14.1 8.6V6.9c0-.8.5-1 .9-1h2.1V2.7h-2.8c-3 0-3.7 2.2-3.7 3.7v2.2H8.8v3.3h1.8V21h3.3v-9.1h2.5l.3-3.3h-2.6Z"/></symbol>
+  <symbol id="i-linkedin" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M6.3 8.9H3.1V21h3.2V8.9ZM4.7 3a1.9 1.9 0 1 0 0 3.9 1.9 1.9 0 0 0 0-3.9ZM21 14.3c0-3.5-1.9-5.6-4.6-5.6-1.6 0-2.7.9-3.2 1.7V8.9h-3.1V21h3.2v-6.4c0-1.7.9-2.6 2.1-2.6s2.1.9 2.1 2.6V21H21v-6.7Z"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M17.4 3h3.2l-7 8 8.2 10.9h-6.4L10.4 15l-5.7 6.9H1.5l7.5-8.6L1.6 3h6.6l4.5 6L17.4 3Zm-1.1 17h1.8L7.8 4.8H5.9l10.4 15.2Z"/></symbol>
+  <symbol id="i-whatsapp" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12.04 2.5A9.44 9.44 0 0 0 4 16.85L2.6 21.5l4.8-1.36A9.44 9.44 0 1 0 12.04 2.5Zm0 1.86a7.58 7.58 0 1 1-3.9 14.06l-.28-.17-2.85.81.83-2.78-.18-.29a7.58 7.58 0 0 1 6.38-11.63Zm-3.4 3.5c-.17 0-.45.06-.68.31-.24.25-.9.87-.9 2.13s.92 2.47 1.05 2.64c.13.17 1.8 2.86 4.44 3.9 2.2.86 2.64.69 3.12.65.48-.05 1.55-.63 1.77-1.24.22-.62.22-1.14.15-1.25-.06-.11-.24-.17-.5-.3-.26-.13-1.55-.77-1.79-.85-.24-.09-.41-.13-.59.13-.17.26-.67.85-.82 1.02-.15.18-.3.2-.56.07-.26-.13-1.1-.41-2.1-1.3-.78-.69-1.3-1.55-1.45-1.81-.15-.26-.02-.4.11-.53.12-.12.26-.3.39-.46.13-.15.17-.26.26-.44.09-.17.04-.33-.02-.46-.07-.13-.58-1.42-.8-1.94-.2-.5-.4-.43-.55-.44h-.5Z"/></symbol>
+</g>
+</defs></svg>
+<!-- icons:end -->
+
+<a class="skip" href="#main">Skip to content</a>
+
+<!-- banner:start -->
+<div class="concept-banner">
+  <div class="wrap">
+    <svg class="icon" aria-hidden="true"><use href="#i-info"></use></svg>
+    <p><strong>This is a design concept, not a real clinic website.</strong> Phuture Digital built it to show how InsureSPR Health's own content could be presented. It is not affiliated with, endorsed by, or operated by the practice, and nothing here is medical advice.</p>
+  </div>
+</div>
+<!-- banner:end -->
+
+<!-- header:start -->
+<header class="head">
+  <div class="wrap head-in">
+    <a class="brand" href="index.html">
+      <img src="assets/mark.svg" alt="" width="30" height="40">
+      <span>
+        <span class="brand-name">Insure<span>SPR</span> Health</span>
+        <span class="brand-sub">Bone &amp; muscle health</span>
+      </span>
+    </a>
+
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+      <svg class="icon" aria-hidden="true"><use href="#i-menu"></use></svg>
+      <span class="nav-toggle-label">Menu</span>
+    </button>
+
+    <nav class="nav" id="site-nav" aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="scan.html">The scan</a>
+      <a href="services.html" aria-current="page">Services</a>
+      <a href="about.html">About</a>
+      <a href="learn.html">Learn</a>
+      <a href="contact.html">Contact</a>
+      <a class="btn btn-primary" href="book.html">
+        <svg class="icon" aria-hidden="true"><use href="#i-calendar"></use></svg>
+        Book a scan
+      </a>
+    </nav>
+  </div>
+</header>
+<!-- header:end -->
+
+<main id="main">
+
+  <section class="band band--head">
+    <div class="band-media">
+      <img src="assets/mobility.webp" alt="A clinician guiding a patient through a shoulder exercise with a resistance band." width="1000" height="667" fetchpriority="high">
+    </div>
+    <div class="wrap band-in">
+      <div class="band-copy">
+        <p class="eyebrow eyebrow--light">Services</p>
+        <h1>Everything on offer, in words you already use</h1>
+        <p class="lede">The practice's full list of services. Each one keeps its proper name, gains a sentence explaining what it actually is, and a line on what you get out of it.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================================================================
+       THE THREE PROGRAMMES, in full. Anchors match the links used on the
+       homepage and in the footer.
+       =================================================================== -->
+  <section id="strong">
+    <div class="wrap">
+      <div class="split">
+        <div class="reveal">
+          <p class="eyebrow">Programme one</p>
+          <h2>InsureStrong</h2>
+          <p class="plainly-plain" style="color:var(--gold-ink);margin-bottom:1rem">Find out what you are actually working with, then build on it.</p>
+          <p>The practice describes this as building and maintaining healthy bone and muscle mass. In practice it starts with the scan, because you cannot build on a number you do not have.</p>
+          <ul class="checks" style="margin-top:1.25rem">
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg><span><strong>A bone and body composition scan</strong> to set your starting point.</span></li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg><span><strong>Fitness and nutrition guidance</strong> built on your own measurements rather than a general rule.</span></li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg><span><strong>A repeat scan later</strong> so you can see whether any of it worked.</span></li>
+          </ul>
+        </div>
+        <figure class="split-media reveal reveal-d1">
+          <img src="assets/strong.webp" alt="Two older adults pressing light dumbbells overhead in a bright exercise room." width="1200" height="800" loading="lazy">
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section id="prevent" class="bone-2-section">
+    <div class="wrap">
+      <div class="split split--flip">
+        <figure class="split-media reveal">
+          <img src="assets/prevent.webp" alt="An older man standing with both arms extended sideways while a clinician assesses his balance." width="1200" height="800" loading="lazy">
+        </figure>
+        <div class="reveal reveal-d1">
+          <p class="eyebrow">Programme two</p>
+          <h2>InsurePrevent</h2>
+          <p class="plainly-plain" style="color:var(--gold-ink);margin-bottom:1rem">Stop bone and muscle loss before it starts.</p>
+          <p>A specialised nurse consultation covering the three things that decide whether a stumble becomes a fracture: how you hold yourself, how well you move, and how strong your bones are.</p>
+          <ul class="checks" style="margin-top:1.25rem">
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg><span><strong>Posture</strong> — what your spine is doing, and what it is heading toward.</span></li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg><span><strong>Mobility</strong> — how much range you have, and where you have lost it.</span></li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg><span><strong>Bone health management</strong> — ongoing, and led by the same nurse each time.</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="reclaim">
+    <div class="wrap">
+      <div class="split">
+        <div class="reveal">
+          <p class="eyebrow">Programme three</p>
+          <h2>InsureReclaim</h2>
+          <p class="plainly-plain" style="color:var(--gold-ink);margin-bottom:1rem">Restore what has been lost, so you can live boldly.</p>
+          <p>A personal prescription with monthly performance goals, built around what you want back rather than a generic target. The practice's own word for this is reclaiming — and the goals are yours to set.</p>
+          <ul class="checks" style="margin-top:1.25rem">
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg><span><strong>Goals in real terms</strong> — carrying your own shopping, getting off the floor unaided, walking without watching every step.</span></li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg><span><strong>Monthly checkpoints</strong>, so drift gets caught early.</span></li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg><span><strong>Adjustments as you go</strong>, rather than one plan handed over and never revisited.</span></li>
+          </ul>
+        </div>
+        <figure class="split-media reveal reveal-d1">
+          <img src="assets/reclaim.webp" alt="An older man lifting a weight with a controlled, extended arm in a gym." width="1200" height="800" loading="lazy">
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================================================================
+       THE FULL SERVICE LIST. Every item the practice publishes, each with
+       its clinical name kept and a plain sentence added.
+       =================================================================== -->
+  <section class="ink-section">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow eyebrow--light">The full list</p>
+        <h2>Everything else the practice does</h2>
+        <p>These are the practice's own service names, kept exactly as the practice writes them. Underneath each one: what it actually is, then what it gets you.</p>
+      </div>
+
+      <div class="plainly-grid">
+        <div class="plainly plainly--onink reveal">
+          <p class="plainly-term"><svg class="icon" aria-hidden="true"><use href="#i-bone"></use></svg> DXA bone density screening</p>
+          <p class="plainly-plain">A ten-minute scan measuring <strong>how strong your bones are</strong>, so thinning gets caught while there is still time to act on it.</p>
+          <p class="plainly-gain"><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg> <span>You leave knowing whether to act now or simply re-check in a few years — instead of finding out from a fracture.</span></p>
+        </div>
+
+        <div class="plainly plainly--onink reveal reveal-d1">
+          <p class="plainly-term"><svg class="icon" aria-hidden="true"><use href="#i-chart"></use></svg> DXA body composition analysis</p>
+          <p class="plainly-plain">The same scan, showing <strong>how much muscle, fat and bone you carry and where</strong>. What you are made of, not just what you weigh.</p>
+          <p class="plainly-gain"><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg> <span>A measurement that moves when the work is working. A scale can sit still for months while your body quietly changes underneath it.</span></p>
+        </div>
+
+        <div class="plainly plainly--onink reveal">
+          <p class="plainly-term"><svg class="icon" aria-hidden="true"><use href="#i-spine"></use></svg> Osteoporosis clinic consultation</p>
+          <p class="plainly-plain">Nurse-led care if your bones have already thinned — <strong>the same person following your case</strong>, rather than starting again with a stranger each visit.</p>
+          <p class="plainly-gain"><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg> <span>The practice runs this as one consultation at one price with the scans and assessments included — not three bookings, three trips and three accounts.</span></p>
+        </div>
+
+        <div class="plainly plainly--onink reveal reveal-d1">
+          <p class="plainly-term"><svg class="icon" aria-hidden="true"><use href="#i-balance"></use></svg> Posture, flexibility and balance assessment</p>
+          <p class="plainly-plain">A proper test of <strong>how likely you are to fall</strong> — and which specific thing to work on to change that answer.</p>
+          <p class="plainly-gain"><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg> <span>A straight answer on your fall risk, and the one or two things that actually shift it — rather than being told to &ldquo;be careful&rdquo;.</span></p>
+        </div>
+
+        <div class="plainly plainly--onink reveal">
+          <p class="plainly-term"><svg class="icon" aria-hidden="true"><use href="#i-move"></use></svg> Neck and shoulder mobility</p>
+          <p class="plainly-plain">Getting <strong>range of movement back</strong> in the joints that stiffen first and change how everything below them works.</p>
+          <p class="plainly-gain"><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg> <span>Top shelves, blind spots and a night&rsquo;s sleep your shoulder does not interrupt.</span></p>
+        </div>
+
+        <div class="plainly plainly--onink reveal reveal-d1">
+          <p class="plainly-term"><svg class="icon" aria-hidden="true"><use href="#i-move"></use></svg> Back, hip and knee mobility</p>
+          <p class="plainly-plain">The joints that decide whether you can <strong>get out of a chair, climb stairs and walk properly</strong> without thinking about it.</p>
+          <p class="plainly-gain"><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg> <span>Stairs and chairs go back to being things you do, not things you plan around.</span></p>
+        </div>
+
+        <div class="plainly plainly--onink reveal">
+          <p class="plainly-term"><svg class="icon" aria-hidden="true"><use href="#i-lungs"></use></svg> Breatheez — diaphragmatic gateway</p>
+          <p class="plainly-plain">Learning to <strong>breathe with your diaphragm</strong> instead of your neck and shoulders. Shallow breathing keeps those muscles permanently switched on, which is where a lot of neck and upper back pain quietly comes from.</p>
+          <p class="plainly-gain"><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg> <span>The tension that always comes back stops coming back, because the load moves off the muscles that were never meant to carry it.</span></p>
+        </div>
+
+        <div class="plainly plainly--onink reveal reveal-d1">
+          <p class="plainly-term"><svg class="icon" aria-hidden="true"><use href="#i-shield"></use></svg> Overuse injury correction</p>
+          <p class="plainly-plain">Sorting out the <strong>aches that come from doing the same movement too often</strong> — and fixing the pattern causing them, not just the sore spot.</p>
+          <p class="plainly-gain"><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg> <span>The ache stops returning, because the movement that caused it is not the movement you leave with.</span></p>
+        </div>
+
+        <div class="plainly plainly--onink reveal">
+          <p class="plainly-term"><svg class="icon" aria-hidden="true"><use href="#i-heart"></use></svg> Health coaching</p>
+          <p class="plainly-plain">Someone <strong>in your corner between appointments</strong>, for the long stretch where a plan either becomes a habit or quietly stops.</p>
+          <p class="plainly-gain"><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg> <span>The plan survives a normal week, because somebody notices it slipping before it stops.</span></p>
+        </div>
+
+        <div class="plainly plainly--onink reveal reveal-d1">
+          <p class="plainly-term"><svg class="icon" aria-hidden="true"><use href="#i-target"></use></svg> Sports and fitness assessment</p>
+          <p class="plainly-plain">Real body composition for people who train — <strong>sharper programming, better nutrition decisions, fewer injuries</strong> from imbalances nobody spotted.</p>
+          <p class="plainly-gain"><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg> <span>Training decisions made on your own limb-by-limb breakdown, with left-right imbalances caught while they are still a number rather than an injury.</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================================================================
+       SPORTS AUDIENCE — the practice serves fitness facilities too.
+       =================================================================== -->
+  <section class="band">
+    <div class="band-media">
+      <img src="assets/sport.webp" alt="An athlete crouched in starting blocks on a running track." width="1400" height="933" loading="lazy">
+    </div>
+    <div class="wrap band-in">
+      <div class="band-copy reveal">
+        <p class="eyebrow eyebrow--light">For people who train</p>
+        <h2>Refine your fitness focus</h2>
+        <p class="lede">A scale gives you one number that mixes muscle, fat, bone and water together and calls it your weight. It is the least useful measurement in the room.</p>
+        <p style="color:#a9bcd8">The same scan the practice uses for bone health gives athletes and serious trainers an exact breakdown, limb by limb. That is what turns a training programme from a guess into a decision — and it is how side-to-side imbalances get caught before they become injuries.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================================================================
+       FOR PROFESSIONALS.
+       =================================================================== -->
+  <section>
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow">Working together</p>
+        <h2>If you refer patients or run a facility</h2>
+        <p>The practice lists three audiences. Two of them are not the patient.</p>
+      </div>
+
+      <div class="compare">
+        <div class="compare-card reveal">
+          <span class="icon-badge"><svg class="icon" aria-hidden="true"><use href="#i-chat"></use></svg></span>
+          <h3>Medical facilities and health professionals</h3>
+          <p>Screening, diagnosis and ongoing management of <strong>primary and secondary osteoporosis</strong>, with a nurse-led clinic behind it. Your patient comes back understanding their own result, which makes your next conversation with them a shorter one.</p>
+          <p><a class="link-more" href="contact.html">Talk about referrals <svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></a></p>
+        </div>
+
+        <div class="compare-card reveal reveal-d1">
+          <span class="icon-badge icon-badge--gold"><svg class="icon" aria-hidden="true"><use href="#i-target"></use></svg></span>
+          <h3>Sports and fitness facilities</h3>
+          <p>Body composition analysis for performance and injury prevention, available to your members. Objective numbers to programme against, and a clear before-and-after when the work pays off.</p>
+          <p><a class="link-more" href="contact.html">Talk about a partnership <svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></a></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ------------------------------------------------------------ CTA -- -->
+  <section class="bone-2-section pad-sm">
+    <div class="wrap">
+      <div class="form-card reveal" style="text-align:center">
+        <h2>Not sure which one you need?</h2>
+        <p style="margin-inline:auto">Most people do not know, and that is fine — it is what the first consultation is for. Almost everybody starts with the same scan anyway.</p>
+        <div class="btn-row" style="justify-content:center;margin-top:1.5rem">
+          <a class="btn btn-primary" href="book.html">
+            <svg class="icon" aria-hidden="true"><use href="#i-calendar"></use></svg>
+            Book a scan
+          </a>
+          <a class="btn btn-ghost" href="contact.html">
+            <svg class="icon" aria-hidden="true"><use href="#i-phone"></use></svg>
+            Ask a question first
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- footer:start -->
+<!-- pd-network:start -->
+<section class="pd-network" aria-labelledby="pd-network-title">
+  <div class="pd-network-inner">
+    <p class="pd-network-eyebrow">Phuture Digital &middot; Concept work</p>
+    <h2 class="pd-network-title" id="pd-network-title">More concepts by Phuture Digital</h2>
+    <p class="pd-network-lede">Each of these is a complete site we designed and built to show what the finished thing looks like before anyone commits. Have a look at the others.</p>
+    <ul class="pd-network-grid">
+        <li class="pd-network-card">
+          <a href="https://khanya-concept.phuturedigital.co.za">
+            <img class="pd-network-thumb" src="/pd-concepts/khanya.webp" alt=""
+                 width="640" height="400" loading="lazy" decoding="async">
+            <span class="pd-network-body">
+              <span class="pd-network-name">Khanya Dental Studio</span>
+              <span class="pd-network-sector">Dental practice</span>
+              <span class="pd-network-go">View concept &rarr;</span>
+            </span>
+          </a>
+        </li>
+        <li class="pd-network-card">
+          <a href="https://hamba-concept.phuturedigital.co.za">
+            <img class="pd-network-thumb" src="/pd-concepts/hamba.webp" alt=""
+                 width="640" height="400" loading="lazy" decoding="async">
+            <span class="pd-network-body">
+              <span class="pd-network-name">Hamba Freight</span>
+              <span class="pd-network-sector">Last-mile logistics</span>
+              <span class="pd-network-go">View concept &rarr;</span>
+            </span>
+          </a>
+        </li>
+        <li class="pd-network-card">
+          <a href="https://umsuka-concept.phuturedigital.co.za">
+            <img class="pd-network-thumb" src="/pd-concepts/umsuka.webp" alt=""
+                 width="640" height="400" loading="lazy" decoding="async">
+            <span class="pd-network-body">
+              <span class="pd-network-name">UMSUKA Collection</span>
+              <span class="pd-network-sector">Boutique hospitality</span>
+              <span class="pd-network-go">View concept &rarr;</span>
+            </span>
+          </a>
+        </li>
+        <li class="pd-network-card">
+          <a href="https://thatha-concept.phuturedigital.co.za">
+            <img class="pd-network-thumb" src="/pd-concepts/thatha.webp" alt=""
+                 width="640" height="400" loading="lazy" decoding="async">
+            <span class="pd-network-body">
+              <span class="pd-network-name">THATHA</span>
+              <span class="pd-network-sector">Micro-retail units</span>
+              <span class="pd-network-go">View concept &rarr;</span>
+            </span>
+          </a>
+        </li>
+        <li class="pd-network-card">
+          <a href="https://africrest-concept.phuturedigital.co.za">
+            <img class="pd-network-thumb" src="/pd-concepts/africrest.webp" alt=""
+                 width="640" height="400" loading="lazy" decoding="async">
+            <span class="pd-network-body">
+              <span class="pd-network-name">Africrest</span>
+              <span class="pd-network-sector">Built-to-rent property</span>
+              <span class="pd-network-go">View concept &rarr;</span>
+            </span>
+          </a>
+        </li>
+    </ul>
+    <div class="pd-network-cta">
+      <p>Want a site like this for your business?</p>
+      <a class="pd-network-btn" href="mailto:hello@phuturedigital.co.za">hello@phuturedigital.co.za</a>
+      <a class="pd-network-link" href="https://www.phuturedigital.co.za" rel="noopener">phuturedigital.co.za</a>
+    </div>
+    <p class="pd-network-mark"><strong>Concept redesign.</strong> InsureSPR Health is a real practice. This is Phuture Digital&rsquo;s own take on their site, built to demonstrate design and build work. It is not their official site, is not affiliated with them, and nothing here is medical advice.</p>
+  </div>
+</section>
+<!-- pd-network:end -->
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot-top">
+      <div>
+        <a class="brand" href="index.html">
+          <img src="assets/mark-light.svg" alt="" width="30" height="40">
+          <span>
+            <span class="brand-name">Insure<span>SPR</span> Health</span>
+            <span class="brand-sub">A confident movement for life</span>
+          </span>
+        </a>
+        <p style="margin-top:1rem">Bone and muscle health for confident, independent living — measured properly, explained plainly.</p>
+        <div class="foot-social">
+          <a href="https://www.facebook.com/InsureSPR/" aria-label="InsureSPR Health on Facebook" rel="noopener noreferrer" target="_blank"><svg class="icon" aria-hidden="true"><use href="#i-facebook"></use></svg></a>
+          <a href="https://www.linkedin.com/company/InsureSPR" aria-label="InsureSPR Health on LinkedIn" rel="noopener noreferrer" target="_blank"><svg class="icon" aria-hidden="true"><use href="#i-linkedin"></use></svg></a>
+          <a href="https://twitter.com/Bonevitalityc" aria-label="InsureSPR Health on X" rel="noopener noreferrer" target="_blank"><svg class="icon" aria-hidden="true"><use href="#i-x"></use></svg></a>
+        </div>
+      </div>
+
+      <div>
+        <h4>Explore</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="scan.html">The scan explained</a></li>
+          <li><a href="services.html">Services</a></li>
+          <li><a href="about.html">About the practice</a></li>
+          <li><a href="learn.html">Learn</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Programmes</h4>
+        <ul>
+          <li><a href="services.html#strong">InsureStrong</a></li>
+          <li><a href="services.html#prevent">InsurePrevent</a></li>
+          <li><a href="services.html#reclaim">InsureReclaim</a></li>
+          <li><a href="book.html">Book a scan</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Find the practice</h4>
+        <ul>
+          <li><a href="https://maps.google.com/?q=7+Malibongwe+Drive+EmedCentre+Randburg" rel="noopener noreferrer" target="_blank">7 Malibongwe Drive, EmedCentre, Randburg</a></li>
+          <li><a href="tel:+27834507861">083 450 7861</a></li>
+          <li><a href="mailto:health@insuresprhealth.co.za">health@insuresprhealth.co.za</a></li>
+          <li><a href="contact.html">Monday to Friday, 08:00 – 17:00</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="foot-bottom">
+      <p><strong style="color:#cdd9ec">Concept site.</strong> Designed and built by <a href="https://phuturedigital.co.za" rel="noopener noreferrer" target="_blank">Phuture Digital</a> as an independent redesign concept for InsureSPR Health. Not affiliated with or endorsed by the practice. Nothing on this site is medical advice — speak to a qualified healthcare professional.</p>
+      <p>© 2026 Phuture Digital. Practice name, contact details and article titles belong to InsureSPR Health.</p>
+    </div>
+  </div>
+</footer>
+<!-- footer:end -->
+
+<script src="site.js" defer></script>
+</body>
+</html>

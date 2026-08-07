@@ -1,0 +1,19 @@
+# Internal docs — stay in git, kept off the public demo URL.
+README.md
+CONTENT-NOTES.md
+
+# Build/research tooling — never part of the deployed site.
+#
+# This is not just weight. tools/ holds the practice's own logo source files
+# and third-party stock preview JPEGs, none of which should be publicly
+# reachable. Anything added here must be assumed public unless it is listed.
+tools/
+node_modules/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+*.html.bak
+.vscode/
+.idea/

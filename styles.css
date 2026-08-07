@@ -1,0 +1,969 @@
+/* ============================================================================
+   InsureSPR Health — concept redesign by Phuture Digital
+   ----------------------------------------------------------------------------
+   A concept, not a live medical site. See the banner on every page.
+
+   THE ORGANISING IDEA — translation.
+   The practice's own site is written in clinical language: "DXA bone density
+   and body composition analysis", "Breatheez (Diaphragmatic gateway)". This
+   redesign keeps every one of those services but pairs each with what it
+   actually means for the person booking it. The palette carries that idea:
+
+     BLUE  (sampled from the practice's own mark) = the clinical side.
+                                                    Measurement, the scan, science.
+     GOLD  (sampled from the same lockup)         = the human side.
+                                                    Plain English, outcome, you.
+
+   Type is set large throughout and the measure kept short. The audience for a
+   bone-health practice skews 50+, so legibility is a functional requirement
+   here, not a stylistic preference.
+   ========================================================================= */
+
+/* ---------------------------------------------------------------- tokens -- */
+:root {
+  /* Blues sampled from the practice's own logo files by peak chroma —
+     see tools/sample-colours.mjs for why frequency-based sampling fails on
+     thin gradient strokes. */
+  --cyan: #00adef;
+  --azure: #0253a5;
+  --indigo: #213f9a;
+
+  /* Cyan is gorgeous as a fill and unusable as small text: #00ADEF on white is
+     about 2.5:1, well under the 4.5:1 WCAG AA floor. This is the darkened
+     partner used wherever the brand blue has to carry actual words. */
+  --cyan-ink: #0072a8;
+
+  /* Gold from the ring of the full lockup, plus a text-safe partner for the
+     same reason. */
+  --gold: #e5ac2b;
+  --gold-ink: #7d5a08;
+
+  --ink: #0e2140;         /* headings, deepest surface */
+  --ink-2: #17305c;       /* raised dark surface */
+  --body: #3c4a61;        /* body copy — softer than the headings */
+  --muted: #5f6d84;
+
+  --bone: #faf6ef;        /* page ground. Warm, faintly skeletal, and a long
+                             way from the cold clinical white of every other
+                             medical site. */
+  --bone-2: #f3ece0;
+  --paper: #ffffff;
+  --line: #e6ddcd;
+  --line-2: #d8ccb6;
+
+  --radius: 18px;
+  --radius-sm: 12px;
+  --radius-lg: 28px;
+
+  --wrap: 1220px;
+  --measure: 62ch;
+
+  --shadow: 0 1px 2px rgb(14 33 64 / .05), 0 12px 32px -12px rgb(14 33 64 / .16);
+  --shadow-lg: 0 2px 4px rgb(14 33 64 / .06), 0 32px 64px -24px rgb(14 33 64 / .28);
+
+  --step: clamp(1.5rem, 4vw, 2.75rem);   /* rhythm unit for section padding */
+}
+
+/* ------------------------------------------------------------------ base -- */
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+  /* Anchored sections must clear the sticky header. */
+  scroll-padding-top: 5.5rem;
+}
+
+body {
+  margin: 0;
+  background: var(--bone);
+  color: var(--body);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  /* 18px base. Deliberately larger than a typical 16px default: this is a
+     practice whose patients are largely over fifty. */
+  font-size: 1.125rem;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;   /* belt-and-braces against a full-bleed band leaking */
+}
+
+img, svg, video { max-width: 100%; }
+img { height: auto; display: block; }
+
+/* Width/height ATTRIBUTES on an img beat a bare `img { max-width:100% }` rule
+   for the height, so an intrinsically-sized image squashes when the width is
+   constrained. Pairing the attribute selector restores the ratio. Learned the
+   hard way on an earlier concept build. */
+img[width][height] { height: auto; }
+
+a { color: var(--cyan-ink); text-underline-offset: .18em; text-decoration-thickness: .07em; }
+a:hover { color: var(--azure); }
+
+:focus-visible {
+  outline: 3px solid var(--cyan);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.skip {
+  position: absolute; left: -9999px; top: 0;
+  background: var(--ink); color: #fff; padding: .8rem 1.2rem; z-index: 200;
+  border-radius: 0 0 var(--radius-sm) 0;
+}
+.skip:focus { left: 0; }
+
+/* ------------------------------------------------------------ typography -- */
+h1, h2, h3, h4, .display {
+  font-family: Fraunces, "Iowan Old Style", Georgia, "Times New Roman", serif;
+  color: var(--ink);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -.015em;
+  margin: 0 0 .5em;
+  text-wrap: balance;
+}
+
+h1 { font-size: clamp(2.35rem, 6.2vw, 4.4rem); letter-spacing: -.028em; }
+h2 { font-size: clamp(1.85rem, 4.2vw, 2.9rem); letter-spacing: -.022em; }
+h3 { font-size: clamp(1.25rem, 2.2vw, 1.6rem); }
+h4 { font-size: 1.125rem; line-height: 1.3; }
+
+p { margin: 0 0 1.15em; max-width: var(--measure); }
+p:last-child { margin-bottom: 0; }
+
+.lede {
+  font-size: clamp(1.2rem, 2.1vw, 1.45rem);
+  line-height: 1.55;
+  color: var(--ink-2);
+  max-width: 46ch;
+}
+
+/* Small uppercase label that opens most sections. */
+.eyebrow {
+  display: inline-flex; align-items: center; gap: .55rem;
+  font-size: .8125rem; font-weight: 700;
+  letter-spacing: .13em; text-transform: uppercase;
+  color: var(--cyan-ink);
+  margin: 0 0 1rem;
+}
+.eyebrow::before {
+  content: ""; width: 1.75rem; height: 2px; border-radius: 2px;
+  background: linear-gradient(90deg, var(--cyan), var(--indigo));
+}
+.eyebrow--gold { color: var(--gold-ink); }
+.eyebrow--gold::before { background: var(--gold); }
+.eyebrow--light { color: #9fdcff; }
+.eyebrow--light::before { background: linear-gradient(90deg, #7fe0ff, #31c8ff); }
+
+.section-head { max-width: 44rem; margin-bottom: calc(var(--step) * 1.1); }
+.section-head p { color: var(--muted); }
+.section-head--center { margin-inline: auto; text-align: center; }
+.section-head--center p { margin-inline: auto; }
+.section-head--center .eyebrow { justify-content: center; }
+
+/* ---------------------------------------------------------------- layout -- */
+.wrap { width: min(100% - 2.5rem, var(--wrap)); margin-inline: auto; }
+.wrap--narrow { width: min(100% - 2.5rem, 860px); margin-inline: auto; }
+
+section { padding-block: calc(var(--step) * 1.7); }
+.pad-sm { padding-block: calc(var(--step) * 1.1); }
+
+.ink-section { background: var(--ink); color: #cdd9ec; }
+.ink-section h2, .ink-section h3, .ink-section h4 { color: #fff; }
+.ink-section a { color: #7fe0ff; }
+
+.bone-2-section { background: var(--bone-2); }
+
+/* ---------------------------------------------------------------- header -- */
+.head {
+  position: sticky; top: 0; z-index: 100;
+  background: rgb(250 246 239 / .88);
+  backdrop-filter: blur(14px) saturate(160%);
+  border-bottom: 1px solid var(--line);
+}
+.head-in {
+  display: flex; align-items: center; gap: 1rem;
+  min-height: 4.5rem;
+}
+
+.brand { display: inline-flex; align-items: center; gap: .65rem; text-decoration: none; margin-right: auto; }
+.brand img { width: 30px; height: 40px; }
+.brand-name {
+  font-family: Fraunces, Georgia, serif;
+  font-weight: 600; font-size: 1.32rem; line-height: 1;
+  color: var(--ink); letter-spacing: -.02em;
+}
+.brand-name span { color: var(--cyan-ink); }
+.brand-sub {
+  display: block; font-family: Inter, system-ui, sans-serif;
+  font-size: .6875rem; font-weight: 600; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--muted); margin-top: .18rem;
+}
+
+.nav { display: flex; align-items: center; gap: .15rem; flex-wrap: wrap; }
+.nav a {
+  display: inline-flex; align-items: center;
+  padding: .6rem .78rem; min-height: 44px;
+  font-size: .9375rem; font-weight: 600;
+  color: var(--ink); text-decoration: none;
+  border-radius: 10px;
+}
+.nav a:hover { background: var(--bone-2); color: var(--azure); }
+.nav a[aria-current="page"] { color: var(--cyan-ink); background: rgb(0 173 239 / .1); }
+
+.nav-toggle { display: none; }
+
+/* --------------------------------------------------------------- buttons -- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: .55rem;
+  padding: .85rem 1.5rem; min-height: 52px;
+  font: 600 1.0625rem/1.2 Inter, system-ui, sans-serif;
+  border-radius: 999px; border: 2px solid transparent;
+  text-decoration: none; cursor: pointer;
+  transition: transform .16s ease, box-shadow .16s ease, background-color .16s ease;
+}
+.btn svg { width: 20px; height: 20px; flex: none; }
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--cyan), var(--azure) 62%, var(--indigo));
+  color: #fff; box-shadow: 0 10px 26px -10px rgb(2 83 165 / .7);
+}
+.btn-primary:hover { color: #fff; transform: translateY(-2px); box-shadow: 0 16px 34px -12px rgb(2 83 165 / .8); }
+
+.btn-ghost { background: transparent; color: var(--ink); border-color: var(--line-2); }
+.btn-ghost:hover { color: var(--ink); border-color: var(--ink); background: var(--bone-2); transform: translateY(-2px); }
+
+.btn-light { background: #fff; color: var(--ink); }
+.btn-light:hover { color: var(--ink); transform: translateY(-2px); }
+
+.btn-outline-light { background: transparent; color: #fff; border-color: rgb(255 255 255 / .45); }
+.btn-outline-light:hover { color: #fff; border-color: #fff; background: rgb(255 255 255 / .1); transform: translateY(-2px); }
+
+.btn-row { display: flex; flex-wrap: wrap; gap: .85rem; }
+
+/* Text link that reads as an action. */
+.link-more {
+  display: inline-flex; align-items: center; gap: .45rem;
+  font-weight: 600; text-decoration: none; min-height: 44px;
+}
+.link-more svg { width: 18px; height: 18px; transition: transform .18s ease; }
+.link-more:hover svg { transform: translateX(4px); }
+
+/* ------------------------------------------------------------------ icons -- */
+/* Every icon is a 24x24 stroke drawing at 1.7px. That weight is not arbitrary:
+   the practice's own mark is thin-stroke line art, so an icon set drawn the
+   same way reads as part of the same hand rather than bolted on. */
+.icon { width: 24px; height: 24px; flex: none; stroke-width: 1.7; }
+
+.icon-badge {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 3.25rem; height: 3.25rem; flex: none;
+  border-radius: 14px;
+  background: linear-gradient(140deg, rgb(0 173 239 / .16), rgb(33 63 154 / .12));
+  color: var(--azure);
+  margin-bottom: 1.1rem;
+}
+.icon-badge .icon { width: 28px; height: 28px; }
+.icon-badge--gold { background: rgb(229 172 43 / .2); color: var(--gold-ink); }
+.icon-badge--light { background: rgb(255 255 255 / .12); color: #7fe0ff; }
+.icon-badge--sm { width: 2.5rem; height: 2.5rem; border-radius: 11px; margin-bottom: 0; }
+.icon-badge--sm .icon { width: 22px; height: 22px; }
+
+/* ------------------------------------------------------------------- hero -- */
+.hero { position: relative; background: var(--ink); overflow: hidden; }
+.hero-media { position: absolute; inset: 0; }
+.hero-media img { width: 100%; height: 100%; object-fit: cover; object-position: 68% 38%; }
+
+/* The chosen hero frame has open grass on the left and the subject
+   right-of-centre, so the scrim is DIRECTIONAL — heavy where the words sit,
+   almost absent over her. A flat overlay would have dimmed the photograph the
+   brief specifically asked to keep visible. */
+.hero-media::after {
+  content: ""; position: absolute; inset: 0;
+  background:
+    linear-gradient(100deg, rgb(9 22 44 / .93) 0%, rgb(9 22 44 / .82) 34%, rgb(9 22 44 / .35) 58%, rgb(9 22 44 / .12) 78%, rgb(9 22 44 / .3) 100%),
+    linear-gradient(to top, rgb(9 22 44 / .55), transparent 42%);
+}
+
+.hero-in {
+  position: relative;
+  display: flex; align-items: center;
+  min-height: clamp(520px, 76vh, 760px);
+  padding-block: calc(var(--step) * 1.8);
+}
+.hero-copy { max-width: 34rem; color: #dbe6f5; }
+.hero h1 { color: #fff; }
+/* Emphasised words in the hero headline take the brand gradient. Only ever
+   applied to a word or two — gradient text is a poor reading surface, and the
+   fallback colour below is what shows if background-clip is unsupported. */
+.hero h1 em {
+  font-style: normal;
+  color: #7fe0ff;
+  /* Blue only. An earlier version ran the ramp into the brand gold, but the
+     emphasis wraps two lines, so the second line landed on the gold end and
+     read as a rendering fault rather than a deliberate accent. */
+  background: linear-gradient(100deg, #a5eaff, #35c9ff 70%, #59b4f5);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.hero-copy .lede { color: #cfdcef; }
+.hero .btn-row { margin-top: 1.9rem; }
+
+.hero-note {
+  display: flex; align-items: center; gap: .6rem;
+  margin-top: 1.6rem; font-size: .9375rem; color: #a9bcd8;
+}
+.hero-note .icon { width: 20px; height: 20px; color: #7fe0ff; }
+
+/* Cards that sit across the seam between the hero and the section under it. */
+.hero-cards {
+  position: relative; z-index: 2;
+  margin-top: calc(var(--step) * -1.6);
+  display: grid; gap: 1rem;
+  grid-template-columns: repeat(3, 1fr);
+}
+.hero-card {
+  background: var(--paper); border: 1px solid var(--line);
+  border-radius: var(--radius); padding: 1.5rem 1.4rem;
+  box-shadow: var(--shadow);
+}
+.hero-card h3 { font-size: 1.2rem; margin-bottom: .35rem; }
+.hero-card p { font-size: .9688rem; color: var(--muted); margin: 0; }
+
+/* --------------------------------------------------- the translation card -- */
+/* The signature component of this redesign. Clinical term on top in the brand
+   blue, what it means to you underneath in the brand gold. Same information the
+   practice already publishes — just not left in a language only a clinician
+   reads. */
+.plainly {
+  display: grid; gap: .9rem;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-left: 5px solid var(--gold);
+  border-radius: var(--radius-sm);
+  padding: 1.5rem 1.6rem;
+}
+.plainly-term {
+  display: flex; align-items: center; gap: .6rem;
+  margin: 0; max-width: none;
+  font-size: .8125rem; font-weight: 700;
+  letter-spacing: .1em; text-transform: uppercase;
+  color: var(--cyan-ink);
+}
+.plainly-term .icon { width: 18px; height: 18px; }
+.plainly-plain {
+  margin: 0; max-width: 48ch;
+  font-family: Fraunces, Georgia, serif;
+  font-size: clamp(1.15rem, 1.9vw, 1.42rem);
+  line-height: 1.4; font-weight: 500;
+  color: var(--ink);
+}
+.plainly-plain strong { font-weight: 700; color: var(--gold-ink); }
+
+/* The third line: what you actually get.
+   The card now runs the full arc the palette describes at the top of this file
+   — the practice's clinical name in blue, the translation, then the outcome in
+   gold. A service the reader understands but sees no point in is still a no. */
+.plainly-gain {
+  display: flex; align-items: flex-start; gap: .55rem;
+  margin: 0; max-width: 52ch; min-width: 0;
+  padding-top: .9rem; border-top: 1px solid var(--line);
+  font-size: .9688rem; line-height: 1.55;
+  font-weight: 600; color: var(--gold-ink);
+}
+.plainly-gain .icon { width: 17px; height: 17px; flex: none; margin-top: .16rem; color: var(--gold); }
+.plainly-gain span { min-width: 0; overflow-wrap: anywhere; }
+.plainly--onink { background: rgb(255 255 255 / .05); border-color: rgb(255 255 255 / .14); border-left-color: var(--gold); }
+.plainly--onink .plainly-term { color: #7fe0ff; }
+.plainly--onink .plainly-plain { color: #fff; }
+.plainly--onink .plainly-plain strong { color: var(--gold); }
+.plainly--onink .plainly-gain { color: var(--gold); border-top-color: rgb(255 255 255 / .14); }
+
+.plainly-grid { display: grid; gap: 1.1rem; grid-template-columns: repeat(2, 1fr); }
+
+/* ---------------------------------------------------------------- pillars -- */
+/* The practice's three named programmes. Photo-led and large, because the brief
+   asked for photography that is genuinely visible rather than decorative. */
+.pillars { display: grid; gap: 1.6rem; grid-template-columns: repeat(3, 1fr); }
+.pillar {
+  display: flex; flex-direction: column;
+  background: var(--paper); border: 1px solid var(--line);
+  border-radius: var(--radius); overflow: hidden;
+  box-shadow: var(--shadow);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.pillar:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+.pillar-media { position: relative; aspect-ratio: 4 / 3; background: var(--bone-2); }
+.pillar-media img { width: 100%; height: 100%; object-fit: cover; }
+.pillar-badge {
+  position: absolute; left: 1rem; bottom: 1rem;
+  display: inline-flex; align-items: center; gap: .45rem;
+  padding: .42rem .82rem; border-radius: 999px;
+  background: rgb(14 33 64 / .82); backdrop-filter: blur(6px);
+  color: #fff; font-size: .8125rem; font-weight: 700; letter-spacing: .04em;
+}
+.pillar-badge .icon { width: 17px; height: 17px; color: #7fe0ff; }
+.pillar-body { padding: 1.5rem 1.5rem 1.7rem; display: flex; flex-direction: column; flex: 1; }
+.pillar-body h3 { margin-bottom: .3rem; }
+.pillar-plain {
+  font-family: Fraunces, Georgia, serif; font-size: 1.1rem; line-height: 1.4;
+  color: var(--gold-ink); font-weight: 500; margin-bottom: .85rem;
+}
+.pillar-body p { font-size: 1rem; color: var(--muted); }
+.pillar-body .link-more { margin-top: auto; padding-top: .9rem; }
+
+/* ------------------------------------------------------------------ steps -- */
+.steps { display: grid; gap: 1.35rem; grid-template-columns: repeat(4, 1fr); counter-reset: step; }
+.step {
+  position: relative; counter-increment: step;
+  background: var(--paper); border: 1px solid var(--line);
+  border-radius: var(--radius); padding: 1.6rem 1.4rem 1.5rem;
+}
+.step::before {
+  content: counter(step, decimal-leading-zero);
+  display: block; margin-bottom: .9rem;
+  font-family: Fraunces, Georgia, serif; font-size: 1.5rem; font-weight: 600;
+  color: var(--cyan); letter-spacing: -.02em;
+}
+.step h3 { font-size: 1.18rem; margin-bottom: .4rem; }
+.step p { font-size: .9688rem; color: var(--muted); margin: 0; }
+.step .icon-badge { position: absolute; top: 1.35rem; right: 1.25rem; margin: 0; }
+
+/* --------------------------------------------------------------- services -- */
+.services { display: grid; gap: 1.35rem; grid-template-columns: repeat(3, 1fr); }
+.service {
+  display: flex; flex-direction: column;
+  background: var(--paper); border: 1px solid var(--line);
+  border-radius: var(--radius); overflow: hidden;
+}
+.service-media { aspect-ratio: 16 / 10; background: var(--bone-2); }
+.service-media img { width: 100%; height: 100%; object-fit: cover; }
+.service-body { padding: 1.4rem 1.4rem 1.5rem; flex: 1; display: flex; flex-direction: column; gap: .55rem; }
+.service-body h3 { font-size: 1.2rem; margin: 0; display: flex; align-items: center; gap: .6rem; }
+.service-body h3 .icon { color: var(--cyan-ink); }
+.service-plain {
+  margin: 0; font-family: Fraunces, Georgia, serif; font-size: 1.06rem;
+  line-height: 1.4; color: var(--gold-ink); font-weight: 500;
+}
+.service-body p:not(.service-plain) { font-size: .9688rem; color: var(--muted); margin: 0; }
+
+/* Compact icon-only list for the longer service inventory. */
+.mini-grid { display: grid; gap: 1rem; grid-template-columns: repeat(4, 1fr); }
+.mini {
+  display: flex; gap: .9rem; align-items: flex-start;
+  background: var(--paper); border: 1px solid var(--line);
+  border-radius: var(--radius-sm); padding: 1.15rem 1.2rem;
+}
+.mini h4 { margin: 0 0 .2rem; }
+.mini p { margin: 0; font-size: .9375rem; color: var(--muted); }
+
+/* ------------------------------------------------------------ photo bands -- */
+/* Full-bleed image bands. These are the "very visible" part of the brief:
+   the photograph gets the whole viewport width and a real height, rather than
+   being reduced to a thumbnail beside a paragraph. */
+.band { position: relative; background: var(--ink); overflow: hidden; isolation: isolate; }
+.band-media { position: absolute; inset: 0; z-index: -1; }
+.band-media img { width: 100%; height: 100%; object-fit: cover; }
+/* Scrim falls off fast once it clears the text column (which ends near 50%),
+   so the subject of the photograph stays properly visible. The brief asked for
+   photography you can actually see; a flat 70% overlay across the whole frame
+   is how that gets quietly thrown away. */
+.band-media::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(95deg, rgb(9 22 44 / .93) 0%, rgb(9 22 44 / .86) 32%, rgb(9 22 44 / .5) 54%, rgb(9 22 44 / .18) 74%, rgb(9 22 44 / .1) 100%);
+}
+.band-in {
+  display: flex; align-items: center;
+  min-height: clamp(400px, 52vh, 560px);
+  padding-block: calc(var(--step) * 1.5);
+}
+.band-copy { max-width: 40rem; color: #cfdcef; }
+.band-copy h2 { color: #fff; }
+
+/* --------------------------------------------- dark-context text repairs -- */
+/* Several base rules hard-code a dark ink colour (.lede, .section-head p,
+   .checks strong, figcaption). Dropped onto a photo band or an ink section
+   they render dark-on-dark — text that is technically present and practically
+   invisible. These are the overrides that stop that happening, and they are
+   grouped here deliberately so any new dark surface inherits the whole set
+   rather than rediscovering the bug one element at a time. */
+.band-copy .lede,
+.ink-section .lede { color: #dbe6f5; }
+.band-copy .section-head p,
+.ink-section .section-head p { color: #a9bcd8; }
+.ink-section figcaption { color: #8fa3c2; }
+.band-copy p, .ink-section p { max-width: 62ch; }
+.band--center .band-in { justify-content: center; text-align: center; }
+.band--center .band-copy { max-width: 46rem; }
+.band--center .band-copy p { margin-inline: auto; }
+.band--center .eyebrow { justify-content: center; }
+
+/* Compact band used as an inner-page header. Same machinery as the full band,
+   just shorter — inner pages need to get to their content quickly. */
+.band--head .band-in { min-height: clamp(300px, 38vh, 420px); }
+.band--head h1 { color: #fff; }
+.band--head .band-copy { max-width: 44rem; }
+
+/* Numbered explainer rows — a big brand numeral beside a block of copy. Used
+   where a process has to be walked through rather than listed. */
+.walkthrough { display: grid; gap: 2.2rem; }
+.wt-row { display: grid; gap: 1.5rem; grid-template-columns: 5.5rem 1fr 1fr; align-items: start; }
+.wt-num {
+  font-family: Fraunces, Georgia, serif; font-size: clamp(2.4rem, 5vw, 3.6rem);
+  font-weight: 600; line-height: .9; color: var(--cyan);
+  letter-spacing: -.04em;
+}
+.wt-body h3 { margin-bottom: .45rem; }
+.wt-media { border-radius: var(--radius); overflow: hidden; background: var(--bone-2); box-shadow: var(--shadow); }
+.wt-media img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+.wt-row--noimg { grid-template-columns: 5.5rem 1fr; }
+
+/* A big single number with a label — used for scan readouts, never for
+   marketing statistics. Nothing on this concept claims a figure the practice
+   has not published. */
+.readouts { display: grid; gap: 1.2rem; grid-template-columns: repeat(3, 1fr); }
+.readout {
+  background: var(--paper); border: 1px solid var(--line);
+  border-left: 5px solid var(--cyan); border-radius: var(--radius);
+  padding: 1.6rem 1.5rem;
+}
+.readout-key {
+  font-family: Fraunces, Georgia, serif; font-size: clamp(1.6rem, 3vw, 2.1rem);
+  font-weight: 600; color: var(--ink); line-height: 1.05; margin-bottom: .5rem;
+}
+.readout p { font-size: .9688rem; color: var(--muted); margin: 0; }
+.readout--gold { border-left-color: var(--gold); }
+.readout--indigo { border-left-color: var(--indigo); }
+
+/* Long-form reading column. */
+.prose { max-width: 68ch; }
+.prose h3 { margin-top: 2rem; }
+.prose h3:first-child { margin-top: 0; }
+.prose ul { padding-left: 1.2rem; margin: 0 0 1.15em; }
+.prose li { margin-bottom: .45em; max-width: var(--measure); }
+
+/* Same idea, image on the right rather than behind. Used where the copy is too
+   long to sit legibly over a photograph. */
+.split { display: grid; gap: calc(var(--step) * 1.2); grid-template-columns: 1fr 1fr; align-items: center; }
+.split--flip .split-media { order: -1; }
+.split-media { border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-lg); background: var(--bone-2); }
+.split-media img { width: 100%; height: 100%; object-fit: cover; aspect-ratio: 4 / 3; }
+.split-media--tall img { aspect-ratio: 3 / 4; }
+
+figure { margin: 0; }
+.figure-full { border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow); background: var(--bone-2); }
+.figure-full img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
+figcaption { padding: .85rem 0 0; font-size: .9375rem; color: var(--muted); }
+
+/* -------------------------------------------------------------- checklist -- */
+.checks { list-style: none; margin: 0; padding: 0; display: grid; gap: .85rem; }
+.checks li { display: flex; gap: .75rem; align-items: flex-start; }
+.checks .icon { color: var(--cyan-ink); margin-top: .18rem; }
+.ink-section .checks .icon { color: #7fe0ff; }
+.checks strong { color: var(--ink); }
+.ink-section .checks strong { color: #fff; }
+
+/* Two-column "this is for you if" / "this is not" comparison. */
+.compare { display: grid; gap: 1.35rem; grid-template-columns: repeat(2, 1fr); }
+.compare-card { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.7rem 1.6rem; }
+.compare-card--warn { border-color: var(--line-2); background: var(--bone-2); }
+
+/* -------------------------------------------------------------------- FAQ -- */
+.faq { display: grid; gap: .8rem; }
+.faq details {
+  background: var(--paper); border: 1px solid var(--line);
+  border-radius: var(--radius-sm); overflow: hidden;
+}
+.faq summary {
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  padding: 1.15rem 1.4rem; min-height: 56px;
+  font-family: Fraunces, Georgia, serif; font-size: 1.14rem; font-weight: 600;
+  color: var(--ink); cursor: pointer; list-style: none;
+}
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after {
+  content: ""; flex: none; width: 12px; height: 12px;
+  border-right: 2.5px solid var(--cyan-ink); border-bottom: 2.5px solid var(--cyan-ink);
+  transform: rotate(45deg) translate(-2px, -2px); transition: transform .2s ease;
+}
+.faq details[open] summary::after { transform: rotate(225deg) translate(-3px, -3px); }
+.faq summary:hover { background: var(--bone); }
+.faq-body { padding: 0 1.4rem 1.35rem; }
+.faq-body p { font-size: 1rem; }
+
+/* ------------------------------------------------------------------ posts -- */
+.posts { display: grid; gap: 1.35rem; grid-template-columns: repeat(3, 1fr); }
+.post {
+  display: flex; flex-direction: column; gap: .6rem;
+  background: var(--paper); border: 1px solid var(--line);
+  border-radius: var(--radius); padding: 1.5rem 1.5rem 1.6rem;
+}
+.post-date { font-size: .8125rem; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--muted); }
+.post h3 { font-size: 1.22rem; margin: 0; }
+.post p { font-size: .9688rem; color: var(--muted); margin: 0; }
+.post .plainly-term { font-size: .75rem; }
+
+/* ------------------------------------------------------------------ forms -- */
+.form-card {
+  background: var(--paper); border: 1px solid var(--line);
+  border-radius: var(--radius-lg); padding: clamp(1.5rem, 3.5vw, 2.5rem);
+  box-shadow: var(--shadow);
+}
+.field { display: grid; gap: .45rem; margin-bottom: 1.15rem; }
+.field label { font-weight: 600; color: var(--ink); font-size: 1rem; }
+.field .hint { font-size: .875rem; color: var(--muted); }
+.field input, .field select, .field textarea {
+  font: inherit; font-size: 1.0625rem;
+  padding: .8rem .95rem; min-height: 52px;
+  border: 1.5px solid var(--line-2); border-radius: var(--radius-sm);
+  background: var(--bone); color: var(--ink); width: 100%;
+}
+.field textarea { min-height: 130px; resize: vertical; }
+.field input:focus, .field select:focus, .field textarea:focus { border-color: var(--cyan); background: #fff; }
+.field-row { display: grid; gap: 1.15rem; grid-template-columns: 1fr 1fr; }
+
+.choice-grid { display: grid; gap: .7rem; grid-template-columns: repeat(2, 1fr); margin-bottom: 1.15rem; }
+.choice {
+  display: flex; gap: .7rem; align-items: flex-start;
+  border: 1.5px solid var(--line-2); border-radius: var(--radius-sm);
+  padding: .95rem 1rem; cursor: pointer; background: var(--bone);
+}
+.choice:hover { border-color: var(--cyan); }
+.choice input { margin-top: .3rem; width: 20px; height: 20px; flex: none; accent-color: var(--cyan-ink); }
+.choice span { font-size: .9688rem; }
+.choice strong { display: block; color: var(--ink); font-size: 1.0625rem; }
+
+/* Standing disclosure attached to any form on this concept. Nothing here
+   submits anywhere, and a visitor is entitled to know that BEFORE typing their
+   details in, not after. */
+.form-notice {
+  display: flex; gap: .8rem; align-items: flex-start;
+  background: rgb(229 172 43 / .13); border: 1px solid rgb(229 172 43 / .45);
+  border-radius: var(--radius-sm); padding: 1rem 1.15rem;
+  font-size: .9688rem; color: #5c440d; margin-bottom: 1.5rem;
+}
+.form-notice .icon { color: var(--gold-ink); margin-top: .1rem; }
+/* Same unbreakable-token trap as `.contact-item` below: this notice carries the
+   practice's email address inside a flex row. */
+.form-notice p { margin: 0; max-width: none; min-width: 0; overflow-wrap: anywhere; }
+
+/* ------------------------------------------------------------- contact bar -- */
+.contact-grid { display: grid; gap: 1.1rem; grid-template-columns: repeat(4, 1fr); }
+.contact-item {
+  display: flex; gap: .9rem; align-items: flex-start;
+  background: var(--paper); border: 1px solid var(--line);
+  border-radius: var(--radius); padding: 1.35rem 1.35rem;
+}
+.contact-item h4 { margin: 0 0 .2rem; }
+.contact-item p, .contact-item a { margin: 0; font-size: 1rem; }
+.contact-item a { font-weight: 600; }
+
+/* A flex item refuses to shrink below its min-content width, and an email
+   address or a street address is one long unbreakable token — which is how a
+   292px column renders 332px wide at 320px and pushes the whole page sideways.
+   `min-width: 0` releases the item; `overflow-wrap: anywhere` is the value that
+   actually feeds back into min-content sizing (`break-word` does not, which is
+   why the obvious fix quietly fails here). */
+.contact-item > div, .mini > div, .step > div, .checks li > div { min-width: 0; }
+.contact-item p, .contact-item a, .foot ul a, .plainly-term { overflow-wrap: anywhere; }
+
+/* ----------------------------------------------------------------- footer -- */
+.foot { background: var(--ink); color: #a9bcd8; padding-block: calc(var(--step) * 1.5) var(--step); }
+.foot-top { display: grid; gap: 2rem; grid-template-columns: 1.4fr 1fr 1fr 1.2fr; margin-bottom: 2.5rem; }
+.foot h4 { color: #fff; font-family: Inter, system-ui, sans-serif; font-size: .8125rem; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; margin-bottom: 1rem; }
+.foot ul { list-style: none; margin: 0; padding: 0; display: grid; gap: .1rem; }
+.foot ul a { color: #cdd9ec; text-decoration: none; display: inline-flex; align-items: center; min-height: 40px; font-size: 1rem; }
+.foot ul a:hover { color: #7fe0ff; text-decoration: underline; }
+.foot .brand-name { color: #fff; }
+.foot .brand-name span { color: #7fe0ff; }
+.foot .brand-sub { color: #8fa3c2; }
+.foot p { font-size: .9688rem; }
+
+.foot-social { display: flex; gap: .5rem; margin-top: 1rem; }
+.foot-social a {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 44px; height: 44px; border-radius: 12px;
+  background: rgb(255 255 255 / .08); color: #cdd9ec;
+}
+.foot-social a:hover { background: rgb(0 173 239 / .3); color: #fff; }
+
+.foot-bottom {
+  border-top: 1px solid rgb(255 255 255 / .12); padding-top: 1.6rem;
+  display: flex; flex-wrap: wrap; gap: 1rem 2rem; justify-content: space-between;
+  font-size: .9375rem; color: #8fa3c2;
+}
+.foot-bottom p { max-width: 62ch; }
+
+/* --------------------------------------------------- concept disclosures -- */
+/* This is a redesign concept for a REAL, trading practice. It has to be
+   impossible to mistake for the practice's own site, and impossible to mistake
+   for medical advice. The label therefore appears in several independent
+   places rather than one: this banner, the footer note, the page <title>,
+   robots.txt, and an X-Robots-Tag response header. */
+.concept-banner {
+  background: var(--ink-2); color: #dbe6f5;
+  font-size: .875rem; line-height: 1.45;
+  border-bottom: 1px solid rgb(255 255 255 / .12);
+}
+.concept-banner .wrap { display: flex; gap: .75rem; align-items: center; padding-block: .7rem; }
+.concept-banner .icon { flex: none; width: 20px; height: 20px; color: var(--gold); }
+.concept-banner p { margin: 0; max-width: none; }
+.concept-banner strong { color: #fff; }
+
+.disclaimer {
+  border: 1px solid var(--line-2); background: var(--bone-2);
+  border-radius: var(--radius); padding: 1.4rem 1.5rem;
+  font-size: .9688rem; color: var(--muted);
+}
+.disclaimer h4 { margin-bottom: .4rem; }
+.disclaimer p { max-width: none; }
+.disclaimer p + p { margin-top: .6rem; }
+
+/* --------------------------------------------------------- scroll reveal -- */
+/* Targets are hidden only when the `.js` class is present, and that class is
+   stamped by an inline script in <head> BEFORE first paint. Doing it from a
+   deferred script instead guarantees a flash of un-animated content on a slow
+   connection, because the stylesheet is render-blocking and the script is not.
+   A visitor without JavaScript sees the finished page, never a blank one. */
+.js .reveal { opacity: 0; transform: translateY(18px); }
+.js .reveal.in { opacity: 1; transform: none; transition: opacity .6s ease, transform .6s cubic-bezier(.2, .7, .3, 1); }
+.js .reveal-d1.in { transition-delay: .08s; }
+.js .reveal-d2.in { transition-delay: .16s; }
+.js .reveal-d3.in { transition-delay: .24s; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  /* CRITICAL: killing the transition alone would leave every reveal target
+     stuck at opacity 0 — a blank page for the people most likely to need the
+     content. The opacity has to be forced back on explicitly. */
+  .js .reveal, .js .reveal.in { opacity: 1 !important; transform: none !important; transition: none !important; }
+  *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; }
+}
+
+/* ----------------------------------------------------------- responsive -- */
+@media (max-width: 1080px) {
+  .foot-top { grid-template-columns: 1fr 1fr; gap: 2rem 1.5rem; }
+  .mini-grid { grid-template-columns: repeat(2, 1fr); }
+  .contact-grid { grid-template-columns: repeat(2, 1fr); }
+  .steps { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 980px) {
+  .pillars, .services, .posts { grid-template-columns: repeat(2, 1fr); }
+  .split { grid-template-columns: 1fr; }
+  .split--flip .split-media { order: 0; }
+  .hero-cards { grid-template-columns: 1fr; margin-top: calc(var(--step) * -1); }
+  .plainly-grid { grid-template-columns: 1fr; }
+
+  /* Nav collapses to a disclosure button. Only when JS is present — without it
+     the toggle would be inert and the whole nav unreachable, so the no-JS path
+     keeps every link on screen instead. */
+  .js .nav-toggle {
+    display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+    min-height: 46px; padding: .5rem .95rem;
+    font: 600 .9375rem Inter, system-ui, sans-serif;
+    background: var(--paper); color: var(--ink);
+    border: 1.5px solid var(--line-2); border-radius: 999px; cursor: pointer;
+  }
+  .js .nav {
+    display: none; position: absolute; top: 100%; left: 0; right: 0;
+    flex-direction: column; align-items: stretch; gap: .15rem;
+    background: var(--bone); border-bottom: 1px solid var(--line);
+    padding: .75rem 1.25rem 1.25rem;
+    box-shadow: var(--shadow);
+  }
+  .js .nav[data-open="true"] { display: flex; }
+  .js .nav a { padding: .75rem .9rem; font-size: 1.0625rem; }
+  .js .nav .btn { margin-top: .5rem; }
+  .head-in { position: relative; }
+}
+
+@media (max-width: 720px) {
+  :root { --measure: 60ch; }
+  .pillars, .services, .posts, .compare, .steps, .mini-grid,
+  .contact-grid, .field-row, .choice-grid { grid-template-columns: 1fr; }
+  .foot-top { grid-template-columns: 1fr; gap: 1.75rem; }
+  .hero-in { min-height: auto; padding-block: calc(var(--step) * 2.2); }
+  .hero-media img { object-position: 62% 30%; }
+  /* On a narrow screen the directional scrim stops working — the copy and the
+     subject occupy the same column — so it becomes a vertical one instead. */
+  .hero-media::after {
+    background: linear-gradient(to bottom, rgb(9 22 44 / .62) 0%, rgb(9 22 44 / .86) 55%, rgb(9 22 44 / .94) 100%);
+  }
+  .band-media::after {
+    background: linear-gradient(to bottom, rgb(9 22 44 / .68) 0%, rgb(9 22 44 / .9) 60%, rgb(9 22 44 / .94) 100%);
+  }
+  .band-in { min-height: auto; padding-block: calc(var(--step) * 1.8); }
+}
+
+@media (max-width: 420px) {
+  /* 320px is the narrowest width worth supporting. The nav lockup is the usual
+     casualty at this width — an earlier concept shipped 46px of horizontal
+     overflow from exactly this element — so the sub-label is dropped and the
+     gutter tightened rather than letting the header set the page width. */
+  .wrap, .wrap--narrow { width: calc(100% - 1.75rem); }
+  .brand-sub { display: none; }
+  .brand-name { font-size: 1.16rem; }
+  .brand img { width: 26px; height: 35px; }
+  .btn { padding: .8rem 1.15rem; font-size: 1rem; }
+  .btn-row .btn { width: 100%; }
+  .plainly { padding: 1.25rem 1.2rem; }
+  .foot-bottom { font-size: .9063rem; }
+}
+
+/* Responsive additions for the components introduced with the inner pages. */
+@media (max-width: 980px) {
+  .wt-row { grid-template-columns: 4rem 1fr; }
+  .wt-media { grid-column: 2; }
+  .readouts { grid-template-columns: 1fr; }
+}
+@media (max-width: 720px) {
+  .wt-row { grid-template-columns: 1fr; gap: .9rem; }
+  .wt-media { grid-column: 1; }
+  .wt-num { font-size: 2.4rem; }
+}
+
+/* Message shown after a form is "submitted". A concept form that silently does
+   nothing is a dark pattern — the visitor has to be told, at the moment they
+   press the button, that their details went nowhere. */
+.form-status {
+  display: flex; gap: .75rem; align-items: flex-start;
+  margin-top: 1.25rem; padding: 1rem 1.15rem;
+  background: rgb(0 173 239 / .1);
+  border: 1px solid rgb(0 173 239 / .4);
+  border-radius: var(--radius-sm);
+  font-size: 1rem; color: var(--ink); max-width: none;
+}
+.form-status .icon { color: var(--cyan-ink); flex: none; margin-top: .15rem; }
+.form-status[hidden] { display: none; }
+
+/* ------------------------------------------------- layout modifiers ------ */
+/* These exist because the same one-off tweaks were briefly written as inline
+   style attributes — and an inline style outranks the entire stylesheet,
+   media queries included. Media queries change WHICH rules apply, not their
+   specificity, so `style="grid-template-columns:1.35fr 1fr"` quietly disabled
+   the mobile collapse and forced a two-column grid at 320px. Any layout that
+   has to respond to width must be a class. */
+.split--wide { grid-template-columns: 1.35fr 1fr; align-items: start; }
+.mini-grid--3 { grid-template-columns: repeat(3, 1fr); }
+
+@media (max-width: 980px) {
+  .split--wide { grid-template-columns: 1fr; }
+  .mini-grid--3 { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 720px) {
+  .mini-grid--3 { grid-template-columns: 1fr; }
+}
+
+/* Tap targets. WCAG 2.2 SC 2.5.8 sets 24x24 CSS px as the floor; a bare inline
+   link in a card renders about 20px tall, which fails. The radio inputs pass
+   via their wrapping label, but are enlarged anyway — this audience is exactly
+   the one that struggles with a small hit area. */
+.contact-item a {
+  display: inline-flex; align-items: center; min-height: 28px;
+}
+.choice input { width: 24px; height: 24px; }
+
+/* Grid and flex children default to `min-width: auto`, which resolves to their
+   CONTENT minimum — the longest unbreakable word, a replaced element's
+   intrinsic width, or a <select>'s widest option. A single oversized child then
+   widens its whole track and pushes the entire page sideways, which is how a
+   292px column renders 352px wide. Zeroing it on every grid child is the
+   blanket fix, and it costs nothing where it was not needed. */
+.split > *, .pillars > *, .services > *, .posts > *, .mini-grid > *,
+.steps > *, .compare > *, .contact-grid > *, .readouts > *,
+.plainly-grid > *, .field-row > *, .choice-grid > *, .foot-top > *,
+.walkthrough > *, .wt-row > * { min-width: 0; }
+
+/* A <select> is sized by its longest <option> and ignores a percentage width
+   for the purposes of that minimum. Both declarations are needed. */
+.field select { min-width: 0; max-width: 100%; }
+
+/* pd-network:start */
+/* Shared cross-link block across the Phuture Digital concept sites. Same markup
+   and rhythm everywhere; the palette below maps this site's own tokens onto it.
+   Appended at the END of the file so every pd-network* class outranks the bare
+   a{} p{} ul{} resets above. Keep that ordering. */
+.pd-network {
+  background: var(--ink);
+  color: #a9bcd8;
+  font-family: inherit;
+  padding: clamp(34px, 4.4vw, 52px) clamp(20px, 3.6vw, 48px);
+}
+.pd-network-inner { max-width: 1080px; margin: 0 auto; }
+.pd-network-eyebrow {
+  font-size: 10.5px; letter-spacing: .15em; text-transform: uppercase;
+  color: #7fe0ff; font-weight: 700; margin: 0 0 12px;
+}
+.pd-network-title {
+  font-family: Fraunces, Georgia, serif;
+  font-size: clamp(21px, 2.5vw, 27px); line-height: 1.15; letter-spacing: -.015em;
+  color: #ffffff; font-weight: 600; margin: 0 0 10px; text-wrap: balance;
+}
+.pd-network-lede {
+  font-size: 14.5px; line-height: 1.6; max-width: 56ch;
+  color: #a9bcd8; margin: 0 0 26px;
+}
+.pd-network-grid {
+  list-style: none; margin: 0 0 28px; padding: 0;
+  /* 150px min keeps all five on one row on desktop (auto-fit collapses empty
+     tracks), goes 2-up on phones instead of a very long stack, and avoids the
+     awkward wrap a larger min produces around tablet width. */
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px;
+}
+.pd-network-card { margin: 0; }
+.pd-network-card a {
+  display: flex; flex-direction: column; height: 100%;
+  padding: 0; overflow: hidden; text-decoration: none;
+  background: var(--ink-2); border: 1px solid rgb(255 255 255 / .14); border-radius: 12px;
+  transition: border-color .18s ease, transform .18s ease, background .18s ease;
+}
+.pd-network-card a:hover,
+.pd-network-card a:focus-visible {
+  border-color: #7fe0ff; background: #1d3d70; transform: translateY(-2px);
+}
+.pd-network-card a:focus-visible { outline: 2px solid #7fe0ff; outline-offset: 2px; }
+/* height:auto is required, not optional: the width/height attributes on the
+   <img> would otherwise pin the height and defeat aspect-ratio. */
+.pd-network-thumb {
+  display: block; width: 100%; height: auto;
+  aspect-ratio: 16 / 10; object-fit: cover; object-position: top center;
+  background: #1d3d70; border-bottom: 1px solid rgb(255 255 255 / .14);
+}
+.pd-network-card a:hover .pd-network-thumb { opacity: .92; }
+.pd-network-body { display: flex; flex-direction: column; gap: 3px; flex: 1; padding: 13px 15px 14px; min-width: 0; }
+.pd-network-name { color: #ffffff; font-size: 14.5px; font-weight: 650; line-height: 1.25; }
+.pd-network-sector { color: #a9bcd8; font-size: 12px; line-height: 1.4; }
+.pd-network-go {
+  color: #7fe0ff; font-size: 11px; letter-spacing: .05em; font-weight: 650;
+  margin-top: auto; padding-top: 11px;
+}
+.pd-network-cta {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 12px 18px;
+  padding-top: 22px; border-top: 1px solid rgb(255 255 255 / .14);
+}
+.pd-network-cta p { margin: 0 auto 0 0; font-size: 14px; color: #ffffff; font-weight: 600; max-width: none; }
+.pd-network-btn {
+  background: #7fe0ff; color: var(--ink); text-decoration: none;
+  padding: 10px 18px; border-radius: 12px; font-size: 13.5px; font-weight: 650;
+}
+.pd-network-btn:hover { opacity: .9; }
+.pd-network-link {
+  color: #a9bcd8; text-decoration: none; font-size: 13px;
+  border-bottom: 1px solid rgb(255 255 255 / .14); padding-bottom: 2px;
+}
+.pd-network-link:hover { color: #ffffff; }
+.pd-network-mark {
+  margin: 22px 0 0; padding-top: 16px; border-top: 1px solid rgb(255 255 255 / .14);
+  font-size: 11.5px; line-height: 1.55; color: #a9bcd8; max-width: 72ch;
+}
+.pd-network-mark strong { color: #ffffff; font-weight: 650; }
+@media (max-width: 560px) {
+  .pd-network-cta p { margin-right: 0; width: 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pd-network-card a { transition: none; }
+  .pd-network-card a:hover { transform: none; }
+}
+/* pd-network:end */
