@@ -20,6 +20,7 @@
   <symbol id="i-chart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20.5h18M6.5 20.5v-5.8M11.5 20.5V7.4M16.5 20.5v-9.2M21 20.5V4"/></symbol>
   <symbol id="i-move" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.2v17.6M3.2 12h17.6"/><path d="m9 6.2 3-3 3 3M9 17.8l3 3 3-3M6.2 9l-3 3 3 3M17.8 9l3 3-3 3"/></symbol>
   <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="m4.6 12.4 5 5 9.8-10.8"/></symbol>
+  <symbol id="i-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="m5 9 7 7 7-7"/></symbol>
   <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15m-6-6 6 6-6 6"/></symbol>
   <symbol id="i-phone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M6.4 3.4h3.1l1.5 3.9-2 1.5a12.2 12.2 0 0 0 6.2 6.2l1.5-2 3.9 1.5v3.1a2 2 0 0 1-2.2 2A17.2 17.2 0 0 1 4.4 5.6a2 2 0 0 1 2-2.2Z"/></symbol>
   <symbol id="i-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="2.6" y="5" width="18.8" height="14" rx="2.2"/><path d="m3.2 6.6 8.8 5.8 8.8-5.8"/></symbol>

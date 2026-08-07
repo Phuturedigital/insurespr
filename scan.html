@@ -3,14 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The scan, explained — InsureSPR Health concept by Phuture Digital</title>
-<meta name="description" content="What a DXA bone density and body composition scan actually is, what happens during it, and what the numbers mean — in plain English. Concept site by Phuture Digital.">
+<title>The scan, explained — InsureSPR Health concept demo by Phuture Digital</title>
+<meta name="description" content="What actually happens in a DXA bone density and body composition scan at InsureSPR Health — start to finish, without a single word you would have to look up. Concept demo by Phuture Digital.">
 <meta name="robots" content="noindex, nofollow">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Outfit:wght@300;400;500;600&display=swap">
 <link rel="stylesheet" href="styles.css">
+<!-- Stamp `.js` BEFORE first paint. A deferred script cannot do this without a
+     flash of content: the stylesheet blocks rendering and the script does not. -->
 <script>document.documentElement.className += ' js';</script>
 </head>
 <body>
@@ -37,6 +39,7 @@
   <symbol id="i-chart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20.5h18M6.5 20.5v-5.8M11.5 20.5V7.4M16.5 20.5v-9.2M21 20.5V4"/></symbol>
   <symbol id="i-move" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.2v17.6M3.2 12h17.6"/><path d="m9 6.2 3-3 3 3M9 17.8l3 3 3-3M6.2 9l-3 3 3 3M17.8 9l3 3-3 3"/></symbol>
   <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="m4.6 12.4 5 5 9.8-10.8"/></symbol>
+  <symbol id="i-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="m5 9 7 7 7-7"/></symbol>
   <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15m-6-6 6 6-6 6"/></symbol>
   <symbol id="i-phone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M6.4 3.4h3.1l1.5 3.9-2 1.5a12.2 12.2 0 0 0 6.2 6.2l1.5-2 3.9 1.5v3.1a2 2 0 0 1-2.2 2A17.2 17.2 0 0 1 4.4 5.6a2 2 0 0 1 2-2.2Z"/></symbol>
   <symbol id="i-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="2.6" y="5" width="18.8" height="14" rx="2.2"/><path d="m3.2 6.6 8.8 5.8 8.8-5.8"/></symbol>
@@ -70,373 +73,151 @@
 <div class="concept-banner">
   <div class="wrap">
     <svg class="icon" aria-hidden="true"><use href="#i-info"></use></svg>
-    <p><strong>This is a design concept, not a real clinic website.</strong> Phuture Digital built it to show how InsureSPR Health's own content could be presented. It is not affiliated with, endorsed by, or operated by the practice, and nothing here is medical advice.</p>
+    <p><strong>Concept demo — not a real clinic website.</strong> Phuture Digital built this to show how InsureSPR Health&rsquo;s own content could be presented. It is not affiliated with, endorsed by, or operated by the practice, no appointment made here reaches anyone, and nothing on it is medical advice.</p>
   </div>
 </div>
 <!-- banner:end -->
 
-<!-- header:start -->
-
-<div class="utility">
-  <div class="wrap utility-in">
-    <span class="utility-item">
-      <svg class="icon" aria-hidden="true"><use href="#i-pin"></use></svg>
-      7 Malibongwe Drive, EmedCentre, Randburg
-    </span>
-    <span class="utility-item utility-hide-sm">
-      <svg class="icon" aria-hidden="true"><use href="#i-clock"></use></svg>
-      Monday to Friday, 08:00 – 17:00
-    </span>
-    <span class="utility-spacer"></span>
-    <a class="utility-item" href="tel:+27834507861">
-      <svg class="icon" aria-hidden="true"><use href="#i-phone"></use></svg>
-      083 450 7861
-    </a>
-    <span class="utility-social">
-      <a href="https://www.facebook.com/InsureSPR/" rel="noopener" aria-label="InsureSPR Health on Facebook"><svg class="icon" aria-hidden="true"><use href="#i-facebook"></use></svg></a>
-      <a href="https://www.linkedin.com/company/InsureSPR" rel="noopener" aria-label="InsureSPR Health on LinkedIn"><svg class="icon" aria-hidden="true"><use href="#i-linkedin"></use></svg></a>
-      <a href="https://twitter.com/Bonevitalityc" rel="noopener" aria-label="InsureSPR Health on X"><svg class="icon" aria-hidden="true"><use href="#i-x"></use></svg></a>
-    </span>
-  </div>
-</div>
-<header class="head">
-  <div class="wrap head-in">
-    <a class="brand" href="index.html">
-      <img src="assets/mark.svg" alt="" width="34" height="34">
-      <span>
-        <span class="brand-name">Insure<span>SPR</span></span>
-        <span class="brand-sub">Precision Healthcare</span>
-      </span>
-    </a>
-
-    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
-      <svg class="icon" aria-hidden="true"><use href="#i-menu"></use></svg>
-      <span class="nav-toggle-label">Menu</span>
-    </button>
-
-    <nav class="nav" id="site-nav" aria-label="Main">
-      <a href="index.html">Home</a>
-      <a href="scan.html" aria-current="page">The scan</a>
-      <a href="services.html">Services</a>
-      <a href="about.html">About</a>
-      <a href="learn.html">Learn</a>
-      <a href="contact.html">Contact</a>
-      <a class="btn btn--primary" href="book.html">
-        Book a scan
-        <span class="btn-badge"><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></span>
+<!-- nav:start -->
+<div class="nav-shell">
+  <div class="wrap">
+    <nav class="nav" aria-label="Main">
+      <a class="brand" href="index.html">
+        <img src="assets/mark.svg" alt="" width="34" height="34">
+        <span>
+          <span class="brand-name">Insure<span>SPR</span></span>
+          <span class="brand-sub">Precision Healthcare</span>
+        </span>
       </a>
+
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links">
+        <svg class="icon" aria-hidden="true"><use href="#i-menu"></use></svg>
+        Menu
+      </button>
+
+      <div class="nav-links" id="nav-links" data-open="false">
+        <a href="index.html">Home</a>
+        <a href="programmes.html">Programmes</a>
+        <a href="scan.html" aria-current="page">The scan</a>
+        <a href="about.html">About</a>
+        <a href="learn.html">Learn</a>
+        <a href="contact.html">Contact</a>
+        <a class="btn btn--primary btn--sm" href="book.html">Book a scan <span class="btn-badge"><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></span></a>
+      </div>
+
+      <a class="btn btn--primary btn--sm" href="book.html">Book a scan <span class="btn-badge"><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></span></a>
     </nav>
   </div>
-</header>
-<!-- header:end -->
+</div>
+<!-- nav:end -->
 
 <main id="main">
 
-  <section class="band band--head">
-    <div class="band-media">
-      <img src="assets/scan.webp" alt="A person lying fully clothed on a flat, open scanning table while a radiographer operates the machine beside them." width="1600" height="1067" fetchpriority="high">
-    </div>
-    <div class="wrap band-in">
-      <div class="band-copy">
-        <p class="eyebrow eyebrow--light">The scan</p>
-        <h1>Ten minutes lying down. Then you actually know.</h1>
-        <p class="lede">Here is the whole thing, start to finish, without a single word you would have to look up.</p>
+  <section class="pad-sm">
+    <div class="wrap">
+      <div class="split">
+        <div>
+          <p class="eyebrow">The scan</p>
+          <h1>Ten minutes lying down. Then you actually know.</h1>
+          <p class="lede">Here is the whole thing, start to finish, without a single word you would have to look up.</p>
+        </div>
+        <div class="media media--wide reveal reveal-d1">
+          <img src="assets/scan.webp" alt="A person lying fully clothed on a flat, open scanning table while a radiographer operates the machine beside them." width="1600" height="1000" fetchpriority="high">
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- ==================================================================
-       WHAT IT IS. The clinical name first, then the translation — the
-       pattern the whole site runs on.
-       =================================================================== -->
+  <section class="pad-sm">
+    <div class="wrap">
+      <dl class="statstrip reveal">
+        <div><dt>On the table</dt><dd>10 min<small>Fully clothed, lying flat</small></dd></div>
+        <div><dt>In the practice</dt><dd>~1 hour<small>Most of it is talking</small></dd></div>
+        <div><dt>Needles</dt><dd>None<small>No dye, no injection</small></dd></div>
+        <div><dt>Enclosed space</dt><dd>None<small>Open table, not a tunnel</small></dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow">What it measures</p>
+        <h2>More than a bone density test</h2>
+        <p>The same ten minutes produces two different sets of numbers, which is why the practice calls DXA a blueprint rather than a test.</p>
+      </div>
+      <div class="pgrid reveal">
+        <article class="pcard">
+          <p class="pcard-name">Bone</p>
+          <h3>How strong your skeleton is</h3>
+          <p>Measured against what is normal for your age and sex, so thinning shows up as a number rather than as a broken wrist.</p>
+        </article>
+        <article class="pcard">
+          <p class="pcard-name">Muscle &amp; fat</p>
+          <h3>What you are actually made of</h3>
+          <p>Muscle, fat and bone separated out and located — limb by limb, not averaged into one figure on a scale.</p>
+        </article>
+        <article class="pcard">
+          <p class="pcard-name">Change</p>
+          <h3>Whether anything is working</h3>
+          <p>Repeat it later and the difference is measurable. That is the part a scale genuinely cannot tell you.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="ink-panel reveal">
+        <div class="section-head" style="margin-bottom:1.75rem">
+          <p class="eyebrow eyebrow--light">Rethink how you measure health</p>
+          <h2>BMI is a population average. You are not a population.</h2>
+          <p style="color:#a9bcd8">The practice&rsquo;s own argument, and it is a good one: traditional tools like BMI are population-based and outdated. Two people at the same height and weight can have completely different amounts of muscle and bone.</p>
+        </div>
+        <div class="split">
+          <div>
+            <h3 style="color:#fff">What most people go on</h3>
+            <p style="color:#a9bcd8">One number from a bathroom scale, which mixes muscle, fat, bone and water together and calls the total your weight. It is the least useful measurement in the room.</p>
+          </div>
+          <div>
+            <h3 style="color:#fff">What the practice measures instead</h3>
+            <p style="color:#a9bcd8">Personalised, science-based data you can track over time — the years you live strong and independent, which the practice calls your healthspan.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section>
     <div class="wrap">
       <div class="split">
-        <div class="reveal">
-          <p class="eyebrow">Start here</p>
-          <h2>What is a DXA scan?</h2>
-          <p>DXA stands for dual-energy X-ray absorptiometry. That is the only time you will need to read those words.</p>
-          <p>It is a scan that sends two very low-strength X-ray beams through your body. Dense material like bone absorbs them differently to muscle and fat, and the machine turns that difference into measurements. It is the same principle as a normal X-ray, at a small fraction of the strength, and it produces numbers rather than a picture of a break.</p>
-
-          <div class="plainly" style="margin-top:1.5rem">
-            <p class="plainly-term">
-              <svg class="icon" aria-hidden="true"><use href="#i-scan"></use></svg>
-              In one sentence
-            </p>
-            <p class="plainly-plain">You lie still for about ten minutes and walk out knowing <strong>how strong your bones are</strong> and <strong>how much muscle and fat you carry</strong>, and where.</p>
-          </div>
+        <div class="media media--wide reveal">
+          <img src="assets/results.webp" alt="A clinician showing a patient their results on a screen." width="1600" height="1000" loading="lazy">
         </div>
-
-        <figure class="split-media reveal reveal-d1">
-          <img src="assets/results.webp" alt="A hand pointing at a spine X-ray displayed on a lightbox." width="1200" height="800" loading="lazy">
-          <figcaption>The scan produces measurements you can track over time, not a single yes-or-no answer.</figcaption>
-        </figure>
-      </div>
-    </div>
-  </section>
-
-  <!-- ==================================================================
-       WHAT ACTUALLY HAPPENS. The unknown is what stops people booking.
-       =================================================================== -->
-  <section class="bone-2-section">
-    <div class="wrap">
-      <div class="section-head reveal">
-        <p class="eyebrow">Minute by minute</p>
-        <h2>What actually happens</h2>
-        <p>No needles, no dye, no enclosed tunnel, no getting undressed into a gown. Genuinely.</p>
-      </div>
-
-      <div class="walkthrough">
-        <article class="wt-row reveal">
-          <div class="wt-num">01</div>
-          <div class="wt-body">
-            <h3>You talk to a nurse first</h3>
-            <p>Before anything is switched on, you go through your history — past fractures, medication you take, whether a parent broke a hip, whether you have lost height, what you want to still be able to do in ten years.</p>
-            <p>This part matters more than people expect. The same number means different things for different people, and this is the conversation that decides which.</p>
-          </div>
-          <figure class="wt-media">
-            <img src="assets/nurse.webp" alt="A clinician talking with a patient across a desk in a bright consulting room." width="1400" height="933" loading="lazy">
-          </figure>
-        </article>
-
-        <article class="wt-row reveal">
-          <div class="wt-num">02</div>
-          <div class="wt-body">
-            <h3>You lie down on an open table</h3>
-            <p>Flat on your back, on a padded table in an open room. You keep your own clothes on — you will usually just be asked to take off anything with metal in it, like a belt, a zip or jewellery.</p>
-            <p>A scanning arm passes slowly above you. It does not touch you. There is no tunnel to go into and nothing closes around you, which is the single thing people are most relieved to hear.</p>
-          </div>
-          <figure class="wt-media">
-            <img src="assets/scan.webp" alt="A patient lying flat and fully clothed on an open scanning table." width="1600" height="1067" loading="lazy">
-          </figure>
-        </article>
-
-        <article class="wt-row reveal">
-          <div class="wt-num">03</div>
-          <div class="wt-body">
-            <h3>You stay still for about ten minutes</h3>
-            <p>You can breathe normally and talk. Staying reasonably still is the only thing asked of you — movement blurs the reading in the same way it blurs a photograph.</p>
-            <p>Most scans cover the lower spine and one hip, because those are the two places a fracture does the most damage to your life. A whole-body scan takes a little longer and is what gives the muscle and fat breakdown.</p>
-          </div>
-          <figure class="wt-media">
-            <img src="assets/clinic.webp" alt="A bright, modern clinic reception area." width="1400" height="933" loading="lazy">
-          </figure>
-        </article>
-
-        <article class="wt-row reveal">
-          <div class="wt-num">04</div>
-          <div class="wt-body">
-            <h3>Someone sits down and explains it</h3>
-            <p>This is the part most people have never had. Your results come up on a screen and get talked through — what is normal, what is not, what it means for you specifically, and what can actually be done about it.</p>
-            <p>You leave with the numbers written down and a plan, plus a date to come back and check whether the plan worked.</p>
-          </div>
-          <figure class="wt-media">
-            <img src="assets/coach.webp" alt="Two people in conversation across a table with notes between them." width="1000" height="667" loading="lazy">
-          </figure>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <!-- ==================================================================
-       WHAT IT MEASURES.
-       =================================================================== -->
-  <section>
-    <div class="wrap">
-      <div class="section-head reveal">
-        <p class="eyebrow">Three answers</p>
-        <h2>What you find out</h2>
-        <p>The practice's own phrase for this is "more than just bone density" — because one scan answers three separate questions.</p>
-      </div>
-
-      <div class="readouts">
-        <article class="readout reveal">
-          <div class="readout-key">Bone</div>
-          <p><strong style="color:var(--ink)">How solid your skeleton is.</strong> Measured at the spine and hip, where a break costs you the most. This is the number that says whether you are heading toward brittle bones — years before anything breaks.</p>
-        </article>
-        <article class="readout readout--indigo reveal reveal-d1">
-          <div class="readout-key">Muscle</div>
-          <p><strong style="color:var(--ink)">How much muscle you are carrying, and where.</strong> Muscle quietly disappears with age, and it is what catches you when you stumble. Losing it on one side only is worth knowing about too.</p>
-        </article>
-        <article class="readout readout--gold reveal reveal-d2">
-          <div class="readout-key">Fat</div>
-          <p><strong style="color:var(--ink)">How much fat you carry, and where it sits.</strong> Fat around the middle behaves differently to fat elsewhere. A bathroom scale cannot tell the two apart. This can.</p>
-        </article>
-      </div>
-
-      <div class="plainly" style="margin-top:2rem;max-width:none">
-        <p class="plainly-term">
-          <svg class="icon" aria-hidden="true"><use href="#i-chart"></use></svg>
-          Body composition
-        </p>
-        <p class="plainly-plain">What you are actually <strong>made of</strong> — rather than just what you weigh. Two people at the same weight can be built completely differently, and it changes what each of them should do next.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- ==================================================================
-       THE NUMBERS. The WHO T-score bands are an internationally published
-       standard, not something invented for this concept — which is why
-       they can safely be stated here, with the source named.
-       =================================================================== -->
-  <section class="ink-section">
-    <div class="wrap">
-      <div class="section-head reveal">
-        <p class="eyebrow eyebrow--light">Reading your result</p>
-        <h2>The number you will be given, and what it means</h2>
-        <p>Bone results come back as a <strong style="color:#fff">T-score</strong>. It sounds technical. It is actually just one number comparing your bones to those of a healthy young adult.</p>
-      </div>
-
-      <div class="readouts">
-        <article class="readout reveal" style="background:rgb(255 255 255 / .06);border-color:rgb(255 255 255 / .14)">
-          <div class="readout-key" style="color:#fff">−1 or above</div>
-          <p style="color:#cdd9ec"><strong style="color:#fff">Normal.</strong> Your bones are about as dense as they should be. The job now is holding on to that.</p>
-        </article>
-        <article class="readout readout--gold reveal reveal-d1" style="background:rgb(255 255 255 / .06);border-color:rgb(255 255 255 / .14);border-left-color:var(--gold)">
-          <div class="readout-key" style="color:#fff">−1 to −2.5</div>
-          <p style="color:#cdd9ec"><strong style="color:#fff">Thinner than they should be.</strong> The clinical word is osteopenia. This is the stage where there is still a great deal you can do — and the whole reason for scanning early.</p>
-        </article>
-        <article class="readout reveal reveal-d2" style="background:rgb(255 255 255 / .06);border-color:rgb(255 255 255 / .14);border-left-color:#ff9d7a">
-          <div class="readout-key" style="color:#fff">−2.5 or below</div>
-          <p style="color:#cdd9ec"><strong style="color:#fff">Osteoporosis.</strong> Bones have thinned enough that they break more easily. It is treatable, and treatment works better the sooner it starts.</p>
-        </article>
-      </div>
-
-      <p style="margin-top:1.75rem;color:#8fa3c2;font-size:.9688rem;max-width:62ch">These three bands are the standard classification published by the World Health Organization and used worldwide. A score is never read on its own, though — your age, your history and your other risk factors all change what it means for you, which is exactly what the consultation is for.</p>
-    </div>
-  </section>
-
-  <!-- ==================================================================
-       SAFETY + PREPARATION.
-       =================================================================== -->
-  <section>
-    <div class="wrap">
-      <div class="split split--flip">
-        <figure class="split-media reveal">
-          <img src="assets/bones.webp" alt="A grid of spine X-ray films on a viewing panel." width="1600" height="1067" loading="lazy">
-        </figure>
-
         <div class="reveal reveal-d1">
-          <p class="eyebrow">The two questions everyone asks</p>
-          <h2>Is it safe, and what do I wear?</h2>
-
-          <h3 style="margin-top:1.5rem">The radiation</h3>
-          <p>A DXA uses a very small dose — far lower than a standard chest X-ray, and a great deal lower than a CT scan. It is low enough that the scan is used routinely for repeat monitoring over many years.</p>
-          <p>If you want the exact figure for the machine at the practice, ask when you book. Any radiography service will tell you, and a good one will offer before you ask.</p>
-
-          <h3>What to wear</h3>
-          <ul class="checks" style="margin-bottom:1.15rem">
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg><span>Comfortable clothes with <strong>no metal</strong> — avoid zips, studs, underwire and belts if you can.</span></li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg><span>Leave jewellery at home, or expect to take it off.</span></li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg><span><strong>Tell them if you might be pregnant.</strong> The scan is not done during pregnancy.</span></li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg><span>Mention any recent scan that used contrast dye — it can affect the reading, and they may reschedule you.</span></li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg><span>Bring a list of your medication, and any previous bone scan results you have.</span></li>
-          </ul>
+          <p class="eyebrow">Afterwards</p>
+          <h2>You read it with someone</h2>
+          <p>The result is explained while you are still in the room, in the same plain language as the rest of this site — not posted to you a week later to decode alone.</p>
+          <p>You leave with what to do, what to change, and when to come back and check.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ==================================================================
-       WHO SHOULD BOOK.
-       =================================================================== -->
-  <section class="bone-2-section">
-    <div class="wrap">
-      <div class="section-head reveal">
-        <p class="eyebrow eyebrow--gold">Worth booking if…</p>
-        <h2>Reasons people come in</h2>
-      </div>
-
-      <div class="compare">
-        <div class="compare-card reveal">
-          <span class="icon-badge"><svg class="icon" aria-hidden="true"><use href="#i-bone"></use></svg></span>
-          <h3>For your bones</h3>
-          <ul class="checks">
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg><span>You have been through menopause</span></li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg><span>A parent or sibling has broken a hip, or has osteoporosis</span></li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg><span>You have broken a bone from a fall that should not have broken one</span></li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg><span>You have lost height, or your posture has changed</span></li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg><span>You take, or have taken, steroids long term</span></li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg><span>You live with a condition that affects bone — kidney disease among them</span></li>
-          </ul>
-        </div>
-
-        <div class="compare-card reveal reveal-d1">
-          <span class="icon-badge icon-badge--gold"><svg class="icon" aria-hidden="true"><use href="#i-target"></use></svg></span>
-          <h3>For everything else it measures</h3>
-          <ul class="checks">
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg><span>You train seriously and want real numbers instead of a scale</span></li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg><span>You are changing how you eat and want to see what is actually changing</span></li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg><span>You keep picking up the same injury on the same side</span></li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg><span>You have noticed you are less steady on your feet than you were</span></li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg><span>You are recovering from illness and want to know what you lost</span></li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg><span>You simply want a baseline while everything is still fine</span></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ------------------------------------------------------------ FAQ -- -->
   <section>
-    <div class="wrap wrap--narrow">
-      <div class="section-head section-head--center reveal">
-        <p class="eyebrow">Still wondering</p>
-        <h2>Questions people ask</h2>
-      </div>
-
-      <div class="faq reveal">
-        <details>
-          <summary>Will it hurt?</summary>
-          <div class="faq-body"><p>No. Nothing touches you and nothing goes into you. The most uncomfortable part is lying still on a firm table for ten minutes.</p></div>
-        </details>
-        <details>
-          <summary>Do I have to get undressed?</summary>
-          <div class="faq-body"><p>Usually not. You stay in your own clothes. You may be asked to remove metal — a belt, jewellery, sometimes an underwired bra — because metal shows up on the scan and interferes with the reading.</p></div>
-        </details>
-        <details>
-          <summary>Is it the same as an MRI?</summary>
-          <div class="faq-body"><p>No, and this is the difference that matters if you dislike enclosed spaces. An MRI is a tunnel you go inside, and it is loud. A DXA is an open table in an open room with an arm that passes above you. Nothing closes around you.</p></div>
-        </details>
-        <details>
-          <summary>How often should I have one?</summary>
-          <div class="faq-body"><p>It depends entirely on what the first one finds and what you are being treated for. Bone changes slowly, so scans are usually spaced out by a year or more — repeating one too soon simply cannot show a real change. The practice will tell you what interval makes sense for you.</p></div>
-        </details>
-        <details>
-          <summary>Will my medical aid cover it?</summary>
-          <div class="faq-body"><p>That depends on your plan and on why you are being scanned — cover is often better where there is a clinical reason such as a previous fracture or a diagnosis. Ask the practice directly, and check with your scheme before you come in.</p></div>
-        </details>
-        <details>
-          <summary>Can I bring someone with me?</summary>
-          <div class="faq-body"><p>Yes, and it is often a good idea. A second person hears the explanation too, and remembers the half of it you will not.</p></div>
-        </details>
-      </div>
-
-      <div class="disclaimer reveal" style="margin-top:2rem">
-        <h4>About this page</h4>
-        <p>This is general information written for a design concept, not medical advice, and it has not been reviewed by the practice. What a scan means for you personally depends on your own history — that is a conversation for a qualified healthcare professional.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- ------------------------------------------------------------ CTA -- -->
-  <section class="band band--center">
-    <div class="band-media">
-      <img src="assets/joy.webp" alt="A woman in her sixties smiling broadly in a park, holding out a rolled exercise mat." width="1600" height="1067" loading="lazy">
-    </div>
-    <div class="wrap band-in">
-      <div class="band-copy reveal">
-        <h2>Ten minutes now, or a fracture later</h2>
-        <p class="lede">Bone loss is silent right up until it is not. A baseline scan is the cheapest information you will ever buy about your next twenty years.</p>
-        <div class="btn-row" style="justify-content:center">
-          <a class="btn btn--primary" href="book.html">Book a scan <span class="btn-badge"><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></span></a>
-          <a class="btn btn--on-ink" href="services.html">See all services <span class="btn-badge"><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></span></a>
+    <div class="wrap">
+      <div class="ink-panel reveal" style="text-align:center">
+        <h2 style="max-width:24ch;margin-inline:auto">Ten minutes is the whole ask</h2>
+        <p style="color:#a9bcd8;max-width:48ch;margin-inline:auto">Lying down, fully clothed, on an open table. Everything else is conversation.</p>
+        <div class="btn-row" style="justify-content:center;margin-top:1.75rem">
+          <a class="btn btn--light" href="book.html">Book a scan <span class="btn-badge"><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></span></a>
+          <a class="btn btn--on-ink" href="contact.html">Ask a question first <span class="btn-badge"><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></span></a>
         </div>
       </div>
     </div>
   </section>
-
 </main>
+
 
 <!-- pd-network:start -->
 <section class="pd-network" aria-labelledby="pd-network-title">
@@ -512,43 +293,43 @@
 <!-- pd-network:end -->
 <!-- footer:start -->
 <footer class="foot">
-  <div class="wrap">
+  <div class="wrap foot-in">
     <div class="foot-top">
       <div>
         <a class="brand" href="index.html">
-          <img src="assets/mark-light.svg" alt="" width="30" height="40">
+          <img src="assets/mark-light.svg" alt="" width="34" height="34">
           <span>
-            <span class="brand-name">Insure<span>SPR</span> Health</span>
-            <span class="brand-sub">A confident movement for life</span>
+            <span class="brand-name">Insure<span>SPR</span></span>
+            <span class="brand-sub">Precision Healthcare</span>
           </span>
         </a>
-        <p style="margin-top:1rem">Bone and muscle health for confident, independent living — measured properly, explained plainly.</p>
+        <p style="margin-top:1rem;max-width:30ch">Bone and muscle health, measured properly and explained in plain English.</p>
         <div class="foot-social">
-          <a href="https://www.facebook.com/InsureSPR/" aria-label="InsureSPR Health on Facebook" rel="noopener noreferrer" target="_blank"><svg class="icon" aria-hidden="true"><use href="#i-facebook"></use></svg></a>
-          <a href="https://www.linkedin.com/company/InsureSPR" aria-label="InsureSPR Health on LinkedIn" rel="noopener noreferrer" target="_blank"><svg class="icon" aria-hidden="true"><use href="#i-linkedin"></use></svg></a>
-          <a href="https://twitter.com/Bonevitalityc" aria-label="InsureSPR Health on X" rel="noopener noreferrer" target="_blank"><svg class="icon" aria-hidden="true"><use href="#i-x"></use></svg></a>
+          <a href="https://www.facebook.com/InsureSPR/" rel="noopener" aria-label="InsureSPR Health on Facebook"><svg class="icon" aria-hidden="true"><use href="#i-facebook"></use></svg></a>
+          <a href="https://www.linkedin.com/company/InsureSPR" rel="noopener" aria-label="InsureSPR Health on LinkedIn"><svg class="icon" aria-hidden="true"><use href="#i-linkedin"></use></svg></a>
+          <a href="https://twitter.com/Bonevitalityc" rel="noopener" aria-label="InsureSPR Health on X"><svg class="icon" aria-hidden="true"><use href="#i-x"></use></svg></a>
         </div>
       </div>
 
       <div>
-        <h4>Explore</h4>
+        <h4>Pages</h4>
         <ul>
           <li><a href="index.html">Home</a></li>
-          <li><a href="scan.html">The scan explained</a></li>
-          <li><a href="services.html">Services</a></li>
-          <li><a href="about.html">About the practice</a></li>
+          <li><a href="programmes.html">Programmes</a></li>
+          <li><a href="scan.html">The scan</a></li>
+          <li><a href="about.html">About</a></li>
           <li><a href="learn.html">Learn</a></li>
+          <li><a href="contact.html">Contact</a></li>
         </ul>
       </div>
 
       <div>
         <h4>Programmes</h4>
         <ul>
-          <li><a href="services.html#strong">InsureStrong</a></li>
-          <li><a href="services.html#prevent">InsurePrevent</a></li>
-          <li><a href="services.html#reclaim">InsureReclaim</a></li>
+          <li><a href="programmes.html#strong">InsureStrong</a></li>
+          <li><a href="programmes.html#prevent">InsurePrevent</a></li>
+          <li><a href="programmes.html#reclaim">InsureReclaim</a></li>
           <li><a href="book.html">Book a scan</a></li>
-          <li><a href="contact.html">Contact</a></li>
         </ul>
       </div>
 
@@ -564,7 +345,7 @@
     </div>
 
     <div class="foot-bottom">
-      <p><strong style="color:#cdd9ec">Concept site.</strong> Designed and built by <a href="https://phuturedigital.co.za" rel="noopener noreferrer" target="_blank">Phuture Digital</a> as an independent redesign concept for InsureSPR Health. Not affiliated with or endorsed by the practice. Nothing on this site is medical advice — speak to a qualified healthcare professional. <a href="brand.html">See how it was designed and built &rarr;</a></p>
+      <p><strong>Concept demo.</strong> Designed and built by <a href="https://phuturedigital.co.za" rel="noopener noreferrer" target="_blank">Phuture Digital</a> as an independent redesign concept for InsureSPR Health. It is not the practice&rsquo;s official site and is not affiliated with or endorsed by them. Nothing here is medical advice — speak to a qualified healthcare professional. <a href="brand.html">See how it was designed and built &rarr;</a></p>
       <p>© 2026 Phuture Digital. Practice name, contact details and article titles belong to InsureSPR Health.</p>
     </div>
   </div>

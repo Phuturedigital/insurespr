@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The brand system — InsureSPR Health concept by Phuture Digital</title>
-<meta name="description" content="How the InsureSPR Health concept site was designed and built: the brand mark, the palette read from the vector logo, the type system, the component library and the process behind it. By Phuture Digital.">
+<title>The brand system — InsureSPR Health concept demo by Phuture Digital</title>
+<meta name="description" content="How the InsureSPR Health concept demo was designed and built: the mark, the palette read from the vector logo, the type system and the process behind it. By Phuture Digital.">
 <meta name="robots" content="noindex, nofollow">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Outfit:wght@300;400;500;600&display=swap">
 <link rel="stylesheet" href="styles.css">
 <!-- Stamp `.js` BEFORE first paint. A deferred script cannot do this without a
      flash of content: the stylesheet blocks rendering and the script does not. -->
@@ -39,6 +39,7 @@
   <symbol id="i-chart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20.5h18M6.5 20.5v-5.8M11.5 20.5V7.4M16.5 20.5v-9.2M21 20.5V4"/></symbol>
   <symbol id="i-move" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.2v17.6M3.2 12h17.6"/><path d="m9 6.2 3-3 3 3M9 17.8l3 3 3-3M6.2 9l-3 3 3 3M17.8 9l3 3-3 3"/></symbol>
   <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="m4.6 12.4 5 5 9.8-10.8"/></symbol>
+  <symbol id="i-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="m5 9 7 7 7-7"/></symbol>
   <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15m-6-6 6 6-6 6"/></symbol>
   <symbol id="i-phone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M6.4 3.4h3.1l1.5 3.9-2 1.5a12.2 12.2 0 0 0 6.2 6.2l1.5-2 3.9 1.5v3.1a2 2 0 0 1-2.2 2A17.2 17.2 0 0 1 4.4 5.6a2 2 0 0 1 2-2.2Z"/></symbol>
   <symbol id="i-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="2.6" y="5" width="18.8" height="14" rx="2.2"/><path d="m3.2 6.6 8.8 5.8 8.8-5.8"/></symbol>
@@ -72,83 +73,60 @@
 <div class="concept-banner">
   <div class="wrap">
     <svg class="icon" aria-hidden="true"><use href="#i-info"></use></svg>
-    <p><strong>This is a design concept, not a real clinic website.</strong> Phuture Digital built it to show how InsureSPR Health's own content could be presented. It is not affiliated with, endorsed by, or operated by the practice, and nothing here is medical advice.</p>
+    <p><strong>Concept demo — not a real clinic website.</strong> Phuture Digital built this to show how InsureSPR Health&rsquo;s own content could be presented. It is not affiliated with, endorsed by, or operated by the practice, no appointment made here reaches anyone, and nothing on it is medical advice.</p>
   </div>
 </div>
 <!-- banner:end -->
 
-<!-- header:start -->
-
-<div class="utility">
-  <div class="wrap utility-in">
-    <span class="utility-item">
-      <svg class="icon" aria-hidden="true"><use href="#i-pin"></use></svg>
-      7 Malibongwe Drive, EmedCentre, Randburg
-    </span>
-    <span class="utility-item utility-hide-sm">
-      <svg class="icon" aria-hidden="true"><use href="#i-clock"></use></svg>
-      Monday to Friday, 08:00 – 17:00
-    </span>
-    <span class="utility-spacer"></span>
-    <a class="utility-item" href="tel:+27834507861">
-      <svg class="icon" aria-hidden="true"><use href="#i-phone"></use></svg>
-      083 450 7861
-    </a>
-    <span class="utility-social">
-      <a href="https://www.facebook.com/InsureSPR/" rel="noopener" aria-label="InsureSPR Health on Facebook"><svg class="icon" aria-hidden="true"><use href="#i-facebook"></use></svg></a>
-      <a href="https://www.linkedin.com/company/InsureSPR" rel="noopener" aria-label="InsureSPR Health on LinkedIn"><svg class="icon" aria-hidden="true"><use href="#i-linkedin"></use></svg></a>
-      <a href="https://twitter.com/Bonevitalityc" rel="noopener" aria-label="InsureSPR Health on X"><svg class="icon" aria-hidden="true"><use href="#i-x"></use></svg></a>
-    </span>
-  </div>
-</div>
-<header class="head">
-  <div class="wrap head-in">
-    <a class="brand" href="index.html">
-      <img src="assets/mark.svg" alt="" width="34" height="34">
-      <span>
-        <span class="brand-name">Insure<span>SPR</span></span>
-        <span class="brand-sub">Precision Healthcare</span>
-      </span>
-    </a>
-
-    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
-      <svg class="icon" aria-hidden="true"><use href="#i-menu"></use></svg>
-      <span class="nav-toggle-label">Menu</span>
-    </button>
-
-    <nav class="nav" id="site-nav" aria-label="Main">
-      <a href="index.html">Home</a>
-      <a href="scan.html">The scan</a>
-      <a href="services.html">Services</a>
-      <a href="about.html">About</a>
-      <a href="learn.html">Learn</a>
-      <a href="contact.html">Contact</a>
-      <a class="btn btn--primary" href="book.html">
-        Book a scan
-        <span class="btn-badge"><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></span>
+<!-- nav:start -->
+<div class="nav-shell">
+  <div class="wrap">
+    <nav class="nav" aria-label="Main">
+      <a class="brand" href="index.html">
+        <img src="assets/mark.svg" alt="" width="34" height="34">
+        <span>
+          <span class="brand-name">Insure<span>SPR</span></span>
+          <span class="brand-sub">Precision Healthcare</span>
+        </span>
       </a>
+
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links">
+        <svg class="icon" aria-hidden="true"><use href="#i-menu"></use></svg>
+        Menu
+      </button>
+
+      <div class="nav-links" id="nav-links" data-open="false">
+        <a href="index.html">Home</a>
+        <a href="programmes.html">Programmes</a>
+        <a href="scan.html">The scan</a>
+        <a href="about.html">About</a>
+        <a href="learn.html">Learn</a>
+        <a href="contact.html">Contact</a>
+        <a class="btn btn--primary btn--sm" href="book.html">Book a scan <span class="btn-badge"><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></span></a>
+      </div>
+
+      <a class="btn btn--primary btn--sm" href="book.html">Book a scan <span class="btn-badge"><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></span></a>
     </nav>
   </div>
-</header>
-<!-- header:end -->
+</div>
+<!-- nav:end -->
 
 <main id="main">
 
-  <!-- ==================================================================
-       HERO. Deliberately plainer than the site's own: this page is the
-       working behind the work, so it should not compete with it.
-       =================================================================== -->
-  <section class="brandhero">
+  <section class="pad-sm">
     <div class="wrap">
-      <p class="trustpill trustpill--light">
-        <span class="trustpill-tag">Phuture Digital</span>
-        How this concept was designed and built
-      </p>
-      <h1>The brand system<br>behind the site</h1>
-      <p class="lede">Every colour, letterform and component on this concept traces back to a decision, and most of those decisions trace back to something the practice already owns. This page shows the working.</p>
-      <div class="btn-row">
-        <a class="btn btn--primary" href="index.html">See it in use <span class="btn-badge"><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></span></a>
-        <a class="btn btn--ghost" href="#process">The process <span class="btn-badge"><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></span></a>
+      <div class="split">
+        <div>
+          <p class="eyebrow">Phuture Digital</p>
+          <h1>The system behind the site</h1>
+          <p class="lede">Every colour and letterform here traces to a decision, and most of those trace back to something the practice already owns. This page shows the working.</p>
+          <div class="btn-row" style="margin-top:1.5rem">
+            <a class="btn btn--primary" href="index.html">See it in use <span class="btn-badge"><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></span></a>
+          </div>
+        </div>
+        <div class="card reveal reveal-d1" style="display:flex;align-items:center;justify-content:center;min-height:240px">
+          <img src="assets/lockup.svg" alt="The InsureSPR lockup: a gradient disc containing a line drawing of a torso and spine, beside the words Insure SPR and the line Precision Healthcare." width="360" height="97" style="width:min(100%,360px)">
+        </div>
       </div>
     </div>
   </section>
@@ -156,109 +134,96 @@
   <!-- ==================================================================
        THE MARK.
        =================================================================== -->
-  <section id="mark">
+  <section>
     <div class="wrap">
       <div class="section-head reveal">
         <p class="eyebrow">01 &middot; The mark</p>
         <h2>Genuine vector, and what we did with it</h2>
-        <p>The practice supplied its logo as two SVGs: a horizontal lockup and the disc mark on its own. Both turned out to be real vector geometry, which is rarer than it should be.</p>
+        <p>The practice supplied real vector artwork — rarer than it should be, and it meant nothing had to be redrawn. But the exporter had flattened each gradient into about 202 separate stops and written every coordinate to six decimal places.</p>
       </div>
-
-      <div class="split2 reveal">
-        <div class="specimen specimen--light">
-          <img src="assets/lockup.svg" alt="The InsureSPR lockup: a gradient disc containing a line drawing of a torso and spine, beside the words Insure SPR and the line Precision Healthcare." width="380" height="103">
-          <p class="specimen-cap">Primary lockup, light ground</p>
-        </div>
-        <div class="specimen specimen--dark">
-          <img src="assets/lockup-light.svg" alt="The same lockup recoloured for dark backgrounds, with a white wordmark." width="380" height="103">
-          <p class="specimen-cap">Dark ground &mdash; a required variant, not a nicety</p>
-        </div>
-      </div>
-
-      <div class="fgrid reveal" style="margin-top:1.15rem">
-        <article class="fcard">
-          <span class="fcard-icon"><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg></span>
-          <h3>What was already right</h3>
-          <p>Real paths, no live text, no embedded rasters. Nothing had to be redrawn, so the mark on this site is the practice's own geometry rather than an approximation of it.</p>
+      <div class="pgrid reveal">
+        <article class="card">
+          <p class="pcard-name">Verified first</p>
+          <h3>The ramp was linear</h3>
+          <p style="color:var(--muted)">Before collapsing 202 stops to two, the middle stop was checked against a straight blend of the endpoints: rgb(21,113,193) against rgb(23,112,193). Inside 2/255, so two stops reproduce it.</p>
         </article>
-        <article class="fcard fcard--cyan">
-          <span class="fcard-icon"><svg class="icon" aria-hidden="true"><use href="#i-refresh"></use></svg></span>
-          <h3>What needed fixing</h3>
-          <p>The exporter flattened each gradient into about 202 separate stops, and wrote every coordinate to six decimal places. That was 89&nbsp;KB for a two-colour ramp.</p>
+        <article class="card">
+          <p class="pcard-name">Then rounded</p>
+          <h3>Finer than the screen</h3>
+          <p style="color:var(--muted)">Coordinates cut to two decimals. On a 300-unit viewBox drawn at 185px the error ceiling is 0.003% — well under one pixel, so invisible.</p>
         </article>
-        <article class="fcard fcard--ink">
-          <span class="fcard-icon"><svg class="icon" aria-hidden="true"><use href="#i-chart"></use></svg></span>
-          <h3>The result</h3>
-          <p>Two stops instead of 202, coordinates rounded to a precision finer than the screen can show: <strong>89&nbsp;KB down to 48&nbsp;KB</strong>, and the disc mark from 62&nbsp;KB to 16&nbsp;KB. Pixel-identical.</p>
+        <article class="card">
+          <p class="pcard-name">Result</p>
+          <h3>89&nbsp;KB down to 48&nbsp;KB</h3>
+          <p style="color:var(--muted)">And the disc mark from 62&nbsp;KB to 16&nbsp;KB, pixel-identical. A dark-ground variant exists because the wordmark is a hardcoded #004AAD that vanishes on the navy — a legibility fix, not a style option.</p>
         </article>
       </div>
-
-      <p class="notebox reveal">
-        <svg class="icon" aria-hidden="true"><use href="#i-info"></use></svg>
-        <span>The supplied wordmark is a hardcoded <code>#004AAD</code>, and the gradient&rsquo;s deep end is <code>#2E3192</code>. Both sit close enough to the navy used across this site that the logo would half-disappear on it. That is why a dark-ground variant exists at all &mdash; it is a legibility fix, not a style option.</span>
-      </p>
     </div>
   </section>
 
   <!-- ==================================================================
-       PALETTE.
+       COLOUR.
        =================================================================== -->
-  <section class="bone-2-section" id="palette">
+  <section>
     <div class="wrap">
       <div class="section-head reveal">
         <p class="eyebrow">02 &middot; Colour</p>
         <h2>Read off the logo, not picked to taste</h2>
-        <p>The first pass at this concept had only a raster logo to work from and sampled it by peak chroma. When the vector arrived, the real values could be read directly &mdash; and the sampling had been close, but not exact.</p>
+        <p>An earlier pass had only a raster to work from and sampled it by peak chroma. When the vector arrived the real values could be read directly — and the sampling had been close, but not exact.</p>
       </div>
-
-      <ul class="swatches reveal">
-        <li class="swatch" style="--sw:#00aeef">
-          <span class="swatch-chip"></span>
-          <b>Process Cyan</b><code>#00AEEF</code>
-          <span class="swatch-note">Gradient start. The brand&rsquo;s loudest asset &mdash; used as a fill, never as small text.</span>
+      <ul class="pgrid reveal" style="list-style:none;margin:0;padding:0">
+        <li class="card" style="padding:0;overflow:hidden">
+          <span style="display:block;height:5rem;background:#00aeef"></span>
+          <span style="display:block;padding:.9rem 1rem 1.1rem">
+            <b style="display:block;color:var(--ink);font-size:.95rem">Process Cyan</b>
+            <code style="font-family:var(--f-mono);font-size:.78rem;color:var(--cyan-ink)">#00AEEF</code>
+            <span style="display:block;font-size:.82rem;line-height:1.45;color:var(--muted);margin-top:.35rem">Gradient start. The brand&rsquo;s loudest asset — used as a fill, never as small text.</span>
+          </span>
         </li>
-        <li class="swatch" style="--sw:#2e3192">
-          <span class="swatch-chip"></span>
-          <b>Deep Indigo</b><code>#2E3192</code>
-          <span class="swatch-note">Gradient end. Sampling had guessed <code>#213F9A</code>.</span>
+        <li class="card" style="padding:0;overflow:hidden">
+          <span style="display:block;height:5rem;background:#2e3192"></span>
+          <span style="display:block;padding:.9rem 1rem 1.1rem">
+            <b style="display:block;color:var(--ink);font-size:.95rem">Deep Indigo</b>
+            <code style="font-family:var(--f-mono);font-size:.78rem;color:var(--cyan-ink)">#2E3192</code>
+            <span style="display:block;font-size:.82rem;line-height:1.45;color:var(--muted);margin-top:.35rem">Gradient end. Sampling had guessed #213F9A.</span>
+          </span>
         </li>
-        <li class="swatch" style="--sw:#004aad">
-          <span class="swatch-chip"></span>
-          <b>Wordmark Azure</b><code>#004AAD</code>
-          <span class="swatch-note">The letterform fill. Sampling had guessed <code>#0253A5</code>.</span>
+        <li class="card" style="padding:0;overflow:hidden">
+          <span style="display:block;height:5rem;background:#004aad"></span>
+          <span style="display:block;padding:.9rem 1rem 1.1rem">
+            <b style="display:block;color:var(--ink);font-size:.95rem">Wordmark Azure</b>
+            <code style="font-family:var(--f-mono);font-size:.78rem;color:var(--cyan-ink)">#004AAD</code>
+            <span style="display:block;font-size:.82rem;line-height:1.45;color:var(--muted);margin-top:.35rem">The letterform fill. Sampling had guessed #0253A5.</span>
+          </span>
         </li>
-        <li class="swatch" style="--sw:#0072a8">
-          <span class="swatch-chip"></span>
-          <b>Cyan Ink</b><code>#0072A8</code>
-          <span class="swatch-note">The working partner. See the contrast note below.</span>
+        <li class="card" style="padding:0;overflow:hidden">
+          <span style="display:block;height:5rem;background:#0072a8"></span>
+          <span style="display:block;padding:.9rem 1rem 1.1rem">
+            <b style="display:block;color:var(--ink);font-size:.95rem">Cyan Ink</b>
+            <code style="font-family:var(--f-mono);font-size:.78rem;color:var(--cyan-ink)">#0072A8</code>
+            <span style="display:block;font-size:.82rem;line-height:1.45;color:var(--muted);margin-top:.35rem">The working partner. See the contrast note below.</span>
+          </span>
         </li>
-        <li class="swatch" style="--sw:#e5ac2b">
-          <span class="swatch-chip"></span>
-          <b>Signal Gold</b><code>#E5AC2B</code>
-          <span class="swatch-note">From the lockup&rsquo;s ring. Reserved for outcomes &mdash; what you get.</span>
+        <li class="card" style="padding:0;overflow:hidden">
+          <span style="display:block;height:5rem;background:#0a1c3d"></span>
+          <span style="display:block;padding:.9rem 1rem 1.1rem">
+            <b style="display:block;color:var(--ink);font-size:.95rem">Ink Navy</b>
+            <code style="font-family:var(--f-mono);font-size:.78rem;color:var(--cyan-ink)">#0A1C3D</code>
+            <span style="display:block;font-size:.82rem;line-height:1.45;color:var(--muted);margin-top:.35rem">Deepest surface — the dark panels and the footer.</span>
+          </span>
         </li>
-        <li class="swatch" style="--sw:#0e2140">
-          <span class="swatch-chip"></span>
-          <b>Ink Navy</b><code>#0E2140</code>
-          <span class="swatch-note">Deepest surface. Carries the dark bands and the dark cards.</span>
-        </li>
-        <li class="swatch" style="--sw:#faf6ef">
-          <span class="swatch-chip swatch-chip--bordered"></span>
-          <b>Bone</b><code>#FAF6EF</code>
-          <span class="swatch-note">The page ground. Warm and faintly skeletal &mdash; a long way from clinical white.</span>
+        <li class="card" style="padding:0;overflow:hidden">
+          <span style="display:block;height:5rem;background:#eef3f9;border-bottom:1px solid var(--line)"></span>
+          <span style="display:block;padding:.9rem 1rem 1.1rem">
+            <b style="display:block;color:var(--ink);font-size:.95rem">Ground</b>
+            <code style="font-family:var(--f-mono);font-size:.78rem;color:var(--cyan-ink)">#EEF3F9</code>
+            <span style="display:block;font-size:.82rem;line-height:1.45;color:var(--muted);margin-top:.35rem">The page itself. Pale blue-grey, so white cards read as objects on a surface rather than as the page.</span>
+          </span>
         </li>
       </ul>
-
-      <div class="split2 reveal" style="margin-top:2rem">
-        <div>
-          <h3>The blue&ndash;gold rule</h3>
-          <p>The palette carries the site&rsquo;s organising idea. <strong>Blue is the clinical side</strong> &mdash; measurement, the scan, the science. <strong>Gold is the human side</strong> &mdash; plain English, the outcome, you.</p>
-          <p>It is applied literally. On the services page every card runs the same three lines: the practice&rsquo;s own clinical name in blue, a plain-English translation, then what you actually get, in gold.</p>
-        </div>
-        <p class="notebox notebox--warn">
-          <svg class="icon" aria-hidden="true"><use href="#i-alert"></use></svg>
-          <span><strong>Process Cyan cannot carry small text.</strong> <code>#00AEEF</code> on white measures about 2.5:1, well under the 4.5:1 the WCAG AA floor requires. It is gorgeous as a fill and unusable as a label. Every place the brand blue has to carry actual words, it is <code>#0072A8</code> instead &mdash; and on dark grounds, <code>#7FE0FF</code>.</span>
-        </p>
+      <div class="note note--warn reveal" style="margin-top:1.5rem">
+        <svg class="icon" aria-hidden="true"><use href="#i-alert"></use></svg>
+        <span><strong>Process Cyan cannot carry small text.</strong> #00AEEF on white measures about 2.5:1, well under the 4.5:1 the WCAG AA floor requires. It is gorgeous as a fill and unusable as a label — so wherever the brand blue has to carry actual words it is #0072A8 instead, and on dark grounds #7FE0FF.</span>
       </div>
     </div>
   </section>
@@ -266,174 +231,105 @@
   <!-- ==================================================================
        TYPE.
        =================================================================== -->
-  <section id="type">
+  <section>
     <div class="wrap">
       <div class="section-head reveal">
         <p class="eyebrow">03 &middot; Type</p>
-        <h2>Two faces, one job each</h2>
-        <p>The first version of this site paired Fraunces with Inter. It read as dry &mdash; correct, but with nothing to say. The replacement gives the display voice some actual character and keeps the body text quietly excellent.</p>
+        <h2>Three cuts, one job each</h2>
       </div>
-
-      <div class="split2 reveal">
-        <div class="specimen specimen--light">
-          <p class="specimen-name">Bricolage Grotesque</p>
-          <p class="specimen-huge">Aa</p>
-          <p class="specimen-line">Strong bones. A body that keeps up with you.</p>
-          <p class="specimen-cap">Display. Variable on optical size and width &mdash; <code>opsz</code> is tracked to the rendered size so the big cuts tighten instead of looking like blown-up text.</p>
-        </div>
-        <div class="specimen specimen--light">
-          <p class="specimen-name specimen-name--body">Plus Jakarta Sans</p>
-          <p class="specimen-huge specimen-huge--body">Aa</p>
-          <p class="specimen-line specimen-line--body">A ten-minute scan tells you years earlier, while there is still plenty you can do about it.</p>
-          <p class="specimen-cap">Body. Open apertures and a tall x-height, set at an 18px base rather than the usual 16 &mdash; this practice&rsquo;s patients skew over fifty, so legibility is a functional requirement, not a preference.</p>
-        </div>
+      <div class="pgrid reveal">
+        <article class="card">
+          <p class="pcard-name">Display</p>
+          <p style="font-family:var(--f-display);font-weight:300;font-size:clamp(2.4rem,5vw,3.4rem);line-height:1;letter-spacing:-.04em;color:var(--ink);margin:.4rem 0">Outfit</p>
+          <p style="color:var(--muted);font-size:.9rem">Set light and large. That combination is most of the register — the same sizes set bold would read as a much louder brand than a diagnostic practice wants.</p>
+        </article>
+        <article class="card">
+          <p class="pcard-name">Body</p>
+          <p style="font-family:var(--f-body);font-weight:400;font-size:clamp(1.8rem,3.6vw,2.5rem);line-height:1.05;color:var(--ink);margin:.4rem 0">IBM Plex Sans</p>
+          <p style="color:var(--muted);font-size:.9rem">A genuine healthcare and scientific face. Open apertures and a tall x-height, set at a 17px base rather than the usual 16 — these patients skew over fifty.</p>
+        </article>
+        <article class="card">
+          <p class="pcard-name">Measurement</p>
+          <p style="font-family:var(--f-mono);font-weight:500;font-size:clamp(1.4rem,2.8vw,1.95rem);line-height:1.1;color:var(--ink);margin:.4rem 0">IBM&nbsp;Plex&nbsp;Mono</p>
+          <p style="color:var(--muted);font-size:.9rem">Every label, duration and figure on the site. Mono because measurement is the subject — it reads as a clinical readout, which is exactly what &ldquo;Precision Healthcare&rdquo; claims.</p>
+        </article>
       </div>
-
-      <ul class="scale reveal">
-        <li><span class="scale-label">H1 &middot; clamp(2.6&ndash;5.1rem)</span><span class="scale-demo" style="font-size:clamp(2rem,4vw,3.2rem)">Strong bones</span></li>
-        <li><span class="scale-label">H2 &middot; clamp(2&ndash;3.15rem)</span><span class="scale-demo" style="font-size:clamp(1.6rem,3vw,2.3rem)">Everything on offer</span></li>
-        <li><span class="scale-label">H3 &middot; clamp(1.3&ndash;1.7rem)</span><span class="scale-demo" style="font-size:1.45rem">About ten minutes</span></li>
-        <li><span class="scale-label">Body &middot; 1.125rem</span><span class="scale-demo scale-demo--body">You lie on your back on an open table, fully clothed.</span></li>
-      </ul>
     </div>
   </section>
 
   <!-- ==================================================================
-       COMPONENTS — live, not pictures of components.
+       THE LINE NOT CROSSED.
        =================================================================== -->
-  <section class="ink-section" id="components">
+  <section>
     <div class="wrap">
-      <div class="section-head reveal">
-        <p class="eyebrow eyebrow--light">04 &middot; Components</p>
-        <h2>The kit</h2>
-        <p>Everything below is the live component, rendered by the same stylesheet the rest of the site uses. Nothing here is a screenshot.</p>
+      <div class="ink-panel reveal">
+        <p class="eyebrow eyebrow--light">04 &middot; The line we did not cross</p>
+        <h2>The reference was a pricing page. This one is not.</h2>
+        <p style="color:#a9bcd8;max-width:62ch">The layout this concept follows sells four tiers, at $450, $2,800, $6,500 a year and $120 a month. InsureSPR publishes no prices at all — its own booking system has no services configured — so the programme cards keep the structure and drop the number.</p>
+        <p style="color:#a9bcd8;max-width:62ch">The same rule removed the star rating, the review count and the completed-works counter that layouts like this ship with. Inventing any of those for a real medical practice is a false commercial claim, not a design placeholder.</p>
       </div>
-
-      <div class="kit reveal">
-        <div class="kit-row">
-          <p class="kit-label">Actions</p>
-          <div class="btn-row">
-            <a class="btn btn--primary" href="#components">Primary <span class="btn-badge"><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></span></a>
-            <a class="btn btn--on-ink" href="#components">On ink <span class="btn-badge"><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></span></a>
-            <a class="btn btn--primary btn--sm" href="#components">Compact <span class="btn-badge"><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></span></a>
-          </div>
-        </div>
-
-        <div class="kit-row">
-          <p class="kit-label">Trust pill</p>
-          <p class="trustpill"><span class="trustpill-tag">DXA</span> The gold standard for measuring bone density</p>
-        </div>
-
-        <div class="kit-row">
-          <p class="kit-label">Tags</p>
-          <ul class="tagcloud">
-            <li>Bone density</li><li>Body composition</li><li>Fall prevention</li>
-            <li>Mobility</li><li>Osteoporosis</li><li>Health coaching</li>
-          </ul>
-        </div>
-      </div>
-
-      <p class="notebox notebox--onink reveal">
-        <svg class="icon" aria-hidden="true"><use href="#i-alert"></use></svg>
-        <span><strong>One component was deliberately left empty.</strong> The reference layout this design borrows from ships a star rating, a review count and a completed-works counter. InsureSPR publishes none of those, so the same components carry facts that are actually true &mdash; how long the scan takes, what it does not involve, when the practice is open. Inventing social proof for a real medical practice is not a design decision, it is a false claim.</span>
-      </p>
     </div>
   </section>
 
   <!-- ==================================================================
        PROCESS.
        =================================================================== -->
-  <section id="process">
+  <section>
     <div class="wrap">
       <div class="section-head reveal">
         <p class="eyebrow">05 &middot; Process</p>
         <h2>How it was made</h2>
-        <p>Five passes, in order. Each one produced something the next one needed.</p>
       </div>
-
-      <ol class="processlist reveal">
-        <li>
-          <span class="processlist-num">01</span>
-          <div>
-            <h3>Read everything the practice publishes</h3>
-            <p>Homepage, about, blog, contact and booking flow. Every service name, every claim and every contact detail was pulled verbatim first, so that the design had real content to be shaped around rather than placeholder text.</p>
-          </div>
-        </li>
-        <li>
-          <span class="processlist-num">02</span>
-          <div>
-            <h3>Find the one idea</h3>
-            <p>The practice writes in clinical language for an audience deciding whether a scan is worth booking. That gap <em>is</em> the brief. Everything else follows from it: keep every clinical name exactly as written, and pair each with what it means and what you get.</p>
-          </div>
-        </li>
-        <li>
-          <span class="processlist-num">03</span>
-          <div>
-            <h3>Build the system before the pages</h3>
-            <p>Colour read off the logo, a type scale, then a component kit &mdash; actions, cards, pills, stat blocks. Pages assembled from the kit stay consistent for free; pages designed one at a time drift.</p>
-          </div>
-        </li>
-        <li>
-          <span class="processlist-num">04</span>
-          <div>
-            <h3>Write it, then cut it</h3>
-            <p>Every factual claim was checked back against the practice&rsquo;s own material, and anything that could not be traced was removed rather than softened. That is why this concept shows no pricing: the real site publishes none.</p>
-          </div>
-        </li>
-        <li>
-          <span class="processlist-num">05</span>
-          <div>
-            <h3>Measure, do not eyeball</h3>
-            <p>Seven widths from 320px up, measured by script rather than judged from a screenshot. An earlier site in this series passed a desktop-and-mobile check while overflowing by 46px at 320 &mdash; which is exactly the kind of thing a screenshot will not tell you.</p>
-          </div>
-        </li>
-      </ol>
+      <div class="pgrid reveal">
+        <article class="card">
+          <p class="pcard-name">01</p>
+          <h3>Read everything the practice publishes</h3>
+          <p style="color:var(--muted)">Homepage, about, blog, contact and booking flow — pulled verbatim first, so the design was shaped around real content rather than placeholder text.</p>
+        </article>
+        <article class="card">
+          <p class="pcard-name">02</p>
+          <h3>Find the one idea</h3>
+          <p style="color:var(--muted)">The practice writes clinically for an audience deciding whether a scan is worth booking. That gap is the brief: keep every clinical name, add what it means and what you get.</p>
+        </article>
+        <article class="card">
+          <p class="pcard-name">03</p>
+          <h3>Build the system before the pages</h3>
+          <p style="color:var(--muted)">Colour read off the logo, a type scale, then a component kit. Pages assembled from a kit stay consistent for free; pages designed one at a time drift.</p>
+        </article>
+        <article class="card">
+          <p class="pcard-name">04</p>
+          <h3>Cut anything that cannot be traced</h3>
+          <p style="color:var(--muted)">Every factual claim checked back against the practice&rsquo;s own material, and anything unsourced removed rather than softened.</p>
+        </article>
+        <article class="card">
+          <p class="pcard-name">05</p>
+          <h3>Measure, do not eyeball</h3>
+          <p style="color:var(--muted)">Widths from 320px up, checked by script. The real test is whether the <em>document</em> scrolls sideways — not whether some element extends past the viewport, because a horizontal scroller&rsquo;s children legitimately do.</p>
+        </article>
+        <article class="card">
+          <p class="pcard-name">06</p>
+          <h3>No face under text</h3>
+          <p style="color:var(--muted)">An audit script finds every place text paints over a photograph. Page heads put copy and picture in separate columns, so a headline across someone&rsquo;s eyes is structurally impossible rather than something to keep re-checking.</p>
+        </article>
+      </div>
     </div>
   </section>
 
-  <!-- ==================================================================
-       HONEST NOTES.
-       =================================================================== -->
-  <section class="bone-2-section">
+  <section>
     <div class="wrap">
-      <div class="section-head reveal">
-        <p class="eyebrow eyebrow--gold">06 &middot; Straight answers</p>
-        <h2>What is real and what is ours</h2>
-      </div>
-      <div class="fgrid fgrid--2 reveal">
-        <article class="fcard">
-          <span class="fcard-icon"><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg></span>
-          <h3>The practice&rsquo;s own</h3>
-          <p>The name, mark and tagline. Every service name. The address, hours, phone number and email. The three programmes. The blog article titles. Claims like &ldquo;one consultation at one price&rdquo; and &ldquo;BMI is population-based and outdated&rdquo; are the practice&rsquo;s own words, paraphrased.</p>
-        </article>
-        <article class="fcard fcard--ink">
-          <span class="fcard-icon"><svg class="icon" aria-hidden="true"><use href="#i-info"></use></svg></span>
-          <h3>Ours</h3>
-          <p>All layout, colour application, typography, iconography and motion. Every plain-English translation and outcome line. The photography, which is licence-free stock chosen to show people at the ages the practice actually serves. And this page.</p>
-        </article>
-      </div>
-      <p class="notebox reveal">
-        <svg class="icon" aria-hidden="true"><use href="#i-alert"></use></svg>
-        <span><strong>InsureSPR Health is a real practice.</strong> This concept is not their official site, is not affiliated with them, and nothing on it is medical advice. The booking and contact forms have no backend and say so on the page rather than quietly swallowing a real person&rsquo;s health enquiry.</span>
-      </p>
-    </div>
-  </section>
-
-  <!-- ==================================================================
-       CTA.
-       =================================================================== -->
-  <section class="ink-section">
-    <div class="wrap" style="text-align:center">
-      <h2>Want this for your business?</h2>
-      <p style="margin-inline:auto">This is the kind of thing Phuture Digital builds before anyone commits &mdash; a complete, working site you can click through, so the decision is made on something real rather than a mockup.</p>
-      <div class="btn-row" style="justify-content:center;margin-top:1.6rem">
-        <a class="btn btn--primary" href="mailto:hello@phuturedigital.co.za">hello@phuturedigital.co.za <span class="btn-badge"><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></span></a>
-        <a class="btn btn--on-ink" href="https://www.phuturedigital.co.za" rel="noopener">phuturedigital.co.za <span class="btn-badge"><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></span></a>
+      <div class="ink-panel reveal" style="text-align:center">
+        <h2 style="max-width:22ch;margin-inline:auto">Want a site like this for your business?</h2>
+        <p style="color:#a9bcd8;max-width:48ch;margin-inline:auto">This is what Phuture Digital builds before anyone commits — a complete, working site you can click through, so the decision is made on something real.</p>
+        <div class="btn-row" style="justify-content:center;margin-top:1.75rem">
+          <a class="btn btn--light" href="mailto:hello@phuturedigital.co.za">hello@phuturedigital.co.za <span class="btn-badge"><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></span></a>
+          <a class="btn btn--on-ink" href="https://www.phuturedigital.co.za" rel="noopener">phuturedigital.co.za <span class="btn-badge"><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></span></a>
+        </div>
       </div>
     </div>
   </section>
 
 </main>
+
 
 <!-- pd-network:start -->
 <section class="pd-network" aria-labelledby="pd-network-title">
@@ -509,43 +405,43 @@
 <!-- pd-network:end -->
 <!-- footer:start -->
 <footer class="foot">
-  <div class="wrap">
+  <div class="wrap foot-in">
     <div class="foot-top">
       <div>
         <a class="brand" href="index.html">
-          <img src="assets/mark-light.svg" alt="" width="30" height="40">
+          <img src="assets/mark-light.svg" alt="" width="34" height="34">
           <span>
-            <span class="brand-name">Insure<span>SPR</span> Health</span>
-            <span class="brand-sub">A confident movement for life</span>
+            <span class="brand-name">Insure<span>SPR</span></span>
+            <span class="brand-sub">Precision Healthcare</span>
           </span>
         </a>
-        <p style="margin-top:1rem">Bone and muscle health for confident, independent living — measured properly, explained plainly.</p>
+        <p style="margin-top:1rem;max-width:30ch">Bone and muscle health, measured properly and explained in plain English.</p>
         <div class="foot-social">
-          <a href="https://www.facebook.com/InsureSPR/" aria-label="InsureSPR Health on Facebook" rel="noopener noreferrer" target="_blank"><svg class="icon" aria-hidden="true"><use href="#i-facebook"></use></svg></a>
-          <a href="https://www.linkedin.com/company/InsureSPR" aria-label="InsureSPR Health on LinkedIn" rel="noopener noreferrer" target="_blank"><svg class="icon" aria-hidden="true"><use href="#i-linkedin"></use></svg></a>
-          <a href="https://twitter.com/Bonevitalityc" aria-label="InsureSPR Health on X" rel="noopener noreferrer" target="_blank"><svg class="icon" aria-hidden="true"><use href="#i-x"></use></svg></a>
+          <a href="https://www.facebook.com/InsureSPR/" rel="noopener" aria-label="InsureSPR Health on Facebook"><svg class="icon" aria-hidden="true"><use href="#i-facebook"></use></svg></a>
+          <a href="https://www.linkedin.com/company/InsureSPR" rel="noopener" aria-label="InsureSPR Health on LinkedIn"><svg class="icon" aria-hidden="true"><use href="#i-linkedin"></use></svg></a>
+          <a href="https://twitter.com/Bonevitalityc" rel="noopener" aria-label="InsureSPR Health on X"><svg class="icon" aria-hidden="true"><use href="#i-x"></use></svg></a>
         </div>
       </div>
 
       <div>
-        <h4>Explore</h4>
+        <h4>Pages</h4>
         <ul>
           <li><a href="index.html">Home</a></li>
-          <li><a href="scan.html">The scan explained</a></li>
-          <li><a href="services.html">Services</a></li>
-          <li><a href="about.html">About the practice</a></li>
+          <li><a href="programmes.html">Programmes</a></li>
+          <li><a href="scan.html">The scan</a></li>
+          <li><a href="about.html">About</a></li>
           <li><a href="learn.html">Learn</a></li>
+          <li><a href="contact.html">Contact</a></li>
         </ul>
       </div>
 
       <div>
         <h4>Programmes</h4>
         <ul>
-          <li><a href="services.html#strong">InsureStrong</a></li>
-          <li><a href="services.html#prevent">InsurePrevent</a></li>
-          <li><a href="services.html#reclaim">InsureReclaim</a></li>
+          <li><a href="programmes.html#strong">InsureStrong</a></li>
+          <li><a href="programmes.html#prevent">InsurePrevent</a></li>
+          <li><a href="programmes.html#reclaim">InsureReclaim</a></li>
           <li><a href="book.html">Book a scan</a></li>
-          <li><a href="contact.html">Contact</a></li>
         </ul>
       </div>
 
@@ -561,7 +457,7 @@
     </div>
 
     <div class="foot-bottom">
-      <p><strong style="color:#cdd9ec">Concept site.</strong> Designed and built by <a href="https://phuturedigital.co.za" rel="noopener noreferrer" target="_blank">Phuture Digital</a> as an independent redesign concept for InsureSPR Health. Not affiliated with or endorsed by the practice. Nothing on this site is medical advice — speak to a qualified healthcare professional. <a href="brand.html">See how it was designed and built &rarr;</a></p>
+      <p><strong>Concept demo.</strong> Designed and built by <a href="https://phuturedigital.co.za" rel="noopener noreferrer" target="_blank">Phuture Digital</a> as an independent redesign concept for InsureSPR Health. It is not the practice&rsquo;s official site and is not affiliated with or endorsed by them. Nothing here is medical advice — speak to a qualified healthcare professional. <a href="brand.html">See how it was designed and built &rarr;</a></p>
       <p>© 2026 Phuture Digital. Practice name, contact details and article titles belong to InsureSPR Health.</p>
     </div>
   </div>

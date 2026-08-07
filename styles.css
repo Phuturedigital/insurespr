@@ -1,100 +1,75 @@
 /* ============================================================================
    InsureSPR Health — concept redesign by Phuture Digital
    ----------------------------------------------------------------------------
-   A concept, not a live medical site. See the banner on every page.
+   A DESIGN CONCEPT. InsureSPR Health is a real practice in Randburg; this is
+   not their site and is not affiliated with them. See the banner on every page.
 
-   THE ORGANISING IDEA — translation.
-   The practice's own site is written in clinical language: "DXA bone density
-   and body composition analysis", "Breatheez (Diaphragmatic gateway)". This
-   redesign keeps every one of those services but pairs each with what it
-   actually means for the person booking it. The palette carries that idea:
+   BUILT FROM SCRATCH against a longevity-clinic reference layout: a pale
+   blue-grey ground, everything living inside generously rounded white cards, a
+   floating pill navigation, light-weight display type and circular arrow
+   badges on every action. The register is premium-clinical rather than
+   warm-editorial, which is the register a diagnostic practice actually wants.
 
-     BLUE  (the practice's own brand gradient) = the clinical side.
-                                                 Measurement, the scan, science.
-     GOLD  (from the lockup's ring)            = the human side.
-                                                 Plain English, outcome, you.
+   WHAT THE REFERENCE HAS THAT THIS DELIBERATELY DOES NOT:
+   the reference is a pricing-led page — $450, $2,800, $6,500/year. InsureSPR
+   publishes no prices at all (its own booking system has no services
+   configured), so the programme cards keep the structure and drop the number.
+   Inventing prices for a real medical practice is a false commercial claim,
+   not a design placeholder. Same rule that kept the star ratings off.
 
-   Type is set large throughout and the measure kept short. The audience for a
-   bone-health practice skews 50+, so legibility is a functional requirement
-   here, not a stylistic preference.
-
-   COLOUR BLOCKING.
-   Sections alternate bone / paper / ink, and card rows alternate paper / cyan /
-   ink within a single row. The rhythm is what carries the page: a run of white
-   cards on a white ground is where a clinical site goes flat.
+   COLOUR comes from the practice's own vector logo, read rather than sampled:
+     #00AEEF  gradient start (Pantone Process Cyan)
+     #2E3192  gradient end
+     #004AAD  wordmark
    ========================================================================= */
 
 /* ---------------------------------------------------------------- tokens -- */
 :root {
-  /* AUTHORITATIVE brand blues, read straight off the vector logo the practice
-     supplied — not sampled. The first pass had only a raster to work from and
-     sampled by peak chroma (tools/sample-colours.mjs); it landed --cyan within
-     1/255 but missed the other two. These are the real values:
-        #00AEEF  gradient start (Pantone Process Cyan)
-        #2E3192  gradient end
-        #004AAD  wordmark
-     See tools/optimise-logo.mjs. */
   --cyan: #00aeef;
-  --azure: #004aad;
   --indigo: #2e3192;
-
-  /* The disc gradient, reusable as a fill. Reproduces the logo's own ramp. */
+  --azure: #004aad;
   --brand-grad: linear-gradient(140deg, #00aeef 0%, #2e3192 100%);
-  /* Same ramp lifted for dark grounds, where #2E3192 sits too close to --ink. */
-  --brand-grad-light: linear-gradient(140deg, #7fe0ff 0%, #0072c6 100%);
 
-  /* Cyan is gorgeous as a fill and unusable as small text: #00AEEF on white is
-     about 2.5:1, well under the 4.5:1 WCAG AA floor. This is the darkened
-     partner used wherever the brand blue has to carry actual words. */
+  /* Cyan is unusable as small text — about 2.5:1 on white, under the 4.5:1
+     WCAG AA floor. These are the partners that carry actual words. */
   --cyan-ink: #0072a8;
-  /* Bright cyan for dark grounds — the counterpart that carries words on ink. */
   --cyan-lift: #7fe0ff;
 
-  /* Gold from the ring of the full lockup, plus a text-safe partner for the
-     same reason. */
-  --gold: #e5ac2b;
-  --gold-ink: #7d5a08;
+  --ink: #0a1c3d;          /* headings and the deepest surface */
+  --ink-2: #14305f;
+  --body: #4a5875;         /* body copy, softer than headings */
+  --muted: #6b7a96;
 
-  --ink: #0e2140;         /* headings, deepest surface */
-  --ink-2: #17305c;       /* raised dark surface */
-  --body: #3c4a61;        /* body copy — softer than the headings */
-  --muted: #5f6d84;
-
-  --bone: #faf6ef;        /* page ground. Warm, faintly skeletal, and a long
-                             way from the cold clinical white of every other
-                             medical site. */
-  --bone-2: #f3ece0;
+  /* The reference's ground is a pale blue-grey, not white. It is what makes
+     white cards read as objects sitting on a surface rather than as the page. */
+  --ground: #eef3f9;
+  --ground-2: #e4ecf6;
   --paper: #ffffff;
-  --line: #e6ddcd;
-  --line-2: #d8ccb6;
+  --line: #dfe7f2;
+  --line-2: #cbd8ea;
 
-  /* Generous rounding is a load-bearing part of this design language, not
-     decoration: it is what keeps a clinical subject feeling approachable. */
-  --radius: 20px;
-  --radius-sm: 14px;
-  --radius-lg: 32px;
-  --radius-pill: 999px;
+  /* Large radii throughout. A 28px card corner is the single strongest signal
+     of the reference's register. */
+  --r-sm: 14px;
+  --r: 22px;
+  --r-lg: 30px;
+  --r-xl: 40px;
+  --r-pill: 999px;
 
-  /* Type. Bricolage Grotesque carries the display voice — a grotesque with
-     actual personality, which is the point: the previous Fraunces/Inter pairing
-     read as dry. Plus Jakarta runs the body: warm, open apertures, and highly
-     legible at the sizes this audience needs. */
-  /* IBM Plex, one superfamily. Genuinely a healthcare/scientific face rather
-     than a generic modern sans, humanist enough to stay warm for a 50+ reader,
-     and — the reason it wins here — it ships a Mono cut. Measurements, the
-     vertebrae numbers and data labels set in mono read like a clinical
-     readout, which is exactly what "Precision Healthcare" claims. */
-  --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
-  --font-display: 'IBM Plex Sans', system-ui, sans-serif;
-  --font-body: 'IBM Plex Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  /* Outfit carries the display voice: geometric, and legible at the LIGHT
+     weights the reference sets its headlines in — that lightness at large size
+     is most of the premium feel. IBM Plex Sans runs the body and IBM Plex Mono
+     the measurements, both genuinely healthcare/scientific faces. */
+  --f-display: 'Outfit', system-ui, sans-serif;
+  --f-body: 'IBM Plex Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  --f-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
 
-  --wrap: 1220px;
-  --measure: 62ch;
+  --wrap: 1180px;
+  --gutter: clamp(1rem, 3vw, 2.25rem);
+  --step: clamp(2.5rem, 6vw, 5.5rem);   /* vertical rhythm between bands */
 
-  --shadow: 0 1px 2px rgb(14 33 64 / .05), 0 12px 32px -12px rgb(14 33 64 / .16);
-  --shadow-lg: 0 2px 4px rgb(14 33 64 / .06), 0 32px 64px -24px rgb(14 33 64 / .28);
-
-  --step: clamp(1.5rem, 4vw, 2.75rem);   /* rhythm unit for section padding */
+  --shadow-sm: 0 1px 2px rgb(10 28 61 / .04), 0 8px 24px -12px rgb(10 28 61 / .12);
+  --shadow: 0 2px 4px rgb(10 28 61 / .04), 0 22px 50px -20px rgb(10 28 61 / .18);
 }
 
 /* ------------------------------------------------------------------ base -- */
@@ -103,1314 +78,497 @@
 html {
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
-  /* Anchored sections must clear the sticky header. */
-  scroll-padding-top: 5.5rem;
+  scroll-padding-top: 7rem;   /* clears the floating nav */
 }
 
 body {
   margin: 0;
-  background: var(--bone);
+  background: var(--ground);
   color: var(--body);
-  font-family: var(--font-body);
-  /* 18px base. Deliberately larger than a typical 16px default: this is a
-     practice whose patients are largely over fifty. */
-  font-size: 1.125rem;
+  font-family: var(--f-body);
+  /* 17px base. Larger than the usual 16 — this practice's patients skew over
+     fifty and legibility here is a functional requirement, not a preference. */
+  font-size: 1.0625rem;
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;   /* belt-and-braces against a full-bleed band leaking */
+  overflow-x: hidden;
 }
 
 img, svg, video { max-width: 100%; }
-img { height: auto; display: block; }
-
-/* Width/height ATTRIBUTES on an img beat a bare `img { max-width:100% }` rule
-   for the height, so an intrinsically-sized image squashes when the width is
-   constrained. Pairing the attribute selector restores the ratio. Learned the
-   hard way on an earlier concept build. */
+img { display: block; height: auto; }
+/* An <img>'s width/height ATTRIBUTES become presentational hints that beat a
+   bare `max-width:100%` for the height, so a constrained image squashes.
+   Pairing the attribute selector restores the ratio. */
 img[width][height] { height: auto; }
 
-a { color: var(--cyan-ink); text-underline-offset: .18em; text-decoration-thickness: .07em; }
-a:hover { color: var(--azure); }
+a { color: var(--azure); text-underline-offset: .18em; text-decoration-thickness: .07em; }
+a:hover { color: var(--cyan-ink); }
 
-:focus-visible {
-  outline: 3px solid var(--cyan);
-  outline-offset: 3px;
-  border-radius: 4px;
-}
+:focus-visible { outline: 3px solid var(--cyan); outline-offset: 3px; border-radius: 6px; }
 
 .skip {
-  position: absolute; left: -9999px; top: 0;
-  background: var(--ink); color: #fff; padding: .8rem 1.2rem; z-index: 200;
-  border-radius: 0 0 var(--radius-sm) 0;
+  position: absolute; left: -9999px; top: 0; z-index: 300;
+  background: var(--ink); color: #fff; padding: .8rem 1.2rem;
+  border-radius: 0 0 var(--r-sm) 0;
 }
 .skip:focus { left: 0; }
 
 /* ------------------------------------------------------------ typography -- */
 h1, h2, h3, h4, .display {
-  font-family: var(--font-display);
+  font-family: var(--f-display);
   color: var(--ink);
-  font-weight: 700;
-  line-height: 1.04;
+  line-height: 1.06;
   letter-spacing: -.03em;
   margin: 0 0 .5em;
   text-wrap: balance;
-  /* IBM Plex Sans has no optical-size axis; presence at display sizes comes
-     from weight and negative tracking instead. */
 }
+/* The reference sets its display type LIGHT and large. That combination is
+   most of its register; setting the same sizes bold would read as a different
+   and much louder brand. */
+h1 { font-size: clamp(2.5rem, 5.6vw, 4.35rem); font-weight: 300; letter-spacing: -.04em; }
+h2 { font-size: clamp(1.9rem, 4vw, 3rem); font-weight: 300; letter-spacing: -.035em; }
+h3 { font-size: clamp(1.15rem, 1.9vw, 1.4rem); font-weight: 500; letter-spacing: -.02em; }
+h4 { font-size: 1.0625rem; font-weight: 600; letter-spacing: -.012em; line-height: 1.3; }
 
-h1 {
-  font-size: clamp(2.6rem, 7vw, 5.1rem);
-  letter-spacing: -.042em;
-}
-h2 { font-size: clamp(2rem, 4.6vw, 3.15rem); letter-spacing: -.035em; }
-h3 { font-size: clamp(1.3rem, 2.3vw, 1.7rem); letter-spacing: -.022em; }
-h4 { font-size: 1.15rem; line-height: 1.25; letter-spacing: -.016em; }
-
-p { margin: 0 0 1.15em; max-width: var(--measure); }
+p { margin: 0 0 1.1em; max-width: 64ch; }
 p:last-child { margin-bottom: 0; }
 
-.lede {
-  font-size: clamp(1.2rem, 2.1vw, 1.45rem);
-  line-height: 1.55;
-  color: var(--ink-2);
-  max-width: 46ch;
-}
+.lede { font-size: clamp(1.05rem, 1.6vw, 1.2rem); line-height: 1.6; color: var(--body); max-width: 52ch; }
 
-/* Small uppercase label that opens most sections. */
+/* Small mono label. Mono because measurement is the subject — it reads as a
+   clinical readout rather than a decorative eyebrow. */
 .eyebrow {
-  display: inline-flex; align-items: center; gap: .55rem;
-  font-size: .8125rem; font-weight: 700;
-  letter-spacing: .13em; text-transform: uppercase;
+  display: inline-flex; align-items: center; gap: .5rem;
+  font-family: var(--f-mono);
+  font-size: .75rem; font-weight: 500;
+  letter-spacing: .14em; text-transform: uppercase;
   color: var(--cyan-ink);
-  margin: 0 0 1rem;
+  margin: 0 0 1.1rem;
 }
-.eyebrow::before {
-  content: ""; width: 1.75rem; height: 2px; border-radius: 2px;
-  background: linear-gradient(90deg, var(--cyan), var(--indigo));
-}
-.eyebrow--gold { color: var(--gold-ink); }
-.eyebrow--gold::before { background: var(--gold); }
-.eyebrow--light { color: #9fdcff; }
-.eyebrow--light::before { background: linear-gradient(90deg, #7fe0ff, #31c8ff); }
-
-.section-head { max-width: 44rem; margin-bottom: calc(var(--step) * 1.1); }
-.section-head p { color: var(--muted); }
-.section-head--center { margin-inline: auto; text-align: center; }
-.section-head--center p { margin-inline: auto; }
-.section-head--center .eyebrow { justify-content: center; }
+.eyebrow::before { content: ""; width: 22px; height: 1px; background: currentColor; opacity: .55; }
+.eyebrow--light { color: var(--cyan-lift); }
+.eyebrow--plain::before { content: none; }
 
 /* ---------------------------------------------------------------- layout -- */
-.wrap { width: min(100% - 2.5rem, var(--wrap)); margin-inline: auto; }
-.wrap--narrow { width: min(100% - 2.5rem, 860px); margin-inline: auto; }
+.wrap { width: min(100% - (var(--gutter) * 2), var(--wrap)); margin-inline: auto; }
+.wrap--narrow { width: min(100% - (var(--gutter) * 2), 820px); margin-inline: auto; }
 
-section { padding-block: calc(var(--step) * 1.7); }
-.pad-sm { padding-block: calc(var(--step) * 1.1); }
+section { padding-block: var(--step); }
+.pad-sm { padding-block: calc(var(--step) * .6); }
 
-.ink-section { background: var(--ink); color: #cdd9ec; }
-.ink-section h2, .ink-section h3, .ink-section h4 { color: #fff; }
-.ink-section a { color: #7fe0ff; }
+.section-head { max-width: 42rem; margin-bottom: clamp(1.75rem, 3.5vw, 3rem); }
+.section-head--center { margin-inline: auto; text-align: center; }
+.section-head--center .eyebrow { justify-content: center; }
+.section-head p { color: var(--muted); }
+.section-head--center p { margin-inline: auto; }
 
-.bone-2-section { background: var(--bone-2); }
-
-/* ---------------------------------------------------------------- header -- */
-.head {
-  position: sticky; top: 0; z-index: 100;
-  background: rgb(250 246 239 / .88);
-  backdrop-filter: blur(14px) saturate(160%);
-  border-bottom: 1px solid var(--line);
+/* Heading left, supporting note right — the reference's section header. */
+.head-split {
+  display: grid; gap: 1.25rem clamp(1.5rem, 4vw, 3.5rem);
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+  align-items: end;
+  margin-bottom: clamp(1.75rem, 3.5vw, 2.75rem);
 }
-.head-in {
-  display: flex; align-items: center; gap: 1rem;
-  min-height: 4.5rem;
-}
+.head-split h2 { margin: 0; }
+.head-split p { margin: 0; color: var(--muted); font-size: 1rem; }
 
-.brand { display: inline-flex; align-items: center; gap: .65rem; text-decoration: none; margin-right: auto; }
-.brand img { width: 38px; height: 38px; }   /* the real mark is square (81.75x80.25), unlike the 48x64 redraw it replaced */
-.brand-name {
-  font-family: var(--font-display);
-  font-weight: 600; font-size: 1.32rem; line-height: 1;
-  color: var(--ink); letter-spacing: -.02em;
-}
-.brand-name span { color: var(--cyan-ink); }
-.brand-sub {
-  display: block; font-family: var(--font-body);
-  font-size: .6875rem; font-weight: 600; letter-spacing: .16em;
-  text-transform: uppercase; color: var(--muted); margin-top: .18rem;
-}
-
-.nav { display: flex; align-items: center; gap: .15rem; flex-wrap: wrap; }
-.nav a {
-  display: inline-flex; align-items: center;
-  padding: .6rem .78rem; min-height: 44px;
-  font-size: .9375rem; font-weight: 600;
-  color: var(--ink); text-decoration: none;
-  border-radius: 10px;
-}
-.nav a:hover { background: var(--bone-2); color: var(--azure); }
-.nav a[aria-current="page"] { color: var(--cyan-ink); background: rgb(0 173 239 / .1); }
-
-.nav-toggle { display: none; }
-
-/* Buttons live in the DESIGN LANGUAGE v2 block below. The old symmetric
-   .btn-* set was superseded by the pill-with-badge; see tools/migrate-buttons.mjs. */
-.btn-row { display: flex; flex-wrap: wrap; gap: .85rem; }
-
-/* Text link that reads as an action. */
-.link-more {
-  display: inline-flex; align-items: center; gap: .45rem;
-  font-weight: 600; text-decoration: none; min-height: 44px;
-}
-.link-more svg { width: 18px; height: 18px; transition: transform .18s ease; }
-.link-more:hover svg { transform: translateX(4px); }
-
-/* ------------------------------------------------------------------ icons -- */
-/* Every icon is a 24x24 stroke drawing at 1.7px. That weight is not arbitrary:
-   the practice's own mark is thin-stroke line art, so an icon set drawn the
-   same way reads as part of the same hand rather than bolted on. */
-.icon { width: 24px; height: 24px; flex: none; stroke-width: 1.7; }
-
-.icon-badge {
-  display: inline-flex; align-items: center; justify-content: center;
-  width: 3.25rem; height: 3.25rem; flex: none;
-  border-radius: 14px;
-  background: linear-gradient(140deg, rgb(0 173 239 / .16), rgb(33 63 154 / .12));
-  color: var(--azure);
-  margin-bottom: 1.1rem;
-}
-.icon-badge .icon { width: 28px; height: 28px; }
-.icon-badge--gold { background: rgb(229 172 43 / .2); color: var(--gold-ink); }
-.icon-badge--light { background: rgb(255 255 255 / .12); color: #7fe0ff; }
-.icon-badge--sm { width: 2.5rem; height: 2.5rem; border-radius: 11px; margin-bottom: 0; }
-.icon-badge--sm .icon { width: 22px; height: 22px; }
-
-/* ------------------------------------------------------------------- hero -- */
-.hero { position: relative; background: var(--ink); overflow: hidden; }
-.hero-media { position: absolute; inset: 0; }
-/* Each hero frame has its subject in a different place, and the copy always
-   sits in the left third — so the crop has to be set per photograph, not once
-   globally. Pages override with `style="--focal: X% Y%"` on .hero-media.
-   The rule this enforces: NO FACE UNDER TEXT. A headline across someone's eyes
-   reads as carelessness, and the face is the first thing anyone looks at. */
-.hero-media img { width: 100%; height: 100%; object-fit: cover; object-position: var(--focal, 68% 38%); }
-
-/* The chosen hero frame has open grass on the left and the subject
-   right-of-centre, so the scrim is DIRECTIONAL — heavy where the words sit,
-   almost absent over her. A flat overlay would have dimmed the photograph the
-   brief specifically asked to keep visible. */
-.hero-media::after {
-  content: ""; position: absolute; inset: 0;
-  background:
-    linear-gradient(100deg, rgb(9 22 44 / .93) 0%, rgb(9 22 44 / .82) 34%, rgb(9 22 44 / .35) 58%, rgb(9 22 44 / .12) 78%, rgb(9 22 44 / .3) 100%),
-    linear-gradient(to top, rgb(9 22 44 / .55), transparent 42%);
-}
-
-.hero-in {
-  position: relative;
-  display: flex; align-items: center;
-  min-height: clamp(520px, 76vh, 760px);
-  padding-block: calc(var(--step) * 1.8);
-}
-/* 40rem, not 34: at the v2 display sizes a 34rem column broke the headline to
-   four lines and orphaned "you." on its own. The scrim below is wide enough to
-   carry the extra width without encroaching on the subject. */
-.hero-copy { max-width: 40rem; color: #dbe6f5; }
-.hero h1 { color: #fff; margin-bottom: .38em; }
-.hero .trustpill { margin: 0 0 1.5rem; }
-/* Emphasised words in the hero headline take the brand gradient. Only ever
-   applied to a word or two — gradient text is a poor reading surface, and the
-   fallback colour below is what shows if background-clip is unsupported. */
-.hero h1 em {
-  font-style: normal;
-  color: #7fe0ff;
-  /* Blue only. An earlier version ran the ramp into the brand gold, but the
-     emphasis wraps two lines, so the second line landed on the gold end and
-     read as a rendering fault rather than a deliberate accent. */
-  background: linear-gradient(100deg, #a5eaff, #35c9ff 70%, #59b4f5);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-.hero-copy .lede { color: #cfdcef; }
-.hero .btn-row { margin-top: 1.9rem; }
-
-.hero-note {
-  display: flex; align-items: center; gap: .6rem;
-  margin-top: 1.6rem; font-size: .9375rem; color: #a9bcd8;
-}
-.hero-note .icon { width: 20px; height: 20px; color: #7fe0ff; }
-
-/* Cards that sit across the seam between the hero and the section under it. */
-.hero-cards {
-  position: relative; z-index: 2;
-  margin-top: calc(var(--step) * -1.6);
-  display: grid; gap: 1rem;
-  grid-template-columns: repeat(3, 1fr);
-}
-/* .hero-card was superseded by .fcard, which carries the alternating fills. */
-
-/* --------------------------------------------------- the translation card -- */
-/* The signature component of this redesign. Clinical term on top in the brand
-   blue, what it means to you underneath in the brand gold. Same information the
-   practice already publishes — just not left in a language only a clinician
-   reads. */
-.plainly {
-  display: grid; gap: .9rem;
+/* --------------------------------------------------------------- surfaces -- */
+.card {
   background: var(--paper);
   border: 1px solid var(--line);
-  border-left: 5px solid var(--gold);
-  border-radius: var(--radius-sm);
-  padding: 1.5rem 1.6rem;
+  border-radius: var(--r);
+  padding: clamp(1.4rem, 2.6vw, 2rem);
+  min-width: 0;
 }
-.plainly-term {
-  display: flex; align-items: center; gap: .6rem;
-  margin: 0; max-width: none;
-  font-size: .8125rem; font-weight: 700;
-  letter-spacing: .1em; text-transform: uppercase;
-  color: var(--cyan-ink);
+.panel { background: var(--paper); border-radius: var(--r-xl); padding: clamp(1.5rem, 4vw, 3.5rem) 0; }
+.ink-panel {
+  background: var(--ink); color: #c3d2e8;
+  border-radius: var(--r-xl);
+  padding: clamp(1.75rem, 4vw, 3.5rem);
 }
-.plainly-term .icon { width: 18px; height: 18px; }
-.plainly-plain {
-  margin: 0; max-width: 48ch;
-  font-family: var(--font-display);
-  font-size: clamp(1.15rem, 1.9vw, 1.42rem);
-  line-height: 1.4; font-weight: 500;
-  color: var(--ink);
-}
-.plainly-plain strong { font-weight: 700; color: var(--gold-ink); }
+.ink-panel h2, .ink-panel h3, .ink-panel h4 { color: #fff; }
+.ink-panel a { color: var(--cyan-lift); }
 
-/* The third line: what you actually get.
-   The card now runs the full arc the palette describes at the top of this file
-   — the practice's clinical name in blue, the translation, then the outcome in
-   gold. A service the reader understands but sees no point in is still a no. */
-.plainly-gain {
-  display: flex; align-items: flex-start; gap: .55rem;
-  margin: 0; max-width: 52ch; min-width: 0;
-  padding-top: .9rem; border-top: 1px solid var(--line);
-  font-size: .9688rem; line-height: 1.55;
-  font-weight: 600; color: var(--gold-ink);
-}
-.plainly-gain .icon { width: 17px; height: 17px; flex: none; margin-top: .16rem; color: var(--gold); }
-.plainly-gain span { min-width: 0; overflow-wrap: anywhere; }
-.plainly--onink { background: rgb(255 255 255 / .05); border-color: rgb(255 255 255 / .14); border-left-color: var(--gold); }
-.plainly--onink .plainly-term { color: #7fe0ff; }
-.plainly--onink .plainly-plain { color: #fff; }
-.plainly--onink .plainly-plain strong { color: var(--gold); }
-.plainly--onink .plainly-gain { color: var(--gold); border-top-color: rgb(255 255 255 / .14); }
-
-.plainly-grid { display: grid; gap: 1.1rem; grid-template-columns: repeat(2, 1fr); }
-
-/* ---------------------------------------------------------------- pillars -- */
-/* The practice's three named programmes. Photo-led and large, because the brief
-   asked for photography that is genuinely visible rather than decorative. */
-.pillars { display: grid; gap: 1.6rem; grid-template-columns: repeat(3, 1fr); }
-.pillar {
-  display: flex; flex-direction: column;
-  background: var(--paper); border: 1px solid var(--line);
-  border-radius: var(--radius); overflow: hidden;
-  box-shadow: var(--shadow);
-  transition: transform .2s ease, box-shadow .2s ease;
-}
-.pillar:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
-.pillar-media { position: relative; aspect-ratio: 4 / 3; background: var(--bone-2); }
-.pillar-media img { width: 100%; height: 100%; object-fit: cover; }
-.pillar-badge {
-  position: absolute; left: 1rem; bottom: 1rem;
-  display: inline-flex; align-items: center; gap: .45rem;
-  padding: .42rem .82rem; border-radius: 999px;
-  background: rgb(14 33 64 / .82); backdrop-filter: blur(6px);
-  color: #fff; font-size: .8125rem; font-weight: 700; letter-spacing: .04em;
-}
-.pillar-badge .icon { width: 17px; height: 17px; color: #7fe0ff; }
-.pillar-body { padding: 1.5rem 1.5rem 1.7rem; display: flex; flex-direction: column; flex: 1; }
-.pillar-body h3 { margin-bottom: .3rem; }
-.pillar-plain {
-  font-family: var(--font-display); font-size: 1.1rem; line-height: 1.4;
-  color: var(--gold-ink); font-weight: 500; margin-bottom: .85rem;
-}
-.pillar-body p { font-size: 1rem; color: var(--muted); }
-.pillar-body .link-more { margin-top: auto; padding-top: .9rem; }
-
-/* ------------------------------------------------------------------ steps -- */
-.steps { display: grid; gap: 1.35rem; grid-template-columns: repeat(4, 1fr); counter-reset: step; }
-.step {
-  position: relative; counter-increment: step;
-  background: var(--paper); border: 1px solid var(--line);
-  border-radius: var(--radius); padding: 1.6rem 1.4rem 1.5rem;
-}
-.step::before {
-  content: counter(step, decimal-leading-zero);
-  display: block; margin-bottom: .9rem;
-  font-family: var(--font-display); font-size: 1.5rem; font-weight: 600;
-  color: var(--cyan); letter-spacing: -.02em;
-}
-.step h3 { font-size: 1.18rem; margin-bottom: .4rem; }
-.step p { font-size: .9688rem; color: var(--muted); margin: 0; }
-.step .icon-badge { position: absolute; top: 1.35rem; right: 1.25rem; margin: 0; }
-
-/* --------------------------------------------------------------- services -- */
-.services { display: grid; gap: 1.35rem; grid-template-columns: repeat(3, 1fr); }
-.service {
-  display: flex; flex-direction: column;
-  background: var(--paper); border: 1px solid var(--line);
-  border-radius: var(--radius); overflow: hidden;
-}
-.service-media { aspect-ratio: 16 / 10; background: var(--bone-2); }
-.service-media img { width: 100%; height: 100%; object-fit: cover; }
-.service-body { padding: 1.4rem 1.4rem 1.5rem; flex: 1; display: flex; flex-direction: column; gap: .55rem; }
-.service-body h3 { font-size: 1.2rem; margin: 0; display: flex; align-items: center; gap: .6rem; }
-.service-body h3 .icon { color: var(--cyan-ink); }
-.service-plain {
-  margin: 0; font-family: var(--font-display); font-size: 1.06rem;
-  line-height: 1.4; color: var(--gold-ink); font-weight: 500;
-}
-.service-body p:not(.service-plain) { font-size: .9688rem; color: var(--muted); margin: 0; }
-
-/* Compact icon-only list for the longer service inventory. */
-.mini-grid { display: grid; gap: 1rem; grid-template-columns: repeat(4, 1fr); }
-.mini {
-  display: flex; gap: .9rem; align-items: flex-start;
-  background: var(--paper); border: 1px solid var(--line);
-  border-radius: var(--radius-sm); padding: 1.15rem 1.2rem;
-}
-.mini h4 { margin: 0 0 .2rem; }
-.mini p { margin: 0; font-size: .9375rem; color: var(--muted); }
-
-/* ------------------------------------------------------------ photo bands -- */
-/* Full-bleed image bands. These are the "very visible" part of the brief:
-   the photograph gets the whole viewport width and a real height, rather than
-   being reduced to a thumbnail beside a paragraph. */
-.band { position: relative; background: var(--ink); overflow: hidden; isolation: isolate; }
-.band-media { position: absolute; inset: 0; z-index: -1; }
-/* Per-photograph focal point, set by each page as `style="--focal: X% Y%"`.
-   NO FACE UNDER TEXT: an audit found the scan headline running straight across
-   the radiographer's eyes and the contact lede across the nurse's face. The
-   copy always occupies the left ~55%, so a subject's face must land right of
-   that or be moved out of the band. See tools/audit-faces.mjs. */
-.band-media img { width: 100%; height: 100%; object-fit: cover; object-position: var(--focal, 50% 50%); }
-/* Scrim falls off fast once it clears the text column (which ends near 50%),
-   so the subject of the photograph stays properly visible. The brief asked for
-   photography you can actually see; a flat 70% overlay across the whole frame
-   is how that gets quietly thrown away. */
-.band-media::after {
-  content: ""; position: absolute; inset: 0;
-  background: linear-gradient(95deg, rgb(9 22 44 / .93) 0%, rgb(9 22 44 / .86) 32%, rgb(9 22 44 / .5) 54%, rgb(9 22 44 / .18) 74%, rgb(9 22 44 / .1) 100%);
-}
-.band-in {
-  display: flex; align-items: center;
-  min-height: clamp(400px, 52vh, 560px);
-  padding-block: calc(var(--step) * 1.5);
-}
-.band-copy { max-width: 40rem; color: #cfdcef; }
-.band-copy h2 { color: #fff; }
-
-/* --------------------------------------------- dark-context text repairs -- */
-/* Several base rules hard-code a dark ink colour (.lede, .section-head p,
-   .checks strong, figcaption). Dropped onto a photo band or an ink section
-   they render dark-on-dark — text that is technically present and practically
-   invisible. These are the overrides that stop that happening, and they are
-   grouped here deliberately so any new dark surface inherits the whole set
-   rather than rediscovering the bug one element at a time. */
-.band-copy .lede,
-.ink-section .lede { color: #dbe6f5; }
-.band-copy .section-head p,
-.ink-section .section-head p { color: #a9bcd8; }
-.ink-section figcaption { color: #8fa3c2; }
-.band-copy p, .ink-section p { max-width: 62ch; }
-.band--center .band-in { justify-content: center; text-align: center; }
-.band--center .band-copy { max-width: 46rem; }
-.band--center .band-copy p { margin-inline: auto; }
-.band--center .eyebrow { justify-content: center; }
-
-/* Compact band used as an inner-page header. Same machinery as the full band,
-   just shorter — inner pages need to get to their content quickly. */
-/* PAGE HEADS DO NOT OVERLAY TEXT ON PHOTOGRAPHS.
-   Two problems, one fix. An audit (tools/audit-faces.mjs) found the scan
-   headline running across the radiographer's eyes and the contact lede across
-   the nurse's face — and object-position could not rescue either, because these
-   frames are narrower in aspect than the band, so `cover` overflows vertically
-   and the X value does nothing at all.
-   The deeper problem was that six pages all opened with the same full-bleed
-   photo + dark scrim + white headline, which is the most templated hero on the
-   web and read as generic. So the head becomes a split: copy in its own column,
-   photograph in a contained tile beside it. Nothing overlaps, no face can be
-   covered, and the homepage keeps the single full-bleed moment — which makes it
-   read as a deliberate opening rather than a house style. */
-.band--head {
-  background: var(--ink);
-  padding-block: calc(var(--step) * 1.6);
-}
-.band--head .band-in { min-height: clamp(300px, 34vh, 400px); display: flex; align-items: center; }
-.band--head h1 { color: #fff; }
-/* The copy is capped at just under half the band. That cap is what guarantees
-   the fix: text physically cannot reach the picture, so no crop, no focal
-   point and no future photograph can put a face under a headline. */
-.band--head .band-copy { max-width: min(34rem, 46%); }
-
-/* The photograph occupies the right half as an inset tile rather than sitting
-   behind everything. `.band-media` is a SIBLING of `.band-in`, not a child, so
-   a grid on the inner wrapper never contained it — pinning it is what actually
-   works with this markup. */
-.band--head .band-media {
-  left: auto; right: clamp(20px, 4vw, 56px);
-  top: clamp(20px, 3vw, 40px); bottom: clamp(20px, 3vw, 40px);
-  width: min(46%, 620px);
-  z-index: 0;
-  border-radius: var(--radius); overflow: hidden; background: var(--ink-2);
-}
-/* height:100% must be restated at this specificity. These <img>s carry width
-   and height ATTRIBUTES, so the base `img[width][height] { height: auto }` rule
-   wins over the generic `.band-media img { height: 100% }` and leaves a strip
-   of tile background showing under the photograph. Same trap the base rule was
-   written for, biting from the other direction. */
-.band--head .band-media img { border-radius: inherit; height: 100%; }
-/* No scrim. It only ever existed to make overlaid text legible, and there is
-   no longer any text over the picture to rescue. */
-.band--head .band-media::after { content: none; }
-
-@media (max-width: 860px) {
-  /* Stacked: the media is first in the DOM, so static positioning puts the
-     picture above the copy, which is the right order on a phone. */
-  .band--head .band-media {
-    position: static; width: auto; aspect-ratio: 16 / 10;
-    margin-bottom: 1.5rem;
-  }
-  .band--head .band-in { display: block; min-height: 0; }
-  .band--head .band-copy { max-width: none; }
-}
-
-/* Numbered explainer rows — a big brand numeral beside a block of copy. Used
-   where a process has to be walked through rather than listed. */
-.walkthrough { display: grid; gap: 2.2rem; }
-.wt-row { display: grid; gap: 1.5rem; grid-template-columns: 5.5rem 1fr 1fr; align-items: start; }
-.wt-num {
-  font-family: var(--font-display); font-size: clamp(2.4rem, 5vw, 3.6rem);
-  font-weight: 600; line-height: .9; color: var(--cyan);
-  letter-spacing: -.04em;
-}
-.wt-body h3 { margin-bottom: .45rem; }
-.wt-media { border-radius: var(--radius); overflow: hidden; background: var(--bone-2); box-shadow: var(--shadow); }
-.wt-media img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
-.wt-row--noimg { grid-template-columns: 5.5rem 1fr; }
-
-/* A big single number with a label — used for scan readouts, never for
-   marketing statistics. Nothing on this concept claims a figure the practice
-   has not published. */
-.readouts { display: grid; gap: 1.2rem; grid-template-columns: repeat(3, 1fr); }
-.readout {
-  background: var(--paper); border: 1px solid var(--line);
-  border-left: 5px solid var(--cyan); border-radius: var(--radius);
-  padding: 1.6rem 1.5rem;
-}
-.readout-key {
-  font-family: var(--font-display); font-size: clamp(1.6rem, 3vw, 2.1rem);
-  font-weight: 600; color: var(--ink); line-height: 1.05; margin-bottom: .5rem;
-}
-.readout p { font-size: .9688rem; color: var(--muted); margin: 0; }
-.readout--gold { border-left-color: var(--gold); }
-.readout--indigo { border-left-color: var(--indigo); }
-
-/* Long-form reading column. */
-.prose { max-width: 68ch; }
-.prose h3 { margin-top: 2rem; }
-.prose h3:first-child { margin-top: 0; }
-.prose ul { padding-left: 1.2rem; margin: 0 0 1.15em; }
-.prose li { margin-bottom: .45em; max-width: var(--measure); }
-
-/* Same idea, image on the right rather than behind. Used where the copy is too
-   long to sit legibly over a photograph. */
-.split { display: grid; gap: calc(var(--step) * 1.2); grid-template-columns: 1fr 1fr; align-items: center; }
-.split--flip .split-media { order: -1; }
-.split-media { border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-lg); background: var(--bone-2); }
-.split-media img { width: 100%; height: 100%; object-fit: cover; aspect-ratio: 4 / 3; }
-.split-media--tall img { aspect-ratio: 3 / 4; }
-
-figure { margin: 0; }
-.figure-full { border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow); background: var(--bone-2); }
-.figure-full img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
-figcaption { padding: .85rem 0 0; font-size: .9375rem; color: var(--muted); }
-
-/* -------------------------------------------------------------- checklist -- */
-.checks { list-style: none; margin: 0; padding: 0; display: grid; gap: .85rem; }
-.checks li { display: flex; gap: .75rem; align-items: flex-start; }
-.checks .icon { color: var(--cyan-ink); margin-top: .18rem; }
-.ink-section .checks .icon { color: #7fe0ff; }
-.checks strong { color: var(--ink); }
-.ink-section .checks strong { color: #fff; }
-
-/* Two-column "this is for you if" / "this is not" comparison. */
-.compare { display: grid; gap: 1.35rem; grid-template-columns: repeat(2, 1fr); }
-.compare-card { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.7rem 1.6rem; }
-.compare-card--warn { border-color: var(--line-2); background: var(--bone-2); }
-
-/* -------------------------------------------------------------------- FAQ -- */
-.faq { display: grid; gap: .8rem; }
-.faq details {
-  background: var(--paper); border: 1px solid var(--line);
-  border-radius: var(--radius-sm); overflow: hidden;
-}
-.faq summary {
-  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
-  padding: 1.15rem 1.4rem; min-height: 56px;
-  font-family: var(--font-display); font-size: 1.14rem; font-weight: 600;
-  color: var(--ink); cursor: pointer; list-style: none;
-}
-.faq summary::-webkit-details-marker { display: none; }
-.faq summary::after {
-  content: ""; flex: none; width: 12px; height: 12px;
-  border-right: 2.5px solid var(--cyan-ink); border-bottom: 2.5px solid var(--cyan-ink);
-  transform: rotate(45deg) translate(-2px, -2px); transition: transform .2s ease;
-}
-.faq details[open] summary::after { transform: rotate(225deg) translate(-3px, -3px); }
-.faq summary:hover { background: var(--bone); }
-.faq-body { padding: 0 1.4rem 1.35rem; }
-.faq-body p { font-size: 1rem; }
-
-/* ------------------------------------------------------------------ posts -- */
-.posts { display: grid; gap: 1.35rem; grid-template-columns: repeat(3, 1fr); }
-.post {
-  display: flex; flex-direction: column; gap: .6rem;
-  background: var(--paper); border: 1px solid var(--line);
-  border-radius: var(--radius); padding: 1.5rem 1.5rem 1.6rem;
-}
-.post-date { font-size: .8125rem; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--muted); }
-.post h3 { font-size: 1.22rem; margin: 0; }
-.post p { font-size: .9688rem; color: var(--muted); margin: 0; }
-.post .plainly-term { font-size: .75rem; }
-
-/* ------------------------------------------------------------------ forms -- */
-.form-card {
-  background: var(--paper); border: 1px solid var(--line);
-  border-radius: var(--radius-lg); padding: clamp(1.5rem, 3.5vw, 2.5rem);
-  box-shadow: var(--shadow);
-}
-.field { display: grid; gap: .45rem; margin-bottom: 1.15rem; }
-.field label { font-weight: 600; color: var(--ink); font-size: 1rem; }
-.field .hint { font-size: .875rem; color: var(--muted); }
-.field input, .field select, .field textarea {
-  font: inherit; font-size: 1.0625rem;
-  padding: .8rem .95rem; min-height: 52px;
-  border: 1.5px solid var(--line-2); border-radius: var(--radius-sm);
-  background: var(--bone); color: var(--ink); width: 100%;
-}
-.field textarea { min-height: 130px; resize: vertical; }
-.field input:focus, .field select:focus, .field textarea:focus { border-color: var(--cyan); background: #fff; }
-.field-row { display: grid; gap: 1.15rem; grid-template-columns: 1fr 1fr; }
-
-.choice-grid { display: grid; gap: .7rem; grid-template-columns: repeat(2, 1fr); margin-bottom: 1.15rem; }
-.choice {
-  display: flex; gap: .7rem; align-items: flex-start;
-  border: 1.5px solid var(--line-2); border-radius: var(--radius-sm);
-  padding: .95rem 1rem; cursor: pointer; background: var(--bone);
-}
-.choice:hover { border-color: var(--cyan); }
-.choice input { margin-top: .3rem; width: 20px; height: 20px; flex: none; accent-color: var(--cyan-ink); }
-.choice span { font-size: .9688rem; }
-.choice strong { display: block; color: var(--ink); font-size: 1.0625rem; }
-
-/* Standing disclosure attached to any form on this concept. Nothing here
-   submits anywhere, and a visitor is entitled to know that BEFORE typing their
-   details in, not after. */
-.form-notice {
-  display: flex; gap: .8rem; align-items: flex-start;
-  background: rgb(229 172 43 / .13); border: 1px solid rgb(229 172 43 / .45);
-  border-radius: var(--radius-sm); padding: 1rem 1.15rem;
-  font-size: .9688rem; color: #5c440d; margin-bottom: 1.5rem;
-}
-.form-notice .icon { color: var(--gold-ink); margin-top: .1rem; }
-/* Same unbreakable-token trap as `.contact-item` below: this notice carries the
-   practice's email address inside a flex row. */
-.form-notice p { margin: 0; max-width: none; min-width: 0; overflow-wrap: anywhere; }
-
-/* ------------------------------------------------------------- contact bar -- */
-.contact-grid { display: grid; gap: 1.1rem; grid-template-columns: repeat(4, 1fr); }
-.contact-item {
-  display: flex; gap: .9rem; align-items: flex-start;
-  background: var(--paper); border: 1px solid var(--line);
-  border-radius: var(--radius); padding: 1.35rem 1.35rem;
-}
-.contact-item h4 { margin: 0 0 .2rem; }
-.contact-item p, .contact-item a { margin: 0; font-size: 1rem; }
-.contact-item a { font-weight: 600; }
-
-/* A flex item refuses to shrink below its min-content width, and an email
-   address or a street address is one long unbreakable token — which is how a
-   292px column renders 332px wide at 320px and pushes the whole page sideways.
-   `min-width: 0` releases the item; `overflow-wrap: anywhere` is the value that
-   actually feeds back into min-content sizing (`break-word` does not, which is
-   why the obvious fix quietly fails here). */
-.contact-item > div, .mini > div, .step > div, .checks li > div { min-width: 0; }
-.contact-item p, .contact-item a, .foot ul a, .plainly-term { overflow-wrap: anywhere; }
-
-/* ----------------------------------------------------------------- footer -- */
-.foot { background: var(--ink); color: #a9bcd8; padding-block: calc(var(--step) * 1.5) var(--step); }
-.foot-top { display: grid; gap: 2rem; grid-template-columns: 1.4fr 1fr 1fr 1.2fr; margin-bottom: 2.5rem; }
-.foot h4 { color: #fff; font-family: var(--font-body); font-size: .8125rem; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; margin-bottom: 1rem; }
-.foot ul { list-style: none; margin: 0; padding: 0; display: grid; gap: .1rem; }
-.foot ul a { color: #cdd9ec; text-decoration: none; display: inline-flex; align-items: center; min-height: 40px; font-size: 1rem; }
-.foot ul a:hover { color: #7fe0ff; text-decoration: underline; }
-.foot .brand-name { color: #fff; }
-.foot .brand-name span { color: #7fe0ff; }
-.foot .brand-sub { color: #8fa3c2; }
-.foot p { font-size: .9688rem; }
-
-.foot-social { display: flex; gap: .5rem; margin-top: 1rem; }
-.foot-social a {
-  display: inline-flex; align-items: center; justify-content: center;
-  width: 44px; height: 44px; border-radius: 12px;
-  background: rgb(255 255 255 / .08); color: #cdd9ec;
-}
-.foot-social a:hover { background: rgb(0 173 239 / .3); color: #fff; }
-
-.foot-bottom {
-  border-top: 1px solid rgb(255 255 255 / .12); padding-top: 1.6rem;
-  display: flex; flex-wrap: wrap; gap: 1rem 2rem; justify-content: space-between;
-  font-size: .9375rem; color: #8fa3c2;
-}
-.foot-bottom p { max-width: 62ch; }
-
-/* --------------------------------------------------- concept disclosures -- */
-/* This is a redesign concept for a REAL, trading practice. It has to be
-   impossible to mistake for the practice's own site, and impossible to mistake
-   for medical advice. The label therefore appears in several independent
-   places rather than one: this banner, the footer note, the page <title>,
-   robots.txt, and an X-Robots-Tag response header. */
-.concept-banner {
-  background: var(--ink-2); color: #dbe6f5;
-  font-size: .875rem; line-height: 1.45;
-  border-bottom: 1px solid rgb(255 255 255 / .12);
-}
-.concept-banner .wrap { display: flex; gap: .75rem; align-items: center; padding-block: .7rem; }
-.concept-banner .icon { flex: none; width: 20px; height: 20px; color: var(--gold); }
-.concept-banner p { margin: 0; max-width: none; }
-.concept-banner strong { color: #fff; }
-
-.disclaimer {
-  border: 1px solid var(--line-2); background: var(--bone-2);
-  border-radius: var(--radius); padding: 1.4rem 1.5rem;
-  font-size: .9688rem; color: var(--muted);
-}
-.disclaimer h4 { margin-bottom: .4rem; }
-.disclaimer p { max-width: none; }
-.disclaimer p + p { margin-top: .6rem; }
-
-/* --------------------------------------------------------- scroll reveal -- */
-/* Targets are hidden only when the `.js` class is present, and that class is
-   stamped by an inline script in <head> BEFORE first paint. Doing it from a
-   deferred script instead guarantees a flash of un-animated content on a slow
-   connection, because the stylesheet is render-blocking and the script is not.
-   A visitor without JavaScript sees the finished page, never a blank one. */
-.js .reveal { opacity: 0; transform: translateY(18px); }
-.js .reveal.in { opacity: 1; transform: none; transition: opacity .6s ease, transform .6s cubic-bezier(.2, .7, .3, 1); }
-.js .reveal-d1.in { transition-delay: .08s; }
-.js .reveal-d2.in { transition-delay: .16s; }
-.js .reveal-d3.in { transition-delay: .24s; }
-
-@media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  /* CRITICAL: killing the transition alone would leave every reveal target
-     stuck at opacity 0 — a blank page for the people most likely to need the
-     content. The opacity has to be forced back on explicitly. */
-  .js .reveal, .js .reveal.in { opacity: 1 !important; transform: none !important; transition: none !important; }
-  *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; }
-}
-
-/* ----------------------------------------------------------- responsive -- */
-@media (max-width: 1080px) {
-  .foot-top { grid-template-columns: 1fr 1fr; gap: 2rem 1.5rem; }
-  .mini-grid { grid-template-columns: repeat(2, 1fr); }
-  .contact-grid { grid-template-columns: repeat(2, 1fr); }
-  .steps { grid-template-columns: repeat(2, 1fr); }
-}
-
-@media (max-width: 980px) {
-  .pillars, .services, .posts { grid-template-columns: repeat(2, 1fr); }
-  .split { grid-template-columns: 1fr; }
-  .split--flip .split-media { order: 0; }
-  .hero-cards { grid-template-columns: 1fr; margin-top: calc(var(--step) * -1); }
-  .plainly-grid { grid-template-columns: 1fr; }
-
-  /* Nav collapses to a disclosure button. Only when JS is present — without it
-     the toggle would be inert and the whole nav unreachable, so the no-JS path
-     keeps every link on screen instead. */
-  .js .nav-toggle {
-    display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
-    min-height: 46px; padding: .5rem .95rem;
-    font: 700 .9375rem var(--font-body);
-    background: var(--paper); color: var(--ink);
-    border: 1.5px solid var(--line-2); border-radius: 999px; cursor: pointer;
-  }
-  .js .nav {
-    display: none; position: absolute; top: 100%; left: 0; right: 0;
-    flex-direction: column; align-items: stretch; gap: .15rem;
-    background: var(--bone); border-bottom: 1px solid var(--line);
-    padding: .75rem 1.25rem 1.25rem;
-    box-shadow: var(--shadow);
-  }
-  .js .nav[data-open="true"] { display: flex; }
-  .js .nav a { padding: .75rem .9rem; font-size: 1.0625rem; }
-  .js .nav .btn { margin-top: .5rem; }
-  .head-in { position: relative; }
-}
-
-@media (max-width: 720px) {
-  :root { --measure: 60ch; }
-  .pillars, .services, .posts, .compare, .steps, .mini-grid,
-  .contact-grid, .field-row, .choice-grid { grid-template-columns: 1fr; }
-  .foot-top { grid-template-columns: 1fr; gap: 1.75rem; }
-  .hero-in { min-height: auto; padding-block: calc(var(--step) * 2.2); }
-  .hero-media img { object-position: var(--focal-sm, 62% 30%); }
-  /* On a narrow screen the directional scrim stops working — the copy and the
-     subject occupy the same column — so it becomes a vertical one instead. */
-  .hero-media::after {
-    background: linear-gradient(to bottom, rgb(9 22 44 / .62) 0%, rgb(9 22 44 / .86) 55%, rgb(9 22 44 / .94) 100%);
-  }
-  .band-media::after {
-    background: linear-gradient(to bottom, rgb(9 22 44 / .68) 0%, rgb(9 22 44 / .9) 60%, rgb(9 22 44 / .94) 100%);
-  }
-  .band-in { min-height: auto; padding-block: calc(var(--step) * 1.8); }
-}
-
-@media (max-width: 420px) {
-  /* 320px is the narrowest width worth supporting. The nav lockup is the usual
-     casualty at this width — an earlier concept shipped 46px of horizontal
-     overflow from exactly this element — so the sub-label is dropped and the
-     gutter tightened rather than letting the header set the page width. */
-  .wrap, .wrap--narrow { width: calc(100% - 1.75rem); }
-  .brand-sub { display: none; }
-  .brand-name { font-size: 1.16rem; }
-  .brand img { width: 32px; height: 32px; }
-  .btn { padding: .8rem 1.15rem; font-size: 1rem; }
-  .btn-row .btn { width: 100%; }
-  .plainly { padding: 1.25rem 1.2rem; }
-  .foot-bottom { font-size: .9063rem; }
-}
-
-/* Responsive additions for the components introduced with the inner pages. */
-@media (max-width: 980px) {
-  .wt-row { grid-template-columns: 4rem 1fr; }
-  .wt-media { grid-column: 2; }
-  .readouts { grid-template-columns: 1fr; }
-}
-@media (max-width: 720px) {
-  .wt-row { grid-template-columns: 1fr; gap: .9rem; }
-  .wt-media { grid-column: 1; }
-  .wt-num { font-size: 2.4rem; }
-}
-
-/* Message shown after a form is "submitted". A concept form that silently does
-   nothing is a dark pattern — the visitor has to be told, at the moment they
-   press the button, that their details went nowhere. */
-.form-status {
-  display: flex; gap: .75rem; align-items: flex-start;
-  margin-top: 1.25rem; padding: 1rem 1.15rem;
-  background: rgb(0 173 239 / .1);
-  border: 1px solid rgb(0 173 239 / .4);
-  border-radius: var(--radius-sm);
-  font-size: 1rem; color: var(--ink); max-width: none;
-}
-.form-status .icon { color: var(--cyan-ink); flex: none; margin-top: .15rem; }
-.form-status[hidden] { display: none; }
-
-/* ------------------------------------------------- layout modifiers ------ */
-/* These exist because the same one-off tweaks were briefly written as inline
-   style attributes — and an inline style outranks the entire stylesheet,
-   media queries included. Media queries change WHICH rules apply, not their
-   specificity, so `style="grid-template-columns:1.35fr 1fr"` quietly disabled
-   the mobile collapse and forced a two-column grid at 320px. Any layout that
-   has to respond to width must be a class. */
-.split--wide { grid-template-columns: 1.35fr 1fr; align-items: start; }
-.mini-grid--3 { grid-template-columns: repeat(3, 1fr); }
-
-@media (max-width: 980px) {
-  .split--wide { grid-template-columns: 1fr; }
-  .mini-grid--3 { grid-template-columns: repeat(2, 1fr); }
-}
-@media (max-width: 720px) {
-  .mini-grid--3 { grid-template-columns: 1fr; }
-}
-
-/* Tap targets. WCAG 2.2 SC 2.5.8 sets 24x24 CSS px as the floor; a bare inline
-   link in a card renders about 20px tall, which fails. The radio inputs pass
-   via their wrapping label, but are enlarged anyway — this audience is exactly
-   the one that struggles with a small hit area. */
-.contact-item a {
-  display: inline-flex; align-items: center; min-height: 28px;
-}
-.choice input { width: 24px; height: 24px; }
-
-/* Grid and flex children default to `min-width: auto`, which resolves to their
-   CONTENT minimum — the longest unbreakable word, a replaced element's
-   intrinsic width, or a <select>'s widest option. A single oversized child then
-   widens its whole track and pushes the entire page sideways, which is how a
-   292px column renders 352px wide. Zeroing it on every grid child is the
-   blanket fix, and it costs nothing where it was not needed. */
-.split > *, .pillars > *, .services > *, .posts > *, .mini-grid > *,
-.steps > *, .compare > *, .contact-grid > *, .readouts > *,
-.plainly-grid > *, .field-row > *, .choice-grid > *, .foot-top > *,
-.walkthrough > *, .wt-row > * { min-width: 0; }
-
-/* A <select> is sized by its longest <option> and ignores a percentage width
-   for the purposes of that minimum. Both declarations are needed. */
-.field select { min-width: 0; max-width: 100%; }
-
-/* ============================================================================
-   DESIGN LANGUAGE v2 — colour-blocked cards, pill actions, utility bar.
-   ----------------------------------------------------------------------------
-   Ported from a business-consulting reference layout the client liked, re-cut
-   into this brand: the reference's lime becomes --cyan, its dark forest green
-   becomes --ink navy, its cream becomes --bone. What carries over is the
-   STRUCTURE — a utility strip above the header, alternating card fills inside a
-   single row, pill actions with a circular arrow badge, and radii large enough
-   to read as friendly rather than institutional.
-
-   What deliberately does NOT carry over is the reference's social proof. That
-   template ships "4.9 ★ 5K+ Reviews", "10K+ Completed Works" and an average
-   client rating. Inventing any of those for a real medical practice would be
-   fabricating commercial claims — see CONTENT-NOTES.md. The same components are
-   used, filled with facts that are actually true: scan duration, opening hours,
-   what the scan does and does not involve.
-   ========================================================================= */
-
-/* -------------------------------------------------------------- utility -- */
-.utility {
-  background: var(--ink);
-  color: #a9bcd8;
-  font-size: .8125rem;
-  line-height: 1.4;
-}
-.utility-in {
-  display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1.5rem;
-  min-height: 2.75rem; padding-block: .45rem;
-}
-.utility-item { display: inline-flex; align-items: center; gap: .45rem; white-space: nowrap; }
-.utility-item .icon { width: 15px; height: 15px; color: var(--cyan-lift); flex: none; }
-.utility a { color: inherit; text-decoration: none; }
-.utility a:hover { color: #fff; text-decoration: underline; }
-.utility-spacer { margin-left: auto; }
-.utility-social { display: inline-flex; align-items: center; gap: .15rem; }
-.utility-social a {
-  display: inline-flex; align-items: center; justify-content: center;
-  width: 30px; height: 30px; border-radius: var(--radius-pill);
-}
-.utility-social a:hover { background: rgb(255 255 255 / .12); }
-.utility-social .icon { width: 15px; height: 15px; }
-/* Below the header breakpoint the strip earns its space only if it still
-   carries the phone number, so the socials go rather than the contact. */
-@media (max-width: 720px) {
-  .utility-social, .utility-hide-sm { display: none; }
-  .utility-in { justify-content: center; }
-  .utility-spacer { margin-left: 0; }
-}
-
-/* ------------------------------------------------------------- buttons -- */
-/* One button, four fills. The badge is a real element rather than a ::after so
-   it can animate independently of the label. */
+/* --------------------------------------------------------------- buttons -- */
 .btn {
   display: inline-flex; align-items: center; gap: .7rem;
-  padding: .55rem .6rem .55rem 1.35rem;
-  border: 1px solid transparent;
-  border-radius: var(--radius-pill);
-  font: 700 1.0625rem/1.2 var(--font-body);
-  letter-spacing: -.01em;
-  text-decoration: none;
-  cursor: pointer;
-  transition: background .18s ease, color .18s ease, border-color .18s ease, transform .18s ease;
+  padding: .5rem .5rem .5rem 1.35rem;
+  border: 1px solid transparent; border-radius: var(--r-pill);
+  font-family: var(--f-body); font-size: .9688rem; font-weight: 600;
+  letter-spacing: -.005em; text-decoration: none; cursor: pointer;
+  transition: background .18s ease, color .18s ease, border-color .18s ease;
 }
-.btn:hover { transform: translateY(-2px); }
 .btn-badge {
   display: inline-flex; align-items: center; justify-content: center;
-  width: 2.15rem; height: 2.15rem; border-radius: var(--radius-pill);
-  background: rgb(255 255 255 / .22);
-  transition: transform .18s ease, background .18s ease;
-  flex: none;
+  width: 2rem; height: 2rem; border-radius: var(--r-pill); flex: none;
+  transition: transform .18s ease;
 }
-.btn-badge .icon { width: 17px; height: 17px; }
+.btn-badge .icon { width: 15px; height: 15px; }
 .btn:hover .btn-badge { transform: translateX(3px); }
 
-.btn--primary { background: var(--cyan); color: var(--ink); }
-.btn--primary:hover { background: #2bc0f5; color: var(--ink); }
-.btn--primary .btn-badge { background: var(--ink); color: var(--cyan); }
+.btn--primary { background: var(--ink); color: #fff; }
+.btn--primary:hover { background: var(--ink-2); color: #fff; }
+.btn--primary .btn-badge { background: var(--cyan); color: var(--ink); }
 
-.btn--ink { background: var(--ink); color: #fff; }
-.btn--ink:hover { background: var(--ink-2); color: #fff; }
-.btn--ink .btn-badge { background: var(--cyan); color: var(--ink); }
+.btn--light { background: var(--paper); color: var(--ink); border-color: var(--line); }
+.btn--light:hover { background: #fff; color: var(--ink); border-color: var(--line-2); }
+.btn--light .btn-badge { background: var(--ink); color: #fff; }
 
 .btn--ghost { background: transparent; color: var(--ink); border-color: var(--line-2); }
-.btn--ghost:hover { background: var(--paper); color: var(--ink); border-color: var(--cyan); }
-.btn--ghost .btn-badge { background: var(--bone-2); color: var(--ink); }
+.btn--ghost:hover { background: var(--paper); color: var(--ink); }
+.btn--ghost .btn-badge { background: var(--ground-2); color: var(--ink); }
 
-.btn--on-ink { background: rgb(255 255 255 / .1); color: #fff; border-color: rgb(255 255 255 / .22); }
+.btn--on-ink { background: rgb(255 255 255 / .1); color: #fff; border-color: rgb(255 255 255 / .24); }
 .btn--on-ink:hover { background: rgb(255 255 255 / .18); color: #fff; }
 .btn--on-ink .btn-badge { background: var(--cyan); color: var(--ink); }
 
-/* Compact variant used inside cards, where a full-size pill would dominate. */
-.btn--sm { font-size: .9375rem; padding: .35rem .38rem .35rem 1rem; gap: .5rem; }
-.btn--sm .btn-badge { width: 1.7rem; height: 1.7rem; }
-.btn--sm .btn-badge .icon { width: 14px; height: 14px; }
+.btn--sm { font-size: .875rem; padding: .3rem .3rem .3rem 1rem; gap: .5rem; }
+.btn--sm .btn-badge { width: 1.6rem; height: 1.6rem; }
+.btn--sm .btn-badge .icon { width: 13px; height: 13px; }
 
-/* A phone call is a different kind of action from a form: circular icon, then
-   the label stacked over the number, as in the reference. */
-.calllink { display: inline-flex; align-items: center; gap: .75rem; text-decoration: none; }
-.calllink-badge {
+.btn-row { display: flex; flex-wrap: wrap; gap: .75rem; align-items: center; }
+
+/* A bare circular control, used for the carousel. */
+.rbtn {
   display: inline-flex; align-items: center; justify-content: center;
-  width: 3rem; height: 3rem; border-radius: var(--radius-pill);
-  background: var(--cyan); color: var(--ink); flex: none;
+  width: 2.75rem; height: 2.75rem; border-radius: var(--r-pill);
+  border: 1px solid var(--line-2); background: var(--paper); color: var(--ink);
+  cursor: pointer; flex: none;
+  transition: background .18s ease, color .18s ease, border-color .18s ease;
 }
-.calllink-badge .icon { width: 20px; height: 20px; }
-.calllink-text { display: flex; flex-direction: column; min-width: 0; }
-.calllink-label {
-  font-size: .6875rem; font-weight: 700; letter-spacing: .16em;
-  text-transform: uppercase; color: var(--muted);
-}
-.calllink-num { font-weight: 700; font-size: 1.0625rem; color: var(--ink); letter-spacing: -.01em; }
-.ink-section .calllink-label { color: #a9bcd8; }
-.ink-section .calllink-num { color: #fff; }
-.calllink:hover .calllink-num { text-decoration: underline; }
+.rbtn:hover:not(:disabled) { background: var(--ink); color: #fff; border-color: var(--ink); }
+.rbtn:disabled { opacity: .35; cursor: default; }
+.rbtn .icon { width: 17px; height: 17px; }
+.rbtn--flip .icon { transform: scaleX(-1); }
 
-/* ---------------------------------------------------------- trust pill -- */
-/* The reference puts a star rating here. This practice has no published
-   ratings, so the slot carries something true instead — what the scan is, or
-   how long it takes. Never populate it with invented numbers. */
-.trustpill {
-  display: inline-flex; align-items: center; gap: .6rem;
-  padding: .45rem 1.1rem .45rem .5rem;
-  background: rgb(255 255 255 / .1);
-  border: 1px solid rgb(255 255 255 / .2);
-  border-radius: var(--radius-pill);
-  font-size: .9375rem; font-weight: 600; color: #fff;
-  backdrop-filter: blur(8px);
-}
-.trustpill-tag {
-  display: inline-flex; align-items: center; gap: .35rem;
-  padding: .2rem .7rem; border-radius: var(--radius-pill);
-  background: var(--cyan); color: var(--ink);
-  font-size: .8125rem; font-weight: 700;
-}
-.trustpill .icon { width: 15px; height: 15px; }
-.trustpill--light { background: var(--paper); border-color: var(--line); color: var(--ink); }
+.icon { width: 20px; height: 20px; flex: none; }
 
-/* -------------------------------------------------------- feature card -- */
-/* The row alternates fills. On a light ground the sequence paper / cyan / ink
-   is what stops three equal cards reading as a table. */
-.fgrid { display: grid; gap: 1.15rem; grid-template-columns: repeat(3, 1fr); }
-.fgrid--2 { grid-template-columns: repeat(2, 1fr); }
-.fgrid--4 { grid-template-columns: repeat(4, 1fr); }
+/* --------------------------------------------------------- concept banner -- */
+/* This must never be mistaken for the practice's own site. The banner is the
+   first thing in the document and is repeated in the footer. */
+.concept-banner {
+  background: var(--ink); color: #b9c9e2;
+  font-size: .8125rem; line-height: 1.5;
+  padding-block: .6rem;
+}
+.concept-banner .wrap { display: flex; align-items: flex-start; gap: .6rem; }
+.concept-banner .icon { width: 16px; height: 16px; color: var(--cyan-lift); margin-top: .18rem; }
+.concept-banner p { margin: 0; max-width: none; }
+.concept-banner strong { color: #fff; }
+.concept-banner a { color: var(--cyan-lift); }
 
-.fcard {
-  display: flex; flex-direction: column; gap: .85rem;
-  padding: 1.85rem 1.75rem 1.6rem;
-  border-radius: var(--radius);
+/* ------------------------------------------------------------------ nav -- */
+/* Floats over the hero card as a white pill, exactly as the reference does. */
+.nav-shell { position: sticky; top: 0; z-index: 120; padding-top: .85rem; }
+.nav {
+  display: flex; align-items: center; gap: 1rem;
+  background: rgb(255 255 255 / .92);
+  backdrop-filter: blur(14px) saturate(160%);
   border: 1px solid var(--line);
-  background: var(--paper);
-  position: relative; overflow: hidden;
+  border-radius: var(--r-pill);
+  padding: .5rem .5rem .5rem 1.15rem;
+  box-shadow: var(--shadow-sm);
+}
+.brand { display: inline-flex; align-items: center; gap: .6rem; text-decoration: none; margin-right: auto; }
+.brand img { width: 34px; height: 34px; }
+.brand-name { font-family: var(--f-display); font-weight: 600; font-size: 1.15rem; color: var(--ink); letter-spacing: -.03em; line-height: 1; }
+.brand-name span { color: var(--cyan-ink); }
+.brand-sub {
+  display: block; font-family: var(--f-mono);
+  font-size: .5625rem; font-weight: 500; letter-spacing: .18em;
+  text-transform: uppercase; color: var(--muted); margin-top: .22rem;
+}
+.nav-links { display: flex; align-items: center; gap: .1rem; }
+.nav-links a {
+  padding: .5rem .8rem; border-radius: var(--r-pill);
+  font-size: .9375rem; font-weight: 500; color: var(--body); text-decoration: none;
+  transition: background .16s ease, color .16s ease;
+}
+.nav-links a:hover { background: var(--ground); color: var(--ink); }
+.nav-links a[aria-current="page"] { color: var(--ink); font-weight: 600; background: var(--ground-2); }
+/* The CTA exists twice in the markup: once inside the collapsible panel (where
+   it belongs on a phone) and once outside it (where it belongs on a desktop).
+   Exactly one must be visible at any width, or it renders twice. */
+.nav-links .btn { display: none; }
+
+.nav-toggle {
+  display: none; align-items: center; gap: .45rem;
+  background: var(--ink); color: #fff; border: 0;
+  border-radius: var(--r-pill); padding: .55rem 1rem;
+  font: 600 .875rem var(--f-body); cursor: pointer;
+}
+
+@media (max-width: 1000px) {
+  .nav-toggle { display: inline-flex; }
+  .nav-links {
+    position: absolute; top: calc(100% + .5rem); left: 0; right: 0;
+    flex-direction: column; align-items: stretch; gap: .15rem;
+    background: var(--paper); border: 1px solid var(--line);
+    border-radius: var(--r); padding: .6rem; box-shadow: var(--shadow);
+  }
+  .nav { position: relative; flex-wrap: wrap; }
+  .nav-links a { padding: .7rem .9rem; }
+  .js .nav-links[data-open="false"] { display: none; }
+  .nav .btn { display: none; }
+  .nav-links .btn { display: inline-flex; justify-content: space-between; margin-top: .35rem; }
+}
+
+/* ----------------------------------------------------------------- hero -- */
+/* One big rounded photo card rather than a full-bleed band. The rounding is
+   what keeps it feeling like an object on the page. */
+.hero { padding-top: .85rem; }
+.hero-card {
+  position: relative; isolation: isolate;
+  border-radius: var(--r-xl); overflow: hidden;
+  min-height: clamp(430px, 66vh, 620px);
+  display: flex; align-items: flex-end;
+  padding: clamp(1.5rem, 4vw, 3.25rem);
+  background: var(--ink);
+}
+.hero-card > img {
+  position: absolute; inset: 0; z-index: -2;
+  width: 100%; height: 100%; object-fit: cover; object-position: var(--focal, 50% 45%);
+}
+/* Directional scrim: heavy where the words sit, light over the rest, so the
+   photograph stays a photograph. */
+.hero-card::after {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background:
+    linear-gradient(95deg, rgb(6 18 40 / .9) 0%, rgb(6 18 40 / .74) 38%, rgb(6 18 40 / .3) 66%, rgb(6 18 40 / .16) 100%),
+    linear-gradient(to top, rgb(6 18 40 / .5), transparent 45%);
+}
+.hero-copy { max-width: 40rem; color: #d6e2f2; }
+.hero-copy h1 { color: #fff; }
+.hero-copy .lede { color: #cfdcef; }
+.hero .btn-row { margin-top: 1.6rem; }
+.hero-note {
+  display: flex; align-items: center; gap: .55rem;
+  margin-top: 1.35rem; font-size: .9375rem; color: #a9bcd8;
+}
+.hero-note .icon { width: 17px; height: 17px; color: var(--cyan-lift); }
+
+/* ------------------------------------------------------------ stat strip -- */
+.statstrip {
+  display: grid; gap: 1px; background: var(--line);
+  border: 1px solid var(--line); border-radius: var(--r);
+  grid-template-columns: repeat(4, 1fr); overflow: hidden;
+}
+.statstrip > div { background: var(--paper); padding: 1.25rem 1.35rem; min-width: 0; }
+.statstrip dt { font-family: var(--f-mono); font-size: .6875rem; font-weight: 500; letter-spacing: .13em; text-transform: uppercase; color: var(--muted); margin-bottom: .35rem; }
+.statstrip dd { margin: 0; font-family: var(--f-display); font-size: clamp(1.35rem, 2.2vw, 1.75rem); font-weight: 400; color: var(--ink); letter-spacing: -.03em; line-height: 1.15; }
+.statstrip dd small { display: block; font-family: var(--f-body); font-size: .8125rem; font-weight: 400; color: var(--muted); letter-spacing: 0; margin-top: .2rem; }
+
+/* ------------------------------------------------------- programme cards -- */
+.pgrid { display: grid; gap: 1.15rem; grid-template-columns: repeat(3, 1fr); }
+.pcard {
+  display: flex; flex-direction: column;
+  background: var(--paper); border: 1px solid var(--line);
+  border-radius: var(--r); padding: clamp(1.35rem, 2.4vw, 1.85rem);
   min-width: 0;
 }
-.fcard-icon {
+.pcard-name {
+  font-family: var(--f-mono); font-size: .75rem; font-weight: 500;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--cyan-ink);
+  background: var(--ground); border: 1px solid var(--line);
+  border-radius: var(--r-pill); padding: .3rem .8rem;
+  align-self: flex-start; margin-bottom: 1.1rem;
+}
+.pcard h3 { margin: 0 0 .9rem; }
+.pcard-label { font-size: .8125rem; font-weight: 600; color: var(--ink); margin: 0 0 .3rem; }
+.pcard p { font-size: .9375rem; color: var(--muted); margin: 0 0 1.1rem; max-width: none; }
+.pcard-rule { border: 0; border-top: 1px solid var(--line); margin: 0 0 1rem; }
+
+/* The reference puts a price here. This practice publishes none, so the slot
+   carries what is actually knowable — see the note at the top of this file. */
+.pcard-terms { margin-top: auto; padding-top: 1rem; border-top: 1px solid var(--line); }
+.pcard-terms p { margin: 0 0 .9rem; font-size: .875rem; color: var(--muted); }
+.pcard-terms strong { color: var(--ink); font-weight: 600; }
+
+/* Native disclosure — no JS needed, and it stays usable with JS blocked. */
+.pcard details { margin-bottom: 1rem; }
+.pcard summary {
+  display: flex; align-items: center; justify-content: space-between; gap: .6rem;
+  cursor: pointer; list-style: none;
+  font-size: .8125rem; font-weight: 600; color: var(--ink);
+  padding: .5rem 0; border-top: 1px solid var(--line);
+}
+.pcard summary::-webkit-details-marker { display: none; }
+.pcard summary .icon { width: 15px; height: 15px; color: var(--muted); transition: transform .2s ease; }
+.pcard details[open] summary .icon { transform: rotate(180deg); }
+.pcard details ul { list-style: none; margin: .2rem 0 .5rem; padding: 0; display: grid; gap: .4rem; }
+.pcard details li { display: flex; gap: .5rem; font-size: .875rem; color: var(--muted); }
+.pcard details li .icon { width: 14px; height: 14px; color: var(--cyan); margin-top: .28rem; }
+
+/* Decorative tiles sit in the grid between cards, as in the reference. Ours are
+   drawn from the logo's vertebral column rather than being stock imagery. */
+.ptile {
+  border-radius: var(--r); overflow: hidden; min-height: 220px;
+  background: var(--ground-2);
+  display: flex; align-items: center; justify-content: center;
+}
+.ptile svg { width: 100%; height: 100%; display: block; }
+
+/* ------------------------------------------------------------ step cards -- */
+/* A real horizontal scroll container, not a grid. With JS blocked the arrow
+   buttons do nothing but the rail still swipes and drags, so the fourth step is
+   never unreachable — which a 3-column grid holding 4 cards would make it. */
+.steps {
+  display: grid; gap: 1.15rem; grid-auto-flow: column;
+  grid-auto-columns: minmax(260px, 1fr);
+  overflow-x: auto; scroll-snap-type: x mandatory;
+  scrollbar-width: none; padding-bottom: .25rem;
+}
+.steps::-webkit-scrollbar { display: none; }
+.steps > .step { scroll-snap-align: start; }
+@media (min-width: 1001px) { .steps { grid-auto-columns: minmax(0, 1fr); } }
+.step {
+  position: relative; border-radius: var(--r); overflow: hidden;
+  min-height: 330px; display: flex; align-items: flex-end;
+  padding: 1rem; background: var(--ink-2); min-width: 0;
+}
+.step > img { position: absolute; inset: 0; z-index: -1; width: 100%; height: 100%; object-fit: cover; }
+.step-chip {
+  position: absolute; top: 1rem; left: 1rem;
+  font-family: var(--f-mono); font-size: .6875rem; font-weight: 500;
+  letter-spacing: .1em; text-transform: uppercase;
+  background: rgb(255 255 255 / .92); color: var(--ink);
+  border-radius: var(--r-pill); padding: .3rem .75rem;
+}
+.step-body {
+  background: rgb(255 255 255 / .95); backdrop-filter: blur(8px);
+  border-radius: var(--r-sm); padding: 1rem 1.1rem; width: 100%; min-width: 0;
+}
+.step-body h3 { margin: 0 0 .3rem; font-size: 1.0625rem; }
+.step-body p { margin: 0; font-size: .875rem; color: var(--muted); max-width: none; }
+
+/* ------------------------------------------------------------- plain rows -- */
+/* The translation idea: the practice's clinical name, what it means, then what
+   you get. Blue for the clinical side, the outcome marked in cyan. */
+.plain { display: grid; gap: 1rem; }
+.plain-row {
+  display: grid; gap: .5rem 1.5rem;
+  grid-template-columns: minmax(0, 15rem) minmax(0, 1fr);
+  padding: 1.15rem 0; border-top: 1px solid var(--line);
+  align-items: start;
+}
+.plain-row:last-child { border-bottom: 1px solid var(--line); }
+.plain-term {
+  display: flex; align-items: center; gap: .55rem; margin: 0;
+  font-family: var(--f-mono); font-size: .75rem; font-weight: 500;
+  letter-spacing: .08em; text-transform: uppercase; color: var(--cyan-ink);
+  min-width: 0; overflow-wrap: anywhere;
+}
+.plain-term .icon { width: 16px; height: 16px; }
+.plain-def { margin: 0; min-width: 0; }
+.plain-def strong { color: var(--ink); font-weight: 600; }
+.plain-gain {
+  display: flex; align-items: flex-start; gap: .5rem;
+  margin: .55rem 0 0; font-size: .9375rem; font-weight: 500; color: var(--cyan-ink);
+  min-width: 0;
+}
+.plain-gain .icon { width: 15px; height: 15px; color: var(--cyan); margin-top: .22rem; }
+.plain-gain span { min-width: 0; overflow-wrap: anywhere; }
+
+/* ------------------------------------------------------------------ misc -- */
+.split { display: grid; gap: clamp(1.5rem, 4vw, 3.25rem); grid-template-columns: 1fr 1fr; align-items: center; }
+.split > * { min-width: 0; }
+.media { border-radius: var(--r); overflow: hidden; background: var(--ground-2); }
+.media img { width: 100%; height: 100%; object-fit: cover; }
+.media--tall { aspect-ratio: 4 / 5; }
+.media--wide { aspect-ratio: 16 / 10; }
+
+.tagrow { display: flex; flex-wrap: wrap; gap: .45rem; list-style: none; margin: 0; padding: 0; }
+.tagrow li {
+  font-size: .8125rem; font-weight: 500; color: var(--body);
+  background: var(--paper); border: 1px solid var(--line);
+  border-radius: var(--r-pill); padding: .35rem .8rem;
+}
+
+.note {
+  display: flex; align-items: flex-start; gap: .7rem;
+  background: var(--paper); border: 1px solid var(--line);
+  border-left: 3px solid var(--cyan);
+  border-radius: var(--r-sm); padding: 1rem 1.15rem;
+  font-size: .9375rem; line-height: 1.55; color: var(--body);
+  min-width: 0;
+}
+.note .icon { width: 18px; height: 18px; color: var(--cyan-ink); margin-top: .18rem; }
+.note span { min-width: 0; overflow-wrap: anywhere; }
+.note p { margin: 0; max-width: none; }
+.note strong { color: var(--ink); }
+.note--warn { border-left-color: #e5ac2b; background: #fdf8ee; }
+.note--warn .icon { color: #7d5a08; }
+
+/* ---------------------------------------------------------------- footer -- */
+.foot { background: var(--ink); color: #a9bcd8; border-radius: var(--r-xl) var(--r-xl) 0 0; margin-top: var(--step); }
+.foot-in { padding-block: clamp(2rem, 5vw, 3.5rem) 1.75rem; }
+.foot-top { display: grid; gap: 2rem; grid-template-columns: 1.5fr 1fr 1fr 1.3fr; margin-bottom: 2.5rem; }
+.foot-top > * { min-width: 0; }
+.foot h4 { color: #fff; font-family: var(--f-mono); font-size: .6875rem; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; margin-bottom: .9rem; }
+.foot ul { list-style: none; margin: 0; padding: 0; display: grid; gap: .15rem; }
+.foot a { color: #c3d2e8; text-decoration: none; font-size: .9375rem; display: inline-flex; align-items: center; min-height: 36px; overflow-wrap: anywhere; }
+.foot a:hover { color: var(--cyan-lift); text-decoration: underline; }
+.foot .brand-name { color: #fff; }
+.foot p { font-size: .9375rem; }
+.foot-bottom { border-top: 1px solid rgb(255 255 255 / .14); padding-top: 1.5rem; display: grid; gap: .7rem; }
+.foot-bottom p { margin: 0; font-size: .8125rem; line-height: 1.6; color: #8ea3c2; max-width: none; }
+.foot-bottom strong { color: #c3d2e8; }
+.foot-social { display: flex; gap: .3rem; margin-top: .8rem; }
+.foot-social a {
+  width: 36px; height: 36px; border-radius: var(--r-pill);
   display: inline-flex; align-items: center; justify-content: center;
-  width: 3.25rem; height: 3.25rem; border-radius: var(--radius-sm);
-  background: var(--bone-2); color: var(--cyan-ink);
-  margin-bottom: .35rem; flex: none;
+  background: rgb(255 255 255 / .08);
 }
-.fcard-icon .icon { width: 26px; height: 26px; }
-.fcard h3 { margin: 0; }
-.fcard p { margin: 0; color: var(--muted); font-size: 1rem; max-width: 34ch; }
-.fcard .btn { margin-top: auto; align-self: flex-start; }
-/* Push the action clear of the copy without collapsing short cards. */
-.fcard .btn { margin-top: 1.15rem; }
+.foot-social a:hover { background: rgb(255 255 255 / .16); }
+.foot-social .icon { width: 16px; height: 16px; }
 
-/* Bright fill. Text goes to ink, not white: cyan is too light to carry white. */
-.fcard--cyan { background: var(--cyan); border-color: transparent; }
-.fcard--cyan h3, .fcard--cyan p { color: var(--ink); }
-.fcard--cyan p { opacity: .82; }
-.fcard--cyan .fcard-icon { background: rgb(255 255 255 / .38); color: var(--ink); }
-.fcard--cyan .btn { background: var(--ink); color: #fff; }
-.fcard--cyan .btn .btn-badge { background: var(--cyan); color: var(--ink); }
-
-/* Dark fill. */
-.fcard--ink { background: var(--ink); border-color: transparent; }
-.fcard--ink h3 { color: #fff; }
-.fcard--ink p { color: #a9bcd8; }
-.fcard--ink .fcard-icon { background: rgb(255 255 255 / .12); color: var(--cyan-lift); }
-.fcard--ink .btn { background: var(--cyan); color: var(--ink); }
-.fcard--ink .btn .btn-badge { background: var(--ink); color: var(--cyan); }
-
-/* A soft brand-gradient wash in the corner, as in the reference's filled cards.
-   Kept behind the content and non-interactive. */
-.fcard--cyan::after, .fcard--ink::after {
-  content: ""; position: absolute; right: -30%; bottom: -60%;
-  width: 78%; aspect-ratio: 1; border-radius: 50%;
-  background: rgb(255 255 255 / .1); pointer-events: none;
+/* ------------------------------------------------------------------ form -- */
+.field { display: grid; gap: .35rem; margin-bottom: 1rem; min-width: 0; }
+.field label { font-size: .875rem; font-weight: 600; color: var(--ink); }
+.field input, .field select, .field textarea {
+  font: inherit; font-size: 1rem; color: var(--ink);
+  background: var(--paper); border: 1px solid var(--line-2);
+  border-radius: var(--r-sm); padding: .7rem .85rem;
+  min-width: 0; max-width: 100%; width: 100%;
 }
-.fcard > * { position: relative; z-index: 1; }
+.field textarea { min-height: 7rem; resize: vertical; }
+.field-row { display: grid; gap: 0 1rem; grid-template-columns: 1fr 1fr; }
+.field-row > * { min-width: 0; }
 
-/* --------------------------------------------------------- stat blocks -- */
-.statcard {
-  display: flex; flex-direction: column; gap: .3rem; justify-content: center;
-  padding: 1.5rem 1.5rem;
-  border-radius: var(--radius); background: var(--cyan); color: var(--ink);
-  min-width: 0;
-}
-.statcard .icon { width: 26px; height: 26px; margin-bottom: .5rem; }
-.statcard-num {
-  font-family: var(--font-display); font-weight: 700;
-  font-size: clamp(1.9rem, 3.4vw, 2.6rem); line-height: 1;
-  letter-spacing: -.035em; color: var(--ink);
-}
-.statcard-label { font-size: .9375rem; font-weight: 600; opacity: .8; max-width: 22ch; }
-.statcard--ink { background: var(--ink); }
-.statcard--ink .statcard-num { color: #fff; }
-.statcard--ink .statcard-label { color: #a9bcd8; opacity: 1; }
-.statcard--ink .icon { color: var(--cyan-lift); }
-.statcard--paper { background: var(--paper); border: 1px solid var(--line); }
-.statcard--paper .icon { color: var(--cyan-ink); }
+/* --------------------------------------------------------- scroll reveal -- */
+/* `.js` is stamped on <html> by an inline <head> script, before first paint —
+   a deferred script cannot do it without a flash, because the stylesheet
+   blocks rendering and the script does not. */
+.js .reveal { opacity: 0; transform: translateY(14px); transition: opacity .5s ease, transform .5s ease; }
+.js .reveal.in { opacity: 1; transform: none; }
+.js .reveal-d1 { transition-delay: .08s; }
+.js .reveal-d2 { transition-delay: .16s; }
 
-/* ---------------------------------------------------------- tag cloud -- */
-.tagcloud { display: flex; flex-wrap: wrap; gap: .45rem; margin: 0; padding: 0; list-style: none; }
-.tagcloud li {
-  padding: .38rem .85rem; border-radius: var(--radius-pill);
-  background: var(--bone-2); border: 1px solid var(--line);
-  font-size: .875rem; font-weight: 600; color: var(--ink-2);
+/* Reduced motion MUST force full opacity. A reveal that only un-hides via
+   script leaves a blank page for anyone who has motion turned down. */
+@media (prefers-reduced-motion: reduce) {
+  .js .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+  html { scroll-behavior: auto; }
+  * { animation-duration: .01ms !important; transition-duration: .01ms !important; }
 }
-.ink-section .tagcloud li {
-  background: rgb(255 255 255 / .08); border-color: rgb(255 255 255 / .16); color: #cdd9ec;
-}
-
-/* --------------------------------------------------------------- media -- */
-/* Image tile with a consistent radius and ratio, used in the split sections. */
-.mediatile { border-radius: var(--radius); overflow: hidden; background: var(--bone-2); }
-.mediatile img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.mediatile--tall { aspect-ratio: 4 / 5; }
-.mediatile--wide { aspect-ratio: 16 / 10; }
-.mediatile--square { aspect-ratio: 1; }
-
-/* A two-column split that collapses predictably. */
-.split2 { display: grid; gap: clamp(1.5rem, 4vw, 3.25rem); grid-template-columns: 1fr 1fr; align-items: center; }
-.split2--media-first > :first-child { order: -1; }
-.split2 > * { min-width: 0; }
 
 /* ------------------------------------------------------------ responsive -- */
 @media (max-width: 1000px) {
-  .fgrid, .fgrid--4 { grid-template-columns: repeat(2, 1fr); }
+  .pgrid, .steps { grid-template-columns: repeat(2, 1fr); }
+  .statstrip { grid-template-columns: repeat(2, 1fr); }
+  .foot-top { grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 860px) {
-  .split2 { grid-template-columns: 1fr; }
+  .split, .head-split { grid-template-columns: 1fr; }
+  .head-split { align-items: start; }
+  .plain-row { grid-template-columns: 1fr; }
 }
-@media (max-width: 640px) {
-  .fgrid, .fgrid--2, .fgrid--4 { grid-template-columns: 1fr; }
-  .fcard { padding: 1.5rem 1.35rem 1.35rem; }
-  .btn { font-size: 1rem; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .btn, .btn-badge, .fcard { transition: none; }
-  .btn:hover, .btn:hover .btn-badge { transform: none; }
-}
-
-/* ============================================================================
-   BRAND + PROCESS PAGE (brand.html)
-   ----------------------------------------------------------------------------
-   Documentation surface for the design system. Components are shown live rather
-   than as screenshots, so this page cannot drift from the site it describes —
-   if a component changes, this page changes with it.
-   ========================================================================= */
-.brandhero { background: var(--bone-2); padding-block: calc(var(--step) * 2.1) calc(var(--step) * 1.7); }
-.brandhero h1 { margin-bottom: .45em; }
-.brandhero .trustpill { margin-bottom: 1.5rem; }
-
-/* --------------------------------------------------------------- specimen -- */
-.specimen {
-  border-radius: var(--radius); padding: 1.75rem 1.6rem;
-  border: 1px solid var(--line); background: var(--paper);
-  display: flex; flex-direction: column; gap: .8rem; min-width: 0;
-}
-.specimen--dark { background: var(--ink); border-color: transparent; }
-.specimen--dark .specimen-cap { color: #a9bcd8; }
-.specimen img { width: 100%; max-width: 380px; height: auto; }
-.specimen-cap { margin: 0; font-size: .9375rem; color: var(--muted); max-width: 46ch; }
-.specimen-name { margin: 0; font-family: var(--font-display); font-weight: 700; font-size: 1.35rem; color: var(--ink); letter-spacing: -.02em; }
-.specimen-name--body { font-family: var(--font-body); }
-.specimen-huge {
-  margin: 0; font-family: var(--font-display); font-weight: 700;
-  font-size: clamp(4rem, 11vw, 7rem); line-height: .84; letter-spacing: -.05em;
-  color: var(--cyan-ink);
-}
-.specimen-huge--body { font-family: var(--font-body); font-variation-settings: normal; color: var(--ink-2); }
-.specimen-line { margin: 0; font-family: var(--font-display); font-size: 1.3rem; line-height: 1.25; color: var(--ink); letter-spacing: -.02em; max-width: none; }
-.specimen-line--body { font-family: var(--font-body); font-size: 1.06rem; line-height: 1.5; color: var(--body); }
-
-/* --------------------------------------------------------------- swatches -- */
-.swatches { list-style: none; margin: 0; padding: 0; display: grid; gap: 1rem; grid-template-columns: repeat(4, 1fr); }
-.swatch {
-  display: flex; flex-direction: column; gap: .3rem; min-width: 0;
-  background: var(--paper); border: 1px solid var(--line);
-  border-radius: var(--radius-sm); padding: 1rem 1.1rem 1.15rem;
-}
-.swatch-chip { display: block; height: 4.5rem; border-radius: var(--radius-sm); background: var(--sw); margin-bottom: .5rem; }
-.swatch-chip--bordered { border: 1px solid var(--line-2); }
-.swatch b { font-size: 1rem; color: var(--ink); }
-.swatch code, .notebox code, .scale code {
-  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
-  font-size: .8125rem; color: var(--cyan-ink); background: var(--bone-2);
-  padding: .05rem .35rem; border-radius: 5px;
-}
-.swatch code { align-self: flex-start; }
-.swatch-note { font-size: .875rem; line-height: 1.45; color: var(--muted); }
-
-/* ---------------------------------------------------------------- notebox -- */
-.notebox {
-  display: flex; align-items: flex-start; gap: .8rem;
-  margin: 1.5rem 0 0; padding: 1.15rem 1.3rem;
-  border-radius: var(--radius-sm); border: 1px solid var(--line);
-  background: var(--paper); font-size: 1rem; line-height: 1.6;
-  color: var(--body); max-width: none; min-width: 0;
-}
-.notebox .icon { width: 20px; height: 20px; flex: none; margin-top: .2rem; color: var(--cyan-ink); }
-.notebox span { min-width: 0; overflow-wrap: anywhere; }
-.notebox--warn { background: rgb(229 172 43 / .1); border-color: rgb(229 172 43 / .42); color: #5c440d; }
-.notebox--warn .icon { color: var(--gold-ink); }
-.notebox--warn code { background: rgb(255 255 255 / .6); color: var(--gold-ink); }
-.notebox--onink { background: rgb(255 255 255 / .06); border-color: rgb(255 255 255 / .16); color: #cdd9ec; }
-.notebox--onink .icon { color: var(--cyan-lift); }
-.notebox--onink strong { color: #fff; }
-
-/* ------------------------------------------------------------------ scale -- */
-.scale { list-style: none; margin: 2rem 0 0; padding: 0; display: grid; gap: 0; }
-.scale li {
-  display: grid; grid-template-columns: 15rem 1fr; gap: 1.5rem; align-items: baseline;
-  padding: 1.05rem 0; border-top: 1px solid var(--line);
-}
-.scale li:last-child { border-bottom: 1px solid var(--line); }
-.scale-label { font-size: .8125rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
-.scale-demo { font-family: var(--font-display); font-weight: 700; color: var(--ink); letter-spacing: -.03em; line-height: 1.1; min-width: 0; }
-.scale-demo--body { font-family: var(--font-body); font-weight: 400; font-size: 1.125rem; color: var(--body); letter-spacing: 0; }
-
-/* -------------------------------------------------------------------- kit -- */
-.kit { display: grid; gap: 0; }
-.kit-row {
-  display: grid; grid-template-columns: 11rem 1fr; gap: 1.5rem; align-items: center;
-  padding: 1.4rem 0; border-top: 1px solid rgb(255 255 255 / .14);
-}
-.kit-row:last-child { border-bottom: 1px solid rgb(255 255 255 / .14); }
-.kit-label { margin: 0; font-size: .8125rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #9fdcff; }
-.kit-row > *:last-child { min-width: 0; }
-
-/* ------------------------------------------------------------ processlist -- */
-.processlist { list-style: none; margin: 0; padding: 0; display: grid; gap: 1rem; counter-reset: none; }
-.processlist li {
-  display: grid; grid-template-columns: auto 1fr; gap: 1.35rem; align-items: start;
-  background: var(--paper); border: 1px solid var(--line);
-  border-radius: var(--radius); padding: 1.6rem 1.75rem;
-}
-.processlist li > div { min-width: 0; }
-.processlist h3 { margin: 0 0 .35rem; }
-.processlist p { margin: 0; color: var(--muted); max-width: 74ch; }
-.processlist-num {
-  font-family: var(--font-display); font-weight: 700; font-size: 1.5rem;
-  line-height: 1; letter-spacing: -.04em;
-  display: inline-flex; align-items: center; justify-content: center;
-  width: 3.1rem; height: 3.1rem; border-radius: var(--radius-pill);
-  background: var(--bone-2); color: var(--cyan-ink); flex: none;
-}
-
-@media (max-width: 900px) {
-  .swatches { grid-template-columns: repeat(2, 1fr); }
-  .scale li, .kit-row { grid-template-columns: 1fr; gap: .5rem; }
-}
-@media (max-width: 520px) {
-  .swatches { grid-template-columns: 1fr; }
-  .processlist li { grid-template-columns: 1fr; gap: .9rem; padding: 1.35rem 1.25rem; }
-}
-
-/* ============================================================================
-   THE VERTEBRAE COLUMN — this site's signature device.
-   ----------------------------------------------------------------------------
-   Lifted directly out of the practice's own logo, where the mark is a torso in
-   profile built around a column of vertebrae dots. Here that column is scaled
-   up to become the page's own spine: a rail down the left edge with a node at
-   every section, numbered in mono like a clinical readout.
-
-   The point is that nothing else could wear it. A full-bleed photo with a dark
-   scrim and a white headline is the same hero every template ships; a dotted
-   vertebral rail derived from the client's mark is not.
-
-   Density is the second idea: the nodes are hollow until their section has been
-   reached, then fill — bone density made literal as you move down the page.
-   ========================================================================= */
-.spine { position: relative; }
-
-/* The rail itself. A repeating-gradient of dots rather than a solid line, so it
-   reads as vertebrae rather than a border. */
-/* The rail must line up with the centred .wrap, not the full-bleed section, or
-   the numbers hang off the left edge of the viewport on wide screens. */
-.spine { --wrap-inset: max(1.25rem, calc((100% - var(--wrap)) / 2)); }
-.spine::before {
-  content: "";
-  position: absolute; top: 0; bottom: 0;
-  left: calc(var(--wrap-inset) + var(--spine-x) - 1px);
-  width: 2px;
-  background: repeating-linear-gradient(
-    to bottom,
-    var(--line-2) 0 6px,
-    transparent 6px 13px
-  );
-  pointer-events: none;
-}
-.spine-sec { position: relative; }
-
-/* The node + its number sit in the gutter the rail runs through. */
-.spine-node {
-  position: absolute; left: var(--wrap-inset); top: calc(var(--step) * 1.7);
-  width: var(--spine-x); display: flex; align-items: center; gap: .75rem;
-  pointer-events: none;
-}
-.spine-dot {
-  position: relative; z-index: 1; flex: none;
-  width: 15px; height: 15px; border-radius: 50%;
-  margin-left: calc(var(--spine-x) - 25px);
-  background: var(--bone);
-  border: 2px solid var(--line-2);
-  transition: background .4s ease, border-color .4s ease, transform .4s ease;
-}
-.spine-num {
-  font-family: var(--font-mono); font-size: .75rem; font-weight: 500;
-  letter-spacing: .06em; color: var(--muted);
-  order: -1; margin-left: auto;
-  transition: color .4s ease;
-}
-/* Filled once the section has been reached. `.in` is the same class the scroll
-   reveal already sets, so this needs no second observer. */
-.spine-sec.in .spine-dot,
-.spine-sec .reveal.in ~ .spine-node .spine-dot { background: var(--cyan); border-color: var(--cyan); }
-.spine-sec.in .spine-num { color: var(--cyan-ink); }
-
-/* Dark bands invert the rail. */
-.ink-section.spine-sec .spine-dot { background: var(--ink); border-color: rgb(255 255 255 / .3); }
-.ink-section.spine-sec.in .spine-dot { background: var(--cyan-lift); border-color: var(--cyan-lift); }
-.ink-section.spine-sec .spine-num { color: #7f92ad; }
-.ink-section.spine-sec.in .spine-num { color: var(--cyan-lift); }
-
-/* The gutter width is the whole layout contract: content shifts right by this
-   much, so it is defined once and everything keys off it. */
-.spine { --spine-x: clamp(56px, 7vw, 104px); }
-.spine .wrap, .spine .wrap--narrow { padding-left: var(--spine-x); }
-
-/* Full-bleed media inside a spined section must NOT be pushed in — only the
-   text column shifts. */
-.spine .band-media, .spine .hero-media { left: 0; right: 0; }
-
-@media (max-width: 860px) {
-  /* Below this the gutter costs more than it gives: the rail goes, and the
-     number moves inline above the heading where it still does its job. */
-  .spine { --spine-x: 0px; }
-  .spine::before { display: none; }
-  .spine-node { position: static; width: auto; margin-bottom: .6rem; }
-  .spine-dot { margin-left: 0; width: 11px; height: 11px; }
-  .spine-num { order: 0; margin-left: 0; }
-  .spine .wrap, .spine .wrap--narrow { padding-left: 0; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .spine-dot, .spine-num { transition: none; }
+@media (max-width: 620px) {
+  .pgrid, .steps { grid-template-columns: 1fr; }
+  .statstrip { grid-template-columns: 1fr; }
+  .foot-top { grid-template-columns: 1fr; }
+  .field-row { grid-template-columns: 1fr; }
+  .ptile { min-height: 160px; }
 }
 
 /* pd-network:start */
@@ -1430,7 +588,7 @@ figcaption { padding: .85rem 0 0; font-size: .9375rem; color: var(--muted); }
   color: #7fe0ff; font-weight: 700; margin: 0 0 12px;
 }
 .pd-network-title {
-  font-family: var(--font-display);
+  font-family: Fraunces, Georgia, serif;
   font-size: clamp(21px, 2.5vw, 27px); line-height: 1.15; letter-spacing: -.015em;
   color: #ffffff; font-weight: 600; margin: 0 0 10px; text-wrap: balance;
 }
