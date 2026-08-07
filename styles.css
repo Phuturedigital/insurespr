@@ -40,6 +40,22 @@
   --body: #4a5875;         /* body copy, softer than headings */
   --muted: #6b7a96;
 
+  /* Text ON the dark panels. Six near-identical blue-greys had drifted in doing
+     this one job (#c3d2e8 #a9bcd8 #b9c9e2 #d6e2f2 #cfdcef #8ea3c2). Three
+     steps is all the hierarchy that surface needs. */
+  --on-ink: #cdd9ec;        /* primary copy on navy */
+  --on-ink-soft: #a9bcd8;   /* secondary copy, captions */
+  --on-ink-dim: #8ea3c2;    /* fine print in the footer */
+
+  /* The warning ramp. Fill, border, icon and text all warm — mixing a cool
+     border with a warm fill is what made the form notice look muddy. */
+  --warn-bg: #fdf6e8;
+  --warn-line: #f0dcb0;
+  --warn-ink: #6a5312;
+  --warn-icon: #a8791a;
+  --warn-strong: #4d3c0c;
+  --warn-link: #8a5f0c;
+
   /* The reference's ground is a pale blue-grey, not white. It is what makes
      white cards read as objects sitting on a surface rather than as the page. */
   --ground: #eef3f9;
@@ -182,7 +198,7 @@ section { padding-block: var(--step); }
 }
 .panel { background: var(--paper); border-radius: var(--r-xl); padding: clamp(1.5rem, 4vw, 3.5rem) 0; }
 .ink-panel {
-  background: var(--ink); color: #c3d2e8;
+  background: var(--ink); color: var(--on-ink);
   border-radius: var(--r-xl);
   padding: clamp(1.75rem, 4vw, 3.5rem);
 }
@@ -247,7 +263,7 @@ section { padding-block: var(--step); }
 /* This must never be mistaken for the practice's own site. The banner is the
    first thing in the document and is repeated in the footer. */
 .concept-banner {
-  background: var(--ink); color: #b9c9e2;
+  background: var(--ink); color: var(--on-ink);
   font-size: .8125rem; line-height: 1.5;
   padding-block: .6rem;
 }
@@ -337,13 +353,13 @@ section { padding-block: var(--step); }
     linear-gradient(95deg, rgb(6 18 40 / .9) 0%, rgb(6 18 40 / .74) 38%, rgb(6 18 40 / .3) 66%, rgb(6 18 40 / .16) 100%),
     linear-gradient(to top, rgb(6 18 40 / .5), transparent 45%);
 }
-.hero-copy { max-width: 40rem; color: #d6e2f2; }
+.hero-copy { max-width: 40rem; color: var(--on-ink); }
 .hero-copy h1 { color: #fff; }
-.hero-copy .lede { color: #cfdcef; }
+.hero-copy .lede { color: var(--on-ink); }
 .hero .btn-row { margin-top: 1.6rem; }
 .hero-note {
   display: flex; align-items: center; gap: .55rem;
-  margin-top: 1.35rem; font-size: .9375rem; color: #a9bcd8;
+  margin-top: 1.35rem; font-size: .9375rem; color: var(--on-ink-soft);
 }
 .hero-note .icon { width: 17px; height: 17px; color: var(--cyan-lift); }
 
@@ -484,35 +500,62 @@ section { padding-block: var(--step); }
   border-radius: var(--r-pill); padding: .35rem .8rem;
 }
 
+/* An annotation, NOT a callout box.
+   ----------------------------------------------------------------------------
+   This was a tinted panel with a rounded border and a warning triangle — which
+   is the single most recognisable generated-content cliché on the web, and it
+   read as one. Nothing else on this site is shaped like that.
+
+   The site's actual language is mono labels, hairline rules and clean bordered
+   cards. So the fill, the border-box and the icon all go, and what is left is
+   a ruled block with a mono lead-in — the same treatment as the stat strip and
+   the programme chips. It reads as a clinical annotation on the page rather
+   than a widget dropped onto it. */
 .note {
-  display: flex; align-items: flex-start; gap: .7rem;
-  background: var(--paper); border: 1px solid var(--line);
-  border-left: 3px solid var(--cyan);
-  border-radius: var(--r-sm); padding: 1rem 1.15rem;
-  font-size: .9375rem; line-height: 1.55; color: var(--body);
+  display: block;
+  padding: .85rem 0 .9rem;
+  border-top: 1px solid var(--line);
+  font-size: .9063rem; line-height: 1.6; color: var(--muted);
   min-width: 0;
 }
-.note .icon { width: 18px; height: 18px; color: var(--cyan-ink); margin-top: .18rem; }
-.note span { min-width: 0; overflow-wrap: anywhere; }
+/* The icon is decorative here — the mono lead-in already says what this is. */
+.note .icon { display: none; }
+.note span { display: block; min-width: 0; overflow-wrap: anywhere; }
 .note p { margin: 0; max-width: none; }
-.note strong { color: var(--ink); }
-.note--warn { border-left-color: #e5ac2b; background: #fdf8ee; }
-.note--warn .icon { color: #7d5a08; }
+/* The lead-in becomes the label: mono, uppercase, small, in the site's own
+   annotation voice rather than bolded body text. */
+.note strong {
+  display: block;
+  font-family: var(--f-mono); font-weight: 500;
+  font-size: .6875rem; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--cyan-ink);
+  margin-bottom: .3rem;
+}
+.note a { color: var(--body); text-decoration-color: var(--line-2); }
+.note a:hover { color: var(--ink); }
+
+/* The variant that carries a caveat rather than a fact. Still no fill — the
+   only difference is the colour of the label, which is all the weight it needs
+   when it sits directly above the fields it is talking about. */
+.note--warn { border-top-color: var(--warn-line); }
+.note--warn strong { color: var(--warn-icon); }
+.note--warn a { color: var(--warn-link); text-decoration-color: var(--warn-line); }
+.note--warn a:hover { color: var(--warn-strong); }
 
 /* ---------------------------------------------------------------- footer -- */
-.foot { background: var(--ink); color: #a9bcd8; border-radius: var(--r-xl) var(--r-xl) 0 0; margin-top: var(--step); }
+.foot { background: var(--ink); color: var(--on-ink-soft); border-radius: var(--r-xl) var(--r-xl) 0 0; margin-top: var(--step); }
 .foot-in { padding-block: clamp(2rem, 5vw, 3.5rem) 1.75rem; }
 .foot-top { display: grid; gap: 2rem; grid-template-columns: 1.5fr 1fr 1fr 1.3fr; margin-bottom: 2.5rem; }
 .foot-top > * { min-width: 0; }
 .foot h4 { color: #fff; font-family: var(--f-mono); font-size: .6875rem; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; margin-bottom: .9rem; }
 .foot ul { list-style: none; margin: 0; padding: 0; display: grid; gap: .15rem; }
-.foot a { color: #c3d2e8; text-decoration: none; font-size: .9375rem; display: inline-flex; align-items: center; min-height: 36px; overflow-wrap: anywhere; }
+.foot a { color: var(--on-ink); text-decoration: none; font-size: .9375rem; display: inline-flex; align-items: center; min-height: 36px; overflow-wrap: anywhere; }
 .foot a:hover { color: var(--cyan-lift); text-decoration: underline; }
 .foot .brand-name { color: #fff; }
 .foot p { font-size: .9375rem; }
 .foot-bottom { border-top: 1px solid rgb(255 255 255 / .14); padding-top: 1.5rem; display: grid; gap: .7rem; }
-.foot-bottom p { margin: 0; font-size: .8125rem; line-height: 1.6; color: #8ea3c2; max-width: none; }
-.foot-bottom strong { color: #c3d2e8; }
+.foot-bottom p { margin: 0; font-size: .8125rem; line-height: 1.6; color: var(--on-ink-dim); max-width: none; }
+.foot-bottom strong { color: var(--on-ink); }
 .foot-social { display: flex; gap: .3rem; margin-top: .8rem; }
 .foot-social a {
   width: 36px; height: 36px; border-radius: var(--r-pill);
