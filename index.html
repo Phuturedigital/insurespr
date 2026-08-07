@@ -9,7 +9,7 @@
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
 <link rel="stylesheet" href="styles.css">
 <!-- Stamp `.js` BEFORE first paint. A deferred script cannot do this without a
      flash of content: the stylesheet blocks rendering and the script does not. -->
@@ -78,13 +78,36 @@
 <!-- banner:end -->
 
 <!-- header:start -->
+
+<div class="utility">
+  <div class="wrap utility-in">
+    <span class="utility-item">
+      <svg class="icon" aria-hidden="true"><use href="#i-pin"></use></svg>
+      7 Malibongwe Drive, EmedCentre, Randburg
+    </span>
+    <span class="utility-item utility-hide-sm">
+      <svg class="icon" aria-hidden="true"><use href="#i-clock"></use></svg>
+      Monday to Friday, 08:00 – 17:00
+    </span>
+    <span class="utility-spacer"></span>
+    <a class="utility-item" href="tel:+27834507861">
+      <svg class="icon" aria-hidden="true"><use href="#i-phone"></use></svg>
+      083 450 7861
+    </a>
+    <span class="utility-social">
+      <a href="https://www.facebook.com/InsureSPR/" rel="noopener" aria-label="InsureSPR Health on Facebook"><svg class="icon" aria-hidden="true"><use href="#i-facebook"></use></svg></a>
+      <a href="https://www.linkedin.com/company/InsureSPR" rel="noopener" aria-label="InsureSPR Health on LinkedIn"><svg class="icon" aria-hidden="true"><use href="#i-linkedin"></use></svg></a>
+      <a href="https://twitter.com/Bonevitalityc" rel="noopener" aria-label="InsureSPR Health on X"><svg class="icon" aria-hidden="true"><use href="#i-x"></use></svg></a>
+    </span>
+  </div>
+</div>
 <header class="head">
   <div class="wrap head-in">
     <a class="brand" href="index.html">
-      <img src="assets/mark.svg" alt="" width="30" height="40">
+      <img src="assets/mark.svg" alt="" width="34" height="34">
       <span>
-        <span class="brand-name">Insure<span>SPR</span> Health</span>
-        <span class="brand-sub">Bone &amp; muscle health</span>
+        <span class="brand-name">Insure<span>SPR</span></span>
+        <span class="brand-sub">Precision Healthcare</span>
       </span>
     </a>
 
@@ -100,9 +123,9 @@
       <a href="about.html">About</a>
       <a href="learn.html">Learn</a>
       <a href="contact.html">Contact</a>
-      <a class="btn btn-primary" href="book.html">
-        <svg class="icon" aria-hidden="true"><use href="#i-calendar"></use></svg>
+      <a class="btn btn--primary" href="book.html">
         Book a scan
+        <span class="btn-badge"><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></span>
       </a>
     </nav>
   </div>
@@ -122,18 +145,19 @@
     </div>
     <div class="wrap hero-in">
       <div class="hero-copy">
-        <p class="eyebrow eyebrow--light">Randburg, Johannesburg</p>
+        <!-- The reference layout puts a star rating here. This practice
+             publishes none, so the slot carries a claim that is actually
+             theirs: their own blog calls DXA "the gold standard tool for
+             assessing bone density". Never fill this with invented numbers. -->
+        <p class="trustpill">
+          <span class="trustpill-tag">DXA</span>
+          The gold standard for measuring bone density
+        </p>
         <h1>Strong bones.<br>A body that <em>keeps up</em> with you.</h1>
         <p class="lede">Most people find out their bones are weak the day one breaks. A ten-minute scan tells you years earlier, while there is still plenty you can do about it.</p>
         <div class="btn-row">
-          <a class="btn btn-primary" href="book.html">
-            <svg class="icon" aria-hidden="true"><use href="#i-calendar"></use></svg>
-            Book a scan
-          </a>
-          <a class="btn btn-outline-light" href="scan.html">
-            <svg class="icon" aria-hidden="true"><use href="#i-scan"></use></svg>
-            What happens in a scan?
-          </a>
+          <a class="btn btn--primary" href="book.html">Book a scan <span class="btn-badge"><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></span></a>
+          <a class="btn btn--on-ink" href="scan.html">What happens in a scan? <span class="btn-badge"><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></span></a>
         </div>
         <p class="hero-note">
           <svg class="icon" aria-hidden="true"><use href="#i-clock"></use></svg>
@@ -147,18 +171,18 @@
   <section class="pad-sm">
     <div class="wrap">
       <div class="hero-cards">
-        <article class="hero-card reveal">
-          <span class="icon-badge icon-badge--sm"><svg class="icon" aria-hidden="true"><use href="#i-clock"></use></svg></span>
+        <article class="fcard reveal">
+          <span class="fcard-icon"><svg class="icon" aria-hidden="true"><use href="#i-clock"></use></svg></span>
           <h3>About ten minutes</h3>
           <p>You lie on your back on an open table, fully clothed. A scanning arm passes above you. That is the whole thing.</p>
         </article>
-        <article class="hero-card reveal reveal-d1">
-          <span class="icon-badge icon-badge--sm"><svg class="icon" aria-hidden="true"><use href="#i-chart"></use></svg></span>
+        <article class="fcard fcard--cyan reveal reveal-d1">
+          <span class="fcard-icon"><svg class="icon" aria-hidden="true"><use href="#i-chart"></use></svg></span>
           <h3>Numbers you can act on</h3>
           <p>Bone strength, muscle, fat — measured, not estimated. Explained to you in words you already use.</p>
         </article>
-        <article class="hero-card reveal reveal-d2">
-          <span class="icon-badge icon-badge--sm"><svg class="icon" aria-hidden="true"><use href="#i-chat"></use></svg></span>
+        <article class="fcard fcard--ink reveal reveal-d2">
+          <span class="fcard-icon"><svg class="icon" aria-hidden="true"><use href="#i-chat"></use></svg></span>
           <h3>A nurse, start to finish</h3>
           <p>The practice is nurse-led. The same person walks you through the result and what to do next.</p>
         </article>
@@ -406,10 +430,7 @@
       </div>
 
       <p style="margin-top:2rem">
-        <a class="btn btn-ghost" href="services.html">
-          See every service in detail
-          <svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg>
-        </a>
+        <a class="btn btn--ghost" href="services.html">See every service in detail <span class="btn-badge"><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></span></a>
       </p>
     </div>
   </section>
@@ -513,14 +534,8 @@
         <h2>Reclaim your health. Rebuild yourself.</h2>
         <p class="lede">Do not outlive your health. Find out where your bones and muscle actually stand, and get a plan for the next ten years while those years are still yours to shape.</p>
         <div class="btn-row" style="justify-content:center">
-          <a class="btn btn-light" href="book.html">
-            <svg class="icon" aria-hidden="true"><use href="#i-calendar"></use></svg>
-            Book a scan
-          </a>
-          <a class="btn btn-outline-light" href="contact.html">
-            <svg class="icon" aria-hidden="true"><use href="#i-phone"></use></svg>
-            Ask a question first
-          </a>
+          <a class="btn btn--primary" href="book.html">Book a scan <span class="btn-badge"><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></span></a>
+          <a class="btn btn--on-ink" href="contact.html">Ask a question first <span class="btn-badge"><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></span></a>
         </div>
       </div>
     </div>
@@ -563,6 +578,7 @@
   </section>
 
 </main>
+
 
 <!-- pd-network:start -->
 <section class="pd-network" aria-labelledby="pd-network-title">
@@ -690,7 +706,7 @@
     </div>
 
     <div class="foot-bottom">
-      <p><strong style="color:#cdd9ec">Concept site.</strong> Designed and built by <a href="https://phuturedigital.co.za" rel="noopener noreferrer" target="_blank">Phuture Digital</a> as an independent redesign concept for InsureSPR Health. Not affiliated with or endorsed by the practice. Nothing on this site is medical advice — speak to a qualified healthcare professional.</p>
+      <p><strong style="color:#cdd9ec">Concept site.</strong> Designed and built by <a href="https://phuturedigital.co.za" rel="noopener noreferrer" target="_blank">Phuture Digital</a> as an independent redesign concept for InsureSPR Health. Not affiliated with or endorsed by the practice. Nothing on this site is medical advice — speak to a qualified healthcare professional. <a href="brand.html">See how it was designed and built &rarr;</a></p>
       <p>© 2026 Phuture Digital. Practice name, contact details and article titles belong to InsureSPR Health.</p>
     </div>
   </div>

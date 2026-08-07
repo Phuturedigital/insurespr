@@ -30,14 +30,43 @@ writes them** and pairs each with two added lines:
 1. what it actually is, in plain English
 2. what you get out of it
 
-The palette carries the same idea: **blue** (sampled from the practice's own
-logo) is the clinical side — measurement, the scan, science. **Gold** (from the
-same lockup) is the human side — plain English, outcome, you. The
+The palette carries the same idea: **blue** is the clinical side — measurement,
+the scan, science. **Gold** is the human side — plain English, outcome, you. The
 `.plainly` card in `styles.css` plays that arc in miniature: cyan service name,
 translated meaning, gold outcome.
 
 Type is set large and the measure kept short throughout. For this audience
 legibility is a functional requirement, not a stylistic preference.
+
+`brand.html` documents all of this — palette, type scale, live component kit and
+the design process — and is linked from the footer of every page.
+
+## Brand assets
+
+The practice supplied genuine vector logos (rare: the other concept sites in
+this network all received broken exports). `tools/optimise-logo.mjs` turns them
+into web-weight assets and is the source of the authoritative brand colours:
+
+| | Value | |
+|---|---|---|
+| Gradient start | `#00AEEF` | Pantone Process Cyan |
+| Gradient end | `#2E3192` | |
+| Wordmark | `#004AAD` | |
+
+⚠️ **Dark-ground variants are required, not optional.** The wordmark is a
+hardcoded `#004AAD` and the gradient's deep end is `#2E3192`; both sit close
+enough to `--ink` that the logo half-disappears on it. Use `mark-light.svg` /
+`lockup-light.svg` on dark surfaces.
+
+⚠️ The practice's real tagline is **"Precision Healthcare"** — it is in the
+lockup. An earlier pass invented "Bone & muscle health"; do not reintroduce it.
+
+## Type
+
+**Bricolage Grotesque** (display) + **Plus Jakarta Sans** (body), both variable.
+Bricolage's `opsz` axis is tracked to the rendered size so large cuts tighten
+rather than looking like blown-up text. This replaced a Fraunces/Inter pairing
+that read as dry.
 
 ## Stack
 
@@ -47,7 +76,7 @@ on it — open a page in a browser.
 
 | Path | What it is |
 |---|---|
-| `*.html` | 7 pages: index, scan, services, about, learn, book, contact |
+| `*.html` | 8 pages: index, scan, services, about, learn, book, contact, **brand** |
 | `styles.css` | Every style. Tokens at the top, components below. |
 | `site.js` | Nav, scroll-reveal, form UI. No dependencies. |
 | `assets/` | Shipped imagery + the redrawn logo mark and favicon |

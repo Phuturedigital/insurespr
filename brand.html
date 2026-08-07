@@ -3,14 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>About the practice — InsureSPR Health concept by Phuture Digital</title>
-<meta name="description" content="Why InsureSPR Health exists, who it serves, and what it means to rethink how you measure health. Concept site by Phuture Digital — not the practice's official site.">
+<title>The brand system — InsureSPR Health concept by Phuture Digital</title>
+<meta name="description" content="How the InsureSPR Health concept site was designed and built: the brand mark, the palette read from the vector logo, the type system, the component library and the process behind it. By Phuture Digital.">
 <meta name="robots" content="noindex, nofollow">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
 <link rel="stylesheet" href="styles.css">
+<!-- Stamp `.js` BEFORE first paint. A deferred script cannot do this without a
+     flash of content: the stylesheet blocks rendering and the script does not. -->
 <script>document.documentElement.className += ' js';</script>
 </head>
 <body>
@@ -118,7 +120,7 @@
       <a href="index.html">Home</a>
       <a href="scan.html">The scan</a>
       <a href="services.html">Services</a>
-      <a href="about.html" aria-current="page">About</a>
+      <a href="about.html">About</a>
       <a href="learn.html">Learn</a>
       <a href="contact.html">Contact</a>
       <a class="btn btn--primary" href="book.html">
@@ -132,208 +134,301 @@
 
 <main id="main">
 
-  <section class="band band--head">
-    <div class="band-media">
-      <img src="assets/family.webp" alt="An older woman laughing outdoors with a young child." width="1400" height="933" fetchpriority="high">
-    </div>
-    <div class="wrap band-in">
-      <div class="band-copy">
-        <p class="eyebrow eyebrow--light">About</p>
-        <h1>Strong bones, stronger life</h1>
-        <p class="lede">The practice's own words. This page is what they mean.</p>
-      </div>
-    </div>
-  </section>
-
   <!-- ==================================================================
-       WHY IT EXISTS.
+       HERO. Deliberately plainer than the site's own: this page is the
+       working behind the work, so it should not compete with it.
        =================================================================== -->
-  <section>
+  <section class="brandhero">
     <div class="wrap">
-      <div class="split">
-        <div class="reveal">
-          <p class="eyebrow">Why this exists</p>
-          <h2>Because a broken bone late in life is rarely just a broken bone</h2>
-          <p>InsureSPR Health is a bone and muscle health practice in Randburg. Its stated belief is simple: <strong>strong bones and strong muscles are what make confident, independent living possible.</strong></p>
-          <p>Falls that lead to fractures can take that independence away quickly and permanently. A broken hip at seventy is not an inconvenience — it is often the moment someone stops driving, stops cooking for themselves, stops living alone.</p>
-          <p>Both of the things standing between a stumble and that outcome — bone strength and muscle mass — can be measured. Both can be improved. Neither one improves on its own, and neither one announces that it is disappearing.</p>
-        </div>
-        <figure class="split-media reveal reveal-d1">
-          <img src="assets/walk.webp" alt="An older couple walking together along a tree-lined street." width="1400" height="933" loading="lazy">
-        </figure>
+      <p class="trustpill trustpill--light">
+        <span class="trustpill-tag">Phuture Digital</span>
+        How this concept was designed and built
+      </p>
+      <h1>The brand system<br>behind the site</h1>
+      <p class="lede">Every colour, letterform and component on this concept traces back to a decision, and most of those decisions trace back to something the practice already owns. This page shows the working.</p>
+      <div class="btn-row">
+        <a class="btn btn--primary" href="index.html">See it in use <span class="btn-badge"><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></span></a>
+        <a class="btn btn--ghost" href="#process">The process <span class="btn-badge"><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></span></a>
       </div>
     </div>
   </section>
 
   <!-- ==================================================================
-       RETHINK HOW YOU MEASURE HEALTH — the practice's own heading.
+       THE MARK.
        =================================================================== -->
-  <section class="ink-section">
+  <section id="mark">
     <div class="wrap">
       <div class="section-head reveal">
-        <p class="eyebrow eyebrow--light">The idea</p>
-        <h2>Rethink how you measure health</h2>
-        <p>Most of us judge our health by two numbers that are barely worth having.</p>
+        <p class="eyebrow">01 &middot; The mark</p>
+        <h2>Genuine vector, and what we did with it</h2>
+        <p>The practice supplied its logo as two SVGs: a horizontal lockup and the disc mark on its own. Both turned out to be real vector geometry, which is rarer than it should be.</p>
       </div>
 
-      <div class="compare">
-        <div class="compare-card reveal" style="background:rgb(255 255 255 / .05);border-color:rgb(255 255 255 / .14)">
-          <h3 style="color:#fff">What most people go on</h3>
-          <p style="color:#a9bcd8">What the bathroom scale says, and whether anything hurts today.</p>
-          <p style="color:#a9bcd8">Weight mixes muscle, fat, bone and water into one figure and tells you nothing about the balance between them. And pain is a late signal — bone loss causes none at all until something breaks.</p>
+      <div class="split2 reveal">
+        <div class="specimen specimen--light">
+          <img src="assets/lockup.svg" alt="The InsureSPR lockup: a gradient disc containing a line drawing of a torso and spine, beside the words Insure SPR and the line Precision Healthcare." width="380" height="103">
+          <p class="specimen-cap">Primary lockup, light ground</p>
         </div>
-        <div class="compare-card reveal reveal-d1" style="background:rgb(255 255 255 / .05);border-color:rgb(255 255 255 / .14)">
-          <h3 style="color:#fff">What the practice measures instead</h3>
-          <ul class="checks">
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg><span>How dense your bones actually are</span></li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg><span>How much muscle you carry, and on which side</span></li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg><span>Where your fat sits, not just how much there is</span></li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg><span>How steady you are on your feet</span></li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg><span>How much range your joints still have</span></li>
+        <div class="specimen specimen--dark">
+          <img src="assets/lockup-light.svg" alt="The same lockup recoloured for dark backgrounds, with a white wordmark." width="380" height="103">
+          <p class="specimen-cap">Dark ground &mdash; a required variant, not a nicety</p>
+        </div>
+      </div>
+
+      <div class="fgrid reveal" style="margin-top:1.15rem">
+        <article class="fcard">
+          <span class="fcard-icon"><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg></span>
+          <h3>What was already right</h3>
+          <p>Real paths, no live text, no embedded rasters. Nothing had to be redrawn, so the mark on this site is the practice's own geometry rather than an approximation of it.</p>
+        </article>
+        <article class="fcard fcard--cyan">
+          <span class="fcard-icon"><svg class="icon" aria-hidden="true"><use href="#i-refresh"></use></svg></span>
+          <h3>What needed fixing</h3>
+          <p>The exporter flattened each gradient into about 202 separate stops, and wrote every coordinate to six decimal places. That was 89&nbsp;KB for a two-colour ramp.</p>
+        </article>
+        <article class="fcard fcard--ink">
+          <span class="fcard-icon"><svg class="icon" aria-hidden="true"><use href="#i-chart"></use></svg></span>
+          <h3>The result</h3>
+          <p>Two stops instead of 202, coordinates rounded to a precision finer than the screen can show: <strong>89&nbsp;KB down to 48&nbsp;KB</strong>, and the disc mark from 62&nbsp;KB to 16&nbsp;KB. Pixel-identical.</p>
+        </article>
+      </div>
+
+      <p class="notebox reveal">
+        <svg class="icon" aria-hidden="true"><use href="#i-info"></use></svg>
+        <span>The supplied wordmark is a hardcoded <code>#004AAD</code>, and the gradient&rsquo;s deep end is <code>#2E3192</code>. Both sit close enough to the navy used across this site that the logo would half-disappear on it. That is why a dark-ground variant exists at all &mdash; it is a legibility fix, not a style option.</span>
+      </p>
+    </div>
+  </section>
+
+  <!-- ==================================================================
+       PALETTE.
+       =================================================================== -->
+  <section class="bone-2-section" id="palette">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow">02 &middot; Colour</p>
+        <h2>Read off the logo, not picked to taste</h2>
+        <p>The first pass at this concept had only a raster logo to work from and sampled it by peak chroma. When the vector arrived, the real values could be read directly &mdash; and the sampling had been close, but not exact.</p>
+      </div>
+
+      <ul class="swatches reveal">
+        <li class="swatch" style="--sw:#00aeef">
+          <span class="swatch-chip"></span>
+          <b>Process Cyan</b><code>#00AEEF</code>
+          <span class="swatch-note">Gradient start. The brand&rsquo;s loudest asset &mdash; used as a fill, never as small text.</span>
+        </li>
+        <li class="swatch" style="--sw:#2e3192">
+          <span class="swatch-chip"></span>
+          <b>Deep Indigo</b><code>#2E3192</code>
+          <span class="swatch-note">Gradient end. Sampling had guessed <code>#213F9A</code>.</span>
+        </li>
+        <li class="swatch" style="--sw:#004aad">
+          <span class="swatch-chip"></span>
+          <b>Wordmark Azure</b><code>#004AAD</code>
+          <span class="swatch-note">The letterform fill. Sampling had guessed <code>#0253A5</code>.</span>
+        </li>
+        <li class="swatch" style="--sw:#0072a8">
+          <span class="swatch-chip"></span>
+          <b>Cyan Ink</b><code>#0072A8</code>
+          <span class="swatch-note">The working partner. See the contrast note below.</span>
+        </li>
+        <li class="swatch" style="--sw:#e5ac2b">
+          <span class="swatch-chip"></span>
+          <b>Signal Gold</b><code>#E5AC2B</code>
+          <span class="swatch-note">From the lockup&rsquo;s ring. Reserved for outcomes &mdash; what you get.</span>
+        </li>
+        <li class="swatch" style="--sw:#0e2140">
+          <span class="swatch-chip"></span>
+          <b>Ink Navy</b><code>#0E2140</code>
+          <span class="swatch-note">Deepest surface. Carries the dark bands and the dark cards.</span>
+        </li>
+        <li class="swatch" style="--sw:#faf6ef">
+          <span class="swatch-chip swatch-chip--bordered"></span>
+          <b>Bone</b><code>#FAF6EF</code>
+          <span class="swatch-note">The page ground. Warm and faintly skeletal &mdash; a long way from clinical white.</span>
+        </li>
+      </ul>
+
+      <div class="split2 reveal" style="margin-top:2rem">
+        <div>
+          <h3>The blue&ndash;gold rule</h3>
+          <p>The palette carries the site&rsquo;s organising idea. <strong>Blue is the clinical side</strong> &mdash; measurement, the scan, the science. <strong>Gold is the human side</strong> &mdash; plain English, the outcome, you.</p>
+          <p>It is applied literally. On the services page every card runs the same three lines: the practice&rsquo;s own clinical name in blue, a plain-English translation, then what you actually get, in gold.</p>
+        </div>
+        <p class="notebox notebox--warn">
+          <svg class="icon" aria-hidden="true"><use href="#i-alert"></use></svg>
+          <span><strong>Process Cyan cannot carry small text.</strong> <code>#00AEEF</code> on white measures about 2.5:1, well under the 4.5:1 the WCAG AA floor requires. It is gorgeous as a fill and unusable as a label. Every place the brand blue has to carry actual words, it is <code>#0072A8</code> instead &mdash; and on dark grounds, <code>#7FE0FF</code>.</span>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================================================================
+       TYPE.
+       =================================================================== -->
+  <section id="type">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow">03 &middot; Type</p>
+        <h2>Two faces, one job each</h2>
+        <p>The first version of this site paired Fraunces with Inter. It read as dry &mdash; correct, but with nothing to say. The replacement gives the display voice some actual character and keeps the body text quietly excellent.</p>
+      </div>
+
+      <div class="split2 reveal">
+        <div class="specimen specimen--light">
+          <p class="specimen-name">Bricolage Grotesque</p>
+          <p class="specimen-huge">Aa</p>
+          <p class="specimen-line">Strong bones. A body that keeps up with you.</p>
+          <p class="specimen-cap">Display. Variable on optical size and width &mdash; <code>opsz</code> is tracked to the rendered size so the big cuts tighten instead of looking like blown-up text.</p>
+        </div>
+        <div class="specimen specimen--light">
+          <p class="specimen-name specimen-name--body">Plus Jakarta Sans</p>
+          <p class="specimen-huge specimen-huge--body">Aa</p>
+          <p class="specimen-line specimen-line--body">A ten-minute scan tells you years earlier, while there is still plenty you can do about it.</p>
+          <p class="specimen-cap">Body. Open apertures and a tall x-height, set at an 18px base rather than the usual 16 &mdash; this practice&rsquo;s patients skew over fifty, so legibility is a functional requirement, not a preference.</p>
+        </div>
+      </div>
+
+      <ul class="scale reveal">
+        <li><span class="scale-label">H1 &middot; clamp(2.6&ndash;5.1rem)</span><span class="scale-demo" style="font-size:clamp(2rem,4vw,3.2rem)">Strong bones</span></li>
+        <li><span class="scale-label">H2 &middot; clamp(2&ndash;3.15rem)</span><span class="scale-demo" style="font-size:clamp(1.6rem,3vw,2.3rem)">Everything on offer</span></li>
+        <li><span class="scale-label">H3 &middot; clamp(1.3&ndash;1.7rem)</span><span class="scale-demo" style="font-size:1.45rem">About ten minutes</span></li>
+        <li><span class="scale-label">Body &middot; 1.125rem</span><span class="scale-demo scale-demo--body">You lie on your back on an open table, fully clothed.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ==================================================================
+       COMPONENTS — live, not pictures of components.
+       =================================================================== -->
+  <section class="ink-section" id="components">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow eyebrow--light">04 &middot; Components</p>
+        <h2>The kit</h2>
+        <p>Everything below is the live component, rendered by the same stylesheet the rest of the site uses. Nothing here is a screenshot.</p>
+      </div>
+
+      <div class="kit reveal">
+        <div class="kit-row">
+          <p class="kit-label">Actions</p>
+          <div class="btn-row">
+            <a class="btn btn--primary" href="#components">Primary <span class="btn-badge"><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></span></a>
+            <a class="btn btn--on-ink" href="#components">On ink <span class="btn-badge"><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></span></a>
+            <a class="btn btn--primary btn--sm" href="#components">Compact <span class="btn-badge"><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></span></a>
+          </div>
+        </div>
+
+        <div class="kit-row">
+          <p class="kit-label">Trust pill</p>
+          <p class="trustpill"><span class="trustpill-tag">DXA</span> The gold standard for measuring bone density</p>
+        </div>
+
+        <div class="kit-row">
+          <p class="kit-label">Tags</p>
+          <ul class="tagcloud">
+            <li>Bone density</li><li>Body composition</li><li>Fall prevention</li>
+            <li>Mobility</li><li>Osteoporosis</li><li>Health coaching</li>
           </ul>
         </div>
       </div>
 
-      <div class="plainly plainly--onink reveal" style="margin-top:1.75rem;max-width:none">
-        <p class="plainly-term"><svg class="icon" aria-hidden="true"><use href="#i-heart"></use></svg> Healthspan</p>
-        <p class="plainly-plain">The years you stay <strong>well</strong> — not simply the years you stay alive. The practice's phrase for this is "don't outlive your health", and extending that span is the whole point of measuring any of it.</p>
-      </div>
+      <p class="notebox notebox--onink reveal">
+        <svg class="icon" aria-hidden="true"><use href="#i-alert"></use></svg>
+        <span><strong>One component was deliberately left empty.</strong> The reference layout this design borrows from ships a star rating, a review count and a completed-works counter. InsureSPR publishes none of those, so the same components carry facts that are actually true &mdash; how long the scan takes, what it does not involve, when the practice is open. Inventing social proof for a real medical practice is not a design decision, it is a false claim.</span>
+      </p>
     </div>
   </section>
 
   <!-- ==================================================================
-       HOW THEY WORK.
+       PROCESS.
        =================================================================== -->
-  <section>
+  <section id="process">
     <div class="wrap">
       <div class="section-head reveal">
-        <p class="eyebrow">How it works</p>
-        <h2>Nurse-led, from the first question to the follow-up</h2>
-        <p>The practice describes its osteoporosis care as nurse-led. That is not a technicality — it changes what the appointment feels like.</p>
+        <p class="eyebrow">05 &middot; Process</p>
+        <h2>How it was made</h2>
+        <p>Five passes, in order. Each one produced something the next one needed.</p>
       </div>
 
-      <div class="services">
-        <article class="service reveal">
-          <div class="service-media">
-            <img src="assets/nurse.webp" alt="A clinician talking with a patient across a desk in a bright consulting room." width="1400" height="933" loading="lazy">
+      <ol class="processlist reveal">
+        <li>
+          <span class="processlist-num">01</span>
+          <div>
+            <h3>Read everything the practice publishes</h3>
+            <p>Homepage, about, blog, contact and booking flow. Every service name, every claim and every contact detail was pulled verbatim first, so that the design had real content to be shaped around rather than placeholder text.</p>
           </div>
-          <div class="service-body">
-            <h3><svg class="icon" aria-hidden="true"><use href="#i-chat"></use></svg> The same person</h3>
-            <p class="service-plain">You are not starting again with a stranger every visit.</p>
-            <p>One nurse follows your case, which means the second appointment starts where the first one ended instead of at the beginning.</p>
+        </li>
+        <li>
+          <span class="processlist-num">02</span>
+          <div>
+            <h3>Find the one idea</h3>
+            <p>The practice writes in clinical language for an audience deciding whether a scan is worth booking. That gap <em>is</em> the brief. Everything else follows from it: keep every clinical name exactly as written, and pair each with what it means and what you get.</p>
           </div>
-        </article>
-
-        <article class="service reveal reveal-d1">
-          <div class="service-media">
-            <img src="assets/results.webp" alt="A hand pointing at a spine X-ray displayed on a lightbox." width="1200" height="800" loading="lazy">
+        </li>
+        <li>
+          <span class="processlist-num">03</span>
+          <div>
+            <h3>Build the system before the pages</h3>
+            <p>Colour read off the logo, a type scale, then a component kit &mdash; actions, cards, pills, stat blocks. Pages assembled from the kit stay consistent for free; pages designed one at a time drift.</p>
           </div>
-          <div class="service-body">
-            <h3><svg class="icon" aria-hidden="true"><use href="#i-chart"></use></svg> Time to explain</h3>
-            <p class="service-plain">Your results get talked through, not posted to you.</p>
-            <p>A number nobody explains is just anxiety with a decimal point. Questions are expected — that is what the appointment is for.</p>
+        </li>
+        <li>
+          <span class="processlist-num">04</span>
+          <div>
+            <h3>Write it, then cut it</h3>
+            <p>Every factual claim was checked back against the practice&rsquo;s own material, and anything that could not be traced was removed rather than softened. That is why this concept shows no pricing: the real site publishes none.</p>
           </div>
-        </article>
-
-        <article class="service reveal reveal-d2">
-          <div class="service-media">
-            <img src="assets/breathing.webp" alt="Two older adults doing standing breathing exercises together in a park." width="1000" height="667" loading="lazy">
+        </li>
+        <li>
+          <span class="processlist-num">05</span>
+          <div>
+            <h3>Measure, do not eyeball</h3>
+            <p>Seven widths from 320px up, measured by script rather than judged from a screenshot. An earlier site in this series passed a desktop-and-mobile check while overflowing by 46px at 320 &mdash; which is exactly the kind of thing a screenshot will not tell you.</p>
           </div>
-          <div class="service-body">
-            <h3><svg class="icon" aria-hidden="true"><use href="#i-lungs"></use></svg> Beyond the scan</h3>
-            <p class="service-plain">Measuring is the start, not the service.</p>
-            <p>Mobility work, balance, breathing, coaching — the hands-on side that turns a reading into an actual change.</p>
-          </div>
-        </article>
-      </div>
+        </li>
+      </ol>
     </div>
   </section>
 
   <!-- ==================================================================
-       WHO WE SERVE — the practice's own three audiences.
+       HONEST NOTES.
        =================================================================== -->
   <section class="bone-2-section">
     <div class="wrap">
       <div class="section-head reveal">
-        <p class="eyebrow eyebrow--gold">Who we serve</p>
-        <h2>Three groups, one set of measurements</h2>
+        <p class="eyebrow eyebrow--gold">06 &middot; Straight answers</p>
+        <h2>What is real and what is ours</h2>
       </div>
-
-      <div class="mini-grid mini-grid--3">
-        <div class="mini reveal">
-          <span class="icon-badge icon-badge--sm"><svg class="icon" aria-hidden="true"><use href="#i-chat"></use></svg></span>
-          <div>
-            <h4>Medical facilities and health professionals</h4>
-            <p>Screening, diagnosis and osteoporosis management, alongside the doctors already treating the patient.</p>
-          </div>
-        </div>
-        <div class="mini reveal reveal-d1">
-          <span class="icon-badge icon-badge--sm"><svg class="icon" aria-hidden="true"><use href="#i-target"></use></svg></span>
-          <div>
-            <h4>Sports and fitness facilities</h4>
-            <p>Performance optimisation and injury prevention, built on real body composition rather than a scale reading.</p>
-          </div>
-        </div>
-        <div class="mini reveal reveal-d2">
-          <span class="icon-badge icon-badge--sm"><svg class="icon" aria-hidden="true"><use href="#i-users"></use></svg></span>
-          <div>
-            <h4>Anyone who wants to know where they stand</h4>
-            <p>Personal data about your own body, and someone to explain what it means for you.</p>
-          </div>
-        </div>
+      <div class="fgrid fgrid--2 reveal">
+        <article class="fcard">
+          <span class="fcard-icon"><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg></span>
+          <h3>The practice&rsquo;s own</h3>
+          <p>The name, mark and tagline. Every service name. The address, hours, phone number and email. The three programmes. The blog article titles. Claims like &ldquo;one consultation at one price&rdquo; and &ldquo;BMI is population-based and outdated&rdquo; are the practice&rsquo;s own words, paraphrased.</p>
+        </article>
+        <article class="fcard fcard--ink">
+          <span class="fcard-icon"><svg class="icon" aria-hidden="true"><use href="#i-info"></use></svg></span>
+          <h3>Ours</h3>
+          <p>All layout, colour application, typography, iconography and motion. Every plain-English translation and outcome line. The photography, which is licence-free stock chosen to show people at the ages the practice actually serves. And this page.</p>
+        </article>
       </div>
+      <p class="notebox reveal">
+        <svg class="icon" aria-hidden="true"><use href="#i-alert"></use></svg>
+        <span><strong>InsureSPR Health is a real practice.</strong> This concept is not their official site, is not affiliated with them, and nothing on it is medical advice. The booking and contact forms have no backend and say so on the page rather than quietly swallowing a real person&rsquo;s health enquiry.</span>
+      </p>
     </div>
   </section>
 
   <!-- ==================================================================
-       WHAT THIS CONCEPT IS. Being explicit here is not decoration — it is
-       the point of the page, given the practice is a real business.
+       CTA.
        =================================================================== -->
-  <section>
-    <div class="wrap wrap--narrow">
-      <div class="section-head reveal">
-        <p class="eyebrow">About this website</p>
-        <h2>What you are actually looking at</h2>
-      </div>
-
-      <div class="prose reveal">
-        <p><strong>This site is a design concept, built by <a href="https://phuturedigital.co.za" rel="noopener noreferrer" target="_blank">Phuture Digital</a>.</strong> InsureSPR Health is a real practice in Randburg with its own live website. We were not commissioned to make this, and the practice has not reviewed or approved it.</p>
-
-        <h3>Why we made it</h3>
-        <p>The practice publishes genuinely useful information, and it is written the way clinicians write. "DXA bone density and body composition analysis" is precise and correct, and it is also the reason someone closes the tab. We wanted to show what the same content looks like when every clinical term is kept but paired with the sentence a person actually needs.</p>
-
-        <h3>What is real and what is ours</h3>
-        <ul>
-          <li><strong>Real:</strong> the practice name, its three programme names, its service list, its contact details, its address and hours, and the titles and dates of its articles. All of it is taken from the practice's own published website.</li>
-          <li><strong>Ours:</strong> every word of the design, the layout, the plain-English rewrites, the summaries under each article title, and the photography.</li>
-          <li><strong>Neither:</strong> there are no invented staff members, no made-up qualifications, no statistics, no prices, no testimonials and no registration numbers anywhere on this site. Where we did not have a fact, we left it out rather than filling the space.</li>
-        </ul>
-
-        <h3>The photography</h3>
-        <p>Every photograph here is licensed stock, credited in the project notes. None of these people work at the practice, and none of them are its patients. No image is presented as being of the practice, its staff or its equipment.</p>
-      </div>
-
-      <div class="disclaimer reveal" style="margin-top:2rem">
-        <h4>Not medical advice</h4>
-        <p>Everything written here is general information for a design concept. It has not been reviewed by a clinician and it is not a substitute for advice from a qualified healthcare professional who knows your history.</p>
-        <p>If you want the practice's own information, go to their actual website or call them on <a href="tel:+27834507861">083 450 7861</a>.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- ------------------------------------------------------------ CTA -- -->
-  <section class="band band--center">
-    <div class="band-media">
-      <img src="assets/hero.webp" alt="A woman in her sixties standing confidently in a park in exercise clothes." width="2000" height="1333" loading="lazy">
-    </div>
-    <div class="wrap band-in">
-      <div class="band-copy reveal">
-        <p class="eyebrow eyebrow--light">A confident movement for life</p>
-        <h2>Reclaim your health. Rebuild yourself.</h2>
-        <div class="btn-row" style="justify-content:center;margin-top:1.5rem">
-          <a class="btn btn--primary" href="book.html">Book a scan <span class="btn-badge"><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></span></a>
-          <a class="btn btn--on-ink" href="scan.html">See how the scan works <span class="btn-badge"><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></span></a>
-        </div>
+  <section class="ink-section">
+    <div class="wrap" style="text-align:center">
+      <h2>Want this for your business?</h2>
+      <p style="margin-inline:auto">This is the kind of thing Phuture Digital builds before anyone commits &mdash; a complete, working site you can click through, so the decision is made on something real rather than a mockup.</p>
+      <div class="btn-row" style="justify-content:center;margin-top:1.6rem">
+        <a class="btn btn--primary" href="mailto:hello@phuturedigital.co.za">hello@phuturedigital.co.za <span class="btn-badge"><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></span></a>
+        <a class="btn btn--on-ink" href="https://www.phuturedigital.co.za" rel="noopener">phuturedigital.co.za <span class="btn-badge"><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></span></a>
       </div>
     </div>
   </section>

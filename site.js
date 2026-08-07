@@ -108,7 +108,17 @@
       entry.target.classList.add('in');
       io.unobserve(entry.target);      /* one-shot: never re-hide on scroll up */
     });
-  }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+    /* threshold 0, not a fraction.
+       `threshold` is a proportion of the ELEMENT's own area, not of the
+       viewport, so a percentage punishes tall elements: at 0.08 a 1231px form
+       card needed 98px on screen before it would fire, while the -8% bottom
+       rootMargin had already trimmed 72px off a 900px viewport. The result was
+       a card sitting at opacity 0 while plainly visible — it self-healed on the
+       next scroll, which is exactly why it survived review.
+       At threshold 0 any pixel entering triggers, so tall and short elements
+       behave identically, and a fixed-pixel rootMargin keeps the trigger point
+       independent of viewport height. */
+  }, { rootMargin: '0px 0px -60px 0px', threshold: 0 });
 
   targets.forEach(function (el) { io.observe(el); });
 })();

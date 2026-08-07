@@ -9,29 +9,46 @@
    redesign keeps every one of those services but pairs each with what it
    actually means for the person booking it. The palette carries that idea:
 
-     BLUE  (sampled from the practice's own mark) = the clinical side.
-                                                    Measurement, the scan, science.
-     GOLD  (sampled from the same lockup)         = the human side.
-                                                    Plain English, outcome, you.
+     BLUE  (the practice's own brand gradient) = the clinical side.
+                                                 Measurement, the scan, science.
+     GOLD  (from the lockup's ring)            = the human side.
+                                                 Plain English, outcome, you.
 
    Type is set large throughout and the measure kept short. The audience for a
    bone-health practice skews 50+, so legibility is a functional requirement
    here, not a stylistic preference.
+
+   COLOUR BLOCKING.
+   Sections alternate bone / paper / ink, and card rows alternate paper / cyan /
+   ink within a single row. The rhythm is what carries the page: a run of white
+   cards on a white ground is where a clinical site goes flat.
    ========================================================================= */
 
 /* ---------------------------------------------------------------- tokens -- */
 :root {
-  /* Blues sampled from the practice's own logo files by peak chroma —
-     see tools/sample-colours.mjs for why frequency-based sampling fails on
-     thin gradient strokes. */
-  --cyan: #00adef;
-  --azure: #0253a5;
-  --indigo: #213f9a;
+  /* AUTHORITATIVE brand blues, read straight off the vector logo the practice
+     supplied — not sampled. The first pass had only a raster to work from and
+     sampled by peak chroma (tools/sample-colours.mjs); it landed --cyan within
+     1/255 but missed the other two. These are the real values:
+        #00AEEF  gradient start (Pantone Process Cyan)
+        #2E3192  gradient end
+        #004AAD  wordmark
+     See tools/optimise-logo.mjs. */
+  --cyan: #00aeef;
+  --azure: #004aad;
+  --indigo: #2e3192;
 
-  /* Cyan is gorgeous as a fill and unusable as small text: #00ADEF on white is
+  /* The disc gradient, reusable as a fill. Reproduces the logo's own ramp. */
+  --brand-grad: linear-gradient(140deg, #00aeef 0%, #2e3192 100%);
+  /* Same ramp lifted for dark grounds, where #2E3192 sits too close to --ink. */
+  --brand-grad-light: linear-gradient(140deg, #7fe0ff 0%, #0072c6 100%);
+
+  /* Cyan is gorgeous as a fill and unusable as small text: #00AEEF on white is
      about 2.5:1, well under the 4.5:1 WCAG AA floor. This is the darkened
      partner used wherever the brand blue has to carry actual words. */
   --cyan-ink: #0072a8;
+  /* Bright cyan for dark grounds — the counterpart that carries words on ink. */
+  --cyan-lift: #7fe0ff;
 
   /* Gold from the ring of the full lockup, plus a text-safe partner for the
      same reason. */
@@ -51,9 +68,19 @@
   --line: #e6ddcd;
   --line-2: #d8ccb6;
 
-  --radius: 18px;
-  --radius-sm: 12px;
-  --radius-lg: 28px;
+  /* Generous rounding is a load-bearing part of this design language, not
+     decoration: it is what keeps a clinical subject feeling approachable. */
+  --radius: 20px;
+  --radius-sm: 14px;
+  --radius-lg: 32px;
+  --radius-pill: 999px;
+
+  /* Type. Bricolage Grotesque carries the display voice — a grotesque with
+     actual personality, which is the point: the previous Fraunces/Inter pairing
+     read as dry. Plus Jakarta runs the body: warm, open apertures, and highly
+     legible at the sizes this audience needs. */
+  --font-display: 'Bricolage Grotesque', 'Archivo', system-ui, sans-serif;
+  --font-body: 'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
 
   --wrap: 1220px;
   --measure: 62ch;
@@ -78,7 +105,7 @@ body {
   margin: 0;
   background: var(--bone);
   color: var(--body);
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  font-family: var(--font-body);
   /* 18px base. Deliberately larger than a typical 16px default: this is a
      practice whose patients are largely over fifty. */
   font-size: 1.125rem;
@@ -114,19 +141,27 @@ a:hover { color: var(--azure); }
 
 /* ------------------------------------------------------------ typography -- */
 h1, h2, h3, h4, .display {
-  font-family: Fraunces, "Iowan Old Style", Georgia, "Times New Roman", serif;
+  font-family: var(--font-display);
   color: var(--ink);
-  font-weight: 600;
-  line-height: 1.1;
-  letter-spacing: -.015em;
+  font-weight: 700;
+  line-height: 1.04;
+  letter-spacing: -.03em;
   margin: 0 0 .5em;
   text-wrap: balance;
+  /* Bricolage is variable on optical size and width. Letting opsz track the
+     rendered size is what stops the big display cuts looking like a blown-up
+     text face — the detail tightens as the size grows. */
+  font-variation-settings: 'opsz' 24, 'wdth' 100;
 }
 
-h1 { font-size: clamp(2.35rem, 6.2vw, 4.4rem); letter-spacing: -.028em; }
-h2 { font-size: clamp(1.85rem, 4.2vw, 2.9rem); letter-spacing: -.022em; }
-h3 { font-size: clamp(1.25rem, 2.2vw, 1.6rem); }
-h4 { font-size: 1.125rem; line-height: 1.3; }
+h1 {
+  font-size: clamp(2.6rem, 7vw, 5.1rem);
+  letter-spacing: -.042em;
+  font-variation-settings: 'opsz' 48, 'wdth' 100;
+}
+h2 { font-size: clamp(2rem, 4.6vw, 3.15rem); letter-spacing: -.035em; font-variation-settings: 'opsz' 36, 'wdth' 100; }
+h3 { font-size: clamp(1.3rem, 2.3vw, 1.7rem); letter-spacing: -.022em; }
+h4 { font-size: 1.15rem; line-height: 1.25; letter-spacing: -.016em; }
 
 p { margin: 0 0 1.15em; max-width: var(--measure); }
 p:last-child { margin-bottom: 0; }
@@ -187,15 +222,15 @@ section { padding-block: calc(var(--step) * 1.7); }
 }
 
 .brand { display: inline-flex; align-items: center; gap: .65rem; text-decoration: none; margin-right: auto; }
-.brand img { width: 30px; height: 40px; }
+.brand img { width: 38px; height: 38px; }   /* the real mark is square (81.75x80.25), unlike the 48x64 redraw it replaced */
 .brand-name {
-  font-family: Fraunces, Georgia, serif;
+  font-family: var(--font-display);
   font-weight: 600; font-size: 1.32rem; line-height: 1;
   color: var(--ink); letter-spacing: -.02em;
 }
 .brand-name span { color: var(--cyan-ink); }
 .brand-sub {
-  display: block; font-family: Inter, system-ui, sans-serif;
+  display: block; font-family: var(--font-body);
   font-size: .6875rem; font-weight: 600; letter-spacing: .16em;
   text-transform: uppercase; color: var(--muted); margin-top: .18rem;
 }
@@ -213,32 +248,8 @@ section { padding-block: calc(var(--step) * 1.7); }
 
 .nav-toggle { display: none; }
 
-/* --------------------------------------------------------------- buttons -- */
-.btn {
-  display: inline-flex; align-items: center; justify-content: center; gap: .55rem;
-  padding: .85rem 1.5rem; min-height: 52px;
-  font: 600 1.0625rem/1.2 Inter, system-ui, sans-serif;
-  border-radius: 999px; border: 2px solid transparent;
-  text-decoration: none; cursor: pointer;
-  transition: transform .16s ease, box-shadow .16s ease, background-color .16s ease;
-}
-.btn svg { width: 20px; height: 20px; flex: none; }
-
-.btn-primary {
-  background: linear-gradient(135deg, var(--cyan), var(--azure) 62%, var(--indigo));
-  color: #fff; box-shadow: 0 10px 26px -10px rgb(2 83 165 / .7);
-}
-.btn-primary:hover { color: #fff; transform: translateY(-2px); box-shadow: 0 16px 34px -12px rgb(2 83 165 / .8); }
-
-.btn-ghost { background: transparent; color: var(--ink); border-color: var(--line-2); }
-.btn-ghost:hover { color: var(--ink); border-color: var(--ink); background: var(--bone-2); transform: translateY(-2px); }
-
-.btn-light { background: #fff; color: var(--ink); }
-.btn-light:hover { color: var(--ink); transform: translateY(-2px); }
-
-.btn-outline-light { background: transparent; color: #fff; border-color: rgb(255 255 255 / .45); }
-.btn-outline-light:hover { color: #fff; border-color: #fff; background: rgb(255 255 255 / .1); transform: translateY(-2px); }
-
+/* Buttons live in the DESIGN LANGUAGE v2 block below. The old symmetric
+   .btn-* set was superseded by the pill-with-badge; see tools/migrate-buttons.mjs. */
 .btn-row { display: flex; flex-wrap: wrap; gap: .85rem; }
 
 /* Text link that reads as an action. */
@@ -291,8 +302,12 @@ section { padding-block: calc(var(--step) * 1.7); }
   min-height: clamp(520px, 76vh, 760px);
   padding-block: calc(var(--step) * 1.8);
 }
-.hero-copy { max-width: 34rem; color: #dbe6f5; }
-.hero h1 { color: #fff; }
+/* 40rem, not 34: at the v2 display sizes a 34rem column broke the headline to
+   four lines and orphaned "you." on its own. The scrim below is wide enough to
+   carry the extra width without encroaching on the subject. */
+.hero-copy { max-width: 40rem; color: #dbe6f5; }
+.hero h1 { color: #fff; margin-bottom: .38em; }
+.hero .trustpill { margin: 0 0 1.5rem; }
 /* Emphasised words in the hero headline take the brand gradient. Only ever
    applied to a word or two — gradient text is a poor reading surface, and the
    fallback colour below is what shows if background-clip is unsupported. */
@@ -323,13 +338,7 @@ section { padding-block: calc(var(--step) * 1.7); }
   display: grid; gap: 1rem;
   grid-template-columns: repeat(3, 1fr);
 }
-.hero-card {
-  background: var(--paper); border: 1px solid var(--line);
-  border-radius: var(--radius); padding: 1.5rem 1.4rem;
-  box-shadow: var(--shadow);
-}
-.hero-card h3 { font-size: 1.2rem; margin-bottom: .35rem; }
-.hero-card p { font-size: .9688rem; color: var(--muted); margin: 0; }
+/* .hero-card was superseded by .fcard, which carries the alternating fills. */
 
 /* --------------------------------------------------- the translation card -- */
 /* The signature component of this redesign. Clinical term on top in the brand
@@ -354,7 +363,7 @@ section { padding-block: calc(var(--step) * 1.7); }
 .plainly-term .icon { width: 18px; height: 18px; }
 .plainly-plain {
   margin: 0; max-width: 48ch;
-  font-family: Fraunces, Georgia, serif;
+  font-family: var(--font-display);
   font-size: clamp(1.15rem, 1.9vw, 1.42rem);
   line-height: 1.4; font-weight: 500;
   color: var(--ink);
@@ -407,7 +416,7 @@ section { padding-block: calc(var(--step) * 1.7); }
 .pillar-body { padding: 1.5rem 1.5rem 1.7rem; display: flex; flex-direction: column; flex: 1; }
 .pillar-body h3 { margin-bottom: .3rem; }
 .pillar-plain {
-  font-family: Fraunces, Georgia, serif; font-size: 1.1rem; line-height: 1.4;
+  font-family: var(--font-display); font-size: 1.1rem; line-height: 1.4;
   color: var(--gold-ink); font-weight: 500; margin-bottom: .85rem;
 }
 .pillar-body p { font-size: 1rem; color: var(--muted); }
@@ -423,7 +432,7 @@ section { padding-block: calc(var(--step) * 1.7); }
 .step::before {
   content: counter(step, decimal-leading-zero);
   display: block; margin-bottom: .9rem;
-  font-family: Fraunces, Georgia, serif; font-size: 1.5rem; font-weight: 600;
+  font-family: var(--font-display); font-size: 1.5rem; font-weight: 600;
   color: var(--cyan); letter-spacing: -.02em;
 }
 .step h3 { font-size: 1.18rem; margin-bottom: .4rem; }
@@ -443,7 +452,7 @@ section { padding-block: calc(var(--step) * 1.7); }
 .service-body h3 { font-size: 1.2rem; margin: 0; display: flex; align-items: center; gap: .6rem; }
 .service-body h3 .icon { color: var(--cyan-ink); }
 .service-plain {
-  margin: 0; font-family: Fraunces, Georgia, serif; font-size: 1.06rem;
+  margin: 0; font-family: var(--font-display); font-size: 1.06rem;
   line-height: 1.4; color: var(--gold-ink); font-weight: 500;
 }
 .service-body p:not(.service-plain) { font-size: .9688rem; color: var(--muted); margin: 0; }
@@ -510,7 +519,7 @@ section { padding-block: calc(var(--step) * 1.7); }
 .walkthrough { display: grid; gap: 2.2rem; }
 .wt-row { display: grid; gap: 1.5rem; grid-template-columns: 5.5rem 1fr 1fr; align-items: start; }
 .wt-num {
-  font-family: Fraunces, Georgia, serif; font-size: clamp(2.4rem, 5vw, 3.6rem);
+  font-family: var(--font-display); font-size: clamp(2.4rem, 5vw, 3.6rem);
   font-weight: 600; line-height: .9; color: var(--cyan);
   letter-spacing: -.04em;
 }
@@ -529,7 +538,7 @@ section { padding-block: calc(var(--step) * 1.7); }
   padding: 1.6rem 1.5rem;
 }
 .readout-key {
-  font-family: Fraunces, Georgia, serif; font-size: clamp(1.6rem, 3vw, 2.1rem);
+  font-family: var(--font-display); font-size: clamp(1.6rem, 3vw, 2.1rem);
   font-weight: 600; color: var(--ink); line-height: 1.05; margin-bottom: .5rem;
 }
 .readout p { font-size: .9688rem; color: var(--muted); margin: 0; }
@@ -578,7 +587,7 @@ figcaption { padding: .85rem 0 0; font-size: .9375rem; color: var(--muted); }
 .faq summary {
   display: flex; align-items: center; justify-content: space-between; gap: 1rem;
   padding: 1.15rem 1.4rem; min-height: 56px;
-  font-family: Fraunces, Georgia, serif; font-size: 1.14rem; font-weight: 600;
+  font-family: var(--font-display); font-size: 1.14rem; font-weight: 600;
   color: var(--ink); cursor: pointer; list-style: none;
 }
 .faq summary::-webkit-details-marker { display: none; }
@@ -671,7 +680,7 @@ figcaption { padding: .85rem 0 0; font-size: .9375rem; color: var(--muted); }
 /* ----------------------------------------------------------------- footer -- */
 .foot { background: var(--ink); color: #a9bcd8; padding-block: calc(var(--step) * 1.5) var(--step); }
 .foot-top { display: grid; gap: 2rem; grid-template-columns: 1.4fr 1fr 1fr 1.2fr; margin-bottom: 2.5rem; }
-.foot h4 { color: #fff; font-family: Inter, system-ui, sans-serif; font-size: .8125rem; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; margin-bottom: 1rem; }
+.foot h4 { color: #fff; font-family: var(--font-body); font-size: .8125rem; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; margin-bottom: 1rem; }
 .foot ul { list-style: none; margin: 0; padding: 0; display: grid; gap: .1rem; }
 .foot ul a { color: #cdd9ec; text-decoration: none; display: inline-flex; align-items: center; min-height: 40px; font-size: 1rem; }
 .foot ul a:hover { color: #7fe0ff; text-decoration: underline; }
@@ -762,7 +771,7 @@ figcaption { padding: .85rem 0 0; font-size: .9375rem; color: var(--muted); }
   .js .nav-toggle {
     display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
     min-height: 46px; padding: .5rem .95rem;
-    font: 600 .9375rem Inter, system-ui, sans-serif;
+    font: 700 .9375rem var(--font-body);
     background: var(--paper); color: var(--ink);
     border: 1.5px solid var(--line-2); border-radius: 999px; cursor: pointer;
   }
@@ -805,7 +814,7 @@ figcaption { padding: .85rem 0 0; font-size: .9375rem; color: var(--muted); }
   .wrap, .wrap--narrow { width: calc(100% - 1.75rem); }
   .brand-sub { display: none; }
   .brand-name { font-size: 1.16rem; }
-  .brand img { width: 26px; height: 35px; }
+  .brand img { width: 32px; height: 32px; }
   .btn { padding: .8rem 1.15rem; font-size: 1rem; }
   .btn-row .btn { width: 100%; }
   .plainly { padding: 1.25rem 1.2rem; }
@@ -880,6 +889,375 @@ figcaption { padding: .85rem 0 0; font-size: .9375rem; color: var(--muted); }
    for the purposes of that minimum. Both declarations are needed. */
 .field select { min-width: 0; max-width: 100%; }
 
+/* ============================================================================
+   DESIGN LANGUAGE v2 — colour-blocked cards, pill actions, utility bar.
+   ----------------------------------------------------------------------------
+   Ported from a business-consulting reference layout the client liked, re-cut
+   into this brand: the reference's lime becomes --cyan, its dark forest green
+   becomes --ink navy, its cream becomes --bone. What carries over is the
+   STRUCTURE — a utility strip above the header, alternating card fills inside a
+   single row, pill actions with a circular arrow badge, and radii large enough
+   to read as friendly rather than institutional.
+
+   What deliberately does NOT carry over is the reference's social proof. That
+   template ships "4.9 ★ 5K+ Reviews", "10K+ Completed Works" and an average
+   client rating. Inventing any of those for a real medical practice would be
+   fabricating commercial claims — see CONTENT-NOTES.md. The same components are
+   used, filled with facts that are actually true: scan duration, opening hours,
+   what the scan does and does not involve.
+   ========================================================================= */
+
+/* -------------------------------------------------------------- utility -- */
+.utility {
+  background: var(--ink);
+  color: #a9bcd8;
+  font-size: .8125rem;
+  line-height: 1.4;
+}
+.utility-in {
+  display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1.5rem;
+  min-height: 2.75rem; padding-block: .45rem;
+}
+.utility-item { display: inline-flex; align-items: center; gap: .45rem; white-space: nowrap; }
+.utility-item .icon { width: 15px; height: 15px; color: var(--cyan-lift); flex: none; }
+.utility a { color: inherit; text-decoration: none; }
+.utility a:hover { color: #fff; text-decoration: underline; }
+.utility-spacer { margin-left: auto; }
+.utility-social { display: inline-flex; align-items: center; gap: .15rem; }
+.utility-social a {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 30px; height: 30px; border-radius: var(--radius-pill);
+}
+.utility-social a:hover { background: rgb(255 255 255 / .12); }
+.utility-social .icon { width: 15px; height: 15px; }
+/* Below the header breakpoint the strip earns its space only if it still
+   carries the phone number, so the socials go rather than the contact. */
+@media (max-width: 720px) {
+  .utility-social, .utility-hide-sm { display: none; }
+  .utility-in { justify-content: center; }
+  .utility-spacer { margin-left: 0; }
+}
+
+/* ------------------------------------------------------------- buttons -- */
+/* One button, four fills. The badge is a real element rather than a ::after so
+   it can animate independently of the label. */
+.btn {
+  display: inline-flex; align-items: center; gap: .7rem;
+  padding: .55rem .6rem .55rem 1.35rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+  font: 700 1.0625rem/1.2 var(--font-body);
+  letter-spacing: -.01em;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background .18s ease, color .18s ease, border-color .18s ease, transform .18s ease;
+}
+.btn:hover { transform: translateY(-2px); }
+.btn-badge {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 2.15rem; height: 2.15rem; border-radius: var(--radius-pill);
+  background: rgb(255 255 255 / .22);
+  transition: transform .18s ease, background .18s ease;
+  flex: none;
+}
+.btn-badge .icon { width: 17px; height: 17px; }
+.btn:hover .btn-badge { transform: translateX(3px); }
+
+.btn--primary { background: var(--cyan); color: var(--ink); }
+.btn--primary:hover { background: #2bc0f5; color: var(--ink); }
+.btn--primary .btn-badge { background: var(--ink); color: var(--cyan); }
+
+.btn--ink { background: var(--ink); color: #fff; }
+.btn--ink:hover { background: var(--ink-2); color: #fff; }
+.btn--ink .btn-badge { background: var(--cyan); color: var(--ink); }
+
+.btn--ghost { background: transparent; color: var(--ink); border-color: var(--line-2); }
+.btn--ghost:hover { background: var(--paper); color: var(--ink); border-color: var(--cyan); }
+.btn--ghost .btn-badge { background: var(--bone-2); color: var(--ink); }
+
+.btn--on-ink { background: rgb(255 255 255 / .1); color: #fff; border-color: rgb(255 255 255 / .22); }
+.btn--on-ink:hover { background: rgb(255 255 255 / .18); color: #fff; }
+.btn--on-ink .btn-badge { background: var(--cyan); color: var(--ink); }
+
+/* Compact variant used inside cards, where a full-size pill would dominate. */
+.btn--sm { font-size: .9375rem; padding: .35rem .38rem .35rem 1rem; gap: .5rem; }
+.btn--sm .btn-badge { width: 1.7rem; height: 1.7rem; }
+.btn--sm .btn-badge .icon { width: 14px; height: 14px; }
+
+/* A phone call is a different kind of action from a form: circular icon, then
+   the label stacked over the number, as in the reference. */
+.calllink { display: inline-flex; align-items: center; gap: .75rem; text-decoration: none; }
+.calllink-badge {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 3rem; height: 3rem; border-radius: var(--radius-pill);
+  background: var(--cyan); color: var(--ink); flex: none;
+}
+.calllink-badge .icon { width: 20px; height: 20px; }
+.calllink-text { display: flex; flex-direction: column; min-width: 0; }
+.calllink-label {
+  font-size: .6875rem; font-weight: 700; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--muted);
+}
+.calllink-num { font-weight: 700; font-size: 1.0625rem; color: var(--ink); letter-spacing: -.01em; }
+.ink-section .calllink-label { color: #a9bcd8; }
+.ink-section .calllink-num { color: #fff; }
+.calllink:hover .calllink-num { text-decoration: underline; }
+
+/* ---------------------------------------------------------- trust pill -- */
+/* The reference puts a star rating here. This practice has no published
+   ratings, so the slot carries something true instead — what the scan is, or
+   how long it takes. Never populate it with invented numbers. */
+.trustpill {
+  display: inline-flex; align-items: center; gap: .6rem;
+  padding: .45rem 1.1rem .45rem .5rem;
+  background: rgb(255 255 255 / .1);
+  border: 1px solid rgb(255 255 255 / .2);
+  border-radius: var(--radius-pill);
+  font-size: .9375rem; font-weight: 600; color: #fff;
+  backdrop-filter: blur(8px);
+}
+.trustpill-tag {
+  display: inline-flex; align-items: center; gap: .35rem;
+  padding: .2rem .7rem; border-radius: var(--radius-pill);
+  background: var(--cyan); color: var(--ink);
+  font-size: .8125rem; font-weight: 700;
+}
+.trustpill .icon { width: 15px; height: 15px; }
+.trustpill--light { background: var(--paper); border-color: var(--line); color: var(--ink); }
+
+/* -------------------------------------------------------- feature card -- */
+/* The row alternates fills. On a light ground the sequence paper / cyan / ink
+   is what stops three equal cards reading as a table. */
+.fgrid { display: grid; gap: 1.15rem; grid-template-columns: repeat(3, 1fr); }
+.fgrid--2 { grid-template-columns: repeat(2, 1fr); }
+.fgrid--4 { grid-template-columns: repeat(4, 1fr); }
+
+.fcard {
+  display: flex; flex-direction: column; gap: .85rem;
+  padding: 1.85rem 1.75rem 1.6rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  background: var(--paper);
+  position: relative; overflow: hidden;
+  min-width: 0;
+}
+.fcard-icon {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 3.25rem; height: 3.25rem; border-radius: var(--radius-sm);
+  background: var(--bone-2); color: var(--cyan-ink);
+  margin-bottom: .35rem; flex: none;
+}
+.fcard-icon .icon { width: 26px; height: 26px; }
+.fcard h3 { margin: 0; }
+.fcard p { margin: 0; color: var(--muted); font-size: 1rem; max-width: 34ch; }
+.fcard .btn { margin-top: auto; align-self: flex-start; }
+/* Push the action clear of the copy without collapsing short cards. */
+.fcard .btn { margin-top: 1.15rem; }
+
+/* Bright fill. Text goes to ink, not white: cyan is too light to carry white. */
+.fcard--cyan { background: var(--cyan); border-color: transparent; }
+.fcard--cyan h3, .fcard--cyan p { color: var(--ink); }
+.fcard--cyan p { opacity: .82; }
+.fcard--cyan .fcard-icon { background: rgb(255 255 255 / .38); color: var(--ink); }
+.fcard--cyan .btn { background: var(--ink); color: #fff; }
+.fcard--cyan .btn .btn-badge { background: var(--cyan); color: var(--ink); }
+
+/* Dark fill. */
+.fcard--ink { background: var(--ink); border-color: transparent; }
+.fcard--ink h3 { color: #fff; }
+.fcard--ink p { color: #a9bcd8; }
+.fcard--ink .fcard-icon { background: rgb(255 255 255 / .12); color: var(--cyan-lift); }
+.fcard--ink .btn { background: var(--cyan); color: var(--ink); }
+.fcard--ink .btn .btn-badge { background: var(--ink); color: var(--cyan); }
+
+/* A soft brand-gradient wash in the corner, as in the reference's filled cards.
+   Kept behind the content and non-interactive. */
+.fcard--cyan::after, .fcard--ink::after {
+  content: ""; position: absolute; right: -30%; bottom: -60%;
+  width: 78%; aspect-ratio: 1; border-radius: 50%;
+  background: rgb(255 255 255 / .1); pointer-events: none;
+}
+.fcard > * { position: relative; z-index: 1; }
+
+/* --------------------------------------------------------- stat blocks -- */
+.statcard {
+  display: flex; flex-direction: column; gap: .3rem; justify-content: center;
+  padding: 1.5rem 1.5rem;
+  border-radius: var(--radius); background: var(--cyan); color: var(--ink);
+  min-width: 0;
+}
+.statcard .icon { width: 26px; height: 26px; margin-bottom: .5rem; }
+.statcard-num {
+  font-family: var(--font-display); font-weight: 700;
+  font-size: clamp(1.9rem, 3.4vw, 2.6rem); line-height: 1;
+  letter-spacing: -.035em; color: var(--ink);
+}
+.statcard-label { font-size: .9375rem; font-weight: 600; opacity: .8; max-width: 22ch; }
+.statcard--ink { background: var(--ink); }
+.statcard--ink .statcard-num { color: #fff; }
+.statcard--ink .statcard-label { color: #a9bcd8; opacity: 1; }
+.statcard--ink .icon { color: var(--cyan-lift); }
+.statcard--paper { background: var(--paper); border: 1px solid var(--line); }
+.statcard--paper .icon { color: var(--cyan-ink); }
+
+/* ---------------------------------------------------------- tag cloud -- */
+.tagcloud { display: flex; flex-wrap: wrap; gap: .45rem; margin: 0; padding: 0; list-style: none; }
+.tagcloud li {
+  padding: .38rem .85rem; border-radius: var(--radius-pill);
+  background: var(--bone-2); border: 1px solid var(--line);
+  font-size: .875rem; font-weight: 600; color: var(--ink-2);
+}
+.ink-section .tagcloud li {
+  background: rgb(255 255 255 / .08); border-color: rgb(255 255 255 / .16); color: #cdd9ec;
+}
+
+/* --------------------------------------------------------------- media -- */
+/* Image tile with a consistent radius and ratio, used in the split sections. */
+.mediatile { border-radius: var(--radius); overflow: hidden; background: var(--bone-2); }
+.mediatile img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.mediatile--tall { aspect-ratio: 4 / 5; }
+.mediatile--wide { aspect-ratio: 16 / 10; }
+.mediatile--square { aspect-ratio: 1; }
+
+/* A two-column split that collapses predictably. */
+.split2 { display: grid; gap: clamp(1.5rem, 4vw, 3.25rem); grid-template-columns: 1fr 1fr; align-items: center; }
+.split2--media-first > :first-child { order: -1; }
+.split2 > * { min-width: 0; }
+
+/* ------------------------------------------------------------ responsive -- */
+@media (max-width: 1000px) {
+  .fgrid, .fgrid--4 { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 860px) {
+  .split2 { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .fgrid, .fgrid--2, .fgrid--4 { grid-template-columns: 1fr; }
+  .fcard { padding: 1.5rem 1.35rem 1.35rem; }
+  .btn { font-size: 1rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn, .btn-badge, .fcard { transition: none; }
+  .btn:hover, .btn:hover .btn-badge { transform: none; }
+}
+
+/* ============================================================================
+   BRAND + PROCESS PAGE (brand.html)
+   ----------------------------------------------------------------------------
+   Documentation surface for the design system. Components are shown live rather
+   than as screenshots, so this page cannot drift from the site it describes —
+   if a component changes, this page changes with it.
+   ========================================================================= */
+.brandhero { background: var(--bone-2); padding-block: calc(var(--step) * 2.1) calc(var(--step) * 1.7); }
+.brandhero h1 { margin-bottom: .45em; }
+.brandhero .trustpill { margin-bottom: 1.5rem; }
+
+/* --------------------------------------------------------------- specimen -- */
+.specimen {
+  border-radius: var(--radius); padding: 1.75rem 1.6rem;
+  border: 1px solid var(--line); background: var(--paper);
+  display: flex; flex-direction: column; gap: .8rem; min-width: 0;
+}
+.specimen--dark { background: var(--ink); border-color: transparent; }
+.specimen--dark .specimen-cap { color: #a9bcd8; }
+.specimen img { width: 100%; max-width: 380px; height: auto; }
+.specimen-cap { margin: 0; font-size: .9375rem; color: var(--muted); max-width: 46ch; }
+.specimen-name { margin: 0; font-family: var(--font-display); font-weight: 700; font-size: 1.35rem; color: var(--ink); letter-spacing: -.02em; }
+.specimen-name--body { font-family: var(--font-body); }
+.specimen-huge {
+  margin: 0; font-family: var(--font-display); font-weight: 700;
+  font-size: clamp(4rem, 11vw, 7rem); line-height: .84; letter-spacing: -.05em;
+  color: var(--cyan-ink);
+  font-variation-settings: 'opsz' 96, 'wdth' 100;
+}
+.specimen-huge--body { font-family: var(--font-body); font-variation-settings: normal; color: var(--ink-2); }
+.specimen-line { margin: 0; font-family: var(--font-display); font-size: 1.3rem; line-height: 1.25; color: var(--ink); letter-spacing: -.02em; max-width: none; }
+.specimen-line--body { font-family: var(--font-body); font-size: 1.06rem; line-height: 1.5; color: var(--body); }
+
+/* --------------------------------------------------------------- swatches -- */
+.swatches { list-style: none; margin: 0; padding: 0; display: grid; gap: 1rem; grid-template-columns: repeat(4, 1fr); }
+.swatch {
+  display: flex; flex-direction: column; gap: .3rem; min-width: 0;
+  background: var(--paper); border: 1px solid var(--line);
+  border-radius: var(--radius-sm); padding: 1rem 1.1rem 1.15rem;
+}
+.swatch-chip { display: block; height: 4.5rem; border-radius: var(--radius-sm); background: var(--sw); margin-bottom: .5rem; }
+.swatch-chip--bordered { border: 1px solid var(--line-2); }
+.swatch b { font-size: 1rem; color: var(--ink); }
+.swatch code, .notebox code, .scale code {
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: .8125rem; color: var(--cyan-ink); background: var(--bone-2);
+  padding: .05rem .35rem; border-radius: 5px;
+}
+.swatch code { align-self: flex-start; }
+.swatch-note { font-size: .875rem; line-height: 1.45; color: var(--muted); }
+
+/* ---------------------------------------------------------------- notebox -- */
+.notebox {
+  display: flex; align-items: flex-start; gap: .8rem;
+  margin: 1.5rem 0 0; padding: 1.15rem 1.3rem;
+  border-radius: var(--radius-sm); border: 1px solid var(--line);
+  background: var(--paper); font-size: 1rem; line-height: 1.6;
+  color: var(--body); max-width: none; min-width: 0;
+}
+.notebox .icon { width: 20px; height: 20px; flex: none; margin-top: .2rem; color: var(--cyan-ink); }
+.notebox span { min-width: 0; overflow-wrap: anywhere; }
+.notebox--warn { background: rgb(229 172 43 / .1); border-color: rgb(229 172 43 / .42); color: #5c440d; }
+.notebox--warn .icon { color: var(--gold-ink); }
+.notebox--warn code { background: rgb(255 255 255 / .6); color: var(--gold-ink); }
+.notebox--onink { background: rgb(255 255 255 / .06); border-color: rgb(255 255 255 / .16); color: #cdd9ec; }
+.notebox--onink .icon { color: var(--cyan-lift); }
+.notebox--onink strong { color: #fff; }
+
+/* ------------------------------------------------------------------ scale -- */
+.scale { list-style: none; margin: 2rem 0 0; padding: 0; display: grid; gap: 0; }
+.scale li {
+  display: grid; grid-template-columns: 15rem 1fr; gap: 1.5rem; align-items: baseline;
+  padding: 1.05rem 0; border-top: 1px solid var(--line);
+}
+.scale li:last-child { border-bottom: 1px solid var(--line); }
+.scale-label { font-size: .8125rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.scale-demo { font-family: var(--font-display); font-weight: 700; color: var(--ink); letter-spacing: -.03em; line-height: 1.1; min-width: 0; }
+.scale-demo--body { font-family: var(--font-body); font-weight: 400; font-size: 1.125rem; color: var(--body); letter-spacing: 0; }
+
+/* -------------------------------------------------------------------- kit -- */
+.kit { display: grid; gap: 0; }
+.kit-row {
+  display: grid; grid-template-columns: 11rem 1fr; gap: 1.5rem; align-items: center;
+  padding: 1.4rem 0; border-top: 1px solid rgb(255 255 255 / .14);
+}
+.kit-row:last-child { border-bottom: 1px solid rgb(255 255 255 / .14); }
+.kit-label { margin: 0; font-size: .8125rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #9fdcff; }
+.kit-row > *:last-child { min-width: 0; }
+
+/* ------------------------------------------------------------ processlist -- */
+.processlist { list-style: none; margin: 0; padding: 0; display: grid; gap: 1rem; counter-reset: none; }
+.processlist li {
+  display: grid; grid-template-columns: auto 1fr; gap: 1.35rem; align-items: start;
+  background: var(--paper); border: 1px solid var(--line);
+  border-radius: var(--radius); padding: 1.6rem 1.75rem;
+}
+.processlist li > div { min-width: 0; }
+.processlist h3 { margin: 0 0 .35rem; }
+.processlist p { margin: 0; color: var(--muted); max-width: 74ch; }
+.processlist-num {
+  font-family: var(--font-display); font-weight: 700; font-size: 1.5rem;
+  line-height: 1; letter-spacing: -.04em;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 3.1rem; height: 3.1rem; border-radius: var(--radius-pill);
+  background: var(--bone-2); color: var(--cyan-ink); flex: none;
+}
+
+@media (max-width: 900px) {
+  .swatches { grid-template-columns: repeat(2, 1fr); }
+  .scale li, .kit-row { grid-template-columns: 1fr; gap: .5rem; }
+}
+@media (max-width: 520px) {
+  .swatches { grid-template-columns: 1fr; }
+  .processlist li { grid-template-columns: 1fr; gap: .9rem; padding: 1.35rem 1.25rem; }
+}
+
 /* pd-network:start */
 /* Shared cross-link block across the Phuture Digital concept sites. Same markup
    and rhythm everywhere; the palette below maps this site's own tokens onto it.
@@ -897,7 +1275,7 @@ figcaption { padding: .85rem 0 0; font-size: .9375rem; color: var(--muted); }
   color: #7fe0ff; font-weight: 700; margin: 0 0 12px;
 }
 .pd-network-title {
-  font-family: Fraunces, Georgia, serif;
+  font-family: var(--font-display);
   font-size: clamp(21px, 2.5vw, 27px); line-height: 1.15; letter-spacing: -.015em;
   color: #ffffff; font-weight: 600; margin: 0 0 10px; text-wrap: balance;
 }

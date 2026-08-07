@@ -48,14 +48,42 @@ const banner = () => `
   </div>
 </div>`;
 
+/* Utility strip above the header, per the reference layout. It carries the
+   things a walk-in patient actually needs — where, when, and how to call —
+   rather than the reference template's invented review score. */
+const utility = () => `
+<div class="utility">
+  <div class="wrap utility-in">
+    <span class="utility-item">
+      <svg class="icon" aria-hidden="true"><use href="#i-pin"></use></svg>
+      ${PRACTICE.address}
+    </span>
+    <span class="utility-item utility-hide-sm">
+      <svg class="icon" aria-hidden="true"><use href="#i-clock"></use></svg>
+      ${PRACTICE.hours}
+    </span>
+    <span class="utility-spacer"></span>
+    <a class="utility-item" href="tel:${PRACTICE.phoneHref}">
+      <svg class="icon" aria-hidden="true"><use href="#i-phone"></use></svg>
+      ${PRACTICE.phone}
+    </a>
+    <span class="utility-social">
+      <a href="${PRACTICE.facebook}" rel="noopener" aria-label="InsureSPR Health on Facebook"><svg class="icon" aria-hidden="true"><use href="#i-facebook"></use></svg></a>
+      <a href="${PRACTICE.linkedin}" rel="noopener" aria-label="InsureSPR Health on LinkedIn"><svg class="icon" aria-hidden="true"><use href="#i-linkedin"></use></svg></a>
+      <a href="${PRACTICE.x}" rel="noopener" aria-label="InsureSPR Health on X"><svg class="icon" aria-hidden="true"><use href="#i-x"></use></svg></a>
+    </span>
+  </div>
+</div>`;
+
 const header = (file) => `
+${utility()}
 <header class="head">
   <div class="wrap head-in">
     <a class="brand" href="index.html">
-      <img src="assets/mark.svg" alt="" width="30" height="40">
+      <img src="assets/mark.svg" alt="" width="34" height="34">
       <span>
-        <span class="brand-name">Insure<span>SPR</span> Health</span>
-        <span class="brand-sub">Bone &amp; muscle health</span>
+        <span class="brand-name">Insure<span>SPR</span></span>
+        <span class="brand-sub">Precision Healthcare</span>
       </span>
     </a>
 
@@ -66,9 +94,9 @@ const header = (file) => `
 
     <nav class="nav" id="site-nav" aria-label="Main">
 ${NAV.map((n) => `      <a href="${n.href}"${n.href === file ? ' aria-current="page"' : ''}>${n.label}</a>`).join('\n')}
-      <a class="btn btn-primary" href="book.html">
-        <svg class="icon" aria-hidden="true"><use href="#i-calendar"></use></svg>
+      <a class="btn btn--primary" href="book.html">
         Book a scan
+        <span class="btn-badge"><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></span>
       </a>
     </nav>
   </div>
@@ -128,7 +156,7 @@ const footer = () => `
     </div>
 
     <div class="foot-bottom">
-      <p><strong style="color:#cdd9ec">Concept site.</strong> Designed and built by <a href="https://phuturedigital.co.za" rel="noopener noreferrer" target="_blank">Phuture Digital</a> as an independent redesign concept for InsureSPR Health. Not affiliated with or endorsed by the practice. Nothing on this site is medical advice — speak to a qualified healthcare professional.</p>
+      <p><strong style="color:#cdd9ec">Concept site.</strong> Designed and built by <a href="https://phuturedigital.co.za" rel="noopener noreferrer" target="_blank">Phuture Digital</a> as an independent redesign concept for InsureSPR Health. Not affiliated with or endorsed by the practice. Nothing on this site is medical advice — speak to a qualified healthcare professional. <a href="brand.html">See how it was designed and built &rarr;</a></p>
       <p>© 2026 Phuture Digital. Practice name, contact details and article titles belong to InsureSPR Health.</p>
     </div>
   </div>
