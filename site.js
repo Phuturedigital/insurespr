@@ -100,6 +100,68 @@
     });
   });
 
+  /* ------------------------------------------------------------ sticky nav -- */
+  /* A sentinel rather than a scroll listener: the browser reports the state
+     change itself, so there is no work on every scroll frame. */
+  var shell = document.querySelector('.nav-shell');
+  if (shell && 'IntersectionObserver' in window) {
+    var sentinel = document.createElement('div');
+    sentinel.setAttribute('aria-hidden', 'true');
+    sentinel.style.cssText = 'position:absolute;top:0;height:1px;width:1px';
+    document.body.insertBefore(sentinel, document.body.firstChild);
+    new IntersectionObserver(function (e) {
+      shell.setAttribute('data-stuck', e[0].isIntersecting ? 'false' : 'true');
+    }).observe(sentinel);
+  }
+
+  /* -------------------------------------------------------- counting stats -- */
+  /* Counts the figure up once, when it first comes into view.
+     Reduced motion is honoured HERE as well as in CSS: an animated number is
+     motion regardless of how it is drawn, and CSS cannot suppress a value that
+     JavaScript is rewriting. Anyone with motion turned down simply gets the
+     final number immediately. */
+  var calm = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var counters = document.querySelectorAll('[data-count]');
+
+  if (counters.length && 'IntersectionObserver' in window && !calm.matches) {
+    var cio = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        var el = entry.target;
+        cio.unobserve(el);
+        var target = parseFloat(el.getAttribute('data-count'));
+        var suffix = el.getAttribute('data-suffix') || '';
+        var t0 = null;
+        var tick = function (now) {
+          if (t0 === null) t0 = now;
+          var k = Math.min((now - t0) / 900, 1);
+          /* ease-out: fast then settling, which reads as a measurement coming
+             to rest rather than a slot machine stopping. */
+          var eased = 1 - Math.pow(1 - k, 3);
+          el.textContent = Math.round(target * eased) + suffix;
+          if (k < 1) requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+      });
+    }, { threshold: 0 });
+    counters.forEach(function (el) { cio.observe(el); });
+  }
+
+  /* ------------------------------------------------------ density tile fade -- */
+  var tiles = document.querySelectorAll('.ptile');
+  if (tiles.length && 'IntersectionObserver' in window) {
+    var tio = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        e.target.classList.add('in');
+        tio.unobserve(e.target);
+      });
+    }, { rootMargin: '0px 0px -40px 0px', threshold: 0 });
+    tiles.forEach(function (el) { tio.observe(el); });
+  } else {
+    tiles.forEach(function (el) { el.classList.add('in'); });
+  }
+
   /* --------------------------------------------------------- scroll reveal -- */
   /* Reduced motion is handled entirely in CSS (targets forced back to opacity
      1). Bailing out here as well would be wrong: without the observer the

@@ -571,6 +571,98 @@ section { padding-block: var(--step); }
   .ptile { min-height: 160px; }
 }
 
+
+/* Standalone controls need a real hit area. These were 24px and 19px high —
+   WCAG 2.5.8 exempts links inside a sentence, but not these. */
+.pd-network-link { padding-block: .45rem; display: inline-flex; align-items: center; }
+.statstrip dd a { display: inline-flex; align-items: center; min-height: 32px; }
+/* ============================================================================
+   MOTION
+   ----------------------------------------------------------------------------
+   Restrained on purpose — this is a diagnostic practice, and motion that draws
+   attention to itself reads as a marketing site rather than a clinical one.
+
+   The signature is THE SCAN LINE: a single cyan sweep down the hero, echoing
+   the scanning arm that passes over you during a DXA scan. It is the one piece
+   of motion that could only belong to this practice, which is the same test the
+   decorative tiles had to pass.
+
+   Everything below is gated behind prefers-reduced-motion at the end of the
+   file. The reveal rule forces opacity:1 there rather than merely skipping the
+   animation — a reveal that only un-hides via script leaves a blank page for
+   anyone with motion turned down.
+   ========================================================================= */
+
+/* ----------------------------------------------------------- the scan line -- */
+.hero-card::before {
+  content: "";
+  position: absolute; left: 0; right: 0; top: 0; height: 42%;
+  z-index: 0; pointer-events: none;
+  background: linear-gradient(to bottom,
+    transparent 0%,
+    rgb(0 174 239 / .05) 62%,
+    rgb(0 174 239 / .22) 92%,
+    rgb(127 224 255 / .85) 99.4%,
+    rgb(255 255 255 / .9) 100%);
+  transform: translateY(-100%);
+  animation: scanpass 2.9s cubic-bezier(.4, 0, .2, 1) .35s 1 both;
+}
+@keyframes scanpass {
+  0%   { transform: translateY(-100%); opacity: 0; }
+  12%  { opacity: 1; }
+  88%  { opacity: 1; }
+  100% { transform: translateY(238%); opacity: 0; }
+}
+
+/* -------------------------------------------------------- hero entrance -- */
+/* Staggered rather than simultaneous: the eye is led down the block in the
+   order the content should be read. */
+.js .hero-copy > * { animation: rise .7s cubic-bezier(.22, 1, .36, 1) both; }
+.js .hero-copy > :nth-child(1) { animation-delay: .10s; }
+.js .hero-copy > :nth-child(2) { animation-delay: .18s; }
+.js .hero-copy > :nth-child(3) { animation-delay: .28s; }
+.js .hero-copy > :nth-child(4) { animation-delay: .38s; }
+.js .hero-copy > :nth-child(5) { animation-delay: .48s; }
+@keyframes rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+
+/* ------------------------------------------------------------- surfaces -- */
+/* A small lift on hover. 2px, not 8 — enough to feel responsive, not enough to
+   make a page of cards feel like it is breathing at you. */
+.pcard, .card, .step, .media { transition: transform .28s cubic-bezier(.22,1,.36,1), box-shadow .28s ease, border-color .28s ease; }
+.pcard:hover, .card:hover { transform: translateY(-3px); box-shadow: var(--shadow); border-color: var(--line-2); }
+.step:hover { transform: translateY(-3px); }
+.step > img, .media img { transition: transform .6s cubic-bezier(.22,1,.36,1); }
+.step:hover > img, .media:hover img { transform: scale(1.035); }
+
+/* The stat strip lights its own cell rather than the whole row. */
+.statstrip > div { transition: background .25s ease; }
+.statstrip > div:hover { background: var(--ground); }
+
+/* Nav gains weight once the page has moved, so it separates from the hero. */
+.nav { transition: box-shadow .3s ease, background .3s ease; }
+.nav-shell[data-stuck="true"] .nav { box-shadow: var(--shadow); background: rgb(255 255 255 / .97); }
+
+/* ------------------------------------------------------- counting numbers -- */
+/* Tabular figures so a counting number does not reflow its own container as
+   the digits change — the single most common cause of a jittering counter. */
+.statstrip dd, .count { font-variant-numeric: tabular-nums; }
+
+/* --------------------------------------------------- density tile reveal -- */
+/* The dots arrive left to right, which is the direction the density gradient
+   itself runs — so the animation says the same thing the graphic does. */
+.ptile img { opacity: 0; transition: opacity .9s ease; }
+.ptile.in img, .reveal.in .ptile img, .ptile img.in { opacity: 1; }
+
+/* --------------------------------------------------------- reduced motion -- */
+@media (prefers-reduced-motion: reduce) {
+  .hero-card::before { animation: none; display: none; }
+  .js .hero-copy > * { animation: none; opacity: 1; transform: none; }
+  .pcard, .card, .step, .media, .step > img, .media img, .nav, .statstrip > div { transition: none; }
+  .pcard:hover, .card:hover, .step:hover { transform: none; }
+  .step:hover > img, .media:hover img { transform: none; }
+  .ptile img { opacity: 1; transition: none; }
+}
+
 /* pd-network:start */
 /* Shared cross-link block across the Phuture Digital concept sites. Same markup
    and rhythm everywhere; the palette below maps this site's own tokens onto it.
