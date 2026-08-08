@@ -522,15 +522,24 @@ section { padding-block: var(--step); }
 .note .icon { display: none; }
 .note span { display: block; min-width: 0; overflow-wrap: anywhere; }
 .note p { margin: 0; max-width: none; }
-/* The lead-in becomes the label: mono, uppercase, small, in the site's own
-   annotation voice rather than bolded body text. */
-.note strong {
+/* <strong> stays what it is: emphasis inside a sentence. An earlier pass
+   restyled it into a mono uppercase label, which worked only while the lead-in
+   happened to be short — several notes carry a full pull quote (80 characters
+   on the about page), and tracked uppercase mono is unreadable at that length.
+   Styling that silently depends on content length is a trap for whoever writes
+   the next one. */
+.note strong { color: var(--ink); font-weight: 600; }
+
+/* A real label, when a note wants one. Opt-in and explicit, so it is only ever
+   applied to text that is actually label-length. */
+.note-label {
   display: block;
   font-family: var(--f-mono); font-weight: 500;
   font-size: .6875rem; letter-spacing: .14em; text-transform: uppercase;
   color: var(--cyan-ink);
-  margin-bottom: .3rem;
+  margin-bottom: .35rem;
 }
+.note--warn .note-label { color: var(--warn-icon); }
 .note a { color: var(--body); text-decoration-color: var(--line-2); }
 .note a:hover { color: var(--ink); }
 

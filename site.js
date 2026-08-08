@@ -91,7 +91,7 @@
          injection surface. What the visitor typed stays in the form. */
       status.innerHTML =
         '<svg class="icon" aria-hidden="true"><use href="#i-info"></use></svg>' +
-        '<span><strong>Nothing was sent.</strong> This is a design concept, so the form has nowhere to submit to — ' +
+        '<span><span class="note-label">Not live</span><strong>Nothing was sent.</strong> This is a design concept, so the form has nowhere to submit to — ' +
         'your details were not stored or transmitted. To reach InsureSPR Health for real, call ' +
         '<a href="tel:+27834507861">083 450 7861</a> or email ' +
         '<a href="mailto:health@insuresprhealth.co.za">health@insuresprhealth.co.za</a>.</span>';
