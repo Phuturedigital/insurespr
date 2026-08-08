@@ -86,6 +86,19 @@ const card = (c) => `        <li class="pd-network-card">
 const MARK_RE = /<p class="pd-network-mark">([\s\S]*?)<\/p>/;
 const existingMark = (html) => (html.match(MARK_RE) || [])[1] || null;
 
+/* The reciprocal link home. Points at /portfolio rather than the bare domain:
+ * every concept in this network is a case study there, in its own "Concept Work"
+ * band alongside the client work, so it is the page that actually continues the
+ * visit. The portfolio's own header carries the nav to the rest of the site, so
+ * nothing is lost by being specific.
+ *
+ * `www`, NOT the apex — phuturedigital.co.za 307-redirects to www, and there is
+ * no reason to spend a redirect on 40 pages' worth of outbound links.
+ *
+ * ⚠️ Explanations live here, not inside the emitted markup: this block is served
+ * on ~40 public pages, and HTML comments ship with it. */
+const PORTFOLIO_URL = 'https://www.phuturedigital.co.za/portfolio';
+
 const block = (site, mark) => `<!-- pd-network:start -->
 <section class="pd-network" aria-labelledby="pd-network-title">
   <div class="pd-network-inner">
@@ -98,7 +111,7 @@ ${CONCEPTS.filter((c) => c.key !== site.key).map(card).join('\n')}
     <div class="pd-network-cta">
       <p>Want a site like this for your business?</p>
       <a class="pd-network-btn" href="mailto:hello@phuturedigital.co.za">hello@phuturedigital.co.za</a>
-      <a class="pd-network-link" href="https://www.phuturedigital.co.za" rel="noopener">phuturedigital.co.za</a>
+      <a class="pd-network-link" href="${PORTFOLIO_URL}" rel="noopener">See the full portfolio &rarr;</a>
     </div>
     <p class="pd-network-mark">${mark}</p>
   </div>
