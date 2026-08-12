@@ -343,8 +343,8 @@ main > section + section { padding-top: 0; }
 }
 
 /* ----------------------------------------------------------------- hero -- */
-/* One big rounded photo card rather than a full-bleed band. The rounding is
-   what keeps it feeling like an object on the page. */
+/* Full-viewport editorial hero: the imagery carries the page while every
+   message and control stays inside the intentionally face-free zones. */
 .hero { padding-top: .85rem; }
 .hero-card {
   position: relative; isolation: isolate;
@@ -368,26 +368,39 @@ main > section + section { padding-top: 0; }
 }
 .hero-visual .hero-slide[width][height] { height: 100%; }
 .hero-visual .hero-slide.is-active { opacity: 1; visibility: visible; }
-.hero-media-actions {
-  position: absolute; z-index: 3; left: 0; right: 0; bottom: 0;
-  display: flex; flex-wrap: wrap; gap: .65rem; padding: 3.5rem 1.25rem 1.25rem;
-  background: linear-gradient(to top, rgb(6 18 40 / .88), rgb(6 18 40 / .55) 58%, transparent);
+.hero-booking-panel {
+  position: absolute; z-index: 5; right: clamp(1rem, 2.5vw, 2.5rem); bottom: clamp(1rem, 2.5vw, 2.5rem);
+  display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: .85rem;
+  width: min(360px, calc(100% - 2rem)); min-height: 96px; padding: .8rem .85rem;
+  border: 1px solid rgb(255 255 255 / .58); border-radius: 14px; background: rgb(255 255 255 / .93);
+  box-shadow: 0 18px 45px rgb(6 18 40 / .24); color: var(--ink); text-decoration: none;
+  backdrop-filter: blur(14px); transition: transform .25s ease, box-shadow .25s ease;
 }
-.hero-media-actions .btn { flex: 1 1 10rem; }
+.hero-booking-panel:hover { transform: translateY(-3px); box-shadow: 0 22px 50px rgb(6 18 40 / .32); }
+.hero-booking-panel small,
+.hero-booking-panel strong,
+.hero-booking-panel em { display: block; }
+.hero-booking-panel small { margin-bottom: .2rem; font-family: var(--f-mono); font-size: .62rem; font-style: normal; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--cyan-ink); }
+.hero-booking-panel strong { font-family: var(--f-display); font-size: 1.08rem; font-weight: 600; line-height: 1.15; }
+.hero-booking-panel em { margin-top: .22rem; font-size: .72rem; font-style: normal; color: var(--muted); }
+.hero-booking-icon { display: inline-grid; place-items: center; width: 48px; height: 48px; border-radius: 10px; background: var(--ink); color: #fff; }
+.hero-booking-icon .icon { width: 22px; height: 22px; }
+.hero-booking-arrow { display: inline-grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: var(--blue); color: #fff; font-size: 1.2rem; }
 .hero-dots {
-  position: absolute; z-index: 4; top: 1rem; right: 1rem;
-  display: flex; gap: .45rem; padding: .45rem; border-radius: var(--r-pill);
+  position: absolute; z-index: 6; right: clamp(1rem, 2.5vw, 2.5rem); bottom: clamp(7.6rem, 14vh, 9rem);
+  display: flex; align-items: center; gap: .3rem; padding: .35rem .55rem; border-radius: var(--r-pill);
   background: rgb(6 18 40 / .65); backdrop-filter: blur(8px);
 }
+.hero-dots > span { min-width: 1.45rem; font-family: var(--f-mono); font-size: .58rem; letter-spacing: .08em; color: #fff; text-align: center; }
 .hero-dots button {
-  position: relative; width: 2.75rem; height: 2.75rem; padding: 0; border: 0;
-  border-radius: 50%; background: transparent; cursor: pointer;
+  position: relative; width: 2.3rem; height: 2.3rem; padding: 0; border: 0;
+  border-radius: var(--r-pill); background: transparent; cursor: pointer;
 }
 .hero-dots button::after {
-  content: ''; position: absolute; inset: 50% auto auto 50%; width: .6rem; height: .6rem;
-  transform: translate(-50%, -50%); border: 1px solid rgb(255 255 255 / .85); border-radius: 50%;
+  content: ''; position: absolute; inset: 50% auto auto 50%; width: 1.65rem; height: 2px;
+  transform: translate(-50%, -50%); background: rgb(255 255 255 / .55); border-radius: var(--r-pill);
 }
-.hero-dots button.is-active::after { background: var(--cyan-lift); border-color: var(--cyan-lift); }
+.hero-dots button.is-active::after { height: 4px; background: var(--cyan-lift); }
 .hero-copy h1 { color: #fff; }
 .hero-copy .lede { color: var(--on-ink); }
 .hero .btn-row { margin-top: 1.6rem; }
@@ -413,16 +426,12 @@ main > section + section { padding-top: 0; }
     position: relative; z-index: 4; grid-area: 1 / 1; align-self: center;
     width: min(52%, 760px); padding-right: clamp(1rem, 4vw, 3rem);
   }
-  .hero-copy h1 { font-size: clamp(3.25rem, 5.6vw, 6rem); line-height: .99; }
+  .hero-copy h1 { max-width: 9ch; font-size: clamp(3.5rem, 6.4vw, 6.8rem); font-weight: 500; line-height: .9; letter-spacing: -.055em; text-transform: uppercase; }
   .hero-copy .lede { max-width: 590px; }
   .hero-visual { grid-area: 1 / 1; min-height: 100%; }
   .hero-visual::after {
     content: ''; position: absolute; z-index: 2; inset: 0; pointer-events: none;
     background: linear-gradient(90deg, rgb(6 18 40 / .92) 0%, rgb(6 18 40 / .8) 34%, rgb(6 18 40 / .28) 52%, transparent 70%);
-  }
-  .hero-media-actions {
-    z-index: 5; left: auto; right: 1.35rem; width: min(42%, 560px);
-    gap: .55rem; padding: 0; background: none;
   }
   .hero-dots { z-index: 6; }
 }
@@ -1379,4 +1388,15 @@ fieldset.field legend,
 @media (max-width: 860px) {
   .home-page .hero-card { min-height: 0; }
   .home-page .hero-copy { padding-top: 6.5rem; }
+  .hero-visual .hero-dots { top: .65rem; bottom: auto; left: .65rem; right: auto; }
+  .hero-booking-panel {
+    right: .65rem; bottom: .65rem; width: min(285px, calc(100% - 1.3rem)); min-height: 78px;
+    grid-template-columns: auto minmax(0, 1fr) auto; gap: .55rem; padding: .6rem;
+  }
+  .hero-booking-icon { width: 40px; height: 40px; }
+  .hero-booking-icon .icon { width: 19px; height: 19px; }
+  .hero-booking-panel small { font-size: .52rem; }
+  .hero-booking-panel strong { font-size: .9rem; }
+  .hero-booking-panel em { display: none; }
+  .hero-booking-arrow { width: 30px; height: 30px; }
 }
