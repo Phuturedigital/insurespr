@@ -108,6 +108,7 @@
         var dialog = ensureBookingDialog();
         var source = new URL(trigger.href, window.location.href);
         source.searchParams.set('embed', '1');
+        source.searchParams.set('frame', '2');
         var frame = dialog.querySelector('iframe');
         if (frame.src !== source.href) frame.src = source.href;
         document.documentElement.classList.add('booking-open');
