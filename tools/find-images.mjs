@@ -73,6 +73,19 @@ const SLOTS = {
   'workforce-quote':'business people meeting handshake office documents',
   'scan-body':     'health professional measuring body composition assessment',
   reception:       'friendly receptionist at medical clinic front desk',
+
+  /* --- hero slots ---------------------------------------------------------
+     Hero frames have a harder brief than card frames. They are cropped to a
+     wide band behind a headline, so the subject must sit RIGHT of centre with
+     the left third readable — the same rule the concept hero was picked on.
+     Everything here is clinical: the site's hero carousel was three activewear
+     frames on a running path, which sells a gym, not a practice that does
+     x-rays, bone-density scans and workforce medicals. */
+  'hero-clinical':  'radiology technologist at control monitor hospital wide',
+  'hero-clinical-b':'doctor and patient consultation bright modern clinic room',
+  'hero-scan':      'patient lying on open scanner table radiographer nearby',
+  'hero-workforce': 'nurse screening worker in occupational health clinic',
+  'hero-progress':  'clinician showing results on tablet to patient smiling',
 };
 
 async function search(query, perPage = 6) {

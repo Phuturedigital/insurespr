@@ -241,7 +241,7 @@ main > section + section { padding-top: 0; }
 .btn--sm { min-height: 42px; font-size: .875rem; padding: .58rem 1rem; gap: .5rem; }
 .btn--sm .btn-badge { width: 1.6rem; height: 1.6rem; }
 .btn--sm .btn-badge .icon { width: 13px; height: 13px; }
-.btn > .icon { width: 1.05rem; height: 1.05rem; stroke-width: 1.8; }
+.btn > .icon { width: 1.05rem; height: 1.05rem; }
 .btn--back > .icon { transform: scaleX(-1); }
 .btn > span { min-width: 0; }
 
@@ -261,14 +261,41 @@ main > section + section { padding-top: 0; }
 .rbtn .icon { width: 17px; height: 17px; }
 .rbtn--flip .icon { transform: scaleX(-1); }
 
-.icon { width: 20px; height: 20px; flex: none; }
+/* ------------------------------------------------------------------ icons -- */
+/* ONE stroke weight for the whole set.
+   The sprite's header says the icons are "drawn at 24x24 on a 1.7px stroke …
+   so the icons read as part of the same hand". They are drawn that way — all
+   37 stroked symbols are built identically — but they were not RENDERED that
+   way. Measured across the 11 production pages, 80 icons drew at three
+   different weights:
+
+       1.8   43%   from `.btn > .icon`
+       1.0   35%   nothing reached them, so SVG's own default applied
+       1.7   23%   the documented brand value
+
+   The 35% is the real damage: a third of the site's icons were drawing at the
+   browser default, noticeably lighter than the ones beside them.
+
+   Setting it on `.icon` itself means an icon cannot be added anywhere in
+   future and quietly miss the brand weight. The four filled brand glyphs
+   (facebook/linkedin/x/whatsapp) carry no stroke, so this is a no-op on them.
+
+   Stroke stays in viewBox units and therefore scales with rendered size —
+   1.02px optical on a 14.4px chip up to 1.56px at 22px. That is deliberate
+   and is how 24-grid sets are built; a large icon needs a proportionally
+   larger stroke or it reads as spindly next to its own label. */
+.icon {
+  width: 20px; height: 20px; flex: none;
+  stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round;
+}
 .icon-sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
+/* These four contexts additionally force fill/stroke, because they place an
+   icon on a coloured chip where an inherited fill would fill the glyph solid. */
 .route-icon .icon,
 .journey-icon .icon,
 .statstrip dt .icon,
 .mobile-quick-action .icon {
-  fill: none; stroke: currentColor; stroke-width: 1.7;
-  stroke-linecap: round; stroke-linejoin: round;
+  fill: none; stroke: currentColor;
 }
 
 /* --------------------------------------------------------- concept banner -- */
@@ -359,7 +386,7 @@ main > section + section { padding-top: 0; }
   grid-template-columns: minmax(0, 1.05fr) minmax(360px, .95fr);
   background: var(--ink);
 }
-.nav-toggle .icon { width: 1rem; height: 1rem; stroke-width: 1.9; }
+.nav-toggle .icon { width: 1rem; height: 1rem; }
 .hero-copy {
   align-self: center; max-width: none;
   padding: clamp(2rem, 5vw, 4.5rem);
@@ -374,10 +401,22 @@ main > section + section { padding-top: 0; }
 }
 .hero-visual .hero-slide[width][height] { height: 100%; }
 .hero-visual .hero-slide.is-active { opacity: 1; visibility: visible; }
+/* ⚠️ The dots and the booking panel are both absolutely positioned in the
+   bottom-right of the hero, and they used to be offset in DIFFERENT UNITS —
+   the panel `bottom: clamp(1rem, 2.5vw, 2.5rem)` (viewport WIDTH), the dots
+   `bottom: clamp(7.6rem, 14vh, 9rem)` (viewport HEIGHT). Each rule is
+   individually sensible, and the pair silently collided whenever the window
+   was short relative to its width: clean at 1440x1080, overlapping by 6px at
+   1440x900 and by 10px at 1440x720.
+
+   Both now derive from ONE inset plus the panel's own reserved height, so the
+   gap between them is a constant that cannot drift with the viewport.
+   tools/overlaps.mjs asserts this across nine window sizes. */
+:root { --hero-inset: clamp(1rem, 2.5vw, 2.5rem); --hero-panel-h: 96px; --hero-stack-gap: .85rem; }
 .hero-booking-panel {
-  position: absolute; z-index: 5; right: clamp(1rem, 2.5vw, 2.5rem); bottom: clamp(1rem, 2.5vw, 2.5rem);
+  position: absolute; z-index: 5; right: var(--hero-inset); bottom: var(--hero-inset);
   display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: .85rem;
-  width: min(360px, calc(100% - 2rem)); min-height: 96px; padding: .8rem .85rem;
+  width: min(360px, calc(100% - 2rem)); min-height: var(--hero-panel-h); padding: .8rem .85rem;
   border: 1px solid rgb(255 255 255 / .58); border-radius: 14px; background: rgb(255 255 255 / .93);
   box-shadow: 0 18px 45px rgb(6 18 40 / .24); color: var(--ink); text-decoration: none;
   backdrop-filter: blur(14px); transition: transform .25s ease, box-shadow .25s ease;
@@ -393,7 +432,8 @@ main > section + section { padding-top: 0; }
 .hero-booking-icon .icon { width: 22px; height: 22px; }
 .hero-booking-arrow { display: inline-grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: var(--blue); color: #fff; font-size: 1.2rem; }
 .hero-dots {
-  position: absolute; z-index: 6; right: clamp(1rem, 2.5vw, 2.5rem); bottom: clamp(7.6rem, 14vh, 9rem);
+  position: absolute; z-index: 6; right: var(--hero-inset);
+  bottom: calc(var(--hero-inset) + var(--hero-panel-h) + var(--hero-stack-gap));
   display: flex; align-items: center; gap: .3rem; padding: .35rem .55rem; border-radius: var(--r-pill);
   background: rgb(6 18 40 / .65); backdrop-filter: blur(8px);
 }
@@ -415,14 +455,18 @@ main > section + section { padding-top: 0; }
   margin-top: 1.35rem; font-size: .9375rem; color: var(--on-ink-soft);
 }
 .hero-note .icon { width: 17px; height: 17px; color: var(--cyan-lift); }
-.hero-route-pills { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1.25rem; }
+/* These were 38px tall carrying 12.5px text, sitting under an 80px headline —
+   they read as captions rather than as the three ways into the site. Sized to
+   the same 48px rhythm as .btn so the hero has one button scale, not two. */
+.hero-route-pills { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: 1.6rem; }
 .hero-route-pills a {
-  display: inline-flex; align-items: center; justify-content: center; min-height: 38px;
-  padding: .55rem .9rem; border: 1px solid rgb(255 255 255 / .34); border-radius: var(--r-pill);
-  color: #fff; font-size: .78rem; font-weight: 600; line-height: 1; text-decoration: none;
+  display: inline-flex; align-items: center; justify-content: center; gap: .5rem; min-height: 48px;
+  padding: .7rem 1.35rem; border: 1px solid rgb(255 255 255 / .38); border-radius: var(--r-pill);
+  color: #fff; font-size: .95rem; font-weight: 600; line-height: 1; text-decoration: none;
   background: rgb(10 28 61 / .34); backdrop-filter: blur(8px);
+  transition: background .2s ease, border-color .2s ease, color .2s ease;
 }
-.hero-route-pills .icon { width: .9rem; height: .9rem; }
+.hero-route-pills .icon { width: 1.05rem; height: 1.05rem; }
 .hero-route-pills a:hover { border-color: #fff; background: #fff; color: var(--ink); }
 
 @media (min-width: 1000px) and (min-aspect-ratio: 3/2) {
@@ -431,7 +475,14 @@ main > section + section { padding-top: 0; }
   }
   .hero-copy {
     position: relative; z-index: 4; grid-area: 1 / 1; align-self: center;
-    width: min(52%, 760px); padding-right: clamp(1rem, 4vw, 3rem);
+    width: min(56%, 820px);
+    /* The hero card is full-bleed to the viewport edge while the nav above it
+       is inset, so the headline was landing 72px from the screen edge at 1440
+       and only 48px at 1280 — tight under 80px display type, and visibly out
+       of line with the nav. The left inset now tracks the nav's own gutter
+       and grows with the viewport instead of being capped at 4.5rem. */
+    padding-left: clamp(1.75rem, 6vw, 7rem);
+    padding-right: clamp(1rem, 4vw, 3rem);
   }
   /* Outfit LIGHT, sentence case — the site's own display voice, which every
      other page uses and which the base `h1` rule already sets at weight 300.
@@ -439,7 +490,10 @@ main > section + section { padding-top: 0; }
      `font-weight: 500` + `text-transform: uppercase` at 92px, so the homepage
      shouted in a register nothing else on the site speaks. Light-at-large-size
      is most of the premium feel; uppercase heavy is a different brand. */
-  .hero-copy h1 { max-width: 15ch; font-size: clamp(3rem, 5.6vw, 5.2rem); line-height: 1.02; letter-spacing: -.042em; }
+  /* max-width in `ch` scales WITH the font, so at a hero size 15ch resolved to
+     a ~256px column at 1280 and broke the headline to one word per line. A
+     px measure is stable: the line breaks where the design wants it to. */
+  .hero-copy h1 { max-width: 13em; font-size: clamp(2.9rem, 5vw, 4.9rem); line-height: 1.04; letter-spacing: -.038em; }
   .hero-copy .lede { max-width: 590px; }
   .hero-visual { grid-area: 1 / 1; min-height: 100%; }
   /* ⚠️ The legibility scrim lives on .hero-card, NOT on .hero-visual::after.
@@ -458,6 +512,31 @@ main > section + section { padding-top: 0; }
   }
   .hero-dots { z-index: 6; }
 }
+
+/* ----------------------------------------------------------------- bands -- */
+/* A two-tone page rhythm. The site was one continuous pale-blue field from the
+   hero to the footer, so every section ran into the next and the eye had no
+   landmarks to travel between — a long page read as one undifferentiated
+   scroll regardless of how good the individual sections were.
+
+   Two grounds only, alternating: the default --ground, and --paper for the
+   bands that carry photography or a grid. Deliberately NOT a third tone —
+   more than two reads as decoration rather than structure, and the dark navy
+   panels (journey-flow, home-before-travel) already provide the third beat.
+
+   The band paints full-bleed while its content stays inside .wrap, so the
+   colour change spans the window and the reading measure does not. */
+.band-paper { background: var(--paper); }
+.band-ground { background: var(--ground-2); }
+.band-paper,
+.band-ground { padding-block: clamp(2.75rem, 5.5vw, 5rem); }
+/* A section that already sets its own padding should not gain a second lot. */
+.band-paper.pad-sm,
+.band-ground.pad-sm { padding-block: clamp(2.25rem, 4.5vw, 4rem); }
+/* Hairlines only where two like-toned bands meet, so the seam is legible
+   without drawing a rule across every join. */
+.band-paper + .band-paper,
+.band-ground + .band-ground { border-top: 1px solid var(--line); }
 
 /* ------------------------------------------------------------ stat strip -- */
 .statstrip {

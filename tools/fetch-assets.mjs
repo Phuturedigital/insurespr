@@ -162,6 +162,44 @@ const ASSETS = [
      same error as the carrier-livery frames rejected on the courier site. */
   { id: 4269274,  out: 'assets/reception.webp',    w: 1400, credit: 'Cedric Fauntleroy',
     note: 'Booking page. Two staff at a desk: the human step that confirms a request. No third-party branding.' },
+
+  /* ======================================================================
+     HERO FRAMES
+     ----------------------------------------------------------------------
+     The homepage carousel was three activewear frames on a running path, and
+     spr / scanning / workforce led on a track athlete, a gym and a desk
+     consultation. That set sells a gym or a coaching brand. This practice
+     does x-rays, bone-density scans and workforce medicals.
+
+     A hero frame has a harder brief than a card frame: it is cropped to a
+     wide band with a headline over it, so the subject has to sit RIGHT of
+     centre and the left third has to stay quiet. Every pick below was chosen
+     against that, not just for subject.
+
+     ONE activewear frame is deliberately kept — hero-active-wide.webp stays
+     as the third homepage slide, so the carousel still lands on people rather
+     than ending on equipment.
+
+     REJECTED, all for reasons already established on this site:
+       7088538 / 34170811 / 7088484 / 11119416  patients inside TUNNEL
+             scanners. The site's own rule: a DXA is an open flat table and is
+             "emphatically NOT the enclosed tunnel of a CT or MRI". Showing one
+             misdescribes what a visitor is booking.
+       7089011 / 6011602  brain MRI and CT montages — the wrong modality, the
+             same test that moved results.webp off the x-ray hero.
+       the entire hero-workforce set (6097752, 6285402, 8949898, 6098056 …)
+             masks, face shields and hazmat. They date the page to 2020-21.
+       5355693 / 3952136  DENTAL surgeries. Wrong practice entirely. */
+  { id: 7089302,  out: 'assets/hero-reading.webp', w: 2000, credit: 'MART PRODUCTION',
+    note: 'Homepage lead slide. Radiographer reading at the console; the left third is unlit, so the headline sits on the image rather than on a scrim.' },
+  { id: 4266942,  out: 'assets/hero-practice.webp', w: 2000, credit: 'Cedric Fauntleroy',
+    note: 'Homepage slide 2. Wide, calm practice interior with the two figures right-of-centre — the most headline-friendly frame of the set.' },
+  { id: 7089395,  out: 'assets/scan-open.webp',    w: 1800, credit: 'MART PRODUCTION',
+    note: 'Scanning hero. Patient sitting UP on an OPEN table with the radiographer beside her — the honest shape of a DXA, not a tunnel.' },
+  { id: 4266939,  out: 'assets/consult.webp',      w: 1800, credit: 'Cedric Fauntleroy',
+    note: 'SPR hero. Two people talking through a result in daylight: SPR is the conversation that follows a measurement.' },
+  { id: 5214992,  out: 'assets/workforce-hero.webp', w: 1800, credit: 'Adventure Studio',
+    note: 'Workforce hero. A blood-pressure check in a bright room — a medical, unmasked and undated.' },
 ];
 
 /* Resolve a photo id to its CDN base path. Pexels' canonical file URL embeds
