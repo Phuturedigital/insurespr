@@ -535,6 +535,21 @@ main > section + section { padding-top: 0; }
 .spr-process-rail p { margin: 0; color: var(--muted); font-size: .88rem; line-height: 1.5; }
 .spr-deep-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .85rem; }
 .spr-deep-pillar { min-width: 0; min-height: 390px; padding: clamp(1.4rem, 2.8vw, 2.35rem); border-radius: 14px; }
+
+/* Photographed pillars. The alternating white / pale-cyan / navy fill is a
+   signature of this design and is NOT sacrificed for the image: the picture
+   becomes a banner across the top and the fill still carries the body below,
+   so the three-across colour rhythm reads exactly as before.
+
+   The band is 16/7 rather than the 16/10 used elsewhere. These pillars are
+   already 390px tall by design, and a 16/10 crop on top pushed them past a
+   full viewport at desktop width. */
+.spr-deep-pillar--media { display: flex; flex-direction: column; padding: 0; overflow: hidden; }
+.spr-deep-pillar--media .card-media { aspect-ratio: 16 / 7; }
+.spr-deep-pillar-body { flex: 1; padding: clamp(1.4rem, 2.8vw, 2.35rem); }
+/* Without the photograph the icon needed a big drop to anchor the column.
+   With one above it, that gap reads as a hole. */
+.spr-deep-pillar--media .spr-deep-icon { margin-bottom: 1.35rem; }
 .spr-deep-pillar--strong { background: #fff; }
 .spr-deep-pillar--prevent { background: #dff7ff; }
 .spr-deep-pillar--reclaim { background: var(--ink); color: var(--on-ink); }
@@ -758,6 +773,9 @@ main > section + section { padding-top: 0; }
 .foot a:hover { color: var(--cyan-lift); text-decoration: underline; }
 .foot .brand-name { color: #fff; }
 .foot p { font-size: .9375rem; }
+/* Was an inline style on index and spr only; a class so the stamped footer
+   carries it to all eleven pages. */
+.foot-blurb { margin-top: 1rem; max-width: 32ch; }
 .foot-bottom { border-top: 1px solid rgb(255 255 255 / .14); padding-top: 1.5rem; display: grid; gap: .7rem; }
 .foot-bottom p { margin: 0; font-size: .8125rem; line-height: 1.6; color: var(--on-ink-dim); max-width: none; }
 .foot-bottom strong { color: var(--on-ink); }
@@ -1019,11 +1037,21 @@ main > section + section { padding-top: 0; }
   text-decoration: none;
 }
 .route-card:focus-visible { outline: 3px solid var(--cyan); outline-offset: 3px; }
+
+/* The photograph band inside a card. `.card-media` is the canonical name and
+   `.route-card-media` is kept as its alias: the service pages needed exactly
+   this band and nothing else, so giving them a second, parallel image-card
+   rule would have split one system into two — the mistake the later `.btn`
+   rule made when its asymmetric padding silently squashed 25 existing
+   buttons. New markup should use `.card-media`. */
+.card-media,
 .route-card-media { aspect-ratio: 16 / 10; overflow: hidden; background: var(--ground-2); }
+.card-media img,
 .route-card-media img {
   width: 100%; height: 100%; object-fit: cover; object-position: center 44%;
   transition: transform .6s cubic-bezier(.22, 1, .36, 1);
 }
+.card-media img[width][height],
 .route-card-media img[width][height] { height: 100%; }
 .route-card-media--performance img { object-position: center 48%; }
 .route-card:hover .route-card-media img { transform: scale(1.035); }
@@ -1062,13 +1090,69 @@ main > section + section { padding-top: 0; }
 .service-choice-icon .icon { width: 1.2rem; height: 1.2rem; }
 .service-choice .btn { margin-top: auto; }
 
+/* --- the photographed variant ---------------------------------------------
+   A service-choice that leads on a photograph. The body below the image is
+   deliberately the same stack as .route-card-body — icon chip, title, copy —
+   because these ARE the same object: a service, shown and named. Only the
+   homepage's version happened to keep its picture.
+
+   Zero padding on the card itself so the image can reach the corners; the
+   padding moves to .service-choice-body. */
+.service-choice--media { display: flex; flex-direction: column; padding: 0; overflow: hidden; }
+.service-choice-body {
+  display: flex; flex: 1; flex-direction: column; align-items: flex-start;
+  padding: clamp(1.25rem, 2.4vw, 1.75rem);
+}
+/* The icon chip sits tighter under a photograph than it does floating at the
+   top of a bare card, where it needed the extra space to anchor the column. */
+.service-choice--media .service-choice-icon { margin-bottom: .85rem; }
+.service-choice--media .card-title { margin-bottom: .55rem; }
+.service-choice--media p { margin: 0 0 .7rem; color: var(--muted); }
+.service-choice--media p:last-child { margin-bottom: 0; }
+.service-choice--media:hover .card-media img { transform: scale(1.035); }
+
+/* A plain card that leads on a photograph — the aside variant, for panels that
+   are not part of a service grid. Same deal as .service-choice--media: the
+   padding moves off the card and onto the body so the image reaches the
+   clipped corners. */
+/* The booking page's two columns. This was `align-items: start` inline, which
+   left the short step-1 form card floating against a much taller aside and a
+   large empty patch of ground beside it. Stretching makes both columns one
+   pair of panels; the form's own content stays top-aligned inside its card,
+   so nothing moves as the wizard grows through steps 2-4. */
+.book-split { align-items: stretch; }
+.book-split > aside > .card { height: 100%; }
+
+/* The statstrip's sizes were four repeated inline styles on the homepage.
+   Reusing that strip on the booking page made them classes instead — an inline
+   style would have had to be retyped correctly a second time.
+
+   ⚠️ Both selectors are qualified with `dd` deliberately. An inline style wins
+   the cascade outright, but a bare `.statstrip-lead` (0-1-0) LOSES to the
+   `.statstrip dd` rule above (0-1-1) that sets a clamp() display size. The
+   page still renders — just at the wrong size — which is exactly the kind of
+   regression a visual check waves through. It surfaced here as the email
+   address breaking mid-word, because it was being drawn at 1.75rem. */
+.statstrip dd.statstrip-lead { font-size: 1.05rem; line-height: 1.4; }
+.statstrip dd.statstrip-mail { font-size: .95rem; overflow-wrap: anywhere; }
+
+.card--media-top { padding: 0; overflow: hidden; }
+.card-media-body { padding: clamp(1.25rem, 2.4vw, 1.75rem); }
+.card-media-body > :first-child { margin-top: 0; }
+.card-media-body > :last-child { margin-bottom: 0; }
+
 @media (min-width: 861px) {
-  .route-grid > .service-choice {
+  /* Above 861px a bare service-choice sheds its card entirely and becomes a
+     column separated by a hairline. That is what left the service pages
+     reading as loose text in a lot of dead space — and it must NOT apply to
+     the photographed variant, whose image needs the card's clipped corners
+     and whose fill is what separates it from its neighbour. */
+  .route-grid > .service-choice:not(.service-choice--media) {
     padding: clamp(1.25rem, 2.5vw, 2.25rem); border: 0; border-left: 1px solid var(--line-2);
     border-radius: 0; background: transparent; box-shadow: none;
   }
-  .route-grid > .service-choice:first-child { border-left: 0; padding-left: 0; }
-  .route-grid > .service-choice:last-child { padding-right: 0; }
+  .route-grid > .service-choice:not(.service-choice--media):first-child { border-left: 0; padding-left: 0; }
+  .route-grid > .service-choice:not(.service-choice--media):last-child { padding-right: 0; }
 }
 
 .service-flow-section { padding: 0 0 clamp(2.1rem, 4vw, 3.6rem); }
@@ -1103,14 +1187,38 @@ main > section + section { padding-top: 0; }
 .service-flow strong { display: block; margin-bottom: .25rem; color: var(--ink); font-family: var(--f-display); font-size: 1.05rem; }
 .service-flow p { margin: 0; color: var(--muted); font-size: .78rem; line-height: 1.4; }
 
+/* The practical answers. This was a hairline table — a continuous 3x3 grid of
+   shared 1px borders on a 66%-opacity fill — which read as a spreadsheet and
+   flattened nine genuinely useful answers into data. Everything else on this
+   site is an object sitting ON the pale ground, so these become cards too.
+
+   Several answers are honestly "not yet approved for publication", and those
+   carry .is-pending so an unknown looks deliberate rather than unfinished. */
 .service-answers {
   display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0; margin: clamp(1.4rem, 3vw, 2.25rem) 0 0;
-  border-top: 1px solid var(--line-2); border-left: 1px solid var(--line-2);
+  gap: .7rem; margin: clamp(1.4rem, 3vw, 2.25rem) 0 0;
 }
-.service-answers > div { min-width: 0; padding: 1.15rem; border-right: 1px solid var(--line-2); border-bottom: 1px solid var(--line-2); background: rgb(255 255 255 / .66); }
-.service-answers dt { margin-bottom: .45rem; color: var(--ink); font-weight: 700; }
-.service-answers dd { margin: 0; color: var(--muted); font-size: .88rem; line-height: 1.5; }
+.service-answers > div {
+  position: relative; min-width: 0; padding: 1.25rem 1.35rem;
+  border: 1px solid var(--line); border-radius: var(--r-sm);
+  background: var(--paper); box-shadow: var(--shadow-sm);
+}
+/* A short cyan rule above the question, in place of the old cell border. It
+   gives the card a top edge to hang from without re-drawing a table. */
+.service-answers > div::before {
+  content: ''; position: absolute; top: 0; left: 1.35rem;
+  width: 1.75rem; height: 2px; border-radius: 0 0 2px 2px; background: var(--cyan);
+}
+.service-answers dt {
+  margin-bottom: .5rem; color: var(--ink);
+  font-family: var(--f-display); font-size: 1.02rem; font-weight: 500; line-height: 1.3;
+}
+.service-answers dd { margin: 0; color: var(--muted); font-size: .88rem; line-height: 1.55; }
+.service-answers .is-pending::before { background: var(--warn-line); }
+.service-answers .is-pending dd { color: var(--warn-ink); }
+/* The old hairline table butted straight up against the action row beneath
+   it, so the primary call-to-action read as another table cell. */
+.service-answers + .btn-row { margin-top: clamp(1.5rem, 3vw, 2.25rem); }
 
 .journey-flow {
   position: relative; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1254,9 +1362,18 @@ fieldset.field legend,
 .check-field input,
 .slot-option input {
   flex: 0 0 auto;
-  width: 1.1rem;
-  height: 1.1rem;
-  margin-top: .15rem;
+  /* 1.5rem = 24px, the WCAG 2.5.8 (AA) minimum target size. These were 1.1rem
+     = 17.6px. The wrapping <label> already made the whole row clickable, but
+     the box itself is what a finger aims at, and the consent checkbox in
+     particular gates form submission — an 18px target that is hard to hit is
+     a conversion problem as well as an accessibility one.
+
+     Note this exemption does NOT apply the way it does to links: the 2.5.8
+     inline-text exemption covers targets sized by the line-height of a
+     sentence they sit inside. A form control is not inline text. */
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-top: 0;
   accent-color: var(--cyan);
 }
 .check-field {
@@ -1303,7 +1420,24 @@ fieldset.field legend,
 @media (max-width: 860px) {
   .hero-card { min-height: 0; grid-template-columns: 1fr; }
   .hero-copy { padding: clamp(1.65rem, 6vw, 2.5rem); }
-  .hero-visual { min-height: 260px; aspect-ratio: 16 / 9; }
+  /* ⚠️ `width: 100%` is load-bearing, not tidying.
+     `aspect-ratio` is bidirectional: it sizes whichever axis is not already
+     definite. With only `min-height: 260px` set and no definite width, the
+     browser resolved the HEIGHT first and then ran the ratio backwards to get
+     a width — 240 x 16/9 = 427px — inside a 390px (and a 320px) card.
+
+     Because .hero-card is `overflow: hidden` this never produced page-level
+     horizontal scroll, so documentElement.scrollWidth stayed clean and an
+     overflow check passed. It silently cropped the right of the photograph
+     and pushed the booking panel, which anchors to `right` of THIS box, 26px
+     past the edge of the screen. Pinning the width makes the ratio derive the
+     height, which is the direction intended. */
+  .hero-visual { width: 100%; min-height: 260px; aspect-ratio: 16 / 9; }
+  /* The slides are focal-pointed to their right-hand third so the desktop
+     hero keeps faces clear of the copy column on the left. Once the copy
+     stacks ABOVE the image there is no column to avoid, and holding the right
+     edge just crops people out of a much narrower frame. */
+  .hero-visual .hero-slide { object-position: 50% 42%; }
   .hero-route-pills { display: none; }
   .hero-visual .hero-dots { left: .7rem; right: auto; }
   .route-grid { grid-template-columns: 1fr; }
@@ -1363,7 +1497,10 @@ fieldset.field legend,
   .hero .btn-row { margin-top: 1.1rem; }
   .hero .btn-row .btn { flex: 1 1 100%; }
   .hero-note { margin-top: 1rem; font-size: .84rem; }
-  .hero-visual { min-height: 240px; aspect-ratio: 16 / 9; }
+  /* Same width pin as the 860px block — this rule re-declares min-height and
+     aspect-ratio together, so without it the 427px miscomputation returns
+     below 620px. */
+  .hero-visual { width: 100%; min-height: 240px; aspect-ratio: 16 / 9; }
   .hero-media-actions { gap: .45rem; padding: 3rem .75rem .75rem; }
   .hero-media-actions .btn { min-height: 38px; padding: .5rem .7rem; font-size: .78rem; }
   .hero-dots { top: .7rem; right: .7rem; }
@@ -1404,7 +1541,12 @@ fieldset.field legend,
   .spr-route-list p { display: none; }
   .spr-clarity { gap: 1.25rem; padding: 1.3rem; border-radius: 18px; }
   .route-grid { gap: .75rem; }
-  .route-card { grid-template-columns: 104px 1fr; min-height: 164px; border-radius: 18px; }
+  /* 104px of a 390px screen left the photograph an unreadable vertical
+     sliver — the x-ray frame in particular became abstract grey. Widening to
+     38% with a taller card makes the subject legible while keeping the
+     horizontal layout, so three route cards still fit in roughly a screen
+     rather than tripling the page's scroll depth. */
+  .route-card { grid-template-columns: 38% 1fr; min-height: 188px; border-radius: 18px; }
   .route-card-body { padding: .85rem; }
   .route-card-label { gap: .5rem; }
   .route-icon { width: 1.9rem; height: 1.9rem; }
@@ -1414,14 +1556,33 @@ fieldset.field legend,
     font-size: .78rem; line-height: 1.35;
   }
   .route-action { min-height: 34px; padding: .4rem .7rem; font-size: .76rem; }
-  .journey-flow { grid-template-columns: repeat(3, minmax(0, 1fr)); border-radius: 18px; }
-  .journey-flow::before { top: 2.45rem; }
-  .journey-step { padding: .85rem .65rem 1rem; }
-  .journey-step-top { margin-bottom: .65rem; }
+  /* Three steps STACK on a phone rather than staying three-across.
+     At 390px three columns leave roughly 110px of content each, which broke
+     "Choose the right route" over three lines in a column narrower than the
+     words in it. These are sequential steps, and a phone reads a sequence
+     down the page perfectly well.
+
+     The connector rail is HIDDEN rather than rotated. .journey-step paints an
+     opaque --ink background at z-index 2 over the z-index-1 rail, so the rail
+     only ever shows through the 1px grid gaps. Rotated vertically that leaves
+     two cyan dots. The horizontal rules between stacked steps already carry
+     the sequence, and the numbers say it outright. */
+  .journey-flow { grid-template-columns: 1fr; border-radius: 18px; }
+  .journey-flow::before { display: none; }
+  /* Number and icon lead the row together instead of being pushed to opposite
+     ends of a column that no longer exists. */
+  .journey-step-top { justify-content: flex-start; gap: .85rem; margin-bottom: .65rem; }
+  .journey-step { padding: 1rem .95rem 1.15rem; }
   .journey-number { font-size: .62rem; }
   .journey-icon { width: 1.8rem; height: 1.8rem; }
-  .journey-step h3 { margin: 0; font-size: .9rem; line-height: 1.2; }
-  .journey-step p { display: none; }
+  /* Full width restores the title to a readable size and brings the
+     descriptions back. Both were shrunk and then hidden outright only because
+     three columns at 390px had nowhere to put them — the text was never the
+     problem, the column count was. These lines carry the actual detail
+     ("Give only the practical details needed for a booking request"), so
+     losing them left three bare labels explaining nothing. */
+  .journey-step h3 { margin: 0 0 .35rem; font-size: 1.05rem; line-height: 1.25; }
+  .journey-step p { font-size: .85rem; line-height: 1.5; }
   .home-page .home-contact-strip { display: none; }
   .home-before-travel .lede,
   .home-before-travel .card { display: none; }
@@ -1430,8 +1591,20 @@ fieldset.field legend,
   .home-page .foot { margin-top: 2rem; }
   .home-page .foot-in { padding-top: 1.75rem; }
   .home-page .foot-top { gap: 1.25rem; margin-bottom: 1.5rem; }
+  /* Services and Information used to be `display: none` here, to keep the
+     phone footer short. That removed the site's ONLY always-visible list of
+     pages on mobile — the main nav is behind the hamburger — and it did so on
+     the homepage, which is the most common mobile entry point.
+
+     Pairing them on one row costs roughly the vertical space the hiding was
+     protecting, and keeps the navigation. */
   .home-page .foot-top > :nth-child(2),
-  .home-page .foot-top > :nth-child(3) { display: none; }
+  .home-page .foot-top > :nth-child(3) { grid-column: span 1; }
+  .home-page .foot-top {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .home-page .foot-top > :first-child,
+  .home-page .foot-top > :last-child { grid-column: 1 / -1; }
   .booking-progress li { flex-direction: column; gap: .35rem; padding: .65rem .15rem; font-size: .64rem; }
   .booking-step-actions .btn { flex: 1 1 8rem; min-width: 0; }
 }
@@ -1509,11 +1682,24 @@ fieldset.field legend,
   .service-flow-section .wrap { gap: .75rem; }
   .service-flow-head { display: block; }
   .service-flow-head h2 { max-width: none; font-size: 1.35rem; }
-  .service-flow-head p { display: none; }
-  .service-flow li { display: block; padding: .75rem .45rem; text-align: center; }
-  .service-flow-icon { margin: 0 auto .55rem; }
-  .service-flow strong { font-size: .94rem; }
-  .service-flow p { font-size: .66rem; line-height: 1.3; }
+  /* The Ask/Confirm/Visit rail stacks on a phone for the same reason the
+     journey-flow does: three columns of ~120px forced 0.66rem type and broke
+     every caption over three lines. Stacked, each step gets the full width and
+     its normal size back, and the supporting line no longer has to be hidden
+     to make room. */
+  .service-flow { grid-template-columns: 1fr; }
+  .service-flow li {
+    display: grid; grid-template-columns: auto 1fr; align-items: start;
+    gap: .75rem; padding: .7rem .2rem; text-align: left;
+    border-left: 0; border-top: 1px solid var(--line);
+  }
+  .service-flow li:first-child { border-top: 0; }
+  /* The connector chevron pointed right, between columns. Stacked, it would
+     sit in the middle of a row pointing at nothing. */
+  .service-flow li:not(:last-child)::after { display: none; }
+  .service-flow-icon { margin: 0; }
+  .service-flow strong { font-size: .96rem; }
+  .service-flow p { font-size: .8rem; line-height: 1.45; }
   .service-answers { grid-template-columns: 1fr; }
   .service-answers > div { padding: .95rem 1rem; }
   .spr-visual-grid { position: relative; min-height: 205px; display: block; }

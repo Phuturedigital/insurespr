@@ -54,6 +54,25 @@ const SLOTS = {
   clinic:      'modern medical clinic reception interior bright',
   coach:       'health coach talking with client notes desk',
   family:      'grandmother grandchild playing garden happy',
+
+  /* --- production slots ---------------------------------------------------
+     The slots above were sourced for the CONCEPT site, whose subject was bone
+     longevity — hence the exercise and outdoors register. The production site
+     sells three concrete clinical services (x-ray, scans, workforce medicals),
+     and illustrating a radiography waiting room with a park walk is the exact
+     mismatch that made the service pages feel like stock filler.
+
+     These queries therefore stay inside the building: a radiographer at a
+     machine, a form being completed, a worker being screened. Same rule as
+     above still applies on subjects — the practice is in Randburg. */
+  'xray-primary':  'radiographer positioning patient for x-ray in radiology room',
+  'xray-visa':     'doctor examining chest x-ray film on light box',
+  'xray-admin':    'doctor completing medical form paperwork at desk',
+  'workforce-med': 'occupational health nurse checking worker blood pressure',
+  'workforce-team':'group of industrial workers in safety helmets on site',
+  'workforce-quote':'business people meeting handshake office documents',
+  'scan-body':     'health professional measuring body composition assessment',
+  reception:       'friendly receptionist at medical clinic front desk',
 };
 
 async function search(query, perPage = 6) {

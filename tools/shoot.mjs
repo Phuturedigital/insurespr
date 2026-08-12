@@ -104,6 +104,17 @@ for (const vp of VIEWPORTS) {
         const r = el.getBoundingClientRect();
         if (r.width === 0 || r.height === 0) return;          // hidden — not a target
         if (getComputedStyle(el).display === 'none') return;
+        /* Off-screen and explicitly-hidden controls are not targets either.
+           The spam honeypot ("Website") is a real input with a real 177x22
+           layout box, parked at left:-10000px inside a 1x1 clipped wrapper —
+           getBoundingClientRect reports its own size regardless of an
+           ancestor's overflow, so it was flagged on four pages at every
+           viewport. A permanent false positive is worse than no check: it
+           trains you to skim the SMALL-TAP line, which is where the genuinely
+           undersized consent checkboxes were hiding. */
+        if (el.closest('[aria-hidden="true"]')) return;
+        if (el.tabIndex < 0) return;
+        if (r.right < 0 || r.bottom < 0 || r.left > document.documentElement.scrollWidth) return;
         /* WCAG 2.2 SC 2.5.8 exempts targets sitting inline inside a sentence —
            you cannot enlarge a word in running prose without wrecking the line
            box. Detect that as: the parent holds materially more text than the

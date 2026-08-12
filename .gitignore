@@ -13,6 +13,7 @@ package-lock.json
 tools/shots/
 tools/sheets/
 tools/previews/
+tools/shots-fe/
 
 # Backups only — assets/ is committed (the shipped site imagery)
 *.html.bak
