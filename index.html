@@ -18,46 +18,97 @@
 <link rel="stylesheet" href="styles.css">
 <script>document.documentElement.className += ' js';</script>
 </head>
-<body>
+<body class="home-page has-mobile-actions">
 <a class="skip" href="#main">Skip to content</a>
+<svg class="icon-sprite" aria-hidden="true" focusable="false">
+  <symbol id="i-xray" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="3"/><path d="M9.2 7.5c-1.5 1.2-2.2 2.7-2.2 4.5s.7 3.3 2.2 4.5M14.8 7.5c1.5 1.2 2.2 2.7 2.2 4.5s-.7 3.3-2.2 4.5M12 6.5v11M9.4 10.2h5.2M9.4 13.8h5.2"/></symbol>
+  <symbol id="i-workforce" viewBox="0 0 24 24"><circle cx="8" cy="8" r="3"/><circle cx="16.5" cy="9" r="2.5"/><path d="M3.5 19c.4-3.4 2-5.2 4.5-5.2s4.1 1.8 4.5 5.2M13.2 15.2c.8-.7 1.9-1.1 3.3-1.1 2.3 0 3.6 1.6 4 4.9"/></symbol>
+  <symbol id="i-scan" viewBox="0 0 24 24"><path d="M3 18.5h18M5 15.5h12.5a2.5 2.5 0 0 0 0-5H8.5A3.5 3.5 0 0 0 5 14v1.5Z"/><path d="M15.5 10.5V7.2a2.7 2.7 0 0 1 5.4 0v8.3M9 10.5V8.7"/></symbol>
+  <symbol id="i-route" viewBox="0 0 24 24"><circle cx="5" cy="12" r="2"/><circle cx="19" cy="6" r="2"/><circle cx="19" cy="18" r="2"/><path d="M7 12h3.5c3 0 3-6 6.5-6M10.5 12c3 0 3 6 6.5 6"/></symbol>
+  <symbol id="i-details" viewBox="0 0 24 24"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4.5V3h6v1.5M8.5 9h7M8.5 13h7M8.5 17h4"/></symbol>
+  <symbol id="i-confirm" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M7.5 3v4M16.5 3v4M3.5 9h17M8 15l2.2 2.2L16 12"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s6-5.6 6-11a6 6 0 1 0-12 0c0 5.4 6 11 6 11Z"/><circle cx="12" cy="10" r="2"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3.5 2"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><path d="M7.4 3.5 10 7.7 7.9 9.5c1.2 2.9 3.7 5.4 6.6 6.6l1.8-2.1 4.2 2.6-.7 3c-.2.8-.9 1.4-1.8 1.4C9.7 20.4 3.6 14.3 3 6c-.1-.9.5-1.6 1.4-1.8l3-.7Z"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m4.5 7 7.5 6 7.5-6"/></symbol>
+  <symbol id="i-strong" viewBox="0 0 24 24"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/><path d="m4 6 6-3 6 5 5-4"/></symbol>
+  <symbol id="i-prevent" viewBox="0 0 24 24"><path d="M12 3 20 6v5c0 5-3.2 8.3-8 10-4.8-1.7-8-5-8-10V6l8-3Z"/><path d="m8.5 12 2.2 2.2 4.8-5"/></symbol>
+  <symbol id="i-reclaim" viewBox="0 0 24 24"><path d="M4 17c2.5-4 5.2-6 8-6 2.2 0 4.3 1.1 6.2 3.2M15 5h5v5"/><path d="m20 5-5.2 5.2M5 20h14"/></symbol>
+</svg>
 <div class="nav-shell"><div class="wrap"><nav class="nav" aria-label="Main">
   <a class="brand" href="index.html"><img src="assets/mark.svg" alt="" width="34" height="34"><span><span class="brand-name">Insure<span>SPR</span></span><span class="brand-sub">Precision Healthcare</span></span></a>
   <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links">Menu</button>
-  <div class="nav-links" id="nav-links" data-open="false"><a href="index.html" aria-current="page">Home</a><a href="xray.html">X-Ray &amp; individuals</a><a href="workforce.html">Workforce</a><a href="scanning.html">DXA scans</a><a href="contact.html">Contact</a><a class="btn btn--primary btn--sm" href="book.html">Request a booking</a></div>
+  <div class="nav-links" id="nav-links" data-open="false"><a href="index.html" aria-current="page">Home</a><a class="nav-spr" href="spr.html">SPR</a><a href="xray.html">X-Ray</a><a href="scanning.html">Body &amp; bone scan</a><a href="workforce.html">Workforce</a><a href="contact.html">Contact</a><a class="btn btn--primary btn--sm" href="book.html">Request a booking</a></div>
   <a class="btn btn--primary btn--sm" href="book.html">Request a booking</a>
 </nav></div></div>
 
 <main id="main">
   <section class="hero"><div class="wrap"><div class="hero-card" style="--focal:62% 40%">
-    <img src="assets/hero.webp" alt="An active older woman outdoors carrying an exercise mat." width="2000" height="1333" fetchpriority="high">
     <div class="hero-copy">
-      <p class="eyebrow eyebrow--light">X-Ray, Medicals and Bone Density · Randburg</p>
       <h1>One practice. Three clear ways to get the next step you need.</h1>
-      <p class="lede">Choose individual x-ray services, workforce medicals, or DXA bone-density and body-composition scanning.</p>
-      <div class="btn-row"><a class="btn btn--light" href="#choose-your-route">Choose your route</a><a class="btn btn--on-ink" href="tel:+27834507861" data-track="call_clicked">Call 083 450 7861</a></div>
+      <p class="lede">Start with the service that sounds like your need. Each route explains who it is for, what to expect and how to take the next step.</p>
       <p class="hero-note">7 Malibongwe Drive, EmedCentre, Randburg</p>
+    </div>
+    <div class="hero-visual" data-hero-carousel aria-label="Active people taking preventive-health steps">
+      <img class="hero-slide is-active" src="assets/hero.webp" alt="An active woman outdoors with an exercise mat." width="2000" height="1333" fetchpriority="high" style="--slide-focal:62% 40%" aria-hidden="false">
+      <img class="hero-slide" src="assets/performance-dxa.webp" alt="Two active adults reviewing training data in a gym." width="1536" height="1024" loading="eager" style="--slide-focal:50% 35%" aria-hidden="true">
+      <img class="hero-slide" src="assets/joy.webp" alt="An active woman outdoors with an exercise mat." width="1500" height="1000" loading="lazy" style="--slide-focal:50% 38%" aria-hidden="true">
+      <div class="hero-media-actions"><a class="btn btn--light btn--sm" href="#choose-your-route">Choose your route</a><a class="btn btn--on-ink btn--sm" href="tel:+27834507861" data-track="call_clicked">Call practice</a></div>
+      <div class="hero-dots" aria-label="Choose hero image"><button type="button" class="is-active" aria-label="Show active outdoor health image" aria-pressed="true"></button><button type="button" aria-label="Show gym performance image" aria-pressed="false"></button><button type="button" aria-label="Show active later-life image" aria-pressed="false"></button></div>
+    </div>
+  </div></div></section>
+
+  <section class="pad-sm spr-section"><div class="wrap"><div class="spr-story reveal">
+    <div class="spr-visual-grid" aria-label="InsureSPR preventive-health journeys">
+      <figure class="spr-feature-photo"><img src="assets/performance-dxa.webp" alt="Two active adults reviewing training data in a gym." width="1536" height="1024" loading="lazy"></figure>
+      <div class="spr-metric"><strong>SPR</strong><span>3 connected moves</span><p>Measure. Understand. Act. Review.</p></div>
+      <figure class="spr-support-photo"><img src="assets/results.webp" alt="A clinician reviewing radiology images." width="1500" height="1000" loading="lazy"></figure>
+    </div>
+    <div class="spr-content">
+      <div class="spr-intro"><p class="eyebrow">What SPR means</p><h2>Strong. Prevent. Reclaim.</h2><p>SPR connects the result to a useful next step. Start with a clear baseline, understand what it means, act earlier where appropriate, then review change over time.</p><a class="btn btn--ghost btn--sm" href="spr.html">See the full SPR approach <span aria-hidden="true">→</span></a></div>
+      <div class="spr-flow" aria-label="Strong, Prevent, Reclaim flow">
+        <article class="spr-flow-step"><span class="spr-flow-icon" aria-hidden="true"><svg class="icon"><use href="#i-strong"></use></svg></span><span class="spr-flow-code">S · Measure</span><h3>Strong</h3><p>Establish a useful starting point.</p></article>
+        <div class="spr-flow-link" aria-hidden="true"><span>→</span></div>
+        <article class="spr-flow-step"><span class="spr-flow-icon" aria-hidden="true"><svg class="icon"><use href="#i-prevent"></use></svg></span><span class="spr-flow-code">P · Act early</span><h3>Prevent</h3><p>Turn evidence into an informed step.</p></article>
+        <div class="spr-flow-link" aria-hidden="true"><span>→</span></div>
+        <article class="spr-flow-step"><span class="spr-flow-icon" aria-hidden="true"><svg class="icon"><use href="#i-reclaim"></use></svg></span><span class="spr-flow-code">R · Track</span><h3>Reclaim</h3><p>Review progress and adjust.</p></article>
+      </div>
+      <p class="spr-flow-result"><strong>One connected approach:</strong> measure what matters → understand the result → act → review progress.</p>
     </div>
   </div></div></section>
 
   <section id="choose-your-route"><div class="wrap"><div class="head-split"><div><p class="eyebrow">Choose your route</p><h2>Start with what you need</h2></div><p class="section-intro">Each route asks only for the information appropriate to that service. A request is not treated as a confirmed appointment until the practice confirms it.</p></div>
     <div class="route-grid">
-      <article class="card route-card"><p class="eyebrow eyebrow--plain">Individuals</p><h3 class="card-title">X-Ray and individual services</h3><p>See the currently published x-ray pathways, then call or request the relevant next step.</p><a class="btn btn--primary btn--sm" href="xray.html">Explore individual services</a></article>
-      <article class="card route-card"><p class="eyebrow eyebrow--plain">Workforce</p><h3 class="card-title">Workplace medicals</h3><p>Employers can submit workforce size, location, timeframe and service needs through a dedicated quote journey.</p><a class="btn btn--primary btn--sm" href="workforce.html">Request an employer quote</a></article>
-      <article class="card route-card"><p class="eyebrow eyebrow--plain">Scanning</p><h3 class="card-title">DXA scanning</h3><p>Request bone-density or body-composition scanning, with price and preparation confirmed before the visit.</p><a class="btn btn--primary btn--sm" href="scanning.html">Explore DXA scans</a></article>
+      <a class="card route-card reveal" href="xray.html" aria-label="Explore X-Ray and individual services"><div class="route-card-media"><img src="assets/results.webp" alt="A clinician reviewing radiology images." width="1500" height="1000" loading="lazy"></div><div class="route-card-body"><span class="route-icon" aria-hidden="true"><svg class="icon"><use href="#i-xray"></use></svg></span><h3 class="card-title">X-Ray</h3><p class="route-card-copy">Everyday imaging and supported visa chest X-rays for individuals.</p><span class="route-action">Explore X-Ray <span aria-hidden="true">→</span></span></div></a>
+      <a class="card route-card reveal reveal-d1" href="scanning.html" aria-label="Explore body-composition and bone-density DXA scans"><div class="route-card-media route-card-media--performance"><img src="assets/performance-dxa.webp" alt="Two active adults reviewing training data in a gym." width="1536" height="1024" loading="lazy"></div><div class="route-card-body"><span class="route-icon" aria-hidden="true"><svg class="icon"><use href="#i-scan"></use></svg></span><h3 class="card-title">Body &amp; bone scan</h3><p class="route-card-copy">Go beyond weight to measure lean mass, body fat and bone density.</p><span class="route-action">Explore scans <span aria-hidden="true">→</span></span></div></a>
+      <a class="card route-card reveal reveal-d2" href="workforce.html" aria-label="Request a workplace medicals quote"><div class="route-card-media"><img src="assets/nurse.webp" alt="A healthcare professional speaking with a patient during a consultation." width="1500" height="1000" loading="lazy"></div><div class="route-card-body"><span class="route-icon" aria-hidden="true"><svg class="icon"><use href="#i-workforce"></use></svg></span><h3 class="card-title">Workforce medicals</h3><p class="route-card-copy">Plan medical services and request a tailored quote for your team.</p><span class="route-action">Employer quote <span aria-hidden="true">→</span></span></div></a>
     </div>
   </div></section>
 
-  <section class="pad-sm"><div class="wrap"><dl class="statstrip">
-    <div><dt>Where</dt><dd style="font-size:1.05rem;line-height:1.4">7 Malibongwe Drive<small>EmedCentre, Randburg</small></dd></div>
-    <div><dt>Published hours</dt><dd style="font-size:1.05rem;line-height:1.4">08:00–17:00<small>Monday to Friday</small></dd></div>
-    <div><dt>Call</dt><dd style="font-size:1.05rem"><a href="tel:+27834507861" data-track="call_clicked">083 450 7861</a></dd></div>
-    <div><dt>Email</dt><dd style="font-size:.95rem;overflow-wrap:anywhere"><a href="mailto:health@insuresprhealth.co.za">health@insuresprhealth.co.za</a></dd></div>
+  <section class="pad-sm"><div class="wrap"><div class="head-split"><div><p class="eyebrow">What happens next</p><h2>Three steps from choice to confirmation</h2></div><p class="section-intro">Choose a route, share only the essential practical details, then receive a reference that clearly says whether staff still need to confirm the request.</p></div>
+    <ol class="journey-flow reveal" aria-label="Three-step enquiry and booking journey">
+      <li class="journey-step"><div class="journey-step-top"><span class="journey-number">01</span><span class="journey-icon" aria-hidden="true"><svg class="icon"><use href="#i-route"></use></svg></span></div><h3>Choose the right route</h3><p>Start with X-Ray, a bone or body scan, or workforce medicals.</p></li>
+      <li class="journey-step"><div class="journey-step-top"><span class="journey-number">02</span><span class="journey-icon" aria-hidden="true"><svg class="icon"><use href="#i-details"></use></svg></span></div><h3>Share the essentials</h3><p>Give only the practical details needed for a booking request, quote or reply.</p></li>
+      <li class="journey-step"><div class="journey-step-top"><span class="journey-number">03</span><span class="journey-icon" aria-hidden="true"><svg class="icon"><use href="#i-confirm"></use></svg></span></div><h3>Receive the next step</h3><p>Save the reference and read whether the request is confirmed or awaiting staff action.</p></li>
+    </ol>
+  </div></section>
+
+  <section class="pad-sm home-contact-strip"><div class="wrap"><dl class="statstrip">
+    <div><dt><svg class="icon" aria-hidden="true"><use href="#i-pin"></use></svg>Where</dt><dd style="font-size:1.05rem;line-height:1.4">7 Malibongwe Drive<small>EmedCentre, Randburg</small></dd></div>
+    <div><dt><svg class="icon" aria-hidden="true"><use href="#i-clock"></use></svg>Published hours</dt><dd style="font-size:1.05rem;line-height:1.4">08:00–17:00<small>Monday to Friday</small></dd></div>
+    <div><dt><svg class="icon" aria-hidden="true"><use href="#i-phone"></use></svg>Call</dt><dd style="font-size:1.05rem"><a href="tel:+27834507861" data-track="call_clicked">083 450 7861</a></dd></div>
+    <div><dt><svg class="icon" aria-hidden="true"><use href="#i-mail"></use></svg>Email</dt><dd style="font-size:.95rem;overflow-wrap:anywhere"><a href="mailto:health@insuresprhealth.co.za">health@insuresprhealth.co.za</a></dd></div>
   </dl></div></section>
 
-  <section><div class="wrap"><div class="split"><div><p class="eyebrow">Before you travel</p><h2>Important operating details are confirmed, not guessed</h2><p class="lede">Where price, preparation, referral requirements, eligibility or timing has not been approved for public display, the website says so and asks the practice to confirm it.</p><div class="btn-row"><a class="btn btn--primary" href="book.html">Request a booking</a><a class="btn btn--ghost" href="contact.html">Ask a short question</a></div></div><div class="card"><h3 class="card-title">Need urgent medical help?</h3><p>This website is for service enquiries and booking requests. It is not an emergency channel and does not provide medical advice. Contact an appropriate emergency service or qualified healthcare professional when urgent care is needed.</p></div></div></div></section>
+  <section class="home-before-travel"><div class="wrap"><div class="split"><div><p class="eyebrow">Before you travel</p><h2>Important operating details are confirmed, not guessed</h2><p class="lede">Where price, preparation, referral requirements, eligibility or timing has not been approved for public display, the website says so and asks the practice to confirm it.</p><div class="btn-row"><a class="btn btn--primary" href="book.html">Request a booking</a><a class="btn btn--ghost" href="contact.html">Ask a short question</a></div></div><div class="card"><h3 class="card-title">Need urgent medical help?</h3><p>This website is for service enquiries and booking requests. It is not an emergency channel and does not provide medical advice. Contact an appropriate emergency service or qualified healthcare professional when urgent care is needed.</p></div></div></div></section>
 </main>
 
-<footer class="foot"><div class="wrap foot-in"><div class="foot-top"><div><a class="brand" href="index.html"><img src="assets/mark-light.svg" alt="" width="34" height="34"><span><span class="brand-name">Insure<span>SPR</span></span><span class="brand-sub">Precision Healthcare</span></span></a><p style="margin-top:1rem;max-width:32ch">X-Ray, Medicals and Bone Density at EmedCentre in Randburg.</p></div><div><h4>Services</h4><ul><li><a href="xray.html">X-Ray &amp; individuals</a></li><li><a href="workforce.html">Workforce medicals</a></li><li><a href="scanning.html">DXA scans</a></li><li><a href="book.html">Request a booking</a></li></ul></div><div><h4>Information</h4><ul><li><a href="contact.html">Contact &amp; directions</a></li><li><a href="privacy.html">Privacy notice</a></li></ul></div><div><h4>Find the practice</h4><ul><li><a href="https://maps.google.com/?q=7+Malibongwe+Drive+EmedCentre+Randburg" rel="noopener" target="_blank">7 Malibongwe Drive, EmedCentre, Randburg</a></li><li><a href="tel:+27834507861">083 450 7861</a></li><li><a href="mailto:health@insuresprhealth.co.za">health@insuresprhealth.co.za</a></li><li>Monday–Friday, 08:00–17:00</li></ul></div></div><div class="foot-bottom"><p><strong>InsureSPR Precision Healthcare.</strong> This website provides service-navigation information and does not provide medical advice.</p><p><a href="privacy.html">Privacy</a> · © 2026 InsureSPR Precision Healthcare</p></div></div></footer>
+<nav class="mobile-quick-actions" aria-label="Quick actions">
+  <a class="mobile-quick-action mobile-quick-action--primary" href="book.html" data-booking-popover><svg class="icon" aria-hidden="true"><use href="#i-confirm"></use></svg><span>Book</span></a>
+  <a class="mobile-quick-action" href="https://www.google.com/maps/dir/?api=1&amp;destination=7+Malibongwe+Drive+EmedCentre+Randburg" rel="noopener" target="_blank" data-track="directions_clicked"><svg class="icon" aria-hidden="true"><use href="#i-pin"></use></svg><span>Directions</span></a>
+</nav>
+
+<footer class="foot"><div class="wrap foot-in"><div class="foot-top"><div><a class="brand" href="index.html"><img src="assets/mark-light.svg" alt="" width="34" height="34"><span><span class="brand-name">Insure<span>SPR</span></span><span class="brand-sub">Precision Healthcare</span></span></a><p style="margin-top:1rem;max-width:32ch">X-Ray, Medicals and Bone Density at EmedCentre in Randburg.</p></div><div><h4>Services</h4><ul><li><a href="xray.html">X-Ray</a></li><li><a href="scanning.html">Body &amp; bone scans</a></li><li><a href="workforce.html">Workforce medicals</a></li><li><a href="book.html">Request a booking</a></li></ul></div><div><h4>Information</h4><ul><li><a href="contact.html">Contact &amp; directions</a></li><li><a href="privacy.html">Privacy notice</a></li></ul></div><div><h4>Find the practice</h4><ul><li><a href="https://maps.google.com/?q=7+Malibongwe+Drive+EmedCentre+Randburg" rel="noopener" target="_blank">7 Malibongwe Drive, EmedCentre, Randburg</a></li><li><a href="tel:+27834507861">083 450 7861</a></li><li><a href="mailto:health@insuresprhealth.co.za">health@insuresprhealth.co.za</a></li><li>Monday–Friday, 08:00–17:00</li></ul></div></div><div class="foot-bottom"><p><strong>InsureSPR Precision Healthcare.</strong> This website provides service-navigation information and does not provide medical advice.</p><p><a href="privacy.html">Privacy</a> · © 2026 InsureSPR Precision Healthcare</p></div></div></footer>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"MedicalBusiness","name":"InsureSPR Precision Healthcare","description":"X-Ray, Medicals and Bone Density","telephone":"+27 83 450 7861","email":"health@insuresprhealth.co.za","address":{"@type":"PostalAddress","streetAddress":"7 Malibongwe Drive, EmedCentre","addressLocality":"Randburg","addressRegion":"Gauteng","addressCountry":"ZA"},"openingHours":"Mo-Fr 08:00-17:00","url":"https://insuresprhealth.co.za/"}</script>
 <script src="site.js" defer></script><script src="production.js" defer></script>
 </body>

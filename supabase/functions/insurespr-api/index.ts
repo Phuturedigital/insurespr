@@ -9,6 +9,8 @@ const DEFAULT_ALLOWED_ORIGINS = [
   'https://insurespr-concept.phuturedigital.co.za',
   'http://127.0.0.1:4321',
   'http://localhost:4321',
+  'http://127.0.0.1:5177',
+  'http://localhost:5177',
 ];
 
 type Json = null | boolean | number | string | Json[] | { [key: string]: Json };
@@ -128,6 +130,12 @@ async function readDbJson<T>(response: Response): Promise<T> {
   if (response.ok) return body as T;
 
   const error = body as DbErrorShape;
+  console.error(JSON.stringify({
+    error: 'database_request_failed',
+    status: response.status,
+    code: error.code || 'unknown',
+    message: String(error.message || '').slice(0, 240),
+  }));
   if (error.message === 'selected slot is unavailable' || error.code === 'P0002' || error.code === '23505') {
     throw new ApiError(
       409,

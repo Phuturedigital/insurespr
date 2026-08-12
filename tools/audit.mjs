@@ -7,6 +7,7 @@ const { chromium } = require('playwright');
 
 const PAGES = [
   'index.html',
+  'spr.html',
   'xray.html',
   'workforce.html',
   'scanning.html',

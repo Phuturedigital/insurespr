@@ -44,6 +44,78 @@
     wide.addEventListener ? wide.addEventListener('change', sync) : wide.addListener(sync);
   }
 
+  /* --------------------------------------------------------- hero images -- */
+  var heroCarousel = document.querySelector('[data-hero-carousel]');
+  if (heroCarousel) {
+    var heroSlides = Array.prototype.slice.call(heroCarousel.querySelectorAll('.hero-slide'));
+    var heroDots = Array.prototype.slice.call(heroCarousel.querySelectorAll('.hero-dots button'));
+    var heroIndex = 0;
+    var heroTimer = null;
+    var heroCalm = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    var showHero = function (nextIndex) {
+      heroIndex = (nextIndex + heroSlides.length) % heroSlides.length;
+      heroSlides.forEach(function (slide, index) {
+        var active = index === heroIndex;
+        slide.classList.toggle('is-active', active);
+        slide.setAttribute('aria-hidden', active ? 'false' : 'true');
+      });
+      heroDots.forEach(function (dot, index) {
+        var active = index === heroIndex;
+        dot.classList.toggle('is-active', active);
+        dot.setAttribute('aria-pressed', active ? 'true' : 'false');
+      });
+    };
+    var stopHero = function () { if (heroTimer) window.clearInterval(heroTimer); heroTimer = null; };
+    var startHero = function () {
+      stopHero();
+      if (!heroCalm.matches && heroSlides.length > 1) {
+        heroTimer = window.setInterval(function () { showHero(heroIndex + 1); }, 5500);
+      }
+    };
+
+    heroDots.forEach(function (dot, index) {
+      dot.addEventListener('click', function () { showHero(index); startHero(); });
+    });
+    heroCarousel.addEventListener('pointerenter', stopHero);
+    heroCarousel.addEventListener('pointerleave', startHero);
+    heroCarousel.addEventListener('focusin', stopHero);
+    heroCarousel.addEventListener('focusout', startHero);
+    if (heroCalm.addEventListener) heroCalm.addEventListener('change', startHero);
+    startHero();
+  }
+
+  /* ---------------------------------------------------- booking bottom sheet -- */
+  var bookingTriggers = document.querySelectorAll('[data-booking-popover], a[href^="book.html"]');
+  if (bookingTriggers.length && !document.getElementById('book-form') && 'HTMLDialogElement' in window) {
+    var bookingDialog = null;
+    var ensureBookingDialog = function () {
+      if (bookingDialog) return bookingDialog;
+      bookingDialog = document.createElement('dialog');
+      bookingDialog.className = 'booking-dialog';
+      bookingDialog.setAttribute('aria-label', 'Request an appointment');
+      bookingDialog.innerHTML = '<div class="booking-dialog-bar"><strong>Request an appointment</strong><button type="button" aria-label="Close booking">×</button></div><iframe title="InsureSPR booking steps" loading="eager"></iframe>';
+      document.body.appendChild(bookingDialog);
+      bookingDialog.querySelector('button').addEventListener('click', function () { bookingDialog.close(); });
+      bookingDialog.addEventListener('click', function (event) { if (event.target === bookingDialog) bookingDialog.close(); });
+      bookingDialog.addEventListener('close', function () { document.documentElement.classList.remove('booking-open'); });
+      return bookingDialog;
+    };
+
+    bookingTriggers.forEach(function (trigger) {
+      trigger.addEventListener('click', function (event) {
+        event.preventDefault();
+        var dialog = ensureBookingDialog();
+        var source = new URL(trigger.href, window.location.href);
+        source.searchParams.set('embed', '1');
+        var frame = dialog.querySelector('iframe');
+        if (frame.src !== source.href) frame.src = source.href;
+        document.documentElement.classList.add('booking-open');
+        dialog.showModal();
+      });
+    });
+  }
+
   /* ------------------------------------------------------------- step rail -- */
   /* The reference drives its step cards with arrow buttons. Here the rail is a
      real scroll container, so it works by drag and swipe with the buttons

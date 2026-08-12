@@ -237,6 +237,66 @@
 
     dateInput.min = new Date().toLocaleDateString('en-CA', { timeZone: 'Africa/Johannesburg' });
 
+    var bookingSteps = Array.prototype.slice.call(form.querySelectorAll('[data-book-step]'));
+    var bookingProgress = Array.prototype.slice.call(document.querySelectorAll('[data-book-progress]'));
+    var currentStep = 1;
+
+    function showBookingStep(stepNumber, focusStep) {
+      currentStep = Math.max(1, Math.min(stepNumber, bookingSteps.length));
+      bookingSteps.forEach(function (step) {
+        step.hidden = Number(step.getAttribute('data-book-step')) !== currentStep;
+      });
+      bookingProgress.forEach(function (item) {
+        var itemStep = Number(item.getAttribute('data-book-progress'));
+        if (itemStep === currentStep) item.setAttribute('aria-current', 'step');
+        else item.removeAttribute('aria-current');
+        item.classList.toggle('is-complete', itemStep < currentStep);
+      });
+      if (focusStep) {
+        var headingTarget = bookingSteps[currentStep - 1] && bookingSteps[currentStep - 1].querySelector('select, input, textarea, button');
+        if (headingTarget) headingTarget.focus({ preventScroll: true });
+        window.scrollTo({ top: 0, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+      }
+    }
+
+    function firstInvalidInStep(stepNumber) {
+      var step = bookingSteps.find(function (candidate) {
+        return Number(candidate.getAttribute('data-book-step')) === stepNumber;
+      });
+      if (!step) return null;
+      return Array.prototype.find.call(step.querySelectorAll('input, select, textarea'), function (field) {
+        return !field.disabled && !field.checkValidity();
+      }) || null;
+    }
+
+    function validateBookingStep(stepNumber) {
+      var invalid = firstInvalidInStep(stepNumber);
+      if (!invalid) return true;
+      showBookingStep(stepNumber, false);
+      invalid.reportValidity();
+      return false;
+    }
+
+    function validateWholeBooking() {
+      for (var stepNumber = 1; stepNumber <= bookingSteps.length; stepNumber += 1) {
+        if (!validateBookingStep(stepNumber)) return false;
+      }
+      return true;
+    }
+
+    form.querySelectorAll('[data-book-next]').forEach(function (button) {
+      button.addEventListener('click', function () {
+        if (!validateBookingStep(currentStep)) return;
+        showBookingStep(Number(button.getAttribute('data-book-next')), true);
+      });
+    });
+    form.querySelectorAll('[data-book-back]').forEach(function (button) {
+      button.addEventListener('click', function () {
+        showBookingStep(Number(button.getAttribute('data-book-back')), true);
+      });
+    });
+    showBookingStep(1, false);
+
     function renderServiceFacts() {
       var service = servicesById[serviceSelect.value];
       if (!service || !serviceFacts) return;
@@ -336,14 +396,22 @@
     }, { once: true });
 
     if (whatsapp) whatsapp.addEventListener('click', function () {
+      clearStatus(form);
+      if (!validateWholeBooking()) return;
       var name = [value(form, 'first_name'), value(form, 'surname')].filter(Boolean).join(' ');
+      var selectedSlot = form.querySelector('input[name="slot_id"]:checked');
+      var preferredTime = selectedSlot && selectedSlot.parentElement
+        ? selectedSlot.parentElement.textContent.trim()
+        : (value(form, 'preferred_time_period') || 'Any');
       var message = [
         "Hi InsureSPR, I'd like to request a booking.",
         '',
         'Service: ' + (selectText(serviceSelect) || 'Not selected'),
         'Name: ' + (name || 'Not entered'),
+        'Mobile: ' + value(form, 'mobile'),
+        'Email: ' + value(form, 'email'),
         'Preferred date: ' + formatDate(value(form, 'preferred_date')),
-        'Preferred time: ' + (value(form, 'preferred_time_period') || 'Any'),
+        'Preferred time: ' + preferredTime,
         'New/returning patient: ' + (value(form, 'patient_status') || 'Not selected'),
         '',
         'Please confirm availability.'
@@ -355,7 +423,7 @@
     form.addEventListener('submit', function (event) {
       event.preventDefault();
       clearStatus(form);
-      if (!form.reportValidity()) return;
+      if (!validateWholeBooking()) return;
       setBusy(form, true);
       var slot = form.querySelector('input[name="slot_id"]:checked');
       var payload = Object.assign(basePayload(form), {
@@ -374,7 +442,11 @@
         completed = true;
         safeStorage(sessionStorage, 'setItem', STORAGE_PREFIX + 'lastBooking', JSON.stringify(body.booking));
         track('booking_completed', payload.service_id);
-        window.location.assign('booking-confirmation.html');
+        if (document.documentElement.classList.contains('booking-embed') && window.parent !== window) {
+          window.parent.location.assign('booking-confirmation.html');
+        } else {
+          window.location.assign('booking-confirmation.html');
+        }
       }).catch(function (error) {
         if (error.code === 'SLOT_UNAVAILABLE') loadAvailability();
         setStatus(form, error.message, 'error');
@@ -449,8 +521,8 @@
         employee_count_range: value(form, 'employee_count_range'),
         services_required: services,
         preferred_timeframe: value(form, 'preferred_timeframe') || null,
-        delivery_mode: value(form, 'delivery_mode') || 'needs_advice',
-        location: value(form, 'location') || null,
+        delivery_mode: value(form, 'delivery_mode') || 'practice',
+        location: '7 Malibongwe Drive, EmedCentre, Randburg',
         notes: value(form, 'notes') || null
       });
       api('/employer-leads', { method: 'POST', body: JSON.stringify(payload) }).then(function (body) {
