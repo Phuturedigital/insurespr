@@ -3,6 +3,7 @@ const MAX_BODY_BYTES = 32_000;
 const PRIVACY_VERSION = 'pending-approval';
 
 const DEFAULT_ALLOWED_ORIGINS = [
+  'https://insurespr.vercel.app',
   'https://insuresprhealth.co.za',
   'https://www.insuresprhealth.co.za',
   'https://insurespr-concept.phuturedigital.co.za',
