@@ -433,10 +433,26 @@ main > section + section { padding-top: 0; }
     position: relative; z-index: 4; grid-area: 1 / 1; align-self: center;
     width: min(52%, 760px); padding-right: clamp(1rem, 4vw, 3rem);
   }
-  .hero-copy h1 { max-width: 9ch; font-size: clamp(3.5rem, 6.4vw, 6.8rem); font-weight: 500; line-height: .9; letter-spacing: -.055em; text-transform: uppercase; }
+  /* Outfit LIGHT, sentence case — the site's own display voice, which every
+     other page uses and which the base `h1` rule already sets at weight 300.
+     This override arrived with an imported visual reference and forced
+     `font-weight: 500` + `text-transform: uppercase` at 92px, so the homepage
+     shouted in a register nothing else on the site speaks. Light-at-large-size
+     is most of the premium feel; uppercase heavy is a different brand. */
+  .hero-copy h1 { max-width: 15ch; font-size: clamp(3rem, 5.6vw, 5.2rem); line-height: 1.02; letter-spacing: -.042em; }
   .hero-copy .lede { max-width: 590px; }
   .hero-visual { grid-area: 1 / 1; min-height: 100%; }
-  .hero-visual::after {
+  /* ⚠️ The legibility scrim lives on .hero-card, NOT on .hero-visual::after.
+     It was written as `.hero-visual::after` — the same element and the same
+     pseudo the scan line at the bottom of this file already owns. Media
+     queries add no specificity, so the later scan-line rule won outright and
+     this scrim never rendered at all: the white headline was relying on
+     whatever the photograph happened to be doing behind it.
+
+     The card is the better owner anyway; the scrim protects the copy column,
+     which is the card's left half, not the image's. .hero-copy is z-index 4,
+     so it stays above this at z-index 2. */
+  .hero-card::after {
     content: ''; position: absolute; z-index: 2; inset: 0; pointer-events: none;
     background: linear-gradient(90deg, rgb(6 18 40 / .92) 0%, rgb(6 18 40 / .8) 34%, rgb(6 18 40 / .28) 52%, transparent 70%);
   }
@@ -699,7 +715,20 @@ main > section + section { padding-top: 0; }
 /* ------------------------------------------------------------------ misc -- */
 .split { display: grid; gap: clamp(1.5rem, 4vw, 3.25rem); grid-template-columns: 1fr 1fr; align-items: center; }
 .split > * { min-width: 0; }
-.media { border-radius: var(--r); overflow: hidden; background: var(--ground-2); }
+/* ⚠️ `width: 100%` is load-bearing — the SAME trap as .hero-visual, and this
+   one was live on spr.html at desktop, not just on phones.
+
+   `aspect-ratio` sizes whichever axis is not already definite. `.media--wide`
+   sets 16/10 and `.spr-page-hero .media` sets `min-height: 470px`, so with no
+   definite width the height resolved first and the ratio ran BACKWARDS to
+   demand 470 x 1.6 = 752px of width from a grid column that had far less.
+   Result: 138px of page-level horizontal scroll at 1280, 58px at 1440, 10px
+   at 1536 — the nav visibly cut off.
+
+   Pinning the width makes the ratio derive the HEIGHT, which is the direction
+   intended everywhere .media is used. Any future `min-height` on a .media is
+   then a floor, not a width instruction. */
+.media { width: 100%; border-radius: var(--r); overflow: hidden; background: var(--ground-2); }
 .media img { width: 100%; height: 100%; object-fit: cover; }
 .media--tall { aspect-ratio: 4 / 5; }
 .media--wide { aspect-ratio: 16 / 10; }
@@ -1053,7 +1082,6 @@ main > section + section { padding-top: 0; }
 }
 .card-media img[width][height],
 .route-card-media img[width][height] { height: 100%; }
-.route-card-media--performance img { object-position: center 48%; }
 .route-card:hover .route-card-media img { transform: scale(1.035); }
 .route-card-body {
   display: flex; flex: 1; flex-direction: column; align-items: flex-start; gap: .75rem;
@@ -1611,8 +1639,14 @@ fieldset.field legend,
 
 @media (prefers-reduced-motion: reduce) {
   .journey-flow::before { transform: none !important; transition: none; }
+  /* Both card systems, not just the alias. The reduced-motion rules were
+     written when .route-card was the only photographed card; leaving
+     .service-choice--media and .card--media-top out would have recreated the
+     exact split these two classes were merged to avoid. */
+  .card-media img,
   .route-card-media img { transition: none; }
-  .route-card:hover .route-card-media img { transform: none; }
+  .route-card:hover .route-card-media img,
+  .service-choice--media:hover .card-media img { transform: none; }
   .hero-visual .hero-slide { transition: none; }
 }
 
