@@ -1,10 +1,7 @@
 /* ============================================================================
-   InsureSPR Health — concept redesign by Phuture Digital
+   InsureSPR Precision Healthcare — website design system
    ----------------------------------------------------------------------------
-   A DESIGN CONCEPT. InsureSPR Health is a real practice in Randburg; this is
-   not their site and is not affiliated with them. See the banner on every page.
-
-   BUILT FROM SCRATCH against a longevity-clinic reference layout: a pale
+   Built around a pale
    blue-grey ground, everything living inside generously rounded white cards, a
    floating pill navigation, light-weight display type and circular arrow
    badges on every action. The register is premium-clinical rather than
@@ -802,3 +799,151 @@ section { padding-block: var(--step); }
   .pd-network-card a:hover { transform: none; }
 }
 /* pd-network:end */
+
+/* ------------------------------------------------ production journeys -- */
+/* These rules support the live acquisition, booking and intake journeys.
+   Keep hidden content hidden even when a component class sets display. */
+[hidden] { display: none !important; }
+
+.production .concept-banner,
+.production .pd-network { display: none; }
+
+.route-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+.route-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: .75rem;
+  color: inherit;
+  text-decoration: none;
+}
+.route-card p { margin: 0; color: var(--muted); }
+.route-card .btn { margin-top: auto; }
+.route-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  background: var(--ground-2);
+  color: var(--cyan-ink);
+}
+.route-icon .icon { width: 1.2rem; height: 1.2rem; }
+.card-title { font-size: clamp(1.25rem, 2.2vw, 1.65rem); }
+
+.narrow { max-width: 780px; }
+.prose > * + * { margin-top: 1rem; }
+.prose h2 { margin-top: 2.4rem; }
+.prose ul { padding-left: 1.25rem; }
+
+.hp-field {
+  position: absolute !important;
+  left: -10000px !important;
+  width: 1px !important;
+  height: 1px !important;
+  overflow: hidden !important;
+}
+.optional { color: var(--muted); font-weight: 400; }
+.form-help {
+  margin: .5rem 0 1rem;
+  color: var(--muted);
+  font-size: .9rem;
+  line-height: 1.55;
+}
+.service-facts {
+  margin: -.25rem 0 1.2rem;
+  padding: 1rem;
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  background: var(--ground);
+}
+.service-facts p { margin: 0; }
+.service-facts p + p { margin-top: .45rem; }
+.verification-note { color: var(--muted); font-size: .88rem; }
+
+fieldset.field,
+.field fieldset {
+  min-width: 0;
+  margin: 0 0 1rem;
+  padding: 0;
+  border: 0;
+}
+fieldset.field legend,
+.field legend {
+  margin-bottom: .55rem;
+  font-weight: 600;
+}
+.check-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .65rem;
+}
+.check-grid label,
+.check-field,
+.slot-option {
+  display: flex;
+  align-items: flex-start;
+  gap: .65rem;
+  line-height: 1.45;
+}
+.check-grid input,
+.check-field input,
+.slot-option input {
+  flex: 0 0 auto;
+  width: 1.1rem;
+  height: 1.1rem;
+  margin-top: .15rem;
+  accent-color: var(--cyan);
+}
+.check-field {
+  margin: 1rem 0 1.25rem;
+  padding: .9rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  background: var(--ground);
+  font-size: .9rem;
+}
+.slot-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: .65rem;
+}
+.slot-option {
+  padding: .75rem;
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  background: #fff;
+  cursor: pointer;
+}
+.slot-option:has(input:checked) {
+  border-color: var(--cyan-ink);
+  background: var(--ground-2);
+}
+.note--success {
+  border-color: #9cd9bc;
+  background: #edf9f3;
+  color: #145c3c;
+}
+.confirmation-card { padding: clamp(1.35rem, 4vw, 2.5rem); }
+.confirmation-list { margin: 1.5rem 0; }
+.confirmation-list > div {
+  display: grid;
+  grid-template-columns: minmax(7rem, .35fr) 1fr;
+  gap: 1rem;
+  padding: .85rem 0;
+  border-bottom: 1px solid var(--line);
+}
+.confirmation-list dt { color: var(--muted); }
+.confirmation-list dd { margin: 0; font-weight: 600; overflow-wrap: anywhere; }
+
+@media (max-width: 860px) {
+  .route-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 620px) {
+  .check-grid { grid-template-columns: 1fr; }
+  .confirmation-list > div { grid-template-columns: 1fr; gap: .2rem; }
+}

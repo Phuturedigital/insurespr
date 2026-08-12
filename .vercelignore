@@ -1,6 +1,18 @@
 # Internal docs — stay in git, kept off the public demo URL.
 README.md
 CONTENT-NOTES.md
+PRODUCTION-READINESS.md
+OPERATIONS-RUNBOOK.md
+supabase/
+
+# Historical concept-only pages and assets are retained in git for provenance,
+# but are not part of the production acquisition site.
+about.html
+brand.html
+learn.html
+programmes.html
+scan.html
+pd-concepts/
 
 # Build/research tooling — never part of the deployed site.
 #

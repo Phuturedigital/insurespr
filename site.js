@@ -1,4 +1,4 @@
-/* InsureSPR Health concept — all client-side behaviour.
+/* InsureSPR Precision Healthcare — shared client-side behaviour.
  *
  * Deliberately small. Every page is fully usable with this file blocked: the
  * nav stays expanded, reveal targets are visible (they are only hidden under
@@ -16,7 +16,8 @@
     var setOpen = function (open) {
       links.setAttribute('data-open', open ? 'true' : 'false');
       toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
-      toggle.querySelector('use').setAttribute('href', open ? '#i-close' : '#i-menu');
+      var iconUse = toggle.querySelector('use');
+      if (iconUse) iconUse.setAttribute('href', open ? '#i-close' : '#i-menu');
     };
 
     toggle.addEventListener('click', function () {
@@ -69,35 +70,6 @@
     rail.addEventListener('scroll', sync, { passive: true });
     window.addEventListener('resize', sync);
     sync();
-  });
-
-  /* ----------------------------------------------------------------- forms -- */
-  /* The booking and contact forms are inert by design — this is a concept and
-     there is no backend. A form that looks real and silently swallows a
-     submission is a dark pattern, so the handler says so outright at the moment
-     the button is pressed, and repeats the real phone number. The same warning
-     already sits ABOVE the fields, so nobody types anything before finding out.
-
-     Honest failure mode: with JS blocked the form does a native GET to the same
-     page, the fields clear, and the notice above is still there to explain. */
-  Object.keys({ 'book-form': 1, 'contact-form': 1 }).forEach(function (id) {
-    var form = document.getElementById(id);
-    var status = document.getElementById(id.replace('-form', '-status'));
-    if (!form || !status) return;
-
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-      /* Static literal — no field value is interpolated, so there is no
-         injection surface. What the visitor typed stays in the form. */
-      status.innerHTML =
-        '<svg class="icon" aria-hidden="true"><use href="#i-info"></use></svg>' +
-        '<span><span class="note-label">Not live</span><strong>Nothing was sent.</strong> This is a design concept, so the form has nowhere to submit to — ' +
-        'your details were not stored or transmitted. To reach InsureSPR Health for real, call ' +
-        '<a href="tel:+27834507861">083 450 7861</a> or email ' +
-        '<a href="mailto:health@insuresprhealth.co.za">health@insuresprhealth.co.za</a>.</span>';
-      status.hidden = false;
-      status.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-    });
   });
 
   /* ------------------------------------------------------------ sticky nav -- */
