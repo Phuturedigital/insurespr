@@ -396,6 +396,36 @@ main > section + section { padding-top: 0; }
   margin-top: 1.35rem; font-size: .9375rem; color: var(--on-ink-soft);
 }
 .hero-note .icon { width: 17px; height: 17px; color: var(--cyan-lift); }
+.hero-route-pills { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1.25rem; }
+.hero-route-pills a {
+  display: inline-flex; align-items: center; justify-content: center; min-height: 38px;
+  padding: .55rem .9rem; border: 1px solid rgb(255 255 255 / .34); border-radius: var(--r-pill);
+  color: #fff; font-size: .78rem; font-weight: 600; line-height: 1; text-decoration: none;
+  background: rgb(10 28 61 / .34); backdrop-filter: blur(8px);
+}
+.hero-route-pills a:hover { border-color: #fff; background: #fff; color: var(--ink); }
+
+@media (min-width: 861px) {
+  .hero-card {
+    display: grid; grid-template-columns: 1fr; min-height: clamp(560px, calc(100svh - 125px), 760px);
+  }
+  .hero-copy {
+    position: relative; z-index: 4; grid-area: 1 / 1; align-self: center;
+    width: min(52%, 760px); padding-right: clamp(1rem, 4vw, 3rem);
+  }
+  .hero-copy h1 { font-size: clamp(3.25rem, 5.6vw, 6rem); line-height: .99; }
+  .hero-copy .lede { max-width: 590px; }
+  .hero-visual { grid-area: 1 / 1; min-height: 100%; }
+  .hero-visual::after {
+    content: ''; position: absolute; z-index: 2; inset: 0; pointer-events: none;
+    background: linear-gradient(90deg, rgb(6 18 40 / .92) 0%, rgb(6 18 40 / .8) 34%, rgb(6 18 40 / .28) 52%, transparent 70%);
+  }
+  .hero-media-actions {
+    z-index: 5; left: auto; right: 1.35rem; width: min(42%, 560px);
+    gap: .55rem; padding: 0; background: none;
+  }
+  .hero-dots { z-index: 6; }
+}
 
 /* ------------------------------------------------------------ stat strip -- */
 .statstrip {
@@ -1199,6 +1229,8 @@ fieldset.field legend,
   .hero-card { min-height: 0; grid-template-columns: 1fr; }
   .hero-copy { padding: clamp(1.65rem, 6vw, 2.5rem); }
   .hero-visual { min-height: 260px; aspect-ratio: 16 / 9; }
+  .hero-route-pills { display: none; }
+  .hero-visual .hero-dots { left: .7rem; right: auto; }
   .route-grid { grid-template-columns: 1fr; }
   .service-hero .split {
     gap: 0; overflow: hidden; border: 1px solid var(--line); border-radius: var(--r);
@@ -1260,6 +1292,7 @@ fieldset.field legend,
   .hero-media-actions { gap: .45rem; padding: 3rem .75rem .75rem; }
   .hero-media-actions .btn { min-height: 38px; padding: .5rem .7rem; font-size: .78rem; }
   .hero-dots { top: .7rem; right: .7rem; }
+  .hero-visual .hero-dots { left: .7rem; right: auto; }
   .home-page .head-split { margin-bottom: 1.15rem; }
   .home-page .head-split .section-intro { display: none; }
   .home-page .spr-section { padding-block: 1.6rem; }
@@ -1333,4 +1366,17 @@ fieldset.field legend,
   .route-card-media img { transition: none; }
   .route-card:hover .route-card-media img { transform: none; }
   .hero-visual .hero-slide { transition: none; }
+}
+
+/* The homepage opens as one uninterrupted canvas. The floating navigation is
+   intentionally taken out of document flow here only; service pages retain
+   their compact sticky navigation and practical page rhythm. */
+.home-page .nav-shell { position: fixed; left: 0; right: 0; top: 0; }
+.home-page .hero { padding: 0; }
+.home-page .hero > .wrap { width: 100%; max-width: none; }
+.home-page .hero-card { min-height: 100svh; border-radius: 0; }
+
+@media (max-width: 860px) {
+  .home-page .hero-card { min-height: 0; }
+  .home-page .hero-copy { padding-top: 6.5rem; }
 }
