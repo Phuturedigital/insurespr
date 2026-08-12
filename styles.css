@@ -185,6 +185,7 @@ main > section + section { padding-top: 0; }
 }
 .head-split h2 { margin: 0; }
 .head-split p { margin: 0; color: var(--muted); font-size: 1rem; }
+.page-intro .head-split { margin-bottom: 0; }
 
 /* --------------------------------------------------------------- surfaces -- */
 .card {
@@ -240,8 +241,12 @@ main > section + section { padding-top: 0; }
 .btn--sm { min-height: 42px; font-size: .875rem; padding: .58rem 1rem; gap: .5rem; }
 .btn--sm .btn-badge { width: 1.6rem; height: 1.6rem; }
 .btn--sm .btn-badge .icon { width: 13px; height: 13px; }
+.btn > .icon { width: 1.05rem; height: 1.05rem; stroke-width: 1.8; }
+.btn--back > .icon { transform: scaleX(-1); }
+.btn > span { min-width: 0; }
 
 .btn-row { display: flex; flex-wrap: wrap; gap: .75rem; align-items: center; }
+.btn-row .btn { min-width: 0; }
 
 /* A bare circular control, used for the carousel. */
 .rbtn {
@@ -354,6 +359,7 @@ main > section + section { padding-top: 0; }
   grid-template-columns: minmax(0, 1.05fr) minmax(360px, .95fr);
   background: var(--ink);
 }
+.nav-toggle .icon { width: 1rem; height: 1rem; stroke-width: 1.9; }
 .hero-copy {
   align-self: center; max-width: none;
   padding: clamp(2rem, 5vw, 4.5rem);
@@ -416,9 +422,10 @@ main > section + section { padding-top: 0; }
   color: #fff; font-size: .78rem; font-weight: 600; line-height: 1; text-decoration: none;
   background: rgb(10 28 61 / .34); backdrop-filter: blur(8px);
 }
+.hero-route-pills .icon { width: .9rem; height: .9rem; }
 .hero-route-pills a:hover { border-color: #fff; background: #fff; color: var(--ink); }
 
-@media (min-width: 861px) {
+@media (min-width: 1000px) and (min-aspect-ratio: 3/2) {
   .hero-card {
     display: grid; grid-template-columns: 1fr; min-height: clamp(560px, calc(100svh - 125px), 760px);
   }
@@ -1046,6 +1053,65 @@ main > section + section { padding-top: 0; }
 .route-icon .icon { width: 1.2rem; height: 1.2rem; }
 .card-title { font-size: clamp(1.25rem, 2.2vw, 1.65rem); }
 
+.service-choice { position: relative; min-height: 100%; }
+.service-choice-icon {
+  display: inline-grid; place-items: center; width: 2.8rem; height: 2.8rem;
+  margin-bottom: 1.1rem; border: 1px solid #b9d7e6; border-radius: 50%;
+  background: #eaf8ff; color: var(--azure);
+}
+.service-choice-icon .icon { width: 1.2rem; height: 1.2rem; }
+.service-choice .btn { margin-top: auto; }
+
+@media (min-width: 861px) {
+  .route-grid > .service-choice {
+    padding: clamp(1.25rem, 2.5vw, 2.25rem); border: 0; border-left: 1px solid var(--line-2);
+    border-radius: 0; background: transparent; box-shadow: none;
+  }
+  .route-grid > .service-choice:first-child { border-left: 0; padding-left: 0; }
+  .route-grid > .service-choice:last-child { padding-right: 0; }
+}
+
+.service-flow-section { padding: 0 0 clamp(2.1rem, 4vw, 3.6rem); }
+.service-flow-section .wrap {
+  display: grid; grid-template-columns: minmax(210px, .55fr) minmax(0, 1.45fr);
+  align-items: stretch; gap: clamp(1.25rem, 3vw, 3rem);
+  padding-top: clamp(1.15rem, 2vw, 1.75rem); border-top: 1px solid var(--line-2);
+}
+.service-flow-head { align-self: center; }
+.service-flow-head h2 { max-width: 12ch; margin: 0 0 .5rem; font-size: clamp(1.45rem, 2.5vw, 2rem); }
+.service-flow-head p { margin: 0; color: var(--muted); font-size: .9rem; }
+.service-flow {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 0; padding: 0; list-style: none;
+}
+.service-flow li {
+  position: relative; display: grid; grid-template-columns: auto 1fr; align-content: center;
+  gap: .8rem; min-width: 0; padding: 1rem clamp(.8rem, 1.8vw, 1.35rem);
+  border-left: 1px solid var(--line);
+}
+.service-flow li:first-child { border-left: 0; }
+.service-flow li:not(:last-child)::after {
+  content: ''; position: absolute; z-index: 1; top: 50%; right: -.28rem;
+  width: .55rem; height: .55rem; border-top: 1px solid var(--azure); border-right: 1px solid var(--azure);
+  background: var(--ground); transform: translateY(-50%) rotate(45deg);
+}
+.service-flow-icon {
+  display: inline-grid; place-items: center; width: 2.55rem; height: 2.55rem;
+  border-radius: 50%; background: var(--ink); color: var(--cyan-lift);
+}
+.service-flow-icon .icon { width: 1.05rem; height: 1.05rem; }
+.service-flow strong { display: block; margin-bottom: .25rem; color: var(--ink); font-family: var(--f-display); font-size: 1.05rem; }
+.service-flow p { margin: 0; color: var(--muted); font-size: .78rem; line-height: 1.4; }
+
+.service-answers {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0; margin: clamp(1.4rem, 3vw, 2.25rem) 0 0;
+  border-top: 1px solid var(--line-2); border-left: 1px solid var(--line-2);
+}
+.service-answers > div { min-width: 0; padding: 1.15rem; border-right: 1px solid var(--line-2); border-bottom: 1px solid var(--line-2); background: rgb(255 255 255 / .66); }
+.service-answers dt { margin-bottom: .45rem; color: var(--ink); font-weight: 700; }
+.service-answers dd { margin: 0; color: var(--muted); font-size: .88rem; line-height: 1.5; }
+
 .journey-flow {
   position: relative; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1px; margin: 0; padding: 0; overflow: hidden; list-style: none;
@@ -1399,4 +1465,65 @@ fieldset.field legend,
   .hero-booking-panel strong { font-size: .9rem; }
   .hero-booking-panel em { display: none; }
   .hero-booking-arrow { width: 30px; height: 30px; }
+  .service-flow-section .wrap { grid-template-columns: 1fr; gap: .85rem; }
+  .service-flow-head { display: flex; align-items: end; justify-content: space-between; gap: 1rem; }
+  .service-flow-head h2 { max-width: 18ch; margin: 0; }
+  .service-flow-head p { max-width: 28ch; text-align: right; }
+  .service-flow li { padding-inline: .7rem; gap: .55rem; }
+  .service-flow-icon { width: 2.15rem; height: 2.15rem; }
+  .service-flow p { font-size: .72rem; }
+  .service-answers { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* Tablet keeps one continuous hero, but uses a hard visual split because the
+   taller crop removes the photograph's negative space. Copy and faces never
+   share a layer. */
+@media (min-width: 621px) and (max-width: 999px),
+       (min-width: 1000px) and (max-aspect-ratio: 149/100) {
+  .home-page .hero-card {
+    display: grid; grid-template-columns: minmax(0, .43fr) minmax(0, .57fr);
+    min-height: min(720px, 100svh); background: var(--ink);
+  }
+  .home-page .hero-copy {
+    position: relative; z-index: 4; grid-area: auto; align-self: center;
+    width: auto; padding: 7.5rem clamp(1.35rem, 3vw, 2.25rem) 4rem clamp(2rem, 4vw, 3rem);
+  }
+  .home-page .hero-copy h1 {
+    max-width: 8ch; font-size: clamp(2.7rem, 6.2vw, 3.65rem); font-weight: 500;
+    line-height: .92; letter-spacing: -.05em; text-transform: uppercase;
+  }
+  .home-page .hero-copy .lede { font-size: .9rem; line-height: 1.48; }
+  .home-page .hero-note { font-size: .76rem; }
+  .home-page .hero-visual { grid-area: auto; min-height: 100%; aspect-ratio: auto; }
+  .home-page .hero-visual::after { display: none; }
+  .home-page .hero-visual::before {
+    content: ''; position: absolute; z-index: 3; inset: 0 auto 0 0; width: 52px;
+    pointer-events: none; background: linear-gradient(90deg, var(--ink), rgb(6 18 40 / .75) 42%, transparent);
+  }
+  .home-page .hero-visual .hero-dots { top: auto; bottom: 7rem; left: auto; right: .8rem; }
+  .home-page .hero-booking-panel { right: 1rem; bottom: 1rem; }
+}
+
+@media (max-width: 620px) {
+  .service-flow-section { padding-bottom: 2rem; }
+  .service-flow-section .wrap { gap: .75rem; }
+  .service-flow-head { display: block; }
+  .service-flow-head h2 { max-width: none; font-size: 1.35rem; }
+  .service-flow-head p { display: none; }
+  .service-flow li { display: block; padding: .75rem .45rem; text-align: center; }
+  .service-flow-icon { margin: 0 auto .55rem; }
+  .service-flow strong { font-size: .94rem; }
+  .service-flow p { font-size: .66rem; line-height: 1.3; }
+  .service-answers { grid-template-columns: 1fr; }
+  .service-answers > div { padding: .95rem 1rem; }
+  .spr-visual-grid { position: relative; min-height: 205px; display: block; }
+  .spr-feature-photo { height: 205px; }
+  .spr-support-photo { display: none; }
+  .spr-metric {
+    position: absolute; left: .65rem; bottom: .65rem; width: 124px; min-height: 78px;
+    padding: .7rem .8rem; box-shadow: 0 10px 28px rgb(6 18 40 / .22);
+  }
+  .spr-metric strong { font-size: 1.5rem; }
+  .spr-metric span { margin-top: .25rem; font-size: .64rem; }
+  .spr-story { gap: 1rem; }
 }
