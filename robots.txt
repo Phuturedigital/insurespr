@@ -4,4 +4,4 @@ Disallow: /booking-confirmation
 Disallow: /manage-booking
 Disallow: /brand
 
-Sitemap: https://insuresprhealth.co.za/sitemap.xml
+Sitemap: https://www.insuresprhealth.co.za/sitemap.xml
