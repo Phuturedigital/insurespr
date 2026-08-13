@@ -5,7 +5,6 @@
   "redirects": [
     { "source": "/scan", "destination": "/scanning", "permanent": true },
     { "source": "/programmes", "destination": "/scanning", "permanent": true },
-    { "source": "/about", "destination": "/", "permanent": false },
     { "source": "/learn", "destination": "/", "permanent": false }
   ],
   "headers": [
@@ -17,7 +16,7 @@
         { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
         { "key": "Permissions-Policy", "value": "geolocation=(), microphone=(), camera=()" },
         { "key": "Strict-Transport-Security", "value": "max-age=31536000" },
-        { "key": "Content-Security-Policy", "value": "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://ffdmmxffzewqiacsuvhr.supabase.co; form-action 'self'; upgrade-insecure-requests" }
+        { "key": "Content-Security-Policy", "value": "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'self'; frame-src https://challenges.cloudflare.com; script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://ffdmmxffzewqiacsuvhr.supabase.co https://challenges.cloudflare.com; form-action 'self'; upgrade-insecure-requests" }
       ]
     },
     {

@@ -1,6 +1,6 @@
 # InsureSPR production readiness
 
-Status date: 12 August 2026  
+Status date: 13 August 2026
 Target Supabase project: `ffdmmxffzewqiacsuvhr`  
 Website publication status: **not authorized / not launched**
 
@@ -34,7 +34,10 @@ workflow and domain transition must all be ready at the same time.
 - Operational table privileges are revoked from `anon` and `authenticated`;
   the Edge Function uses the server-side key.
 - Explicit deny policies provide defence in depth.
-- Booking writes are transactional and idempotent.
+- Booking, employer-lead and contact-enquiry writes are transactional and bind
+  each idempotency key to a canonical request fingerprint. A matching network
+  retry returns the existing reference without duplicate consent or
+  notification work; reusing a key for different details is rejected.
 - A partial unique index prevents two active bookings from owning one slot.
 - Slot selection is rechecked under a row lock during booking.
 - Raw booking-management tokens are returned once; only a cryptographic hash is
@@ -71,14 +74,18 @@ workflow and domain transition must all be ready at the same time.
 - Self-cleaning database contracts pass for queue claim/retry/reclaim/complete,
   booking confirmation/completion, lead and enquiry transitions, manual
   notification requeue, status history and operational audit effects.
-- The ten-page desktop/static browser audit passes with no console, request,
-  image, accessible-name, heading or tap-target findings. Analytics writes are
-  intercepted in this audit so a visual/markup check cannot pollute production
-  measurement data.
+- The 18-page desktop/static browser audit passes with no console, request,
+  image, accessible-name, heading, tap-target or horizontal-overflow findings.
+  A separate 390-by-844 sweep confirms one H1, no horizontal overflow, no
+  unnamed buttons and equal 163-by-48 centred quick actions on every page that
+  uses them. Analytics writes are intercepted in the deterministic desktop
+  audit so a visual/markup check cannot pollute production measurement data.
 - Live API release checks return `200` for health/services, `403` for an
-  unapproved origin, `422` for an invalid booking, and `503` for the
-  deliberately unconfigured notification worker. The analytics route returns a
-  CORS-visible `200` acknowledgement after persistence.
+  unapproved origin, `503 PRIVACY_NOTICE_NOT_READY` for official and publicly
+  reachable preview form submissions while approval is pending, `422` for an
+  invalid localhost development submission, and `503` for the deliberately
+  unconfigured notification worker. `/services` is `no-store` so a privacy or
+  Turnstile configuration change cannot be masked by a stale public response.
 - After all self-cleaning tests, the live project contains zero customers,
   bookings, slots, booking history, employer leads, contact enquiries,
   notification attempts, operational audit events and analytics events.
@@ -150,9 +157,23 @@ track them in the Supabase dashboard.
 
 7. **Anti-spam production secret**
    - Create the Cloudflare Turnstile site/secret pair for the official domains.
-   - Add the secret to Supabase Edge Function secrets and the widget to public
-     forms. Rate limiting and honeypots are already active, but Turnstile is
-     deliberately not claimed as active without its secret.
+   - Configure `TURNSTILE_SITE_KEY` and `TURNSTILE_SECRET_KEY` together in
+     Supabase Edge Function secrets, then redeploy `insurespr-api`. The site key
+     is deliberately returned to the browser by `GET /services`; the secret
+     must remain server-side. Never release only one key: a site key without a
+     secret displays a challenge but the API refuses submissions, while a
+     secret without a site key leaves the browser unable to obtain a token.
+     Both partial states fail closed with a configuration error.
+   - Verify that `GET /services` returns a non-null `turnstile_site_key`, each
+     public form renders the widget, and every retry obtains a fresh token.
+     Exercise missing, invalid, expired and replayed tokens plus a simulated
+     Turnstile provider outage; rejected verification must not create a
+     booking, lead, enquiry, consent or notification row.
+   - The API validates the Siteverify response's hostname against the approved
+     request-origin hostname and requires the distinct `book`, `employer` or
+     `contact` action for the route. Focused tests cover exact matches,
+     cross-form action mismatch, cross-host mismatch and incomplete responses.
+     Rate limiting and honeypots remain active independently.
 
 8. **Admin operating procedure**
    - Choose named staff with least-privilege access.
@@ -189,7 +210,9 @@ track them in the Supabase dashboard.
    the changes.
 3. Publish a small set of real slots and test book, double-book rejection,
    cancellation and reschedule behaviour with synthetic identities.
-4. Configure email and Turnstile; test success, rejection, provider outage,
+4. Configure email and both Turnstile keys, redeploy `insurespr-api`, confirm
+   `/services` exposes the site key but never the secret, and test successful
+   submission, token expiry/replay, rejection, provider outage, notification
    retry and dead-letter handling.
 5. Run database security/performance advisors and inspect Edge Function/API
    logs for unexpected personal data.

@@ -101,6 +101,47 @@ Do not put the service-role key in the Cron request. The worker has access to th
 server-side key inside Supabase; the scheduler authenticates with the separate
 worker secret.
 
+## Enabling Cloudflare Turnstile after approval
+
+Turnstile protects the booking, workforce-lead and contact forms in addition to
+the existing honeypot and rate limits. Its two keys form one deployment unit.
+Do not configure or release them independently.
+
+1. Create the production widget in Cloudflare and restrict it to the approved
+   official hostnames. Add only the protected preview hostname used for release
+   testing; use Cloudflare's test keys for localhost rather than weakening the
+   production hostname list.
+2. Put both `TURNSTILE_SITE_KEY` and `TURNSTILE_SECRET_KEY` in Supabase Edge
+   Function secrets. The site key is public configuration; the secret must
+   never enter git, HTML, `production.js`, Vercel browser variables, logs or
+   screenshots.
+3. Redeploy `insurespr-api` after setting both secrets. A partial configuration
+   is unusable and fails closed: site-key-only renders a challenge but the API
+   refuses submissions, while secret-only makes the server require a token that
+   the browser cannot obtain.
+4. From the official origin and the protected preview, call `GET /services` and
+   verify that `turnstile_site_key` is non-null. Confirm that the response never
+   exposes `TURNSTILE_SECRET_KEY` or any other server credential, then load the
+   booking, workforce and contact forms and verify that each renders a widget.
+5. Complete one synthetic form flow. Confirm that completion populates a token,
+   one submission consumes it, and an expiry, error or retry requires a new
+   token. Turnstile tokens are single-use and expire after five minutes; never
+   cache or reuse them between forms or requests.
+6. Test missing, invalid, expired and replayed tokens. The API must reject them
+   without creating a booking, lead, enquiry, consent or notification row. Also
+   simulate an unreachable or non-successful Siteverify response and confirm
+   the API fails closed with a service error rather than accepting the form.
+7. Inspect Edge Function logs and database counts after the test. Logs must not
+   contain form contents, Turnstile tokens, the secret or raw IP addresses;
+   remove only the explicitly identified synthetic records through a reviewed,
+   self-cleaning migration.
+
+The API validates the Siteverify response hostname against the approved request
+origin and requires the distinct `book`, `employer` or `contact` action for the
+route. Keep these checks enabled and include action/hostname mismatch cases in
+every release test. Follow Cloudflare's server-side validation guidance:
+<https://developers.cloudflare.com/turnstile/get-started/server-side-validation/>.
+
 ## Incident and privacy handling
 
 - Disable or unschedule the worker if the wrong recipient, sender, or template

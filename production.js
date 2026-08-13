@@ -11,6 +11,8 @@
   var WHATSAPP_NUMBER = '27834507861';
   var STORAGE_PREFIX = 'insurespr.';
   var configPromise;
+  var turnstileScriptPromise;
+  var REQUEST_TIMEOUT_MS = 12_000;
 
   function uuid() {
     if (window.crypto && window.crypto.randomUUID) return window.crypto.randomUUID();
@@ -64,8 +66,11 @@
   var marketing = captureMarketing();
 
   function api(path, options) {
-    var init = options || {};
+    var init = Object.assign({}, options || {});
     init.headers = Object.assign({ 'Content-Type': 'application/json' }, init.headers || {});
+    var controller = new AbortController();
+    var timeout = window.setTimeout(function () { controller.abort(); }, REQUEST_TIMEOUT_MS);
+    init.signal = controller.signal;
     return fetch(API + path, init).then(function (response) {
       if (response.status === 204) return null;
       return response.json().catch(function () { return {}; }).then(function (body) {
@@ -77,13 +82,27 @@
         }
         return body;
       });
+    }).catch(function (error) {
+      if (error && error.name === 'AbortError') {
+        var timeoutError = new Error('The service is taking too long to respond. Please try again, or call 083 450 7861.');
+        timeoutError.code = 'REQUEST_TIMEOUT';
+        throw timeoutError;
+      }
+      if (error instanceof TypeError) {
+        var networkError = new Error('We could not connect right now. Check your connection and try again, or call 083 450 7861.');
+        networkError.code = 'NETWORK_ERROR';
+        throw networkError;
+      }
+      throw error;
+    }).finally(function () {
+      window.clearTimeout(timeout);
     });
   }
 
   function getConfig() {
     if (!configPromise) {
       configPromise = api('/services').catch(function (error) {
-        if (error.status !== 502 && error.status !== 503 && error.status !== 504) throw error;
+        if (error.status && error.status !== 502 && error.status !== 503 && error.status !== 504) throw error;
         return new Promise(function (resolve) { window.setTimeout(resolve, 650); }).then(function () {
           return api('/services');
         });
@@ -135,8 +154,127 @@
       idempotency_key: form.dataset.idempotency || (form.dataset.idempotency = uuid()),
       website: value(form, 'website'),
       privacy_accepted: checked(form, 'privacy_accepted'),
+      turnstile_token: value(form, 'turnstile_token') || null,
       marketing: marketing
     };
+  }
+
+  function loadTurnstileScript() {
+    if (window.turnstile) return Promise.resolve(window.turnstile);
+    if (turnstileScriptPromise) return turnstileScriptPromise;
+
+    turnstileScriptPromise = new Promise(function (resolve, reject) {
+      var script = document.createElement('script');
+      script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+      script.async = true;
+      script.defer = true;
+      script.dataset.turnstileScript = 'true';
+      script.addEventListener('load', function () {
+        if (window.turnstile) resolve(window.turnstile);
+        else reject(new Error('Anti-spam service did not initialise.'));
+      }, { once: true });
+      script.addEventListener('error', function () {
+        reject(new Error('Anti-spam service could not be loaded.'));
+      }, { once: true });
+      document.head.appendChild(script);
+    });
+    return turnstileScriptPromise;
+  }
+
+  function initTurnstile(form, action) {
+    getConfig().then(function (config) {
+      var siteKey = config && config.turnstile_site_key;
+      if (!siteKey) return;
+
+      form.dataset.turnstileRequired = 'true';
+      var hidden = document.createElement('input');
+      hidden.type = 'hidden';
+      hidden.name = 'turnstile_token';
+      form.appendChild(hidden);
+
+      var field = document.createElement('div');
+      field.className = 'turnstile-field';
+      field.setAttribute('data-turnstile-for', form.id);
+      var mount = document.createElement('div');
+      var status = document.createElement('p');
+      status.id = form.id + '-turnstile-status';
+      status.setAttribute('role', 'status');
+      status.textContent = 'Loading the anti-spam check…';
+      field.appendChild(mount);
+      field.appendChild(status);
+
+      var submit = form.querySelector('[type="submit"]');
+      var actions = submit && submit.closest('.booking-step-actions, .form-actions, .btn-row');
+      var anchor = actions || submit;
+      if (anchor && anchor.parentNode) anchor.parentNode.insertBefore(field, anchor);
+      else form.appendChild(field);
+
+      return loadTurnstileScript().then(function (turnstile) {
+        var widgetId = turnstile.render(mount, {
+          sitekey: siteKey,
+          action: action,
+          size: 'flexible',
+          callback: function (token) {
+            hidden.value = token;
+            status.textContent = 'Anti-spam check complete.';
+          },
+          'expired-callback': function () {
+            hidden.value = '';
+            status.textContent = 'The anti-spam check expired. Please complete it again.';
+          },
+          'timeout-callback': function () {
+            hidden.value = '';
+            status.textContent = 'The anti-spam check timed out. Please try again.';
+          },
+          'error-callback': function () {
+            hidden.value = '';
+            status.textContent = 'The anti-spam check could not be completed. Please retry or call 083 450 7861.';
+          }
+        });
+        form.dataset.turnstileWidgetId = String(widgetId);
+      }).catch(function () {
+        form.dataset.turnstileUnavailable = 'true';
+        status.textContent = 'The anti-spam check is unavailable. Please refresh, retry, or call 083 450 7861.';
+      });
+    }).catch(function () {
+      // The form API provides the authoritative error if production protection
+      // is enabled while public configuration is temporarily unavailable.
+    });
+  }
+
+  function validateTurnstile(form) {
+    if (form.dataset.turnstileRequired !== 'true') return true;
+    if (value(form, 'turnstile_token')) return true;
+    var message = form.dataset.turnstileUnavailable === 'true'
+      ? 'The anti-spam check is unavailable. Please refresh, retry, or call 083 450 7861.'
+      : 'Please complete the anti-spam check before sending.';
+    setStatus(form, message, 'error');
+    var field = form.querySelector('.turnstile-field');
+    if (field) field.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    return false;
+  }
+
+  function resetTurnstile(form) {
+    var token = form.elements.turnstile_token;
+    if (token) token.value = '';
+    var widgetId = form.dataset.turnstileWidgetId;
+    if (widgetId && window.turnstile) {
+      try { window.turnstile.reset(Number(widgetId)); } catch (_) { /* ignore */ }
+    }
+  }
+
+  function removeTurnstile(form) {
+    var widgetId = form.dataset.turnstileWidgetId;
+    if (widgetId && window.turnstile) {
+      try { window.turnstile.remove(Number(widgetId)); } catch (_) { /* ignore */ }
+    }
+    var field = form.querySelector('[data-turnstile-for="' + form.id + '"]');
+    if (field) field.remove();
+    var token = form.elements.turnstile_token;
+    if (token) token.remove();
+    delete form.dataset.turnstileWidgetId;
+    delete form.dataset.turnstileRequired;
+    delete form.dataset.turnstileUnavailable;
   }
 
   function selectText(select) {
@@ -222,6 +360,7 @@
   function bindBookingForm() {
     var form = document.getElementById('book-form');
     if (!form) return;
+    initTurnstile(form, 'book');
 
     var serviceSelect = form.elements.service_id;
     var dateInput = form.elements.preferred_date;
@@ -230,6 +369,7 @@
     var slotList = document.getElementById('slot-options');
     var slotNote = document.getElementById('slot-note');
     var serviceFacts = document.getElementById('booking-service-facts');
+    var review = document.getElementById('booking-review');
     var whatsapp = document.getElementById('booking-whatsapp');
     var completed = false;
     var started = false;
@@ -287,7 +427,9 @@
     form.querySelectorAll('[data-book-next]').forEach(function (button) {
       button.addEventListener('click', function () {
         if (!validateBookingStep(currentStep)) return;
-        showBookingStep(Number(button.getAttribute('data-book-next')), true);
+        var nextStep = Number(button.getAttribute('data-book-next'));
+        if (nextStep === 5) renderBookingReview();
+        showBookingStep(nextStep, true);
       });
     });
     form.querySelectorAll('[data-book-back]').forEach(function (button) {
@@ -395,38 +537,26 @@
       }
     }, { once: true });
 
-    if (whatsapp) whatsapp.addEventListener('click', function () {
-      clearStatus(form);
-      if (!validateWholeBooking()) return;
-      var name = [value(form, 'first_name'), value(form, 'surname')].filter(Boolean).join(' ');
+    function preferredTimeLabel() {
       var selectedSlot = form.querySelector('input[name="slot_id"]:checked');
-      var preferredTime = selectedSlot && selectedSlot.parentElement
+      return selectedSlot && selectedSlot.parentElement
         ? selectedSlot.parentElement.textContent.trim()
-        : (value(form, 'preferred_time_period') || 'Any');
-      var message = [
-        "Hi InsureSPR, I'd like to request a booking.",
-        '',
-        'Service: ' + (selectText(serviceSelect) || 'Not selected'),
-        'Name: ' + (name || 'Not entered'),
-        'Mobile: ' + value(form, 'mobile'),
-        'Email: ' + value(form, 'email'),
-        'Preferred date: ' + formatDate(value(form, 'preferred_date')),
-        'Preferred time: ' + preferredTime,
-        'New/returning patient: ' + (value(form, 'patient_status') || 'Not selected'),
-        '',
-        'Please confirm availability.'
-      ].join('\n');
-      track('whatsapp_clicked', serviceSelect.value || null);
-      window.open('https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(message), '_blank', 'noopener');
-    });
+        : (selectText(form.elements.preferred_time_period) || 'Any available time');
+    }
 
-    form.addEventListener('submit', function (event) {
-      event.preventDefault();
-      clearStatus(form);
-      if (!validateWholeBooking()) return;
-      setBusy(form, true);
+    function renderBookingReview() {
+      if (!review) return;
+      var name = [value(form, 'first_name'), value(form, 'surname')].filter(Boolean).join(' ');
+      review.querySelector('[data-review-service]').textContent = selectText(serviceSelect) || 'Not selected';
+      review.querySelector('[data-review-date]').textContent = formatDate(value(form, 'preferred_date'));
+      review.querySelector('[data-review-time]').textContent = preferredTimeLabel();
+      review.querySelector('[data-review-patient]').textContent = name + ' · ' + selectText(form.elements.patient_status);
+      review.querySelector('[data-review-contact]').textContent = value(form, 'mobile') + ' · ' + value(form, 'email');
+    }
+
+    function bookingPayload() {
       var slot = form.querySelector('input[name="slot_id"]:checked');
-      var payload = Object.assign(basePayload(form), {
+      return Object.assign(basePayload(form), {
         first_name: value(form, 'first_name'),
         surname: value(form, 'surname'),
         mobile: value(form, 'mobile'),
@@ -438,10 +568,47 @@
         patient_status: value(form, 'patient_status'),
         notes: value(form, 'notes') || null
       });
+    }
+
+    function rememberBooking(body, payload) {
+      completed = true;
+      safeStorage(sessionStorage, 'setItem', STORAGE_PREFIX + 'lastBooking', JSON.stringify(body.booking));
+      track('booking_completed', payload.service_id);
+    }
+
+    if (whatsapp) whatsapp.addEventListener('click', function () {
+      clearStatus(form);
+      if (!validateWholeBooking()) return;
+      if (!validateTurnstile(form)) return;
+      setBusy(form, true);
+      whatsapp.disabled = true;
+      var payload = bookingPayload();
       api('/bookings', { method: 'POST', body: JSON.stringify(payload) }).then(function (body) {
-        completed = true;
-        safeStorage(sessionStorage, 'setItem', STORAGE_PREFIX + 'lastBooking', JSON.stringify(body.booking));
-        track('booking_completed', payload.service_id);
+        rememberBooking(body, payload);
+        removeTurnstile(form);
+        track('whatsapp_clicked', payload.service_id);
+        var message = "Hi InsureSPR, I submitted website booking request " + body.booking.reference + '. Please help me continue.';
+        window.location.assign('https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(message));
+      }).catch(function (error) {
+        if (error.code === 'SLOT_UNAVAILABLE') loadAvailability();
+        resetTurnstile(form);
+        setStatus(form, error.message, 'error');
+        setBusy(form, false);
+        whatsapp.disabled = false;
+      });
+    });
+
+    form.addEventListener('submit', function (event) {
+      event.preventDefault();
+      clearStatus(form);
+      if (!validateWholeBooking()) return;
+      if (!validateTurnstile(form)) return;
+      setBusy(form, true);
+      if (whatsapp) whatsapp.disabled = true;
+      var payload = bookingPayload();
+      api('/bookings', { method: 'POST', body: JSON.stringify(payload) }).then(function (body) {
+        rememberBooking(body, payload);
+        removeTurnstile(form);
         if (document.documentElement.classList.contains('booking-embed') && window.parent !== window) {
           window.parent.location.assign('booking-confirmation.html');
         } else {
@@ -449,8 +616,10 @@
         }
       }).catch(function (error) {
         if (error.code === 'SLOT_UNAVAILABLE') loadAvailability();
+        resetTurnstile(form);
         setStatus(form, error.message, 'error');
         setBusy(form, false);
+        if (whatsapp) whatsapp.disabled = false;
       });
     });
 
@@ -462,10 +631,12 @@
   function bindContactForm() {
     var form = document.getElementById('contact-form');
     if (!form) return;
+    initTurnstile(form, 'contact');
     form.addEventListener('submit', function (event) {
       event.preventDefault();
       clearStatus(form);
       if (!form.reportValidity()) return;
+      if (!validateTurnstile(form)) return;
       setBusy(form, true);
       var payload = Object.assign(basePayload(form), {
         name: value(form, 'name'),
@@ -478,8 +649,11 @@
         setStatus(form, 'Thank you. Your enquiry reference is ' + body.enquiry.reference + '. Save the reference and call the practice if your question is time-sensitive.', 'success');
         form.reset();
         form.dataset.idempotency = '';
+        removeTurnstile(form);
+        initTurnstile(form, 'contact');
         setBusy(form, false);
       }).catch(function (error) {
+        resetTurnstile(form);
         setStatus(form, error.message, 'error');
         setBusy(form, false);
       });
@@ -489,6 +663,7 @@
   function bindEmployerForm() {
     var form = document.getElementById('employer-form');
     if (!form) return;
+    initTurnstile(form, 'employer');
     var started = false;
     form.addEventListener('input', function () {
       if (!started) {
@@ -512,6 +687,7 @@
         return;
       }
       if (servicesError) servicesError.hidden = true;
+      if (!validateTurnstile(form)) return;
       setBusy(form, true);
       var payload = Object.assign(basePayload(form), {
         contact_name: value(form, 'contact_name'),
@@ -530,8 +706,11 @@
         setStatus(form, 'Thank you. Your quote-request reference is ' + body.lead.reference + '. InsureSPR will use the contact details you supplied to follow up.', 'success');
         form.reset();
         form.dataset.idempotency = '';
+        removeTurnstile(form);
+        initTurnstile(form, 'employer');
         setBusy(form, false);
       }).catch(function (error) {
+        resetTurnstile(form);
         setStatus(form, error.message, 'error');
         setBusy(form, false);
       });

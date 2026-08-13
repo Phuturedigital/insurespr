@@ -5,11 +5,15 @@ website. The repository began as an independent Phuture Digital concept; the
 historical concept pages and assets remain in git for provenance, but
 `.vercelignore` keeps them out of the production artifact.
 
-The public experience is a zero-build static site with three distinct routes:
+The public experience is a zero-build static site with three clear route families:
 
 - individuals and published x-ray pathways (`xray.html`)
 - employers and workplace medicals (`workforce.html`)
 - DXA bone-density and body-composition scanning (`scanning.html`)
+
+Six standalone, crawlable service-detail pages sit beneath those route pages,
+with separate SPR and owner/founder stories. Every page remains a portable HTML
+file; there is no framework build step or browser-side database credential.
 
 Booking, contact, employer-quote and booking-management requests go through a
 validated public Supabase Edge Function. A separate, scheduler-only function
@@ -27,6 +31,8 @@ has no database key and cannot query operational tables directly.
 - Production browser integration: `production.js`
 - Launch and approval checklist: `PRODUCTION-READINESS.md`
 - Fact provenance: `CONTENT-NOTES.md`
+- Supplied rate evidence review: `XOM-RATES-2026-REVIEW.md`
+- Exact legacy URL inventory: `LEGACY-SEO-URL-INVENTORY.md`
 
 The database schema and public API are deployed. The website itself is not
 published as InsureSPR's official site from this branch. Publication requires
@@ -38,11 +44,18 @@ practice/domain authorization and completion of the release blockers in
 Serve the directory over HTTP; do not open the files with a `file:` URL.
 
 ```powershell
-python -m http.server 4173
+python -m http.server 5177
 ```
 
-Then open `http://localhost:4173/`. `localhost:4173` is in the Edge Function's
+Then open `http://localhost:5177/`. `localhost:5177` is in the Edge Function's
 exact-origin allowlist for local testing.
+
+The browser audit also accepts an explicit preview origin when its usual port
+is occupied:
+
+```powershell
+node tools/audit.mjs http://127.0.0.1:4319
+```
 
 ## Supabase workflow
 
@@ -53,8 +66,10 @@ tables. All public-schema tables use row-level security; direct `anon` and
 the transactional writes.
 
 ```powershell
-deno check production.js site.js supabase/functions/insurespr-api/index.ts \
-  supabase/functions/insurespr-notifications/index.ts
+node --check production.js
+node --check site.js
+deno check supabase/functions/insurespr-api/index.ts
+deno check supabase/functions/insurespr-notifications/index.ts
 ```
 
 Do not put a secret/service-role key in HTML, `production.js`, Vercel browser

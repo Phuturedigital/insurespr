@@ -1,6 +1,8 @@
+import { matchesTurnstileContext, type TurnstileVerification } from './turnstile.ts';
+
 const FUNCTION_NAME = 'insurespr-api';
 const MAX_BODY_BYTES = 32_000;
-const PRIVACY_VERSION = 'pending-approval';
+const TURNSTILE_TIMEOUT_MS = 6_000;
 
 const DEFAULT_ALLOWED_ORIGINS = [
   'https://insurespr.vercel.app',
@@ -9,9 +11,20 @@ const DEFAULT_ALLOWED_ORIGINS = [
   'https://insurespr-concept.phuturedigital.co.za',
   'http://127.0.0.1:4321',
   'http://localhost:4321',
+  'http://127.0.0.1:4319',
+  'http://localhost:4319',
   'http://127.0.0.1:5177',
   'http://localhost:5177',
 ];
+
+const PRIVACY_PREVIEW_ORIGINS = new Set([
+  'http://127.0.0.1:4321',
+  'http://localhost:4321',
+  'http://127.0.0.1:4319',
+  'http://localhost:4319',
+  'http://127.0.0.1:5177',
+  'http://localhost:5177',
+]);
 
 type Json = null | boolean | number | string | Json[] | { [key: string]: Json };
 type JsonRecord = Record<string, Json>;
@@ -112,17 +125,32 @@ async function dbFetch(path: string, init: RequestInit = {}): Promise<Response> 
   headers.set('Content-Type', 'application/json');
   if (!headers.has('Prefer')) headers.set('Prefer', 'return=representation');
 
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 8_000);
-  try {
-    return await fetch(`${supabaseUrl()}/rest/v1/${path}`, {
-      ...init,
-      headers,
-      signal: controller.signal,
-    });
-  } finally {
-    clearTimeout(timeout);
+  const method = String(init.method || 'GET').toUpperCase();
+  const maxAttempts = method === 'GET' ? 2 : 1;
+
+  for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 8_000);
+    try {
+      const response = await fetch(`${supabaseUrl()}/rest/v1/${path}`, {
+        ...init,
+        headers,
+        signal: controller.signal,
+      });
+      const transientReadFailure = [401, 502, 503, 504].includes(response.status);
+      if (attempt === maxAttempts || !transientReadFailure) return response;
+
+      // Hosted gateway/key caches can briefly disagree on the first read after
+      // an Edge Function cold start. Drain the failed response, wait once, and
+      // retry only this idempotent GET. Mutation RPCs are never retried here.
+      await response.text().catch(() => '');
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    } finally {
+      clearTimeout(timeout);
+    }
   }
+
+  throw new ApiError(503, 'DATABASE_UNAVAILABLE', 'The booking service is temporarily unavailable.');
 }
 
 async function readDbJson<T>(response: Response): Promise<T> {
@@ -244,9 +272,22 @@ function rejectBot(body: JsonRecord): void {
   }
 }
 
-async function verifyTurnstile(body: JsonRecord, req: Request): Promise<void> {
-  const turnstileSecret = Deno.env.get('TURNSTILE_SECRET_KEY');
-  if (!turnstileSecret) return;
+async function verifyTurnstile(
+  body: JsonRecord,
+  req: Request,
+  expectedAction: string,
+  allowedOrigin: string | null,
+): Promise<void> {
+  const turnstileSiteKey = Deno.env.get('TURNSTILE_SITE_KEY')?.trim();
+  const turnstileSecret = Deno.env.get('TURNSTILE_SECRET_KEY')?.trim();
+  if (!turnstileSiteKey && !turnstileSecret) return;
+  if (!turnstileSiteKey || !turnstileSecret) {
+    throw new ApiError(
+      503,
+      'BOT_CHECK_UNAVAILABLE',
+      'The anti-spam service is temporarily unavailable. Please try again or call 083 450 7861.',
+    );
+  }
 
   const token = typeof body.turnstile_token === 'string' ? body.turnstile_token : '';
   if (!token) throw new ApiError(422, 'BOT_CHECK_REQUIRED', 'Please complete the anti-spam check.');
@@ -257,12 +298,35 @@ async function verifyTurnstile(body: JsonRecord, req: Request): Promise<void> {
   const ip = clientIp(req);
   if (ip !== 'unknown') form.set('remoteip', ip);
 
-  const response = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
-    method: 'POST',
-    body: form,
-  });
-  const result = await response.json().catch(() => ({ success: false })) as { success?: boolean };
-  if (!result.success) {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), TURNSTILE_TIMEOUT_MS);
+  let response: Response;
+  try {
+    response = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+      method: 'POST',
+      body: form,
+      signal: controller.signal,
+    });
+  } catch {
+    throw new ApiError(
+      503,
+      'BOT_CHECK_UNAVAILABLE',
+      'The anti-spam service is temporarily unavailable. Please try again or call 083 450 7861.',
+    );
+  } finally {
+    clearTimeout(timeout);
+  }
+
+  if (!response.ok) {
+    throw new ApiError(
+      503,
+      'BOT_CHECK_UNAVAILABLE',
+      'The anti-spam service is temporarily unavailable. Please try again or call 083 450 7861.',
+    );
+  }
+
+  const result = await response.json().catch(() => ({ success: false })) as TurnstileVerification;
+  if (!matchesTurnstileContext(result, expectedAction, allowedOrigin)) {
     throw new ApiError(422, 'BOT_CHECK_FAILED', 'The anti-spam check failed. Please try again.');
   }
 }
@@ -313,9 +377,10 @@ async function handleServices(origin: string | null): Promise<Response> {
       practice: practice[0] || null,
       categories,
       services,
+      turnstile_site_key: Deno.env.get('TURNSTILE_SITE_KEY') || null,
     },
     200,
-    'public, max-age=60, stale-while-revalidate=300',
+    'no-store',
   );
 }
 
@@ -341,10 +406,35 @@ async function handleAvailability(url: URL, origin: string | null): Promise<Resp
   return jsonResponse(origin, { slots }, 200, 'public, max-age=15');
 }
 
+async function requireSubmissionPolicy(origin: string | null): Promise<void> {
+  const response = await dbFetch(
+    'practice_settings?select=privacy_notice_version&id=eq.primary&limit=1',
+  );
+  const settings = await readDbJson<Array<{ privacy_notice_version?: string }>>(response);
+  const version = settings[0]?.privacy_notice_version?.trim();
+  if (!version) {
+    throw new ApiError(
+      503,
+      'PRIVACY_NOTICE_NOT_READY',
+      'Online forms are temporarily unavailable. Please call 083 450 7861.',
+    );
+  }
+
+  const pending = version.toLowerCase().includes('pending');
+  if (pending && (!origin || !PRIVACY_PREVIEW_ORIGINS.has(origin))) {
+    throw new ApiError(
+      503,
+      'PRIVACY_NOTICE_NOT_READY',
+      'Online forms are not open on the official site yet. Please call 083 450 7861.',
+    );
+  }
+}
+
 async function handleBooking(req: Request, origin: string | null): Promise<Response> {
   const body = await readBody(req);
   rejectBot(body);
-  await verifyTurnstile(body, req);
+  await requireSubmissionPolicy(origin);
+  await verifyTurnstile(body, req, 'book', origin);
   const ipHash = await enforceRateLimit(req, 'bookings', 10, 3_600);
 
   const payload: JsonRecord = {
@@ -360,7 +450,7 @@ async function handleBooking(req: Request, origin: string | null): Promise<Respo
     patient_status: text(body.patient_status, 20),
     notes: text(body.notes, 1_000) || null,
     privacy_accepted: boolean(body.privacy_accepted),
-    privacy_version: PRIVACY_VERSION,
+    privacy_version: 'database-managed',
     ip_hash: ipHash,
     marketing: marketing(body),
   };
@@ -372,7 +462,8 @@ async function handleBooking(req: Request, origin: string | null): Promise<Respo
 async function handleEmployerLead(req: Request, origin: string | null): Promise<Response> {
   const body = await readBody(req);
   rejectBot(body);
-  await verifyTurnstile(body, req);
+  await requireSubmissionPolicy(origin);
+  await verifyTurnstile(body, req, 'employer', origin);
   const ipHash = await enforceRateLimit(req, 'employer-leads', 6, 3_600);
   const services = Array.isArray(body.services_required)
     ? body.services_required.filter((value): value is string => typeof value === 'string').slice(0, 20)
@@ -391,7 +482,7 @@ async function handleEmployerLead(req: Request, origin: string | null): Promise<
     location: text(body.location, 300) || null,
     notes: text(body.notes, 2_000) || null,
     privacy_accepted: boolean(body.privacy_accepted),
-    privacy_version: PRIVACY_VERSION,
+    privacy_version: 'database-managed',
     ip_hash: ipHash,
     marketing: marketing(body),
   };
@@ -402,7 +493,8 @@ async function handleEmployerLead(req: Request, origin: string | null): Promise<
 async function handleContact(req: Request, origin: string | null): Promise<Response> {
   const body = await readBody(req);
   rejectBot(body);
-  await verifyTurnstile(body, req);
+  await requireSubmissionPolicy(origin);
+  await verifyTurnstile(body, req, 'contact', origin);
   const ipHash = await enforceRateLimit(req, 'contact-enquiries', 6, 3_600);
   const payload: JsonRecord = {
     idempotency_key: text(body.idempotency_key, 36),
@@ -412,7 +504,7 @@ async function handleContact(req: Request, origin: string | null): Promise<Respo
     enquiry_type: text(body.enquiry_type, 40) || 'general',
     message: text(body.message, 2_000),
     privacy_accepted: boolean(body.privacy_accepted),
-    privacy_version: PRIVACY_VERSION,
+    privacy_version: 'database-managed',
     ip_hash: ipHash,
     marketing: marketing(body),
   };

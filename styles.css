@@ -1415,7 +1415,7 @@ main > section + section { padding-top: 0; }
 .mobile-quick-actions { display: none; }
 
 .booking-progress {
-  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1px;
+  display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 1px;
   margin: 0 0 1.5rem; padding: 0; overflow: hidden; list-style: none;
   border: 1px solid var(--line); border-radius: var(--r-sm); background: var(--line);
 }
@@ -1434,6 +1434,12 @@ main > section + section { padding-top: 0; }
 .booking-step-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: .65rem; margin-top: 1.15rem; }
 .booking-step-actions .btn { min-width: 9rem; }
 .booking-actions .btn { flex: 1 1 13rem; }
+.booking-review dl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .8rem 1rem; margin: 1rem 0; }
+.booking-review dl > div { padding: .8rem 0; border-bottom: 1px solid var(--line); }
+.booking-review dt { margin-bottom: .25rem; color: var(--muted); font-family: var(--f-mono); font-size: .68rem; letter-spacing: .12em; text-transform: uppercase; }
+.booking-review dd { margin: 0; overflow-wrap: anywhere; color: var(--ink); }
+.turnstile-field { margin-top: 1rem; }
+.turnstile-field > p { margin: .45rem 0 0; color: var(--muted); font-size: .82rem; }
 
 .booking-dialog {
   width: min(720px, calc(100% - 1rem)); height: min(92dvh, 860px);
@@ -1773,6 +1779,7 @@ fieldset.field legend,
   .home-page .foot-top > :last-child { grid-column: 1 / -1; }
   .booking-progress li { flex-direction: column; gap: .35rem; padding: .65rem .15rem; font-size: .64rem; }
   .booking-step-actions .btn { flex: 1 1 8rem; min-width: 0; }
+  .booking-review dl { grid-template-columns: 1fr; gap: 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {

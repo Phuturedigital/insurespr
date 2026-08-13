@@ -8,9 +8,16 @@ const { chromium } = require('playwright');
 const PAGES = [
   'index.html',
   'spr.html',
+  'about.html',
   'xray.html',
+  'primary-healthcare-x-ray.html',
+  'visa-chest-x-ray.html',
   'workforce.html',
+  'workplace-medicals.html',
   'scanning.html',
+  'dxa-bone-density.html',
+  'dxa-body-composition.html',
+  'osteoporosis-care.html',
   'book.html',
   'contact.html',
   'privacy.html',
@@ -21,7 +28,7 @@ const PAGES = [
 const b = await chromium.launch();
 let fails = 0;
 const note = (m) => { console.log('  ' + m); if (m.startsWith('🚨')) fails++; };
-const localOrigin = 'http://localhost:4321';
+const localOrigin = process.argv[2] || process.env.AUDIT_BASE_URL || 'http://localhost:4321';
 const apiOrigin = 'https://ffdmmxffzewqiacsuvhr.supabase.co';
 
 for (const pg of PAGES) {
@@ -62,7 +69,7 @@ for (const pg of PAGES) {
     reqFail.push(label);
   });
 
-  await p.goto(`http://localhost:4321/${pg}`, { waitUntil: 'domcontentloaded', timeout: 15_000 });
+  await p.goto(`${localOrigin}/${pg}`, { waitUntil: 'domcontentloaded', timeout: 15_000 });
   if (pg === 'xray.html' || pg === 'workforce.html') {
     await p.waitForResponse((response) => response.url().endsWith('/events'), { timeout: 15_000 })
       .catch(() => { /* A persisted keepalive may outlive this diagnostic page. */ });
@@ -79,6 +86,7 @@ for (const pg of PAGES) {
       h1: document.querySelectorAll('h1').length,
       emptyLinks: [...document.querySelectorAll('a')].filter((a) => !a.textContent.trim() && !a.getAttribute('aria-label') && !a.querySelector('img')).length,
       btnNoName: [...document.querySelectorAll('button')].filter((x) => !x.textContent.trim() && !x.getAttribute('aria-label')).length,
+      horizontalOverflow: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
       /* Tap targets. WCAG 2.5.8 exempts links that sit INSIDE a sentence —
          their size is constrained by the line-height of the text around them,
          so demanding 44px there would mean breaking the paragraph. Only
@@ -105,6 +113,7 @@ for (const pg of PAGES) {
   if (r.h1 !== 1) bad.push(`h1-count:${r.h1}`);
   if (r.emptyLinks) bad.push(`unnamed-links:${r.emptyLinks}`);
   if (r.btnNoName) bad.push(`unnamed-buttons:${r.btnNoName}`);
+  if (r.horizontalOverflow) bad.push('horizontal-overflow');
   if (r.smallTaps) bad.push(`small-tap-targets:${r.smallTaps}`);
   if (!r.lang) bad.push('no-lang');
 
