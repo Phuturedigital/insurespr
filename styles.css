@@ -35,7 +35,15 @@
   --ink: #0a1c3d;          /* headings and the deepest surface */
   --ink-2: #14305f;
   --body: #4a5875;         /* body copy, softer than headings */
-  --muted: #6b7a96;
+  /* Was #6b7a96, which computes to 4.35:1 on white — under the 4.5 AA floor
+     for body text, on every card on every page.
+
+     Solved against the DARKEST ground it sits on, not against white. Muted
+     text appears on --paper, --ground and --ground-2, and a value that passes
+     on white can still fail on the pale bands: the first fix here was #66738f,
+     which passes at 4.76 on paper and fails at 3.99 on --ground-2. This value
+     clears 4.5 on all three (5.43 / 4.87 / 4.56). */
+  --muted: #5d6a85;
 
   /* Text ON the dark panels. Six near-identical blue-greys had drifted in doing
      this one job (#c3d2e8 #a9bcd8 #b9c9e2 #d6e2f2 #cfdcef #8ea3c2). Three
@@ -528,15 +536,66 @@ main > section + section { padding-top: 0; }
    colour change spans the window and the reading measure does not. */
 .band-paper { background: var(--paper); }
 .band-ground { background: var(--ground-2); }
+
+/* The navy band. This is the hard break in the rhythm — the page goes from
+   pale to ink and back, which is what stops a long scroll reading as one
+   continuous field.
+
+   ⚠️ A navy band inverts every text colour inside it. The tokens below are
+   the same three-step hierarchy the footer uses (--on-ink / --on-ink-soft /
+   --on-ink-dim) rather than new values, because six near-identical blue-greys
+   had already drifted into doing this job once before. White CARDS are left
+   alone: a white card on navy is the strongest object this design makes, and
+   the whole point of putting a card grid in a navy band. */
+.band-ink { background: var(--ink); color: var(--on-ink); }
+.band-ink h1, .band-ink h2, .band-ink h3, .band-ink .card-title { color: #fff; }
+/* --cyan-ink is the partner that carries small text on PALE grounds; on navy
+   it computes to 3.19:1 and is unreadable. Every element that uses it needs
+   the light partner instead inside a navy band. */
+.band-ink .eyebrow, .band-ink .eyebrow--plain,
+.band-ink .route-card-label .eyebrow,
+.band-ink .service-choice-icon,
+.band-ink .statstrip dt .icon { color: var(--cyan-lift); }
+.band-ink p, .band-ink .lede, .band-ink .section-intro { color: var(--on-ink-soft); }
+.band-ink dt { color: var(--on-ink-soft); }
+/* ⚠️ Scoped to links sitting DIRECTLY on the navy. A blanket
+   `.band-ink a { color: var(--cyan-lift) }` also repainted the phone and email
+   links inside the statstrip's WHITE cells, where pale cyan on white computes
+   to 1.5:1 — an unreadable phone number on the booking page. A navy band
+   inverts its own text, not the text of light cards sitting on it. */
+.band-ink a:not(.btn):not(.card):not(.route-card) { color: var(--cyan-lift); }
+/* ⚠️ The :not() chain above is worth counting. Each :not(.class) contributes a
+   CLASS to specificity, so that selector is (0,4,1) — not the (0,1,1) it looks
+   like. A plain `.band-ink .statstrip a` override is (0,2,1) and silently
+   loses, which is exactly what happened: the phone number stayed at 1.5:1
+   through a "fix" that never applied. These carry the same chain so they win
+   on source order. */
+.band-ink .card a:not(.btn):not(.card):not(.route-card),
+.band-ink .statstrip a:not(.btn):not(.card):not(.route-card),
+.band-ink .route-card a:not(.btn):not(.card):not(.route-card) { color: var(--azure); }
+/* …but anything inside a light card keeps the card's own colours. */
+.band-ink .card, .band-ink .route-card, .band-ink .statstrip > div { color: var(--body); }
+.band-ink .card h1, .band-ink .card h2, .band-ink .card h3, .band-ink .card .card-title,
+.band-ink .route-card .card-title, .band-ink .statstrip dd { color: var(--ink); }
+.band-ink .card p, .band-ink .route-card p { color: var(--muted); }
+.band-ink .statstrip dt { color: var(--muted); }
+/* The pale hairline that separates statstrip cells vanishes on navy. */
+.band-ink .statstrip { background: rgb(255 255 255 / .16); border-color: rgb(255 255 255 / .16); }
+
 .band-paper,
-.band-ground { padding-block: clamp(2.75rem, 5.5vw, 5rem); }
+.band-ground,
+.band-ink { padding-block: clamp(2.75rem, 5.5vw, 5rem); }
 /* A section that already sets its own padding should not gain a second lot. */
 .band-paper.pad-sm,
-.band-ground.pad-sm { padding-block: clamp(2.25rem, 4.5vw, 4rem); }
+.band-ground.pad-sm,
+.band-ink.pad-sm { padding-block: clamp(2.25rem, 4.5vw, 4rem); }
 /* Hairlines only where two like-toned bands meet, so the seam is legible
-   without drawing a rule across every join. */
+   without drawing a rule across every join. Navy needs none — it is its own
+   boundary. */
 .band-paper + .band-paper,
 .band-ground + .band-ground { border-top: 1px solid var(--line); }
+/* A navy band running straight into the navy footer would merge with it. */
+.band-ink:last-of-type { margin-bottom: var(--step); }
 
 /* ------------------------------------------------------------ stat strip -- */
 .statstrip {
