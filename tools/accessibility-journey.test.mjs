@@ -281,6 +281,24 @@ async function activeElementSnapshot(page) {
 }
 
 async function assertVisibleFocus(page, message) {
+  /* Keyboard focus can trigger the page's smooth-scroll behavior. Chromium on
+     Linux reports the new active element before that native scroll animation
+     reaches it, so allow the browser to finish bringing the control on screen
+     before evaluating the accessibility invariant. This still fails closed if
+     focus never becomes visible. */
+  try {
+    await page.waitForFunction(() => {
+      const active = document.activeElement;
+      if (!(active instanceof HTMLElement)) return false;
+      const style = getComputedStyle(active);
+      const rect = active.getBoundingClientRect();
+      return rect.width > 0 && rect.height > 0 &&
+        style.visibility !== 'hidden' && style.display !== 'none' &&
+        rect.bottom > 0 && rect.right > 0 && rect.top < innerHeight && rect.left < innerWidth;
+    }, undefined, { timeout: 1200 });
+  } catch {
+    /* Keep the detailed assertions below as the single diagnostic surface. */
+  }
   const snapshot = await activeElementSnapshot(page);
   assert.ok(snapshot, `${message}: the page has no active HTML element`);
   assert.notEqual(snapshot.tag, 'body', `${message}: keyboard focus fell back to the document body`);
