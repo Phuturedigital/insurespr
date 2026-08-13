@@ -1459,6 +1459,10 @@ main > section + section { padding-top: 0; }
   color: var(--ink); font: 500 1.5rem/1 var(--f-body); cursor: pointer;
 }
 .booking-dialog iframe { display: block; width: 100%; height: calc(100% - 58px); border: 0; background: var(--paper); }
+.booking-dialog-focus-guard {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip-path: inset(50%); white-space: nowrap;
+}
 .booking-open { overflow: hidden; }
 @media (min-width: 861px) {
   .booking-dialog { width: min(760px, calc(100% - 2rem)); height: min(88dvh, 840px); margin: auto; border-radius: 24px; }

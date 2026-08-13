@@ -30,6 +30,7 @@ has no database key and cannot query operational tables directly.
 - Staff operations runbook: `OPERATIONS-RUNBOOK.md`
 - Production browser integration: `production.js`
 - Launch and approval checklist: `PRODUCTION-READINESS.md`
+- Recovery ownership and restore drill: `RECOVERY-RESTORE-DRILL.md`
 - Fact provenance: `CONTENT-NOTES.md`
 - Supplied rate evidence review: `XOM-RATES-2026-REVIEW.md`
 - Exact legacy URL inventory: `LEGACY-SEO-URL-INVENTORY.md`
@@ -116,6 +117,48 @@ privacy and validation gates respond safely. Those probes contain no personal
 information and cannot satisfy the write contract. Notification readiness is
 checked only through an unauthenticated `GET`; no scheduler secret is supplied
 and the notification worker is never invoked.
+
+### Deterministic browser and SEO gates
+
+Install the exact development dependency graph and matching Chromium runtime,
+then run the complete local quality suite. Local prerequisites are Node.js 20
+or newer with npm, plus Deno 2.9.2 on `PATH`:
+
+```powershell
+npm ci
+npx --no-install playwright install chromium
+npm test
+```
+
+`npm test` checks JavaScript syntax, the offline release-audit fixtures, the
+inactive legacy redirect manifest, Deno formatting/linting/type safety, both
+Edge Function test suites, form fail-closed behaviour, the mocked booking
+journey and bounded keyboard/focus accessibility scenarios. The tests use local
+fixtures or an ephemeral loopback server; they do
+not call live Supabase write endpoints or Vercel. CI installs the same locked
+Playwright release and Deno 2.9.2 before running those deterministic phases.
+
+The performance audit remains an explicit local diagnostic because its timing
+measurements are machine-sensitive; it is intentionally not a CI timing gate:
+
+```powershell
+node tools/audit.mjs
+node tools/form-safety.test.mjs
+node tools/booking-journey.test.mjs
+node tools/accessibility-journey.test.mjs
+node --test tools/legacy-redirects.test.mjs
+npm run test:performance
+```
+
+The browser suites use an ephemeral loopback server and mocked public API
+contracts; they do not write to production. Performance limits and measurement
+caveats are documented in `PERFORMANCE-BUDGETS.md`. The legacy decision
+manifest covers every inventoried URL but remains inactive and fail-closed until
+each non-hold decision has named approval. Availability activation, rehearsal,
+monitoring and rollback are documented in `AVAILABILITY-ACTIVATION.md`.
+Recovery inventory, approval fields, isolation rules and restoration order are
+documented in `RECOVERY-RESTORE-DRILL.md`; it does not authorize a production
+restore or invent the practice's RPO, RTO or retention period.
 
 The canonical frontend is live on the practice domain. Keep online form intake
 fail-closed and do not publish unapproved healthcare claims, prices, schedules

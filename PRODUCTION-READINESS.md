@@ -42,6 +42,12 @@ workflow and domain transition must all be ready at the same time.
   notification work; reusing a key for different details is rejected.
 - A partial unique index prevents two active bookings from owning one slot.
 - Slot selection is rechecked under a row lock during booking.
+- The deployed availability engine is revisioned, timezone-aware and
+  fail-closed. It preserves manual/booked slots, records materialization
+  conflicts and refuses stale generated slots. It remains intentionally
+  inactive because the two appointment services have no approved durations,
+  policies, rules or slots. Rehearsal, activation, monitoring and rollback are
+  defined in `AVAILABILITY-ACTIVATION.md`; no Cron schedule has been invented.
 - Raw booking-management tokens are returned once; only a cryptographic hash is
   stored.
 - Consent version, time and source are retained with each applicable record.
@@ -62,6 +68,12 @@ workflow and domain transition must all be ready at the same time.
   completion without retaining synthetic records.
 - Event capture uses anonymous session identifiers and campaign/referrer
   metadata; it does not send patient names, contact details or form notes.
+- Live migration
+  `20260813192722_record_trusted_booking_completion_analytics` adds the
+  pseudonymous booking key as a dedicated, service-role-only lifecycle link.
+  The browser records request receipt; only the audited staff transition that
+  actually sets a booking to `completed` records the deduplicated completion
+  event. Its transactional contract passed without retaining synthetic rows.
 - Edge Function validation includes body-size limits, field allowlists, phone
   normalization, exact-origin CORS, a honeypot, rate limiting and mandatory,
   fail-closed Turnstile verification for public form mutations. Raw IP
@@ -71,9 +83,14 @@ workflow and domain transition must all be ready at the same time.
   notices on the newly created, empty operational database. Keep the indexes
   until real query statistics exist; reference:
   <https://supabase.com/docs/guides/database/database-linter?lint=0005_unused_index>.
-- The notification worker's executable tests pass for exact secret matching,
-  pending-versus-confirmed wording, Johannesburg slot formatting, HTML escaping,
-  and omission of free-text booking/contact content from email bodies.
+- The notification worker's thirteen executable tests pass for exact secret
+  matching, pending-versus-confirmed wording, Johannesburg slot formatting,
+  verified preparation inclusion/omission and HTML escaping, and omission of
+  free-text booking/contact content from email bodies. Immutable transition
+  snapshots and recipient-stream ordering prevent a delayed confirmation from
+  being rebuilt from later cancellation/reschedule state or overtaking a prior
+  patient delivery; an unrelated practice-recipient retry does not block the
+  patient stream.
 - Self-cleaning database contracts pass for queue claim/retry/reclaim/complete,
   booking confirmation/completion, lead and enquiry transitions, manual
   notification requeue, status history and operational audit effects.
@@ -83,6 +100,27 @@ workflow and domain transition must all be ready at the same time.
   unnamed buttons and equal 163-by-48 centred quick actions on every page that
   uses them. Analytics writes are intercepted in the deterministic desktop
   audit so a visual/markup check cannot pollute production measurement data.
+- A deterministic mocked-backend booking suite passes 10 end-to-end scenarios,
+  including the five booking steps and review, Back/Forward restoration,
+  invalid fields, no slots, slot races, duplicate clicks, stable idempotent
+  retries, API/database/network failures, confirmation refresh, cancel and
+  reschedule wording, Turnstile/honeypot rejection, reference-only WhatsApp
+  fallback, analytics minimisation and partial-JavaScript fail-closed behavior.
+- A bounded keyboard/focus regression passes eight critical scenarios: skip
+  navigation, visible focus, mobile-menu Enter/Escape return, booking validation
+  and live regions, booking-dialog focus containment/return, keyboard booking
+  changes, a 200% reflow proxy, reduced motion and semantic/accessibility-tree
+  checks. This is regression evidence, not screen-reader certification or a
+  WCAG-conformance claim.
+- The offline performance regression passes all eight homepage, X-Ray, booking
+  and workforce scenarios at 390-by-844 and 1440-by-900. Transfer, request,
+  layout, image, DOM, FCP/LCP/CLS and initial-load long-task budgets are defined
+  in `PERFORMANCE-BUDGETS.md`; the report explicitly does not claim Lighthouse
+  or field Core Web Vitals.
+- `LEGACY-REDIRECT-MANIFEST.json` accounts for all 153 inventoried legacy URLs
+  and passes its deterministic contract test. Every decision remains `hold`,
+  and activation is false, until named content, clinical and redirect approval
+  is recorded; the manifest does not change live routing.
 - Live API release checks return `200` for health/services, `403` for an
   unapproved origin after the privacy gate is open, `503
   PRIVACY_NOTICE_NOT_READY` for every form-mutation origin while approval is
@@ -92,9 +130,28 @@ workflow and domain transition must all be ready at the same time.
   contains only the exact apex and `www` official origins. `/services` is
   `no-store` so a privacy or Turnstile configuration change cannot be masked by
   a stale public response.
+- The official apex now returns a one-hop `308` to the canonical `www` host,
+  and the repository's Auth `site_url`, page canonicals, sitemap, Open Graph and
+  JSON-LD all use that same `www` origin.
+- Migration
+  `20260813194724_include_confirmed_booking_preparation_in_notifications` and
+  notification worker v7 are deployed. Only a verified service's trimmed,
+  nonblank preparation text can enter a confirmed/rescheduled patient
+  confirmation. All live services remain `needs_confirmation`, so no draft
+  preparation text is currently eligible. Public worker readiness remains
+  `200`, `ready:false` and `no-store` until approved provider configuration is
+  supplied.
+- Live migration
+  `20260813210017_immutable_ordered_booking_notification_events` and worker v7
+  snapshot minimal status-transition context, enforce kind/status compatibility
+  and release only the head unresolved delivery per entity/channel/recipient.
+  Any legacy unsent status event without a trustworthy snapshot is safely
+  skipped. Its self-cleaning SQL contract and the 13 worker tests passed; live
+  queue/business counts remained zero and the security advisor remained clear.
 - After all self-cleaning tests, the live project contains zero customers,
   bookings, slots, booking history, employer leads, contact enquiries,
-  notification attempts and operational audit events. It retains 24
+  notification attempts, trusted completion events and operational audit
+  events. It retains 24
   privacy-minimised QA analytics events; all session identifiers and paths pass
   the current database constraints.
 
@@ -222,6 +279,10 @@ track them in the Supabase dashboard.
    - The Supabase dashboard is the initial internal interface; no public admin
      panel is exposed. The underlying status procedures and audit log are
      implemented, but named accounts and routine ownership remain prerequisites.
+   - `RECOVERY-RESTORE-DRILL.md` defines the technical inventory, safe isolated
+     rehearsal, restoration order and evidence checklist. Incident authority,
+     RPO, RTO, backup plan, data access and retention remain deliberately blank
+     until the practice approves them.
 
 9. **Domain, search and migration**
    - Inventory every indexed URL on the current official property.

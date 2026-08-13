@@ -413,7 +413,7 @@ function inventoryExpectedCount(markdown) {
 }
 
 function validateLegacyManifest(payload, expectedCount = null) {
-  const redirects = Array.isArray(payload) ? payload : payload?.redirects;
+  const redirects = Array.isArray(payload) ? payload : (payload?.redirects ?? payload?.entries);
   const problems = [];
   if (!Array.isArray(redirects)) {
     return { ok: false, redirects: [], problems: ['manifest must be an array or contain a redirects array'] };
@@ -425,7 +425,7 @@ function validateLegacyManifest(payload, expectedCount = null) {
   for (const [index, entry] of redirects.entries()) {
     const source = entry?.source ?? entry?.from ?? entry?.url;
     const destination = entry?.destination ?? entry?.to ?? null;
-    const status = String(entry?.status ?? (destination ? 'redirect' : '')).toLowerCase();
+    const status = String(entry?.status ?? entry?.state ?? (destination ? 'redirect' : '')).toLowerCase();
     if (!source) {
       problems.push(`entry ${index + 1} has no source`);
       continue;

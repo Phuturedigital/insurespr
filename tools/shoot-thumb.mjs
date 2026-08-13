@@ -8,10 +8,10 @@
  * There is no sharp/cwebp on this box, and system32/convert is Windows' FAT
  * converter, NOT ImageMagick. Resize + encode inside Chromium instead.
  */
-import { createRequire } from 'node:module';
 import { writeFileSync } from 'node:fs';
-const require = createRequire('file:///C:/Users/Acer/thatha/');
-const { chromium } = require('playwright');
+import { loadPlaywright } from './load-playwright.mjs';
+
+const { chromium } = loadPlaywright();
 
 const URL = process.argv[2] || 'https://insurespr.vercel.app/';
 const OUT = process.argv[3] || 'pd-concepts/insurespr.webp';

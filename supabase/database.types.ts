@@ -17,6 +17,7 @@ export type Database = {
       analytics_events: {
         Row: {
           anonymous_session_id: string | null;
+          booking_id: string | null;
           event_name: string;
           id: number;
           marketing_context: Json;
@@ -26,6 +27,7 @@ export type Database = {
         };
         Insert: {
           anonymous_session_id?: string | null;
+          booking_id?: string | null;
           event_name: string;
           id?: never;
           marketing_context?: Json;
@@ -35,6 +37,7 @@ export type Database = {
         };
         Update: {
           anonymous_session_id?: string | null;
+          booking_id?: string | null;
           event_name?: string;
           id?: never;
           marketing_context?: Json;
@@ -43,6 +46,13 @@ export type Database = {
           service_id?: string | null;
         };
         Relationships: [
+          {
+            foreignKeyName: 'analytics_events_booking_id_fkey';
+            columns: ['booking_id'];
+            isOneToOne: false;
+            referencedRelation: 'bookings';
+            referencedColumns: ['id'];
+          },
           {
             foreignKeyName: 'analytics_events_service_id_fkey';
             columns: ['service_id'];
@@ -227,31 +237,49 @@ export type Database = {
       };
       booking_slots: {
         Row: {
+          config_revision: number | null;
           created_at: string;
           ends_at: string;
           id: string;
           internal_note: string | null;
+          materialized_at: string | null;
+          origin_kind: string;
+          retired_by_materializer_at: string | null;
           service_id: string;
+          source_exception_id: string | null;
+          source_rule_id: string | null;
           starts_at: string;
           status: string;
           updated_at: string;
         };
         Insert: {
+          config_revision?: number | null;
           created_at?: string;
           ends_at: string;
           id?: string;
           internal_note?: string | null;
+          materialized_at?: string | null;
+          origin_kind?: string;
+          retired_by_materializer_at?: string | null;
           service_id: string;
+          source_exception_id?: string | null;
+          source_rule_id?: string | null;
           starts_at: string;
           status?: string;
           updated_at?: string;
         };
         Update: {
+          config_revision?: number | null;
           created_at?: string;
           ends_at?: string;
           id?: string;
           internal_note?: string | null;
+          materialized_at?: string | null;
+          origin_kind?: string;
+          retired_by_materializer_at?: string | null;
           service_id?: string;
+          source_exception_id?: string | null;
+          source_rule_id?: string | null;
           starts_at?: string;
           status?: string;
           updated_at?: string;
@@ -319,6 +347,7 @@ export type Database = {
           preferred_date: string | null;
           preferred_time_period: string | null;
           reference: string;
+          request_fingerprint: string;
           service_id: string;
           slot_id: string | null;
           status: string;
@@ -338,6 +367,7 @@ export type Database = {
           preferred_date?: string | null;
           preferred_time_period?: string | null;
           reference: string;
+          request_fingerprint: string;
           service_id: string;
           slot_id?: string | null;
           status?: string;
@@ -357,6 +387,7 @@ export type Database = {
           preferred_date?: string | null;
           preferred_time_period?: string | null;
           reference?: string;
+          request_fingerprint?: string;
           service_id?: string;
           slot_id?: string | null;
           status?: string;
@@ -434,6 +465,7 @@ export type Database = {
           name: string;
           phone_e164: string | null;
           reference: string;
+          request_fingerprint: string;
           status: string;
           updated_at: string;
         };
@@ -448,6 +480,7 @@ export type Database = {
           name: string;
           phone_e164?: string | null;
           reference: string;
+          request_fingerprint: string;
           status?: string;
           updated_at?: string;
         };
@@ -462,6 +495,7 @@ export type Database = {
           name?: string;
           phone_e164?: string | null;
           reference?: string;
+          request_fingerprint?: string;
           status?: string;
           updated_at?: string;
         };
@@ -515,6 +549,7 @@ export type Database = {
           phone_e164: string;
           preferred_timeframe: string | null;
           reference: string;
+          request_fingerprint: string;
           services_required: string[];
           status: string;
           updated_at: string;
@@ -534,6 +569,7 @@ export type Database = {
           phone_e164: string;
           preferred_timeframe?: string | null;
           reference: string;
+          request_fingerprint: string;
           services_required: string[];
           status?: string;
           updated_at?: string;
@@ -553,6 +589,7 @@ export type Database = {
           phone_e164?: string;
           preferred_timeframe?: string | null;
           reference?: string;
+          request_fingerprint?: string;
           services_required?: string[];
           status?: string;
           updated_at?: string;
@@ -629,6 +666,8 @@ export type Database = {
           recipient: string;
           sent_at: string | null;
           status: string;
+          transition_sequence: number | null;
+          transition_snapshot: Json | null;
           updated_at: string;
         };
         Insert: {
@@ -654,6 +693,8 @@ export type Database = {
           recipient: string;
           sent_at?: string | null;
           status?: string;
+          transition_sequence?: number | null;
+          transition_snapshot?: Json | null;
           updated_at?: string;
         };
         Update: {
@@ -679,6 +720,8 @@ export type Database = {
           recipient?: string;
           sent_at?: string | null;
           status?: string;
+          transition_sequence?: number | null;
+          transition_snapshot?: Json | null;
           updated_at?: string;
         };
         Relationships: [];

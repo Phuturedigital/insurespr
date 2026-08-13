@@ -30,6 +30,19 @@
     }
   }
 
+  function bindSkipLinks() {
+    document.querySelectorAll('a.skip[href^="#"]').forEach(function (link) {
+      var target = document.getElementById(link.getAttribute('href').slice(1));
+      if (!target) return;
+      if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');
+      link.addEventListener('click', function () {
+        window.setTimeout(function () {
+          try { target.focus({ preventScroll: true }); } catch (_) { target.focus(); }
+        }, 0);
+      });
+    });
+  }
+
   function sessionId() {
     var key = STORAGE_PREFIX + 'session';
     var existing = safeStorage(sessionStorage, 'getItem', key);
@@ -286,7 +299,8 @@
     if (kind === 'success') target.classList.add('note--success');
     target.textContent = message;
     target.setAttribute('role', kind === 'error' ? 'alert' : 'status');
-    target.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    var reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    target.scrollIntoView({ block: 'nearest', behavior: reducedMotion ? 'auto' : 'smooth' });
   }
 
   function clearStatus(form) {
@@ -424,7 +438,10 @@
       : 'Please complete the anti-spam check before sending.';
     setStatus(form, message, 'error');
     var field = form.querySelector('.turnstile-field');
-    if (field) field.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    if (field) {
+      var reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      field.scrollIntoView({ block: 'center', behavior: reducedMotion ? 'auto' : 'smooth' });
+    }
     return false;
   }
 
@@ -548,11 +565,30 @@
     var started = false;
     var servicesById = {};
 
-    dateInput.min = new Date().toLocaleDateString('en-CA', { timeZone: 'Africa/Johannesburg' });
+    // Johannesburg is UTC+02:00 year-round. Avoid cold-starting the full Intl
+    // formatter on the booking page merely to derive an ISO date boundary.
+    dateInput.min = new Date(Date.now() + 2 * 60 * 60 * 1000).toISOString().slice(0, 10);
 
     var bookingSteps = Array.prototype.slice.call(form.querySelectorAll('[data-book-step]'));
     var bookingProgress = Array.prototype.slice.call(document.querySelectorAll('[data-book-progress]'));
     var currentStep = 1;
+    var BOOKING_HISTORY_KEY = 'insuresprBookingStep';
+
+    function bookingHistoryState(stepNumber) {
+      var state = history.state && typeof history.state === 'object'
+        ? Object.assign({}, history.state)
+        : {};
+      state[BOOKING_HISTORY_KEY] = stepNumber;
+      return state;
+    }
+
+    function replaceBookingHistory(stepNumber) {
+      history.replaceState(bookingHistoryState(stepNumber), '', window.location.href);
+    }
+
+    function pushBookingHistory(stepNumber) {
+      history.pushState(bookingHistoryState(stepNumber), '', window.location.href);
+    }
 
     function showBookingStep(stepNumber, focusStep) {
       currentStep = Math.max(1, Math.min(stepNumber, bookingSteps.length));
@@ -586,6 +622,7 @@
       var invalid = firstInvalidInStep(stepNumber);
       if (!invalid) return true;
       showBookingStep(stepNumber, false);
+      replaceBookingHistory(stepNumber);
       invalid.reportValidity();
       return false;
     }
@@ -603,14 +640,29 @@
         var nextStep = Number(button.getAttribute('data-book-next'));
         if (nextStep === 5) renderBookingReview();
         showBookingStep(nextStep, true);
+        pushBookingHistory(nextStep);
       });
     });
     form.querySelectorAll('[data-book-back]').forEach(function (button) {
       button.addEventListener('click', function () {
-        showBookingStep(Number(button.getAttribute('data-book-back')), true);
+        var previousStep = Number(button.getAttribute('data-book-back'));
+        var stateStep = Number(history.state && history.state[BOOKING_HISTORY_KEY]);
+        if (currentStep > previousStep && stateStep === currentStep) {
+          history.back();
+          return;
+        }
+        showBookingStep(previousStep, true);
+        replaceBookingHistory(previousStep);
       });
     });
     showBookingStep(1, false);
+    replaceBookingHistory(1);
+    window.addEventListener('popstate', function (event) {
+      var restoredStep = Number(event.state && event.state[BOOKING_HISTORY_KEY]);
+      if (restoredStep >= 1 && restoredStep <= bookingSteps.length) {
+        showBookingStep(restoredStep, true);
+      }
+    });
 
     function renderServiceFacts() {
       var service = servicesById[serviceSelect.value];
@@ -765,7 +817,26 @@
         removeTurnstile(form);
         track('whatsapp_clicked', payload.service_id);
         var message = "Hi InsureSPR, I submitted website booking request " + body.booking.reference + '. Please help me continue.';
-        window.location.assign('https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(message));
+        var whatsappUrl = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(message);
+        var opened = window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+        setStatus(
+          form,
+          'Booking request saved. Reference: ' + body.booking.reference + '. WhatsApp opens separately so this confirmation stays available.',
+          'success'
+        );
+        if (!opened) {
+          var status = document.getElementById('book-status');
+          var manualLink = document.createElement('a');
+          manualLink.className = 'btn btn--ghost btn--sm';
+          manualLink.href = whatsappUrl;
+          manualLink.target = '_blank';
+          manualLink.rel = 'noopener noreferrer';
+          manualLink.textContent = 'Open WhatsApp';
+          manualLink.setAttribute('aria-label', 'Open WhatsApp for booking reference ' + body.booking.reference);
+          status.append(document.createElement('br'), manualLink);
+        }
+        setBusy(form, false);
+        whatsapp.disabled = false;
       }).catch(function (error) {
         if (handlePrivacyNoticeChanged(form, error)) return;
         if (error.code === 'SLOT_UNAVAILABLE') loadAvailability();
@@ -1034,6 +1105,7 @@
     activateBoundForm(form);
   }
 
+  bindSkipLinks();
   bindBookingForm();
   bindContactForm();
   bindEmployerForm();

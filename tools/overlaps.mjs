@@ -31,13 +31,12 @@
  * box, so a 6px clip of a small pill scores high rather than being lost
  * against a large parent's area.
  */
-import { createRequire } from 'node:module';
 import { readdir } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { loadPlaywright } from './load-playwright.mjs';
 
-const require = createRequire('file:///C:/Users/Acer/thatha/');
-const { chromium } = require('playwright');
+const { chromium } = loadPlaywright();
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const ORIGIN = 'http://localhost:4321';
 

@@ -21,6 +21,11 @@ practice approves and remove access promptly when responsibilities change.
    hours, slots, privacy wording or credentials.
 5. Review the latest audit events for unexpected changes and record/escalate
    discrepancies outside the patient record.
+6. After availability is activated, run queries 7–9 in
+   `supabase/snippets/daily_operations.sql` to review approved policy coverage,
+   current revision/open-slot horizon, materialization freshness, provenance,
+   and unresolved conflicts. Follow `AVAILABILITY-ACTIVATION.md`; do not invent
+   or silently repair schedules.
 
 The practice must still name the person responsible for each queue and approve
 response-time targets. Until then, this is a technical procedure, not a promise
@@ -42,10 +47,16 @@ For a pending or reschedule-requested booking:
 
 Use `public.staff_close_booking` for `completed`, `cancelled`, or `no_show`.
 Every closure requires a reason. The database rejects unsafe transitions; do
-not bypass the procedure with a direct table edit.
+not bypass the procedure with a direct table edit. A completed transition also
+records the one trusted, privacy-minimised `booking_completed` analytics event;
+the browser records only `booking_request_submitted`.
 
 The confirmation email contains the exact slot time only after staff assigns a
 slot. A pending request must never be described as a confirmed appointment.
+Status emails use an immutable event-time snapshot and are delivered in order
+within each patient or practice recipient stream. If an earlier patient email
+is retrying, the later patient event waits; a practice-recipient retry does not
+hold up the patient's stream. Do not bypass or rewrite transition snapshots.
 
 ## Employer leads and contact enquiries
 
@@ -199,3 +210,6 @@ every release test. Follow Cloudflare's server-side validation guidance:
 - Follow the approved POPIA incident, data-subject request, retention and backup
   procedures once the practice supplies them; this repository cannot define
   those business/legal decisions.
+- Use `RECOVERY-RESTORE-DRILL.md` for the technical inventory, isolated
+  quarterly rehearsal, evidence checklist and production restoration order.
+  Its blank owner/RPO/RTO/retention fields are launch dependencies, not defaults.

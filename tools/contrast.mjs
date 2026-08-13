@@ -20,9 +20,9 @@
  * Walks up for the first opaque background rather than assuming the band's,
  * which is what lets it catch that last case.
  */
-import { createRequire } from 'node:module';
-const require = createRequire('file:///C:/Users/Acer/thatha/');
-const { chromium } = require('playwright');
+import { loadPlaywright } from './load-playwright.mjs';
+
+const { chromium } = loadPlaywright();
 const b = await chromium.launch();
 let fails = 0;
 for (const pg of ['index','spr','xray','scanning','workforce','book']) {

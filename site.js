@@ -89,16 +89,39 @@
   var bookingTriggers = document.querySelectorAll('[data-booking-popover], a[href^="book.html"]');
   if (bookingTriggers.length && !document.getElementById('book-form') && 'HTMLDialogElement' in window) {
     var bookingDialog = null;
+    var bookingDialogTrigger = null;
     var ensureBookingDialog = function () {
       if (bookingDialog) return bookingDialog;
       bookingDialog = document.createElement('dialog');
       bookingDialog.className = 'booking-dialog';
       bookingDialog.setAttribute('aria-label', 'Request an appointment');
-      bookingDialog.innerHTML = '<div class="booking-dialog-bar"><strong>Request an appointment</strong><button type="button" aria-label="Close booking">×</button></div><iframe title="InsureSPR booking steps" loading="eager"></iframe>';
+      bookingDialog.innerHTML = '<div class="booking-dialog-bar"><strong>Request an appointment</strong><button type="button" aria-label="Close booking">×</button></div><iframe title="InsureSPR booking steps" loading="eager"></iframe><span class="booking-dialog-focus-guard" tabindex="0"></span>';
       document.body.appendChild(bookingDialog);
       bookingDialog.querySelector('button').addEventListener('click', function () { bookingDialog.close(); });
+      bookingDialog.querySelector('.booking-dialog-focus-guard').addEventListener('focus', function () {
+        bookingDialog.querySelector('button').focus();
+      });
       bookingDialog.addEventListener('click', function (event) { if (event.target === bookingDialog) bookingDialog.close(); });
-      bookingDialog.addEventListener('close', function () { document.documentElement.classList.remove('booking-open'); });
+      bookingDialog.addEventListener('keydown', function (event) {
+        if (event.key !== 'Tab') return;
+        var stops = [bookingDialog.querySelector('button'), bookingDialog.querySelector('iframe')]
+          .filter(function (element) { return element && !element.disabled; });
+        if (!stops.length) return;
+        var first = stops[0];
+        var last = stops[stops.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first.focus();
+        }
+      });
+      bookingDialog.addEventListener('close', function () {
+        document.documentElement.classList.remove('booking-open');
+        if (bookingDialogTrigger && bookingDialogTrigger.isConnected) bookingDialogTrigger.focus();
+        bookingDialogTrigger = null;
+      });
       return bookingDialog;
     };
 
@@ -106,6 +129,7 @@
       trigger.addEventListener('click', function (event) {
         event.preventDefault();
         var dialog = ensureBookingDialog();
+        bookingDialogTrigger = trigger;
         var source = new URL(trigger.href, window.location.href);
         source.searchParams.set('embed', '1');
         source.searchParams.set('frame', '2');

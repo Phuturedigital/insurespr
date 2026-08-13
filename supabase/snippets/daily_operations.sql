@@ -85,3 +85,80 @@ select id, created_at, actor_identifier, action, entity_type, entity_id,
 from public.operational_audit_log
 order by created_at desc
 limit 100;
+
+-- 7. Appointment-service availability policy and materialization coverage.
+-- A missing policy or zero current future slots is an operations/configuration
+-- issue, not permission to invent a schedule. Populate only approved values.
+select
+  service.id as service_id,
+  service.slug,
+  service.name,
+  service.booking_mode,
+  service.appointment_duration_minutes,
+  policy.horizon_days,
+  policy.minimum_notice_minutes,
+  policy.buffer_minutes,
+  policy.config_revision,
+  count(slot.id) filter (
+    where slot.starts_at >= now()
+      and slot.status = 'open'
+      and (
+        slot.origin_kind = 'manual'
+        or slot.config_revision = policy.config_revision
+      )
+  ) as current_open_future_slots,
+  max(slot.starts_at) filter (
+    where slot.starts_at >= now()
+      and slot.status = 'open'
+  ) as latest_open_slot
+from public.services as service
+left join private.booking_availability_policies as policy
+  on policy.service_id = service.id
+left join public.booking_slots as slot
+  on slot.service_id = service.id
+where service.is_published
+  and service.booking_mode = 'appointment'
+group by
+  service.id,
+  service.slug,
+  service.name,
+  service.booking_mode,
+  service.appointment_duration_minutes,
+  policy.horizon_days,
+  policy.minimum_notice_minutes,
+  policy.buffer_minutes,
+  policy.config_revision
+order by service.display_order, service.name;
+
+-- 8. Unresolved materialization conflicts. A conflict protects a manual or
+-- booked row from silent overwrite; resolve it before relying on generated
+-- availability for that service/date.
+select
+  conflict.id,
+  service.slug,
+  service.name as service_name,
+  conflict.slot_id,
+  conflict.candidate_starts_at,
+  conflict.candidate_ends_at,
+  conflict.conflict_kind,
+  conflict.first_detected_at,
+  conflict.last_detected_at
+from private.booking_availability_conflicts as conflict
+join public.services as service on service.id = conflict.service_id
+where conflict.resolved_at is null
+order by conflict.last_detected_at desc, service.name;
+
+-- 9. Slot freshness and provenance. Retired generated slots remain as history;
+-- booked rows must never be silently deleted or moved.
+select
+  service.slug,
+  slot.origin_kind,
+  slot.status,
+  count(*) as slot_count,
+  count(*) filter (where slot.starts_at >= now()) as future_count,
+  count(*) filter (where slot.retired_at is not null) as retired_count,
+  max(slot.materialized_at) as latest_materialized_at
+from public.booking_slots as slot
+join public.services as service on service.id = slot.service_id
+group by service.slug, slot.origin_kind, slot.status
+order by service.slug, slot.origin_kind, slot.status;

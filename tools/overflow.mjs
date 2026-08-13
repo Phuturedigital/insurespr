@@ -4,13 +4,12 @@
  *
  * Usage:  node tools/overflow.mjs <page.html> [width]
  */
-import { createRequire } from 'node:module';
 import { join, dirname } from 'node:path';
 import { pathToFileURL, fileURLToPath } from 'node:url';
+import { loadPlaywright } from './load-playwright.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
-const require = createRequire('file:///C:/Users/Acer/thatha/');
-const { chromium } = require('playwright');
+const { chromium } = loadPlaywright();
 
 const file = process.argv[2] || 'about.html';
 const width = Number(process.argv[3] || 390);

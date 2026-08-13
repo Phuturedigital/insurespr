@@ -9,10 +9,10 @@
  * locate the overlaps and crop them. A human (or a vision model) judges the
  * crops. It also tries the browser's FaceDetector where available.
  */
-import { createRequire } from 'node:module';
 import { mkdirSync } from 'node:fs';
-const require = createRequire('file:///C:/Users/Acer/thatha/');
-const { chromium } = require('playwright');
+import { loadPlaywright } from './load-playwright.mjs';
+
+const { chromium } = loadPlaywright();
 
 const PAGES = ['', 'brand', 'scan', 'services', 'about', 'learn', 'book', 'contact'];
 mkdirSync('tools/shots/faces', { recursive: true });

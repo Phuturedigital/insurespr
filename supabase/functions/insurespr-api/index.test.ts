@@ -53,16 +53,18 @@ for (
           'https://insuresprhealth.co.za',
           'https://www.insuresprhealth.co.za',
         ]),
-      dbFetch: async (path) => {
+      dbFetch: (path) => {
         policyReads += 1;
         assertEquals(
           path,
           'practice_settings?select=privacy_notice_version&id=eq.primary&limit=1',
         );
-        return new Response(JSON.stringify([{ privacy_notice_version: 'pending-approval' }]), {
-          status: 200,
-          headers: { 'Content-Type': 'application/json' },
-        });
+        return Promise.resolve(
+          new Response(JSON.stringify([{ privacy_notice_version: 'pending-approval' }]), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' },
+          }),
+        );
       },
       verifyTurnstile: () => {
         turnstileCalls += 1;

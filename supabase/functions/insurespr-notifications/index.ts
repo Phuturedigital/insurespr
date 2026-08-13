@@ -32,6 +32,8 @@ export type EmailContent = {
   html: string;
 };
 
+export type DeliveryOutcome = 'sent' | 'failed' | 'lease_lost' | 'deferred';
+
 type WorkerConfig = {
   supabaseUrl: string;
   serviceRoleKey: string;
@@ -250,6 +252,90 @@ function formatAppointment(value: string, timezone: string): string {
   }
 }
 
+function transitionSequence(claim: ClaimedNotification): number | null {
+  const delivery = asRecord(claim.payload?._delivery);
+  const sequence = delivery.transition_sequence;
+  return typeof sequence === 'number' && Number.isSafeInteger(sequence) && sequence > 0 ? sequence : null;
+}
+
+function assertBookingTransitionMatches(
+  kind: ClaimedNotification['notification_kind'],
+  status: string,
+): void {
+  const allowedStatuses: Partial<
+    Record<ClaimedNotification['notification_kind'], string[]>
+  > = {
+    patient_booking_confirmed: ['confirmed', 'rescheduled'],
+    patient_booking_cancelled: ['cancelled'],
+    patient_reschedule_acknowledgement: ['reschedule_requested'],
+    practice_booking_action_alert: ['cancelled', 'reschedule_requested'],
+  };
+  const allowed = allowedStatuses[kind];
+  if (allowed && !allowed.includes(status)) {
+    throw new DeliveryError(
+      'notification_transition_mismatch',
+      'The queued booking transition snapshot does not match its notification kind.',
+      false,
+    );
+  }
+}
+
+export async function processClaimsInEntityOrder(
+  claims: ClaimedNotification[],
+  processor: (
+    claim: ClaimedNotification,
+  ) => Promise<Exclude<DeliveryOutcome, 'deferred'>>,
+  deferrer?: (
+    claim: ClaimedNotification,
+    reason: 'predecessor_not_delivered',
+  ) => Promise<'deferred' | 'lease_lost'>,
+): Promise<DeliveryOutcome[]> {
+  const grouped = new Map<string, Array<{ claim: ClaimedNotification; index: number }>>();
+  claims.forEach((claim, index) => {
+    // Delivery order is a recipient stream, not the entire booking. A delayed
+    // practice alert must never hold up a patient's confirmation/cancellation,
+    // while messages to that same patient remain strictly sequenced.
+    const key = `${claim.entity_type}:${claim.entity_id}:${claim.recipient.trim().toLowerCase()}`;
+    const group = grouped.get(key) || [];
+    group.push({ claim, index });
+    grouped.set(key, group);
+  });
+
+  const groupedOutcomes = await Promise.all(
+    Array.from(grouped.values()).map(async (group) => {
+      group.sort((left, right) => {
+        const leftSequence = transitionSequence(left.claim);
+        const rightSequence = transitionSequence(right.claim);
+        if (leftSequence !== null && rightSequence !== null && leftSequence !== rightSequence) {
+          return leftSequence - rightSequence;
+        }
+        if (leftSequence === null && rightSequence !== null) return -1;
+        if (leftSequence !== null && rightSequence === null) return 1;
+        return left.index - right.index;
+      });
+
+      const outcomes: DeliveryOutcome[] = [];
+      let blocked = false;
+      for (const { claim } of group) {
+        if (blocked) {
+          // The claim RPC normally returns one row per delivery stream. If a
+          // future regression returns more, release the later lease through a
+          // bounded retry instead of sending it out of order or abandoning it
+          // in processing state.
+          const outcome = deferrer ? await deferrer(claim, 'predecessor_not_delivered') : 'deferred';
+          outcomes.push(outcome);
+          continue;
+        }
+        const outcome = await processor(claim);
+        outcomes.push(outcome);
+        if (outcome !== 'sent') blocked = true;
+      }
+      return outcomes;
+    }),
+  );
+  return groupedOutcomes.flat();
+}
+
 export function renderEmail(claim: ClaimedNotification): EmailContent {
   if (!claim.payload) {
     throw new DeliveryError(
@@ -285,6 +371,11 @@ export function renderEmail(claim: ClaimedNotification): EmailContent {
     );
     const slotStart = asString(booking.slot_starts_at);
     const appointmentTime = formatAppointment(slotStart, practiceTimezone);
+    const preparationInstructions = claim.notification_kind === 'patient_booking_confirmed' &&
+        (status === 'confirmed' || status === 'rescheduled')
+      ? asString(booking.preparation_instructions)
+      : '';
+    assertBookingTransitionMatches(claim.notification_kind, status);
 
     if (claim.notification_kind === 'patient_booking_acknowledgement') {
       const scheduling = status === 'confirmed' && slotStart
@@ -313,6 +404,7 @@ export function renderEmail(claim: ClaimedNotification): EmailContent {
           `Service: ${service}`,
           appointmentTime ? `Appointment: ${appointmentTime}` : `Appointment date: ${preferredDate}`,
           practiceAddress ? `Location: ${practiceAddress}` : '',
+          preparationInstructions ? `Preparation: ${preparationInstructions}` : '',
           `To request a change or cancellation, reply to this email or call ${practicePhone}.`,
         ],
       );
@@ -548,7 +640,7 @@ async function processClaim(
   config: WorkerConfig,
   workerId: string,
   claim: ClaimedNotification,
-): Promise<'sent' | 'failed' | 'lease_lost'> {
+): Promise<Exclude<DeliveryOutcome, 'deferred'>> {
   try {
     const content = renderEmail(claim);
     const providerMessageId = await sendEmail(config, claim, content);
@@ -590,6 +682,24 @@ async function processClaim(
     });
     return 'failed';
   }
+}
+
+async function deferAfterPredecessor(
+  config: WorkerConfig,
+  workerId: string,
+  claim: ClaimedNotification,
+): Promise<'deferred' | 'lease_lost'> {
+  const released = await recordFailure(
+    config,
+    workerId,
+    claim,
+    new DeliveryError(
+      'predecessor_not_delivered',
+      'An earlier notification in this delivery stream was not delivered.',
+      true,
+    ),
+  );
+  return released ? 'deferred' : 'lease_lost';
 }
 
 export async function handler(request: Request): Promise<Response> {
@@ -636,12 +746,14 @@ export async function handler(request: Request): Promise<Response> {
     return jsonResponse(200, { claimed: 0, sent: 0, failed: 0, lease_lost: 0 });
   }
 
-  const outcomes = await Promise.all(
-    claims.map((claim) => processClaim(config, workerId, claim)),
+  const outcomes = await processClaimsInEntityOrder(
+    claims,
+    (claim) => processClaim(config, workerId, claim),
+    (claim) => deferAfterPredecessor(config, workerId, claim),
   );
   const counts = outcomes.reduce(
     (result, outcome) => ({ ...result, [outcome]: result[outcome] + 1 }),
-    { sent: 0, failed: 0, lease_lost: 0 },
+    { sent: 0, failed: 0, lease_lost: 0, deferred: 0 },
   );
 
   return jsonResponse(200, {
@@ -649,6 +761,7 @@ export async function handler(request: Request): Promise<Response> {
     sent: counts.sent,
     failed: counts.failed,
     lease_lost: counts.lease_lost,
+    deferred: counts.deferred,
   });
 }
 

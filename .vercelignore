@@ -4,7 +4,11 @@ CONTENT-NOTES.md
 PRODUCTION-READINESS.md
 OPERATIONS-RUNBOOK.md
 LEGACY-SEO-URL-INVENTORY.md
+LEGACY-REDIRECT-MANIFEST.json
 XOM-RATES-2026-REVIEW.md
+AVAILABILITY-ACTIVATION.md
+PERFORMANCE-BUDGETS.md
+RECOVERY-RESTORE-DRILL.md
 supabase/
 
 # Historical concept-only pages and assets are retained in git for provenance,
@@ -22,6 +26,9 @@ pd-concepts/
 # reachable. Anything added here must be assumed public unless it is listed.
 tools/
 node_modules/
+package.json
+package-lock.json
+.github/
 
 # OS / editor
 .DS_Store

@@ -1,24 +1,20 @@
 /* Screenshot harness for the Khanya concept demo.
  *
- * Reuses the Playwright install already present in the sibling THATHA repo
- * rather than adding node_modules to this one — the site itself stays a
- * zero-dependency static build, which is the whole point of the pattern.
+ * Loads Playwright through the repository's shared portable loader, which can
+ * resolve either this project's dev dependency or the configured Codex runtime.
  *
  * Usage:  node tools/shoot.mjs [page.html ...]      (default: every page)
  *         node tools/shoot.mjs --url https://…      (shoot a live deploy)
  */
-import { createRequire } from 'node:module';
 import { mkdir, readdir } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
 import { pathToFileURL, fileURLToPath } from 'node:url';
+import { loadPlaywright } from './load-playwright.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = join(ROOT, 'tools', 'shots');
 
-/* Playwright lives next door. If THATHA is ever moved this is the one line
-   that needs updating. */
-const require = createRequire('file:///C:/Users/Acer/thatha/');
-const { chromium } = require('playwright');
+const { chromium } = loadPlaywright();
 
 /* 320 is the narrowest width worth supporting (iPhone SE 1st gen / Galaxy Fold
    cover screen). 360 is the single most common Android width in South Africa,
