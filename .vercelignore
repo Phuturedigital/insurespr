@@ -3,11 +3,12 @@ README.md
 CONTENT-NOTES.md
 PRODUCTION-READINESS.md
 OPERATIONS-RUNBOOK.md
+LEGACY-SEO-URL-INVENTORY.md
+XOM-RATES-2026-REVIEW.md
 supabase/
 
 # Historical concept-only pages and assets are retained in git for provenance,
 # but are not part of the production acquisition site.
-about.html
 brand.html
 learn.html
 programmes.html
