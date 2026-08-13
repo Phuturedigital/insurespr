@@ -246,7 +246,7 @@ main > section + section { padding-top: 0; }
 .btn--on-ink:hover { background: rgb(255 255 255 / .18); color: #fff; }
 .btn--on-ink .btn-badge { background: var(--cyan); color: var(--ink); }
 
-.btn--sm { min-height: 42px; font-size: .875rem; padding: .58rem 1rem; gap: .5rem; }
+.btn--sm { min-height: 44px; font-size: .875rem; padding: .58rem 1rem; gap: .5rem; }
 .btn--sm .btn-badge { width: 1.6rem; height: 1.6rem; }
 .btn--sm .btn-badge .icon { width: 13px; height: 13px; }
 .btn > .icon { width: 1.05rem; height: 1.05rem; }
@@ -1494,6 +1494,25 @@ html.booking-embed main .card { border: 0; border-radius: 0; box-shadow: none; }
   font-size: .9rem;
   line-height: 1.55;
 }
+.js-form-gate {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.js-form-gate[disabled] {
+  display: none;
+}
+.form-gate-notice { margin: 1rem 0 1.25rem; }
+.form-gate-notice [data-form-gate-copy],
+.form-gate-options { margin-top: .3rem; }
+.form-consent-version {
+  margin: -1rem 0 1.25rem;
+  font-family: var(--f-mono);
+  font-size: .72rem;
+  letter-spacing: .02em;
+}
+.form-consent-version strong { color: var(--ink); }
 .service-facts {
   margin: -.25rem 0 1.2rem;
   padding: 1rem;

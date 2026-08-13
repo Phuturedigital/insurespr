@@ -39,15 +39,56 @@
     return created;
   }
 
+  function cleanCampaignValue(candidate) {
+    if (typeof candidate !== 'string') return null;
+    var value = candidate.trim();
+    if (!value || value.length > 120) return null;
+    if (/[\u0000-\u001f\u007f]/.test(value)) return null;
+    if (/[^\s@]+@[^\s@]+\.[^\s@]+/i.test(value)) return null;
+    if ((value.match(/[0-9]/g) || []).length >= 8) return null;
+    return value;
+  }
+
+  function cleanLandingPath(candidate) {
+    if (typeof candidate !== 'string') return '/';
+    var value = candidate.trim();
+    if (!value.startsWith('/') || value.length > 500 || /[\u0000-\u001f\u007f]/.test(value)) return '/';
+    return value;
+  }
+
+  function cleanReferrerHost(candidate) {
+    if (typeof candidate !== 'string') return null;
+    var value = candidate.trim().toLowerCase();
+    if (!value || value.length > 253 || /[\s@\u0000-\u001f\u007f]/.test(value)) return null;
+    return value;
+  }
+
+  function cleanMarketingContext(candidate) {
+    var source = candidate && typeof candidate === 'object' && !Array.isArray(candidate) ? candidate : {};
+    return {
+      utm_source: cleanCampaignValue(source.utm_source),
+      utm_medium: cleanCampaignValue(source.utm_medium),
+      utm_campaign: cleanCampaignValue(source.utm_campaign),
+      utm_term: cleanCampaignValue(source.utm_term),
+      utm_content: cleanCampaignValue(source.utm_content),
+      landing_path: cleanLandingPath(source.landing_path || window.location.pathname),
+      referrer_host: cleanReferrerHost(source.referrer_host)
+    };
+  }
+
   function captureMarketing() {
     var key = STORAGE_PREFIX + 'marketing';
     var existing = safeStorage(sessionStorage, 'getItem', key);
     if (existing) {
-      try { return JSON.parse(existing); } catch (_) { /* replace malformed local state */ }
+      try {
+        var restored = cleanMarketingContext(JSON.parse(existing));
+        safeStorage(sessionStorage, 'setItem', key, JSON.stringify(restored));
+        return restored;
+      } catch (_) { /* replace malformed local state */ }
     }
 
     var params = new URLSearchParams(window.location.search);
-    var context = {
+    var context = cleanMarketingContext({
       utm_source: params.get('utm_source') || null,
       utm_medium: params.get('utm_medium') || null,
       utm_campaign: params.get('utm_campaign') || null,
@@ -55,9 +96,9 @@
       utm_content: params.get('utm_content') || null,
       landing_path: window.location.pathname,
       referrer_host: null
-    };
+    });
     if (document.referrer) {
-      try { context.referrer_host = new URL(document.referrer).hostname; } catch (_) { /* ignore */ }
+      try { context.referrer_host = cleanReferrerHost(new URL(document.referrer).hostname); } catch (_) { /* ignore */ }
     }
     safeStorage(sessionStorage, 'setItem', key, JSON.stringify(context));
     return context;
@@ -111,6 +152,131 @@
     return configPromise;
   }
 
+  function formGate(form) {
+    return form.querySelector('[data-form-gate]');
+  }
+
+  function formGateNotice(form) {
+    return document.querySelector('[data-form-gate-status="' + form.id + '"]');
+  }
+
+  function setFormGateNotice(form, title, copy) {
+    var notice = formGateNotice(form);
+    if (!notice) return;
+    var titleTarget = notice.querySelector('[data-form-gate-title]');
+    var copyTarget = notice.querySelector('[data-form-gate-copy]');
+    if (titleTarget) titleTarget.textContent = title;
+    if (copyTarget) copyTarget.textContent = copy;
+    notice.hidden = false;
+    notice.setAttribute('role', 'alert');
+  }
+
+  function closeFormGate(form, title, copy) {
+    var gate = formGate(form);
+    if (gate) {
+      gate.disabled = true;
+      gate.setAttribute('inert', '');
+    }
+    form.setAttribute('aria-busy', 'false');
+    form.dataset.ready = 'false';
+    setFormGateNotice(form, title, copy);
+    var assistedWhatsApp = form.querySelector('#booking-whatsapp');
+    if (assistedWhatsApp) assistedWhatsApp.disabled = true;
+  }
+
+  function activateBoundForm(form) {
+    var gate = formGate(form);
+    if (gate) {
+      gate.disabled = false;
+      gate.removeAttribute('inert');
+    }
+    form.setAttribute('aria-busy', 'false');
+    form.dataset.ready = 'true';
+    var notice = formGateNotice(form);
+    if (notice) notice.hidden = true;
+    var assistedWhatsApp = form.querySelector('#booking-whatsapp');
+    if (assistedWhatsApp) assistedWhatsApp.disabled = false;
+  }
+
+  function approvedPrivacyVersion(config) {
+    var candidate = config && config.practice && config.practice.privacy_notice_version;
+    var version = typeof candidate === 'string' ? candidate.trim() : '';
+    if (!version || /pending/i.test(version)) return null;
+    return version.slice(0, 80);
+  }
+
+  function applyPrivacyVersion(form, version) {
+    var hidden = form.elements.privacy_version;
+    if (hidden) {
+      hidden.value = version;
+      hidden.defaultValue = version;
+    }
+    form.dataset.privacyVersion = version;
+    var label = form.querySelector('[data-consent-policy-label]');
+    var valueTarget = form.querySelector('[data-consent-policy-version]');
+    if (valueTarget) valueTarget.textContent = version;
+    if (label) label.hidden = false;
+  }
+
+  function activatePrivacyForm(form, action, config) {
+    var version = approvedPrivacyVersion(config);
+    if (!version) {
+      closeFormGate(
+        form,
+        'Online requests are not open yet.',
+        'The privacy notice still needs approval. Use one of the direct contact options below.'
+      );
+      return false;
+    }
+    var turnstileKey = config && typeof config.turnstile_site_key === 'string'
+      ? config.turnstile_site_key.trim()
+      : '';
+    if (!turnstileKey) {
+      closeFormGate(
+        form,
+        'Online requests are not open yet.',
+        'The anti-spam protection still needs setup. Use one of the direct contact options below.'
+      );
+      return false;
+    }
+    applyPrivacyVersion(form, version);
+    initTurnstile(form, action, config);
+    activateBoundForm(form);
+    return true;
+  }
+
+  function closeFormAfterConfigFailure(form) {
+    closeFormGate(
+      form,
+      'The online form could not be opened.',
+      'Use one of the direct contact options below, or refresh this page and try again.'
+    );
+  }
+
+  function handlePrivacyNoticeChanged(form, error) {
+    if (!error || error.code !== 'PRIVACY_NOTICE_CHANGED') return false;
+    var consent = form.elements.privacy_accepted;
+    var hidden = form.elements.privacy_version;
+    if (consent) consent.checked = false;
+    if (hidden) {
+      hidden.value = '';
+      hidden.defaultValue = '';
+    }
+    delete form.dataset.privacyVersion;
+    var label = form.querySelector('[data-consent-policy-label]');
+    var versionTarget = form.querySelector('[data-consent-policy-version]');
+    if (versionTarget) versionTarget.textContent = '';
+    if (label) label.hidden = true;
+    removeTurnstile(form);
+    setBusy(form, false);
+    closeFormGate(
+      form,
+      'Privacy notice changed — reload and review it again.',
+      'This request was not sent. Reload the page to review the current notice, or use a direct contact option below.'
+    );
+    return true;
+  }
+
   function setStatus(form, message, kind) {
     var target = document.getElementById(form.id.replace('-form', '-status'));
     if (!target) return;
@@ -154,6 +320,7 @@
       idempotency_key: form.dataset.idempotency || (form.dataset.idempotency = uuid()),
       website: value(form, 'website'),
       privacy_accepted: checked(form, 'privacy_accepted'),
+      privacy_version: value(form, 'privacy_version') || null,
       turnstile_token: value(form, 'turnstile_token') || null,
       marketing: marketing
     };
@@ -181,8 +348,8 @@
     return turnstileScriptPromise;
   }
 
-  function initTurnstile(form, action) {
-    getConfig().then(function (config) {
+  function initTurnstile(form, action, knownConfig) {
+    function configure(config) {
       var siteKey = config && config.turnstile_site_key;
       if (!siteKey) return;
 
@@ -236,7 +403,14 @@
         form.dataset.turnstileUnavailable = 'true';
         status.textContent = 'The anti-spam check is unavailable. Please refresh, retry, or call 083 450 7861.';
       });
-    }).catch(function () {
+    }
+
+    if (knownConfig) {
+      configure(knownConfig);
+      return;
+    }
+
+    getConfig().then(configure).catch(function () {
       // The form API provides the authoritative error if production protection
       // is enabled while public configuration is temporarily unavailable.
     });
@@ -360,7 +534,6 @@
   function bindBookingForm() {
     var form = document.getElementById('book-form');
     if (!form) return;
-    initTurnstile(form, 'book');
 
     var serviceSelect = form.elements.service_id;
     var dateInput = form.elements.preferred_date;
@@ -498,6 +671,10 @@
     }
 
     getConfig().then(function (config) {
+      if (!approvedPrivacyVersion(config)) {
+        activatePrivacyForm(form, 'book', config);
+        return;
+      }
       var requested = new URLSearchParams(window.location.search).get('service');
       serviceSelect.textContent = '';
       var placeholder = document.createElement('option');
@@ -519,9 +696,9 @@
         renderServiceFacts();
         loadAvailability();
       }
+      activatePrivacyForm(form, 'book', config);
     }).catch(function () {
-      setStatus(form, 'Services could not be loaded. Please call 083 450 7861 or try again.', 'error');
-      serviceSelect.disabled = true;
+      closeFormAfterConfigFailure(form);
     });
 
     serviceSelect.addEventListener('change', function () {
@@ -573,7 +750,7 @@
     function rememberBooking(body, payload) {
       completed = true;
       safeStorage(sessionStorage, 'setItem', STORAGE_PREFIX + 'lastBooking', JSON.stringify(body.booking));
-      track('booking_completed', payload.service_id);
+      track('booking_request_submitted', payload.service_id);
     }
 
     if (whatsapp) whatsapp.addEventListener('click', function () {
@@ -590,6 +767,7 @@
         var message = "Hi InsureSPR, I submitted website booking request " + body.booking.reference + '. Please help me continue.';
         window.location.assign('https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(message));
       }).catch(function (error) {
+        if (handlePrivacyNoticeChanged(form, error)) return;
         if (error.code === 'SLOT_UNAVAILABLE') loadAvailability();
         resetTurnstile(form);
         setStatus(form, error.message, 'error');
@@ -615,6 +793,7 @@
           window.location.assign('booking-confirmation.html');
         }
       }).catch(function (error) {
+        if (handlePrivacyNoticeChanged(form, error)) return;
         if (error.code === 'SLOT_UNAVAILABLE') loadAvailability();
         resetTurnstile(form);
         setStatus(form, error.message, 'error');
@@ -631,7 +810,6 @@
   function bindContactForm() {
     var form = document.getElementById('contact-form');
     if (!form) return;
-    initTurnstile(form, 'contact');
     form.addEventListener('submit', function (event) {
       event.preventDefault();
       clearStatus(form);
@@ -653,17 +831,22 @@
         initTurnstile(form, 'contact');
         setBusy(form, false);
       }).catch(function (error) {
+        if (handlePrivacyNoticeChanged(form, error)) return;
         resetTurnstile(form);
         setStatus(form, error.message, 'error');
         setBusy(form, false);
       });
+    });
+    getConfig().then(function (config) {
+      activatePrivacyForm(form, 'contact', config);
+    }).catch(function () {
+      closeFormAfterConfigFailure(form);
     });
   }
 
   function bindEmployerForm() {
     var form = document.getElementById('employer-form');
     if (!form) return;
-    initTurnstile(form, 'employer');
     var started = false;
     form.addEventListener('input', function () {
       if (!started) {
@@ -710,10 +893,16 @@
         initTurnstile(form, 'employer');
         setBusy(form, false);
       }).catch(function (error) {
+        if (handlePrivacyNoticeChanged(form, error)) return;
         resetTurnstile(form);
         setStatus(form, error.message, 'error');
         setBusy(form, false);
       });
+    });
+    getConfig().then(function (config) {
+      activatePrivacyForm(form, 'employer', config);
+    }).catch(function () {
+      closeFormAfterConfigFailure(form);
     });
   }
 
@@ -736,7 +925,7 @@
         : 'Request received — awaiting staff confirmation';
       var manage = root.querySelector('[data-manage-booking]');
       if (booking.management_token) {
-        manage.href = 'manage-booking.html?token=' + encodeURIComponent(booking.management_token);
+        manage.href = 'manage-booking.html#token=' + encodeURIComponent(booking.management_token);
         manage.hidden = false;
       }
       var calendar = root.querySelector('[data-add-calendar]');
@@ -808,11 +997,15 @@
     var form = document.getElementById('manage-booking-form');
     if (!form) return;
     var params = new URLSearchParams(window.location.search);
-    var token = params.get('token') || safeStorage(sessionStorage, 'getItem', STORAGE_PREFIX + 'manageToken');
+    var fragment = new URLSearchParams(window.location.hash.replace(/^#/, ''));
+    var fragmentToken = fragment.get('token');
+    var queryToken = params.get('token');
+    var candidate = fragmentToken || queryToken || safeStorage(sessionStorage, 'getItem', STORAGE_PREFIX + 'manageToken');
+    var token = /^[0-9a-f]{64}$/i.test(candidate || '') ? candidate : '';
     if (token) {
       safeStorage(sessionStorage, 'setItem', STORAGE_PREFIX + 'manageToken', token);
-      history.replaceState(null, '', window.location.pathname);
     }
+    if (fragmentToken !== null || queryToken !== null) history.replaceState(null, '', window.location.pathname);
     form.elements.token.value = token || '';
     form.addEventListener('submit', function (event) {
       event.preventDefault();
@@ -838,6 +1031,7 @@
         setBusy(form, false);
       });
     });
+    activateBoundForm(form);
   }
 
   bindBookingForm();

@@ -34,10 +34,11 @@ has no database key and cannot query operational tables directly.
 - Supplied rate evidence review: `XOM-RATES-2026-REVIEW.md`
 - Exact legacy URL inventory: `LEGACY-SEO-URL-INVENTORY.md`
 
-The database schema and public API are deployed. The website itself is not
-published as InsureSPR's official site from this branch. Publication requires
-practice/domain authorization and completion of the release blockers in
-`PRODUCTION-READINESS.md`.
+The database schema, public API and canonical frontend are deployed. The public
+site is served at `https://www.insuresprhealth.co.za/`. Transactional intake is
+still deliberately fail-closed until the privacy notice, Turnstile, service
+facts, availability and notification dependencies in
+`PRODUCTION-READINESS.md` are approved and configured.
 
 ## Local preview
 
@@ -47,8 +48,11 @@ Serve the directory over HTTP; do not open the files with a `file:` URL.
 python -m http.server 5177
 ```
 
-Then open `http://localhost:5177/`. `localhost:5177` is in the Edge Function's
-exact-origin allowlist for local testing.
+Then open `http://localhost:5177/`. The production Edge Function intentionally
+accepts only the official apex and `www` origins, so local forms stay gated
+unless they are run against a separate local/test API. `tools/audit.mjs` stubs
+the public configuration and analytics endpoints; it never weakens production
+CORS or writes to the production project.
 
 The browser audit also accepts an explicit preview origin when its usual port
 is occupied:
@@ -89,7 +93,32 @@ security headers and a restrictive Content Security Policy. `robots.txt` and
 `sitemap.xml` cover only the proposed public routes. Confirmation and
 token-based booking-management pages are marked `noindex`.
 
-The current concept deployment is a separate property. Do not repoint the
-practice domain, publish healthcare claims, or remove an existing official site
-until ownership, redirects, content, privacy wording and operational readiness
+### Read-only release preflight
+
+Run the strict production preflight before a release. It exits nonzero while
+technical or practice-owned launch blockers remain:
+
+```powershell
+node tools/release-audit.mjs
+node tools/release-audit.mjs --mode preview
+node tools/release-audit.mjs --self-test
+```
+
+`--base`, `--api` and `--notifications` can target another candidate release;
+`--legacy-manifest` can point to a machine-readable redirect manifest. Preview
+mode downgrades practice-owned readiness items, while metadata, crawlability,
+security and API-integrity checks remain strict. `--report-only` always exits
+zero for dashboards, and `--json` emits structured output.
+
+The audit is read-only. It performs public `GET` requests and sends only an
+invalid empty JSON object to each official form endpoint to confirm that origin,
+privacy and validation gates respond safely. Those probes contain no personal
+information and cannot satisfy the write contract. Notification readiness is
+checked only through an unauthenticated `GET`; no scheduler secret is supplied
+and the notification worker is never invoked.
+
+The canonical frontend is live on the practice domain. Keep online form intake
+fail-closed and do not publish unapproved healthcare claims, prices, schedules
+or credentials. Do not remove legacy WordPress content or activate the full
+redirect map until ownership, licensing, clinical review and redirect decisions
 have been signed off.

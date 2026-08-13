@@ -1,4 +1,4 @@
-import { type ClaimedNotification, renderEmail, timingSafeEqual } from './index.ts';
+import { type ClaimedNotification, readinessResponse, renderEmail, timingSafeEqual } from './index.ts';
 
 function assert(condition: unknown, message: string): asserts condition {
   if (!condition) throw new Error(message);
@@ -53,6 +53,26 @@ Deno.test('worker-secret comparison accepts only exact matches', () => {
   assert(
     !timingSafeEqual('a'.repeat(32), 'a'.repeat(31)),
     'short secret accepted',
+  );
+});
+
+Deno.test('public readiness signal discloses only ready state and never invokes work', async () => {
+  const ready = readinessResponse(true);
+  assert(ready.status === 200, 'ready response must be HTTP 200');
+  assert(ready.headers.get('cache-control') === 'no-store', 'readiness must never be cached');
+  assert(ready.headers.get('x-insurespr-ready') === 'true', 'ready header must be explicit');
+  assert(
+    JSON.stringify(await ready.json()) === JSON.stringify({ ok: true, ready: true, readiness: 'ready' }),
+    'ready body must contain only the public readiness state',
+  );
+
+  const notReady = readinessResponse(false);
+  assert(notReady.status === 200, 'not-ready response must remain machine-readable');
+  assert(notReady.headers.get('x-insurespr-ready') === 'false', 'not-ready header must be explicit');
+  assert(
+    JSON.stringify(await notReady.json()) ===
+      JSON.stringify({ ok: true, ready: false, readiness: 'not_ready' }),
+    'not-ready body must contain only the public readiness state',
   );
 });
 

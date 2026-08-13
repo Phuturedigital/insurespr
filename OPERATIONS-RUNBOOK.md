@@ -101,6 +101,49 @@ Do not put the service-role key in the Cron request. The worker has access to th
 server-side key inside Supabase; the scheduler authenticates with the separate
 worker secret.
 
+## Publishing the privacy notice and testing forms locally
+
+Cloud deployments are never a localhost test backend. The deployed default
+Origin allowlist contains only `https://insuresprhealth.co.za` and
+`https://www.insuresprhealth.co.za`; it has no localhost, loopback, preview or
+command-client exception. While the policy setting is pending, the privacy gate
+runs before Origin, Turnstile, rate limiting and mutation work, so every caller
+receives the same fail-closed response and an unapproved Origin receives no
+cross-origin permission.
+
+For local development, run a local/mocked API and explicitly set a local-only
+`ALLOWED_ORIGINS` value there. Never add `localhost` or `127.0.0.1` to cloud
+function secrets and never add an Origin-based pending-policy bypass. Handler
+tests must assert that official, spoofed-localhost, absent-Origin and arbitrary
+Origin requests create no rate-limit or RPC calls while policy is pending.
+
+Treat privacy wording and its version as one release unit:
+
+1. Set the public setting to a clearly pending value before replacing approved
+   wording. Confirm all three mutation routes return `503
+   PRIVACY_NOTICE_NOT_READY` without creating rate-limit, consent, business or
+   notification rows.
+2. Deploy the reviewed wording and a client that visibly presents the exact
+   version returned by the uncached `/services` response and sends that same
+   nonblank string with the accepted form.
+3. Deploy the matching API version, then apply the strict displayed-version
+   migration and its self-cleaning assertions. Keep forms closed until both are
+   verified.
+4. Set `practice_settings.privacy_notice_version` to the exact approved version
+   only after the wording is public and reviewed. Verify a new submission stores
+   that version in `consent_records`.
+5. Leave an old form page open, publish a new version through the same
+   pending-first process, and submit the old page. It must receive `409
+   PRIVACY_NOTICE_CHANGED`, reload, and require fresh review/acceptance. A retry
+   of an already-created record may recover only with the version stored on its
+   original consent.
+
+Public-form analytics must record request receipt as
+`booking_request_submitted`, not `booking_completed`; completion is a trusted
+staff lifecycle fact. Campaign/referrer metadata must remain attribution-only.
+If a campaign value resembles an email address, phone/identity number, explicit
+PII key/value or contains control characters, the database sanitizer omits it.
+
 ## Enabling Cloudflare Turnstile after approval
 
 Turnstile protects the booking, workforce-lead and contact forms in addition to
@@ -108,18 +151,21 @@ the existing honeypot and rate limits. Its two keys form one deployment unit.
 Do not configure or release them independently.
 
 1. Create the production widget in Cloudflare and restrict it to the approved
-   official hostnames. Add only the protected preview hostname used for release
-   testing; use Cloudflare's test keys for localhost rather than weakening the
-   production hostname list.
+   official hostnames. A protected preview must be an explicit, temporary
+   release configuration in both Turnstile and `ALLOWED_ORIGINS`; it is not in
+   the cloud default. Use Cloudflare's test keys with a local/mock API for
+   localhost rather than weakening the production hostname or Origin lists.
 2. Put both `TURNSTILE_SITE_KEY` and `TURNSTILE_SECRET_KEY` in Supabase Edge
    Function secrets. The site key is public configuration; the secret must
    never enter git, HTML, `production.js`, Vercel browser variables, logs or
    screenshots.
-3. Redeploy `insurespr-api` after setting both secrets. A partial configuration
-   is unusable and fails closed: site-key-only renders a challenge but the API
-   refuses submissions, while secret-only makes the server require a token that
-   the browser cannot obtain.
-4. From the official origin and the protected preview, call `GET /services` and
+3. Redeploy `insurespr-api` after setting both secrets. Missing both keys and a
+   partial configuration are unusable and fail closed: site-key-only renders a
+   challenge but the API refuses submissions, while secret-only makes the
+   server require a token that the browser cannot obtain. Approving the privacy
+   notice without both keys must therefore leave form mutations at `503
+   BOT_CHECK_UNAVAILABLE`.
+4. From each explicitly approved release origin, call `GET /services` and
    verify that `turnstile_site_key` is non-null. Confirm that the response never
    exposes `TURNSTILE_SECRET_KEY` or any other server credential, then load the
    booking, workforce and contact forms and verify that each renders a widget.

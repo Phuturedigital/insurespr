@@ -2,7 +2,9 @@
 
 Status date: 13 August 2026
 Target Supabase project: `ffdmmxffzewqiacsuvhr`  
-Website publication status: **not authorized / not launched**
+Public frontend status: **live at `https://www.insuresprhealth.co.za/`**
+
+Transactional intake status: **fail-closed pending launch approvals and configuration**
 
 This file is the release gate. A technically working form is not enough for a
 healthcare acquisition site: the business facts, privacy position, staff
@@ -61,8 +63,9 @@ workflow and domain transition must all be ready at the same time.
 - Event capture uses anonymous session identifiers and campaign/referrer
   metadata; it does not send patient names, contact details or form notes.
 - Edge Function validation includes body-size limits, field allowlists, phone
-  normalization, exact-origin CORS, a honeypot, rate limiting and optional
-  Turnstile verification. Raw IP addresses are not persisted by the app.
+  normalization, exact-origin CORS, a honeypot, rate limiting and mandatory,
+  fail-closed Turnstile verification for public form mutations. Raw IP
+  addresses are not persisted by the app.
 - Supabase security advisor: zero findings after hardening.
 - Supabase performance advisor: only expected `unused_index` informational
   notices on the newly created, empty operational database. Keep the indexes
@@ -81,14 +84,19 @@ workflow and domain transition must all be ready at the same time.
   uses them. Analytics writes are intercepted in the deterministic desktop
   audit so a visual/markup check cannot pollute production measurement data.
 - Live API release checks return `200` for health/services, `403` for an
-  unapproved origin, `503 PRIVACY_NOTICE_NOT_READY` for official and publicly
-  reachable preview form submissions while approval is pending, `422` for an
-  invalid localhost development submission, and `503` for the deliberately
-  unconfigured notification worker. `/services` is `no-store` so a privacy or
-  Turnstile configuration change cannot be masked by a stale public response.
+  unapproved origin after the privacy gate is open, `503
+  PRIVACY_NOTICE_NOT_READY` for every form-mutation origin while approval is
+  pending (including spoofed localhost and absent Origin). Notification
+  readiness returns `200` with `ready:false`; delivery remains fail-closed until
+  its provider configuration is complete. The deployed cloud default CORS list
+  contains only the exact apex and `www` official origins. `/services` is
+  `no-store` so a privacy or Turnstile configuration change cannot be masked by
+  a stale public response.
 - After all self-cleaning tests, the live project contains zero customers,
   bookings, slots, booking history, employer leads, contact enquiries,
-  notification attempts, operational audit events and analytics events.
+  notification attempts and operational audit events. It retains 24
+  privacy-minimised QA analytics events; all session identifiers and paths pass
+  the current database constraints.
 
 ### API routes
 
@@ -102,6 +110,35 @@ workflow and domain transition must all be ready at the same time.
 | `POST` | `/contact-enquiries` | Short non-clinical enquiry |
 | `POST` | `/booking-actions` | Token-based cancellation/reschedule request |
 | `POST` | `/events` | Privacy-minimised conversion event |
+
+### Applied strict-consent and attribution release package
+
+The coordinated browser, API and database hardening package is deployed. Live
+migration history includes `20260813172057_enforce_displayed_privacy_notice_version`
+and `20260813172127_harden_marketing_and_booking_analytics`:
+
+- Each public form must display the nonblank `privacy_notice_version` returned
+  by the uncached `/services` response and submit that exact version unchanged.
+  The API forwards it; the database accepts a new record only while the same
+  approved version is share-locked as current. A stale open page receives `409
+  PRIVACY_NOTICE_CHANGED` and must reload and show the new notice.
+- A matching idempotent retry remains recoverable after a later policy change,
+  but only when the submitted version equals the consent stored with the
+  original record. Policy version remains excluded from the canonical business
+  fingerprint so a policy publication cannot strand a lost-response replay.
+- Pending or blank policy configuration remains fail-closed with `503
+  PRIVACY_NOTICE_NOT_READY` before Turnstile, rate limiting or mutation work.
+- Attribution sanitization rejects control data and common email-, phone-,
+  identity- and explicit-PII-shaped campaign values. Public booking submission
+  analytics use `booking_request_submitted`; `booking_completed` is reserved for
+  a trusted staff completion workflow.
+
+The technical release order was completed while the policy version remained
+pending: the client displays/sends the version, the API forwards and maps it,
+and the migrations were applied and verified. The remaining controlled step is
+to publish approved privacy wording and set that exact approved version in
+`practice_settings`, only after both Turnstile keys and the other intake
+dependencies are ready. Submissions must remain closed until then.
 
 ## Release blockers — practice decisions or credentials required
 
@@ -163,7 +200,8 @@ track them in the Supabase dashboard.
      must remain server-side. Never release only one key: a site key without a
      secret displays a challenge but the API refuses submissions, while a
      secret without a site key leaves the browser unable to obtain a token.
-     Both partial states fail closed with a configuration error.
+     Missing both keys and either partial state fail closed with a configuration
+     error; privacy approval alone can never open unprotected forms.
    - Verify that `GET /services` returns a non-null `turnstile_site_key`, each
      public form renders the widget, and every retry obtains a fresh token.
      Exercise missing, invalid, expired and replayed tokens plus a simulated

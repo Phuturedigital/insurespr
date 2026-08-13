@@ -5,26 +5,9 @@ const MAX_BODY_BYTES = 32_000;
 const TURNSTILE_TIMEOUT_MS = 6_000;
 
 const DEFAULT_ALLOWED_ORIGINS = [
-  'https://insurespr.vercel.app',
   'https://insuresprhealth.co.za',
   'https://www.insuresprhealth.co.za',
-  'https://insurespr-concept.phuturedigital.co.za',
-  'http://127.0.0.1:4321',
-  'http://localhost:4321',
-  'http://127.0.0.1:4319',
-  'http://localhost:4319',
-  'http://127.0.0.1:5177',
-  'http://localhost:5177',
 ];
-
-const PRIVACY_PREVIEW_ORIGINS = new Set([
-  'http://127.0.0.1:4321',
-  'http://localhost:4321',
-  'http://127.0.0.1:4319',
-  'http://localhost:4319',
-  'http://127.0.0.1:5177',
-  'http://localhost:5177',
-]);
 
 type Json = null | boolean | number | string | Json[] | { [key: string]: Json };
 type JsonRecord = Record<string, Json>;
@@ -35,6 +18,27 @@ type DbErrorShape = {
   details?: string;
   hint?: string;
 };
+
+type ApiDependencies = {
+  getAllowedOrigins: () => Set<string>;
+  dbFetch: (path: string, init?: RequestInit) => Promise<Response>;
+  verifyTurnstile: (
+    body: JsonRecord,
+    req: Request,
+    expectedAction: string,
+    allowedOrigin: string | null,
+  ) => Promise<void>;
+  enforceRateLimit: (
+    req: Request,
+    endpoint: string,
+    limit: number,
+    windowSeconds: number,
+  ) => Promise<string>;
+  rpc: <T>(name: string, payload: JsonRecord) => Promise<T>;
+  requestId: () => string;
+};
+
+export type ApiDependencyOverrides = Partial<ApiDependencies>;
 
 class ApiError extends Error {
   status: number;
@@ -153,7 +157,7 @@ async function dbFetch(path: string, init: RequestInit = {}): Promise<Response> 
   throw new ApiError(503, 'DATABASE_UNAVAILABLE', 'The booking service is temporarily unavailable.');
 }
 
-async function readDbJson<T>(response: Response): Promise<T> {
+export async function readDbJson<T>(response: Response): Promise<T> {
   const body = await response.json().catch(() => ({})) as T | DbErrorShape;
   if (response.ok) return body as T;
 
@@ -164,6 +168,23 @@ async function readDbJson<T>(response: Response): Promise<T> {
     code: error.code || 'unknown',
     message: String(error.message || '').slice(0, 240),
   }));
+  if (error.code === 'PVP01') {
+    throw new ApiError(
+      409,
+      'PRIVACY_NOTICE_CHANGED',
+      'The privacy notice changed. Reload the page, review it and try again.',
+    );
+  }
+  if (
+    error.code === '55000' &&
+    String(error.message || '').toLowerCase().includes('privacy notice')
+  ) {
+    throw new ApiError(
+      503,
+      'PRIVACY_NOTICE_NOT_READY',
+      'Online submissions are temporarily unavailable while the privacy notice is being prepared.',
+    );
+  }
   if (error.message === 'selected slot is unavailable' || error.code === 'P0002' || error.code === '23505') {
     throw new ApiError(
       409,
@@ -272,15 +293,19 @@ function rejectBot(body: JsonRecord): void {
   }
 }
 
-async function verifyTurnstile(
+export async function verifyTurnstile(
   body: JsonRecord,
   req: Request,
   expectedAction: string,
   allowedOrigin: string | null,
+  configuration?: { siteKey?: string; secretKey?: string },
 ): Promise<void> {
-  const turnstileSiteKey = Deno.env.get('TURNSTILE_SITE_KEY')?.trim();
-  const turnstileSecret = Deno.env.get('TURNSTILE_SECRET_KEY')?.trim();
-  if (!turnstileSiteKey && !turnstileSecret) return;
+  const turnstileSiteKey = (
+    configuration ? configuration.siteKey : Deno.env.get('TURNSTILE_SITE_KEY')
+  )?.trim();
+  const turnstileSecret = (
+    configuration ? configuration.secretKey : Deno.env.get('TURNSTILE_SECRET_KEY')
+  )?.trim();
   if (!turnstileSiteKey || !turnstileSecret) {
     throw new ApiError(
       503,
@@ -342,6 +367,16 @@ function text(value: Json, max = 2_000): string {
   return typeof value === 'string' ? value.trim().slice(0, max) : '';
 }
 
+function displayedPrivacyVersion(value: Json): string {
+  if (typeof value !== 'string') {
+    throw new ApiError(422, 'VALIDATION_ERROR', 'The displayed privacy notice version is required.');
+  }
+  if (value.length < 1 || value.length > 80 || value !== value.trim()) {
+    throw new ApiError(422, 'VALIDATION_ERROR', 'The displayed privacy notice version is invalid.');
+  }
+  return value;
+}
+
 function boolean(value: Json): boolean {
   return value === true;
 }
@@ -352,15 +387,15 @@ function marketing(body: JsonRecord): JsonRecord {
   return candidate as JsonRecord;
 }
 
-async function handleServices(origin: string | null): Promise<Response> {
+async function handleServices(origin: string | null, deps: ApiDependencies): Promise<Response> {
   const [practiceResponse, categoriesResponse, servicesResponse] = await Promise.all([
-    dbFetch(
+    deps.dbFetch(
       'practice_settings?select=practice_name,descriptor,address_line,locality,region,country_code,phone_display,phone_e164,whatsapp_e164,public_email,timezone,opening_hours,maps_url,privacy_notice_version&id=eq.primary',
     ),
-    dbFetch(
+    deps.dbFetch(
       'service_categories?select=id,slug,name,audience,summary,primary_cta,display_order&is_published=eq.true&order=display_order.asc',
     ),
-    dbFetch(
+    deps.dbFetch(
       'services?select=id,category_id,slug,name,short_description,audience,booking_mode,confirmation_mode,appointment_duration_minutes,price_type,cash_price_cents,cash_price_max_cents,currency,price_note,medical_aid_status,referral_requirement,appointment_requirement,what_to_bring,expected_duration,results_process,preparation_instructions,verification_status,display_order&is_published=eq.true&order=display_order.asc',
     ),
   ]);
@@ -384,7 +419,11 @@ async function handleServices(origin: string | null): Promise<Response> {
   );
 }
 
-async function handleAvailability(url: URL, origin: string | null): Promise<Response> {
+async function handleAvailability(
+  url: URL,
+  origin: string | null,
+  deps: ApiDependencies,
+): Promise<Response> {
   const serviceId = requireUuid(url.searchParams.get('service_id'), 'service_id');
   const from = url.searchParams.get('from');
   const until = url.searchParams.get('until');
@@ -398,7 +437,7 @@ async function handleAvailability(url: URL, origin: string | null): Promise<Resp
     throw new ApiError(422, 'VALIDATION_ERROR', 'Availability can be requested for at most 45 days.');
   }
 
-  const slots = await rpc<Json[]>('list_available_slots', {
+  const slots = await deps.rpc<Json[]>('list_available_slots', {
     p_service_id: serviceId,
     p_from: fromDate.toISOString(),
     p_until: untilDate.toISOString(),
@@ -406,13 +445,15 @@ async function handleAvailability(url: URL, origin: string | null): Promise<Resp
   return jsonResponse(origin, { slots }, 200, 'public, max-age=15');
 }
 
-async function requireSubmissionPolicy(origin: string | null): Promise<void> {
-  const response = await dbFetch(
+async function requireSubmissionPolicy(deps: ApiDependencies): Promise<void> {
+  const response = await deps.dbFetch(
     'practice_settings?select=privacy_notice_version&id=eq.primary&limit=1',
   );
   const settings = await readDbJson<Array<{ privacy_notice_version?: string }>>(response);
-  const version = settings[0]?.privacy_notice_version?.trim();
-  if (!version) {
+  const version = settings[0]?.privacy_notice_version;
+  if (
+    !version || version.length > 80 || version !== version.trim()
+  ) {
     throw new ApiError(
       503,
       'PRIVACY_NOTICE_NOT_READY',
@@ -421,21 +462,24 @@ async function requireSubmissionPolicy(origin: string | null): Promise<void> {
   }
 
   const pending = version.toLowerCase().includes('pending');
-  if (pending && (!origin || !PRIVACY_PREVIEW_ORIGINS.has(origin))) {
+  if (pending) {
     throw new ApiError(
       503,
       'PRIVACY_NOTICE_NOT_READY',
-      'Online forms are not open on the official site yet. Please call 083 450 7861.',
+      'Online forms are not open yet. Please call 083 450 7861.',
     );
   }
 }
 
-async function handleBooking(req: Request, origin: string | null): Promise<Response> {
+async function handleBooking(
+  req: Request,
+  origin: string | null,
+  deps: ApiDependencies,
+): Promise<Response> {
   const body = await readBody(req);
   rejectBot(body);
-  await requireSubmissionPolicy(origin);
-  await verifyTurnstile(body, req, 'book', origin);
-  const ipHash = await enforceRateLimit(req, 'bookings', 10, 3_600);
+  await deps.verifyTurnstile(body, req, 'book', origin);
+  const ipHash = await deps.enforceRateLimit(req, 'bookings', 10, 3_600);
 
   const payload: JsonRecord = {
     idempotency_key: text(body.idempotency_key, 36),
@@ -450,21 +494,24 @@ async function handleBooking(req: Request, origin: string | null): Promise<Respo
     patient_status: text(body.patient_status, 20),
     notes: text(body.notes, 1_000) || null,
     privacy_accepted: boolean(body.privacy_accepted),
-    privacy_version: 'database-managed',
+    privacy_version: displayedPrivacyVersion(body.privacy_version),
     ip_hash: ipHash,
     marketing: marketing(body),
   };
 
-  const booking = await rpc<JsonRecord>('create_booking', { p_payload: payload });
+  const booking = await deps.rpc<JsonRecord>('create_booking', { p_payload: payload });
   return jsonResponse(origin, { booking }, 201);
 }
 
-async function handleEmployerLead(req: Request, origin: string | null): Promise<Response> {
+async function handleEmployerLead(
+  req: Request,
+  origin: string | null,
+  deps: ApiDependencies,
+): Promise<Response> {
   const body = await readBody(req);
   rejectBot(body);
-  await requireSubmissionPolicy(origin);
-  await verifyTurnstile(body, req, 'employer', origin);
-  const ipHash = await enforceRateLimit(req, 'employer-leads', 6, 3_600);
+  await deps.verifyTurnstile(body, req, 'employer', origin);
+  const ipHash = await deps.enforceRateLimit(req, 'employer-leads', 6, 3_600);
   const services = Array.isArray(body.services_required)
     ? body.services_required.filter((value): value is string => typeof value === 'string').slice(0, 20)
     : [];
@@ -482,20 +529,23 @@ async function handleEmployerLead(req: Request, origin: string | null): Promise<
     location: text(body.location, 300) || null,
     notes: text(body.notes, 2_000) || null,
     privacy_accepted: boolean(body.privacy_accepted),
-    privacy_version: 'database-managed',
+    privacy_version: displayedPrivacyVersion(body.privacy_version),
     ip_hash: ipHash,
     marketing: marketing(body),
   };
-  const lead = await rpc<JsonRecord>('create_employer_lead', { p_payload: payload });
+  const lead = await deps.rpc<JsonRecord>('create_employer_lead', { p_payload: payload });
   return jsonResponse(origin, { lead }, 201);
 }
 
-async function handleContact(req: Request, origin: string | null): Promise<Response> {
+async function handleContact(
+  req: Request,
+  origin: string | null,
+  deps: ApiDependencies,
+): Promise<Response> {
   const body = await readBody(req);
   rejectBot(body);
-  await requireSubmissionPolicy(origin);
-  await verifyTurnstile(body, req, 'contact', origin);
-  const ipHash = await enforceRateLimit(req, 'contact-enquiries', 6, 3_600);
+  await deps.verifyTurnstile(body, req, 'contact', origin);
+  const ipHash = await deps.enforceRateLimit(req, 'contact-enquiries', 6, 3_600);
   const payload: JsonRecord = {
     idempotency_key: text(body.idempotency_key, 36),
     name: text(body.name, 160),
@@ -504,18 +554,22 @@ async function handleContact(req: Request, origin: string | null): Promise<Respo
     enquiry_type: text(body.enquiry_type, 40) || 'general',
     message: text(body.message, 2_000),
     privacy_accepted: boolean(body.privacy_accepted),
-    privacy_version: 'database-managed',
+    privacy_version: displayedPrivacyVersion(body.privacy_version),
     ip_hash: ipHash,
     marketing: marketing(body),
   };
-  const enquiry = await rpc<JsonRecord>('create_contact_enquiry', { p_payload: payload });
+  const enquiry = await deps.rpc<JsonRecord>('create_contact_enquiry', { p_payload: payload });
   return jsonResponse(origin, { enquiry }, 201);
 }
 
-async function handleBookingAction(req: Request, origin: string | null): Promise<Response> {
+async function handleBookingAction(
+  req: Request,
+  origin: string | null,
+  deps: ApiDependencies,
+): Promise<Response> {
   const body = await readBody(req);
   rejectBot(body);
-  await enforceRateLimit(req, 'booking-actions', 10, 3_600);
+  await deps.enforceRateLimit(req, 'booking-actions', 10, 3_600);
   const payload: JsonRecord = {
     token: text(body.token, 64),
     action: text(body.action, 40),
@@ -523,14 +577,18 @@ async function handleBookingAction(req: Request, origin: string | null): Promise
     preferred_time_period: text(body.preferred_time_period, 20) || null,
     note: text(body.note, 500) || null,
   };
-  const booking = await rpc<JsonRecord>('manage_booking', { p_payload: payload });
+  const booking = await deps.rpc<JsonRecord>('manage_booking', { p_payload: payload });
   return jsonResponse(origin, { booking });
 }
 
-async function handleEvent(req: Request, origin: string | null): Promise<Response> {
+async function handleEvent(
+  req: Request,
+  origin: string | null,
+  deps: ApiDependencies,
+): Promise<Response> {
   const body = await readBody(req);
   rejectBot(body);
-  await enforceRateLimit(req, 'analytics-events', 120, 60);
+  await deps.enforceRateLimit(req, 'analytics-events', 120, 60);
   const payload: JsonRecord = {
     event_name: text(body.event_name, 80),
     anonymous_session_id: text(body.anonymous_session_id, 128) || null,
@@ -538,62 +596,110 @@ async function handleEvent(req: Request, origin: string | null): Promise<Respons
     service_id: text(body.service_id, 36) || null,
     marketing: marketing(body),
   };
-  await rpc<null>('record_analytics_event', { p_payload: payload });
+  await deps.rpc<null>('record_analytics_event', { p_payload: payload });
   return jsonResponse(origin, { recorded: true });
 }
 
-Deno.serve(async (req: Request): Promise<Response> => {
-  const requestId = crypto.randomUUID();
-  const origin = req.headers.get('origin');
-  const allowedOrigins = getAllowedOrigins();
-  const allowedOrigin = origin && allowedOrigins.has(origin) ? origin : null;
+const DEFAULT_DEPENDENCIES: ApiDependencies = {
+  getAllowedOrigins,
+  dbFetch,
+  verifyTurnstile,
+  enforceRateLimit,
+  rpc,
+  requestId: () => crypto.randomUUID(),
+};
 
-  if (origin && !allowedOrigin) {
-    return jsonResponse(null, {
-      error: { code: 'ORIGIN_NOT_ALLOWED', message: 'This site is not allowed to use the booking service.' },
-      request_id: requestId,
-    }, 403);
-  }
-  if (req.method === 'OPTIONS') {
-    return new Response(null, { status: 204, headers: corsHeaders(allowedOrigin) });
-  }
+const PRIVACY_GATED_ROUTES = new Set([
+  '/bookings',
+  '/employer-leads',
+  '/contact-enquiries',
+]);
 
-  try {
+export function createHandler(overrides: ApiDependencyOverrides = {}): (req: Request) => Promise<Response> {
+  const deps = { ...DEFAULT_DEPENDENCIES, ...overrides } as ApiDependencies;
+
+  return async (req: Request): Promise<Response> => {
+    const requestId = deps.requestId();
+    const origin = req.headers.get('origin');
+    const allowedOrigins = deps.getAllowedOrigins();
+    const allowedOrigin = origin && allowedOrigins.has(origin) ? origin : null;
     const url = new URL(req.url);
     const route = getRoute(url);
-    if (req.method === 'GET' && route === '/') {
-      return jsonResponse(allowedOrigin, { ok: true, service: FUNCTION_NAME }, 200, 'no-store');
+
+    if (req.method === 'OPTIONS') {
+      if (origin && !allowedOrigin) {
+        return jsonResponse(null, {
+          error: {
+            code: 'ORIGIN_NOT_ALLOWED',
+            message: 'This site is not allowed to use the booking service.',
+          },
+          request_id: requestId,
+        }, 403);
+      }
+      return new Response(null, { status: 204, headers: corsHeaders(allowedOrigin) });
     }
-    if (req.method === 'GET' && route === '/services') return await handleServices(allowedOrigin);
-    if (req.method === 'GET' && route === '/availability') {
-      return await handleAvailability(url, allowedOrigin);
-    }
-    if (req.method === 'POST' && route === '/bookings') return await handleBooking(req, allowedOrigin);
-    if (req.method === 'POST' && route === '/employer-leads') {
-      return await handleEmployerLead(req, allowedOrigin);
-    }
-    if (req.method === 'POST' && route === '/contact-enquiries') {
-      return await handleContact(req, allowedOrigin);
-    }
-    if (req.method === 'POST' && route === '/booking-actions') {
-      return await handleBookingAction(req, allowedOrigin);
-    }
-    if (req.method === 'POST' && route === '/events') return await handleEvent(req, allowedOrigin);
-    throw new ApiError(404, 'NOT_FOUND', 'That endpoint does not exist.');
-  } catch (error) {
-    if (error instanceof ApiError) {
+
+    try {
+      // The privacy readiness gate deliberately precedes the Origin decision
+      // for public form mutations. While the notice is pending, every caller
+      // receives the same fail-closed response and no body, bot, rate-limit or
+      // mutation path is evaluated. Local development uses a local/mock API.
+      if (req.method === 'POST' && PRIVACY_GATED_ROUTES.has(route)) {
+        await requireSubmissionPolicy(deps);
+      }
+
+      if (origin && !allowedOrigin) {
+        return jsonResponse(null, {
+          error: {
+            code: 'ORIGIN_NOT_ALLOWED',
+            message: 'This site is not allowed to use the booking service.',
+          },
+          request_id: requestId,
+        }, 403);
+      }
+
+      if (req.method === 'GET' && route === '/') {
+        return jsonResponse(allowedOrigin, { ok: true, service: FUNCTION_NAME }, 200, 'no-store');
+      }
+      if (req.method === 'GET' && route === '/services') {
+        return await handleServices(allowedOrigin, deps);
+      }
+      if (req.method === 'GET' && route === '/availability') {
+        return await handleAvailability(url, allowedOrigin, deps);
+      }
+      if (req.method === 'POST' && route === '/bookings') {
+        return await handleBooking(req, allowedOrigin, deps);
+      }
+      if (req.method === 'POST' && route === '/employer-leads') {
+        return await handleEmployerLead(req, allowedOrigin, deps);
+      }
+      if (req.method === 'POST' && route === '/contact-enquiries') {
+        return await handleContact(req, allowedOrigin, deps);
+      }
+      if (req.method === 'POST' && route === '/booking-actions') {
+        return await handleBookingAction(req, allowedOrigin, deps);
+      }
+      if (req.method === 'POST' && route === '/events') {
+        return await handleEvent(req, allowedOrigin, deps);
+      }
+      throw new ApiError(404, 'NOT_FOUND', 'That endpoint does not exist.');
+    } catch (error) {
+      if (error instanceof ApiError) {
+        return jsonResponse(allowedOrigin, {
+          error: { code: error.code, message: error.message },
+          request_id: requestId,
+        }, error.status);
+      }
+      console.error(JSON.stringify({ request_id: requestId, error: 'unhandled_request_failure' }));
       return jsonResponse(allowedOrigin, {
-        error: { code: error.code, message: error.message },
+        error: {
+          code: 'UNEXPECTED_ERROR',
+          message: 'Something went wrong. Please try again or contact the practice.',
+        },
         request_id: requestId,
-      }, error.status);
+      }, 500);
     }
-    console.error(JSON.stringify({ request_id: requestId, error: 'unhandled_request_failure' }));
-    return jsonResponse(allowedOrigin, {
-      error: {
-        code: 'UNEXPECTED_ERROR',
-        message: 'Something went wrong. Please try again or contact the practice.',
-      },
-      request_id: requestId,
-    }, 500);
-  }
-});
+  };
+}
+
+if (import.meta.main) Deno.serve(createHandler());

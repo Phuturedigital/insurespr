@@ -59,14 +59,29 @@ class DeliveryError extends Error {
   }
 }
 
-function jsonResponse(status: number, body: JsonRecord): Response {
+function jsonResponse(
+  status: number,
+  body: JsonRecord,
+  additionalHeaders: Record<string, string> = {},
+): Response {
   return new Response(JSON.stringify(body), {
     status,
     headers: {
       'content-type': 'application/json; charset=utf-8',
       'cache-control': 'no-store',
       'x-content-type-options': 'nosniff',
+      ...additionalHeaders,
     },
+  });
+}
+
+export function readinessResponse(ready: boolean): Response {
+  return jsonResponse(200, {
+    ok: true,
+    ready,
+    readiness: ready ? 'ready' : 'not_ready',
+  }, {
+    'x-insurespr-ready': ready ? 'true' : 'false',
   });
 }
 
@@ -578,6 +593,13 @@ async function processClaim(
 }
 
 export async function handler(request: Request): Promise<Response> {
+  if (request.method === 'GET') {
+    // This public probe never invokes the queue and exposes no provider,
+    // recipient or credential details. It exists solely for release/uptime
+    // checks that must not possess the scheduler secret.
+    return readinessResponse(Boolean(readConfig()));
+  }
+
   if (request.method !== 'POST') {
     return jsonResponse(405, { error: 'method_not_allowed' });
   }

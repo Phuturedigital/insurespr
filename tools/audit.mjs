@@ -1,9 +1,8 @@
 /* Whole-site health check. Everything here is measured, not eyeballed.
  *   node tools/audit.mjs
  */
-import { createRequire } from 'node:module';
-const require = createRequire('file:///C:/Users/Acer/thatha/');
-const { chromium } = require('playwright');
+import { loadPlaywright } from './load-playwright.mjs';
+const { chromium } = loadPlaywright();
 
 const PAGES = [
   'index.html',
@@ -30,12 +29,40 @@ let fails = 0;
 const note = (m) => { console.log('  ' + m); if (m.startsWith('🚨')) fails++; };
 const localOrigin = process.argv[2] || process.env.AUDIT_BASE_URL || 'http://localhost:4321';
 const apiOrigin = 'https://ffdmmxffzewqiacsuvhr.supabase.co';
+const apiBase = `${apiOrigin}/functions/v1/insurespr-api`;
+
+/*
+ * Production intentionally accepts only the two official website origins.
+ * Keep this render audit deterministic and offline-safe by supplying the same
+ * fail-closed public configuration that a pending release would expose. This
+ * validates the gated form UI without weakening production CORS or writing to
+ * the production project.
+ */
+const auditConfig = {
+  practice: {
+    privacy_notice_version: 'pending-approval',
+  },
+  categories: [],
+  services: [],
+  turnstile_site_key: null,
+};
 
 for (const pg of PAGES) {
   const name = pg.replace('.html', '');
   const p = await b.newPage({ viewport: { width: 1280, height: 900 }, reducedMotion: 'reduce' });
   p.setDefaultTimeout(10_000);
-  await p.route(`${apiOrigin}/functions/v1/insurespr-api/events`, async (route) => {
+  await p.route(`${apiBase}/services`, async (route) => {
+    await route.fulfill({
+      status: 200,
+      headers: {
+        'Access-Control-Allow-Origin': localOrigin,
+        'Cache-Control': 'no-store',
+        'Content-Type': 'application/json; charset=utf-8',
+      },
+      body: JSON.stringify(auditConfig),
+    });
+  });
+  await p.route(`${apiBase}/events`, async (route) => {
     const headers = {
       'Access-Control-Allow-Origin': localOrigin,
       'Access-Control-Allow-Headers': 'content-type, x-client-version',
