@@ -1,0 +1,53 @@
+name: Quality
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: quality-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  deterministic-tests:
+    name: Syntax, contracts, and browser journeys
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Use Deno 2.9.2
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.9.2
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Install the locked Chromium runtime
+        run: npx --no-install playwright install --with-deps chromium
+
+      - name: Check JavaScript syntax
+        run: npm run test:syntax
+
+      - name: Run offline contract tests
+        run: npm run test:unit
+
+      - name: Check and test Supabase Edge Functions locally
+        run: npm run test:deno
+
+      - name: Run loopback browser journeys
+        run: npm run test:browser

@@ -24,7 +24,6 @@ const sprite = (await readFile(join(ROOT, 'tools', 'icons.svg'), 'utf8')).trim()
 const pages = (await readdir(ROOT)).filter((f) => f.endsWith('.html'));
 
 let stamped = 0;
-let skipped = 0;
 
 for (const file of pages) {
   const path = join(ROOT, file);
@@ -33,8 +32,15 @@ for (const file of pages) {
   const a = html.indexOf(START);
   const b = html.indexOf(END);
   if (a === -1 || b === -1) {
-    console.warn(`skip ${file} — no icons markers`);
-    skipped++;
+    const bodyStart = html.search(/<body\b[^>]*>/i);
+    if (bodyStart === -1) {
+      throw new Error(`${file} has no body element`);
+    }
+    const bodyEnd = html.indexOf('>', bodyStart) + 1;
+    const block = `\n${START}\n${sprite}\n${END}\n`;
+    await writeFile(path, html.slice(0, bodyEnd) + block + html.slice(bodyEnd));
+    console.log(`add  ${file}`);
+    stamped++;
     continue;
   }
 
@@ -48,5 +54,4 @@ for (const file of pages) {
   }
 }
 
-console.log(`\n${stamped} page(s) updated, ${skipped} skipped.`);
-process.exit(skipped ? 1 : 0);
+console.log(`\n${stamped} page(s) updated.`);

@@ -18,9 +18,12 @@
  * nothing. Card markup is what actually changes when a concept is added.
  */
 import { readFileSync, writeFileSync, existsSync, readdirSync } from 'node:fs';
+import { homedir } from 'node:os';
 import { join } from 'node:path';
 
-const ROOT = 'C:/Users/Acer';
+/* The sibling concept repositories live directly under the current user's
+   home directory. Preserve that target without embedding an account name. */
+const ROOT = homedir();
 const WRITE = process.argv.includes('--write');
 const ONLY = process.argv.includes('--only')
   ? process.argv[process.argv.indexOf('--only') + 1]

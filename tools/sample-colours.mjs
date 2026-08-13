@@ -15,14 +15,13 @@
  *
  * Usage:  node tools/sample-colours.mjs
  */
-import { createRequire } from 'node:module';
 import { readFile } from 'node:fs/promises';
 import { join, dirname, basename, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { loadPlaywright } from './load-playwright.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
-const require = createRequire('file:///C:/Users/Acer/thatha/');
-const { chromium } = require('playwright');
+const { chromium } = loadPlaywright();
 
 const FILES = ['tools/logo-source-mark.png', 'tools/logo-source-full.jpeg'];
 

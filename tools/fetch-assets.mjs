@@ -88,6 +88,118 @@ const ASSETS = [
     note: 'Grandmother and child laughing outdoors. "Independence" made concrete instead of stated.' },
   { id: 6809658,  out: 'assets/clinic.webp',      w: 1400, credit: 'Pavel Danilyuk',
     note: 'Reception desk with a real interaction. Used on Contact so the address has a face.' },
+
+  /* ======================================================================
+     PRODUCTION SITE PICKS
+     ----------------------------------------------------------------------
+     Everything above was chosen for the CONCEPT site, whose subject was bone
+     longevity — hence the parks, dumbbells and outdoor light. The production
+     site sells three concrete clinical services, and its service pages had
+     drifted to one hero image each followed by a wall of outline icons.
+     These frames exist to carry those pages.
+
+     The register deliberately moves indoors: a radiographer at a machine, a
+     film being read, a form being completed, a worker being screened. The
+     older exercise frames stay, but only on spr.html where the subject
+     genuinely is strength and recovery.
+     ================================================================== */
+
+  /* --- x-ray ------------------------------------------------------------
+     The page previously led on results.webp — a hand pointing at BRAIN MRI
+     slices. That frame is an MRI montage, not a plain radiograph, and it was
+     already doing duty on two other pages. Leading an x-ray service with an
+     MRI image misdescribes the service, which is the same test that rejected
+     the CT montage (8460380) and the tunnel scanners in the concept pass.
+
+     6812455 and 6812440 are from one Pavel Danilyuk shoot, so hero and card
+     share a room, a light and a lead apron — the same bookending trick the
+     homepage plays with hero.webp/joy.webp.
+
+     REJECTED and worth recording, because they look fine as thumbnails:
+       6812457  dental PANORAMIC unit — rejected once already in the concept
+                pass and returned to the top of the same query.
+       6234976  heavy magenta grade, and the unit reads as mammography.
+       4225922  masked clinician; masks date the whole page to 2020-21.  */
+  { id: 6812455,  out: 'assets/xray-room.webp',    w: 1600, credit: 'Pavel Danilyuk',
+    note: 'X-Ray hero. Patient in a lead apron at an upright bucky — an actual plain-film setup.' },
+  { id: 6812440,  out: 'assets/xray-position.webp', w: 1200, credit: 'Pavel Danilyuk',
+    note: 'Primary Healthcare X-Ray card. A radiographer positioning a patient: the service as a verb.' },
+  { id: 7579820,  out: 'assets/xray-chest.webp',   w: 1200, credit: 'cottonbro studio',
+    note: 'Visa chest x-ray card. A CHEST film, read with the patient — matches the named service exactly.' },
+  { id: 16204070, out: 'assets/certificate.webp',  w: 1200, credit: 'Paloma Gil',
+    note: 'Certificates card. Hands completing a form; no face, so it never outranks the two cards beside it.' },
+
+  /* --- workforce --------------------------------------------------------
+     5721671 sits on a near-black navy that lands within a few points of the
+     --ink token, so it drops onto the dark band without a scrim.
+
+     REJECTED: 7195195 is a hands-on-CARD-READER frame. The public service
+     pages publish no prices by design, and a payment terminal implies a
+     price list the practice has not approved. */
+  { id: 5721671,  out: 'assets/workforce-med.webp', w: 1200, credit: 'cottonbro studio',
+    note: 'Occupational-health medicals. Clinician in scrubs on a navy ground that matches --ink.' },
+  { id: 32467382, out: 'assets/workforce-team.webp', w: 1600, credit: 'Harrun Muhammad',
+    note: 'Staff x-rays. A line of workers in hi-vis on site — the employer’s workforce, not a stock boardroom.' },
+  { id: 9870223,  out: 'assets/workforce-quote.webp', w: 1200, credit: 'Ron Lach',
+    note: 'Quote route. A handshake over signed documents: an agreement on paper, which is what a quote is.' },
+
+  /* --- scanning ---------------------------------------------------------
+     6129508 shows a real medical body-composition analyser, with the subject
+     clothed and upright.
+
+     REJECTED: 7558818 and 5714350 are bikini-and-caliper frames. They read as
+     an aesthetics or weight-loss service rather than a clinical measurement,
+     which is the same misrepresentation test the DXA-is-not-a-tunnel rule
+     applies — and this practice's own copy calls BMI "population-based and
+     outdated". */
+  { id: 6129508,  out: 'assets/scan-body.webp',    w: 1200, credit: 'RDNE Stock project',
+    note: 'Body-composition card. A genuine analyser, subject clothed — clinical, not cosmetic.' },
+
+  /* --- booking ----------------------------------------------------------
+     REJECTED: 6812426 / 6812434 / 6812439 / 6809667 all carry a "DeKo+"
+     dental-clinic logo on the wall behind the desk. Shipping another
+     practice's branding — a DENTAL one — on InsureSPR's booking page is the
+     same error as the carrier-livery frames rejected on the courier site. */
+  { id: 4269274,  out: 'assets/reception.webp',    w: 1400, credit: 'Cedric Fauntleroy',
+    note: 'Booking page. Two staff at a desk: the human step that confirms a request. No third-party branding.' },
+
+  /* ======================================================================
+     HERO FRAMES
+     ----------------------------------------------------------------------
+     The homepage carousel was three activewear frames on a running path, and
+     spr / scanning / workforce led on a track athlete, a gym and a desk
+     consultation. That set sells a gym or a coaching brand. This practice
+     does x-rays, bone-density scans and workforce medicals.
+
+     A hero frame has a harder brief than a card frame: it is cropped to a
+     wide band with a headline over it, so the subject has to sit RIGHT of
+     centre and the left third has to stay quiet. Every pick below was chosen
+     against that, not just for subject.
+
+     ONE activewear frame is deliberately kept — hero-active-wide.webp stays
+     as the third homepage slide, so the carousel still lands on people rather
+     than ending on equipment.
+
+     REJECTED, all for reasons already established on this site:
+       7088538 / 34170811 / 7088484 / 11119416  patients inside TUNNEL
+             scanners. The site's own rule: a DXA is an open flat table and is
+             "emphatically NOT the enclosed tunnel of a CT or MRI". Showing one
+             misdescribes what a visitor is booking.
+       7089011 / 6011602  brain MRI and CT montages — the wrong modality, the
+             same test that moved results.webp off the x-ray hero.
+       the entire hero-workforce set (6097752, 6285402, 8949898, 6098056 …)
+             masks, face shields and hazmat. They date the page to 2020-21.
+       5355693 / 3952136  DENTAL surgeries. Wrong practice entirely. */
+  { id: 7089302,  out: 'assets/hero-reading.webp', w: 2000, credit: 'MART PRODUCTION',
+    note: 'Homepage lead slide. Radiographer reading at the console; the left third is unlit, so the headline sits on the image rather than on a scrim.' },
+  { id: 4266942,  out: 'assets/hero-practice.webp', w: 2000, credit: 'Cedric Fauntleroy',
+    note: 'Homepage slide 2. Wide, calm practice interior with the two figures right-of-centre — the most headline-friendly frame of the set.' },
+  { id: 7089395,  out: 'assets/scan-open.webp',    w: 1800, credit: 'MART PRODUCTION',
+    note: 'Scanning hero. Patient sitting UP on an OPEN table with the radiographer beside her — the honest shape of a DXA, not a tunnel.' },
+  { id: 4266939,  out: 'assets/consult.webp',      w: 1800, credit: 'Cedric Fauntleroy',
+    note: 'SPR hero. Two people talking through a result in daylight: SPR is the conversation that follows a measurement.' },
+  { id: 5214992,  out: 'assets/workforce-hero.webp', w: 1800, credit: 'Adventure Studio',
+    note: 'Workforce hero. A blood-pressure check in a bright room — a medical, unmasked and undated.' },
 ];
 
 /* Resolve a photo id to its CDN base path. Pexels' canonical file URL embeds

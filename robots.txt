@@ -1,7 +1,7 @@
-# This is a design concept, not the practice's official site. It must not be
-# indexed: it would compete with the real insuresprhealth.co.za in search
-# results, and nothing here is contractual or medically reviewed.
-# Reinforces the X-Robots-Tag: noindex header set in vercel.json and the
-# per-page <meta name="robots"> tag.
 User-agent: *
-Disallow: /
+Allow: /
+Disallow: /booking-confirmation
+Disallow: /manage-booking
+Disallow: /brand
+
+Sitemap: https://www.insuresprhealth.co.za/sitemap.xml

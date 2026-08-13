@@ -1,7 +1,6 @@
-# Dependencies (none required — this is a zero-build static site). Playwright is
-# borrowed from a sibling repo via createRequire, so nothing installs here.
+# Development-only browser audit dependencies. The lockfile is committed so a
+# clean clone and CI use the same Playwright release.
 node_modules/
-package-lock.json
 
 # Vercel. .env* covers the .env.local the CLI writes — it holds an OIDC token
 # and must never be committed.
@@ -13,6 +12,7 @@ package-lock.json
 tools/shots/
 tools/sheets/
 tools/previews/
+tools/shots-fe/
 
 # Backups only — assets/ is committed (the shipped site imagery)
 *.html.bak

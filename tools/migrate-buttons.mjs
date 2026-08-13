@@ -13,9 +13,11 @@
  * and an icon on both ends reads cluttered at button size.
  */
 import { readFileSync, writeFileSync, readdirSync } from 'node:fs';
+import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const WRITE = process.argv.includes('--write');
-const ROOT = 'C:/Users/Acer/insurespr';
+const ROOT = fileURLToPath(new URL('../', import.meta.url));
 
 /* old modifier -> new modifier. `btn-light` and `btn-outline-light` both sat on
    dark grounds; they collapse to the two dark-ground fills. */
@@ -30,8 +32,8 @@ const BADGE = '<span class="btn-badge"><svg class="icon" aria-hidden="true"><use
 
 let total = 0;
 for (const file of readdirSync(ROOT).filter((f) => f.endsWith('.html'))) {
-  const path = `${ROOT}/${file}`;
-  const before = readFileSync(path, 'utf8');
+  const filePath = join(ROOT, file);
+  const before = readFileSync(filePath, 'utf8');
   let html = before;
   let n = 0;
 
@@ -52,7 +54,7 @@ for (const file of readdirSync(ROOT).filter((f) => f.endsWith('.html'))) {
   );
 
   if (n) {
-    if (WRITE) writeFileSync(path, html);
+    if (WRITE) writeFileSync(filePath, html);
     console.log(`  ${file.padEnd(16)} ${n} button(s)`);
     total += n;
   }

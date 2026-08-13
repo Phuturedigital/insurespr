@@ -7,15 +7,14 @@
  * Usage:  node tools/shoot-parts.mjs index.html ".hero" ".band"
  *         node tools/shoot-parts.mjs index.html            (common sections)
  */
-import { createRequire } from 'node:module';
 import { mkdir } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
 import { pathToFileURL, fileURLToPath } from 'node:url';
+import { loadPlaywright } from './load-playwright.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = join(ROOT, 'tools', 'shots');
-const require = createRequire('file:///C:/Users/Acer/thatha/');
-const { chromium } = require('playwright');
+const { chromium } = loadPlaywright();
 
 const [file = 'index.html', ...sel] = process.argv.slice(2);
 const selectors = sel.length ? sel : ['.hero', '.band'];

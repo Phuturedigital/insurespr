@@ -1,123 +1,167 @@
-# InsureSPR Health — website concept
+# InsureSPR Precision Healthcare
 
-A design concept for **InsureSPR Health**, a bone and muscle health practice at
-7 Malibongwe Drive, EmedCentre, Randburg. Built by
-[Phuture Digital](https://www.phuturedigital.co.za) to show what a finished site
-could look like before anyone commits to building one.
+Production-preparation branch for the InsureSPR acquisition, booking and intake
+website. The repository began as an independent Phuture Digital concept; the
+historical concept pages and assets remain in git for provenance, but
+`.vercelignore` keeps them out of the production artifact.
 
-**Live:** https://insurespr-concept.phuturedigital.co.za
+The public experience is a zero-build static site with three clear route families:
 
-> ⚠️ **InsureSPR Health is a real practice.** This is not their official site and
-> it is not affiliated with them. Every page carries a concept banner, every
-> `<title>` says "concept by Phuture Digital", and the footer copyright is
-> Phuture Digital's with attribution back to the practice. **That framing is
-> load-bearing — do not remove it.** The same rule applies here as to the
-> Africrest concept: a redesign aimed at a real company must never read as that
-> company's own site.
+- individuals and published x-ray pathways (`xray.html`)
+- employers and workplace medicals (`workforce.html`)
+- DXA bone-density and body-composition scanning (`scanning.html`)
 
-The real practice site is <https://insuresprhealth.co.za>. It is the source for
-every factual claim here; see `CONTENT-NOTES.md`.
+Six standalone, crawlable service-detail pages sit beneath those route pages,
+with separate SPR and owner/founder stories. Every page remains a portable HTML
+file; there is no framework build step or browser-side database credential.
 
-## The organising idea
+Booking, contact, employer-quote and booking-management requests go through a
+validated public Supabase Edge Function. A separate, scheduler-only function
+processes notification intent after the underlying record commits. Browser code
+has no database key and cannot query operational tables directly.
 
-The practice's own site is written in clinical language — *"DXA bone density and
-body composition analysis"*, *"Breatheez (Diaphragmatic gateway)"*. Its audience
-skews 50+ and is deciding whether a scan is worth booking.
+## Current state
 
-This concept keeps **every one of those service names exactly as the practice
-writes them** and pairs each with two added lines:
+- Supabase project: `ffdmmxffzewqiacsuvhr`
+- API: `https://ffdmmxffzewqiacsuvhr.supabase.co/functions/v1/insurespr-api`
+- Database migrations: `supabase/migrations/`
+- Public Edge Function: `supabase/functions/insurespr-api/`
+- Fail-closed notification worker: `supabase/functions/insurespr-notifications/`
+- Staff operations runbook: `OPERATIONS-RUNBOOK.md`
+- Production browser integration: `production.js`
+- Launch and approval checklist: `PRODUCTION-READINESS.md`
+- Recovery ownership and restore drill: `RECOVERY-RESTORE-DRILL.md`
+- Fact provenance: `CONTENT-NOTES.md`
+- Supplied rate evidence review: `XOM-RATES-2026-REVIEW.md`
+- Exact legacy URL inventory: `LEGACY-SEO-URL-INVENTORY.md`
 
-1. what it actually is, in plain English
-2. what you get out of it
+The database schema, public API and canonical frontend are deployed. The public
+site is served at `https://www.insuresprhealth.co.za/`. Transactional intake is
+still deliberately fail-closed until the privacy notice, Turnstile, service
+facts, availability and notification dependencies in
+`PRODUCTION-READINESS.md` are approved and configured.
 
-The palette carries the same idea: **blue** is the clinical side — measurement,
-the scan, science. **Gold** is the human side — plain English, outcome, you. The
-`.plainly` card in `styles.css` plays that arc in miniature: cyan service name,
-translated meaning, gold outcome.
+## Local preview
 
-Type is set large and the measure kept short throughout. For this audience
-legibility is a functional requirement, not a stylistic preference.
+Serve the directory over HTTP; do not open the files with a `file:` URL.
 
-`brand.html` documents all of this — palette, type scale, live component kit and
-the design process — and is linked from the footer of every page.
-
-## Brand assets
-
-The practice supplied genuine vector logos (rare: the other concept sites in
-this network all received broken exports). `tools/optimise-logo.mjs` turns them
-into web-weight assets and is the source of the authoritative brand colours:
-
-| | Value | |
-|---|---|---|
-| Gradient start | `#00AEEF` | Pantone Process Cyan |
-| Gradient end | `#2E3192` | |
-| Wordmark | `#004AAD` | |
-
-⚠️ **Dark-ground variants are required, not optional.** The wordmark is a
-hardcoded `#004AAD` and the gradient's deep end is `#2E3192`; both sit close
-enough to `--ink` that the logo half-disappears on it. Use `mark-light.svg` /
-`lockup-light.svg` on dark surfaces.
-
-⚠️ The practice's real tagline is **"Precision Healthcare"** — it is in the
-lockup. An earlier pass invented "Bone & muscle health"; do not reintroduce it.
-
-## Type
-
-**Bricolage Grotesque** (display) + **Plus Jakarta Sans** (body), both variable.
-Bricolage's `opsz` axis is tracked to the rendered size so large cuts tighten
-rather than looking like blown-up text. This replaced a Fraunces/Inter pairing
-that read as dry.
-
-## Stack
-
-Zero-build static site. Flat HTML + one `styles.css` + one `site.js`, deployed
-to Vercel with `cleanUrls`. No framework, no bundler, nothing to install to work
-on it — open a page in a browser.
-
-| Path | What it is |
-|---|---|
-| `*.html` | 8 pages: index, scan, services, about, learn, book, contact, **brand** |
-| `styles.css` | Every style. Tokens at the top, components below. |
-| `site.js` | Nav, scroll-reveal, form UI. No dependencies. |
-| `assets/` | Shipped imagery + the redrawn logo mark and favicon |
-| `pd-concepts/` | Thumbnails for the cross-site concept network block |
-| `tools/` | Research + audit scripts. **Never deployed** — see `.vercelignore`. |
-
-### Motion
-
-Scroll-reveal is stamped `.js` on `<html>` from an **inline `<head>` script**, before
-first paint. A deferred script cannot do this without a flash: the stylesheet
-blocks rendering and the script does not. Under `prefers-reduced-motion` the CSS
-forces full opacity — if you change the reveal rules, verify reduced-motion
-still renders content, or the page goes blank.
-
-## Working on it
-
-```bash
-# Serve locally (any static server works)
-npx serve .
-
-# Find what overflows at a given width — measure, don't guess from a screenshot
-node tools/overflow.mjs contact.html 320
-
-# Re-shoot the responsive audit (7 widths x 7 pages)
-node tools/shoot.mjs
+```powershell
+python -m http.server 5177
 ```
 
-Playwright is borrowed from a sibling repo via `createRequire`, so nothing
-installs here. `tools/shots|sheets|previews` are gitignored — ~77MB of
-regenerable output.
+Then open `http://localhost:5177/`. The production Edge Function intentionally
+accepts only the official apex and `www` origins, so local forms stay gated
+unless they are run against a separate local/test API. `tools/audit.mjs` stubs
+the public configuration and analytics endpoints; it never weakens production
+CORS or writes to the production project.
 
-**Always sweep 7 widths, not 2.** A previous concept site in this network passed
-a desktop+mobile check while overflowing by 46px at 320px.
+The browser audit also accepts an explicit preview origin when its usual port
+is occupied:
 
-## Deploy
+```powershell
+node tools/audit.mjs http://127.0.0.1:4319
+```
 
-Pushes to `main` auto-deploy via the GitHub integration. `vercel.json` sets
-`cleanUrls`, `noindex` and the security headers; `robots.txt` reinforces the
-noindex. Neither is optional — this must not compete with the real practice site
-in search results.
+## Supabase workflow
 
-⚠️ Never share a raw `insurespr-<hash>.vercel.app` deployment URL. Deployment
-Protection puts a Vercel login wall on per-deployment URLs. Share the custom
-domain.
+The committed migration versions match the remote project migration history.
+The Supabase CLI configuration deliberately disables automatic exposure of new
+tables. All public-schema tables use row-level security; direct `anon` and
+`authenticated` access to operational records is revoked. Server-side RPCs own
+the transactional writes.
+
+```powershell
+node --check production.js
+node --check site.js
+deno check supabase/functions/insurespr-api/index.ts
+deno check supabase/functions/insurespr-notifications/index.ts
+```
+
+Do not put a secret/service-role key in HTML, `production.js`, Vercel browser
+environment variables or screenshots. Edge Function secrets belong in
+Supabase's encrypted function-secret store.
+
+The notification worker is deployed but intentionally returns `503` until an
+approved sender, provider key, reply-to address and independent worker secret
+are configured. It uses atomic queue leases, provider idempotency keys, bounded
+backoff and a terminal `dead` state; deploying it does not authorize or enable
+outbound mail.
+
+## Production artifact
+
+Vercel serves flat HTML with clean URLs. `vercel.json` provides redirects,
+security headers and a restrictive Content Security Policy. `robots.txt` and
+`sitemap.xml` cover only the proposed public routes. Confirmation and
+token-based booking-management pages are marked `noindex`.
+
+### Read-only release preflight
+
+Run the strict production preflight before a release. It exits nonzero while
+technical or practice-owned launch blockers remain:
+
+```powershell
+node tools/release-audit.mjs
+node tools/release-audit.mjs --mode preview
+node tools/release-audit.mjs --self-test
+```
+
+`--base`, `--api` and `--notifications` can target another candidate release;
+`--legacy-manifest` can point to a machine-readable redirect manifest. Preview
+mode downgrades practice-owned readiness items, while metadata, crawlability,
+security and API-integrity checks remain strict. `--report-only` always exits
+zero for dashboards, and `--json` emits structured output.
+
+The audit is read-only. It performs public `GET` requests and sends only an
+invalid empty JSON object to each official form endpoint to confirm that origin,
+privacy and validation gates respond safely. Those probes contain no personal
+information and cannot satisfy the write contract. Notification readiness is
+checked only through an unauthenticated `GET`; no scheduler secret is supplied
+and the notification worker is never invoked.
+
+### Deterministic browser and SEO gates
+
+Install the exact development dependency graph and matching Chromium runtime,
+then run the complete local quality suite. Local prerequisites are Node.js 20
+or newer with npm, plus Deno 2.9.2 on `PATH`:
+
+```powershell
+npm ci
+npx --no-install playwright install chromium
+npm test
+```
+
+`npm test` checks JavaScript syntax, the offline release-audit fixtures, the
+inactive legacy redirect manifest, Deno formatting/linting/type safety, both
+Edge Function test suites, form fail-closed behaviour, the mocked booking
+journey and bounded keyboard/focus accessibility scenarios. The tests use local
+fixtures or an ephemeral loopback server; they do
+not call live Supabase write endpoints or Vercel. CI installs the same locked
+Playwright release and Deno 2.9.2 before running those deterministic phases.
+
+The performance audit remains an explicit local diagnostic because its timing
+measurements are machine-sensitive; it is intentionally not a CI timing gate:
+
+```powershell
+node tools/audit.mjs
+node tools/form-safety.test.mjs
+node tools/booking-journey.test.mjs
+node tools/accessibility-journey.test.mjs
+node --test tools/legacy-redirects.test.mjs
+npm run test:performance
+```
+
+The browser suites use an ephemeral loopback server and mocked public API
+contracts; they do not write to production. Performance limits and measurement
+caveats are documented in `PERFORMANCE-BUDGETS.md`. The legacy decision
+manifest covers every inventoried URL but remains inactive and fail-closed until
+each non-hold decision has named approval. Availability activation, rehearsal,
+monitoring and rollback are documented in `AVAILABILITY-ACTIVATION.md`.
+Recovery inventory, approval fields, isolation rules and restoration order are
+documented in `RECOVERY-RESTORE-DRILL.md`; it does not authorize a production
+restore or invent the practice's RPO, RTO or retention period.
+
+The canonical frontend is live on the practice domain. Keep online form intake
+fail-closed and do not publish unapproved healthcare claims, prices, schedules
+or credentials. Do not remove legacy WordPress content or activate the full
+redirect map until ownership, licensing, clinical review and redirect decisions
+have been signed off.

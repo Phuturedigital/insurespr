@@ -24,9 +24,14 @@
  * #2E3192, both of which sit a shade off the --ink navy and disappear on it.
  */
 import { readFileSync, writeFileSync } from 'node:fs';
+import { homedir } from 'node:os';
+import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const SRC_LOCKUP = 'C:/Users/Acer/Downloads/Motselisi Mosiana.svg';
-const SRC_MARK = 'C:/Users/Acer/Downloads/Motselisi Mosiana (1).svg';
+const REPO_ROOT = fileURLToPath(new URL('../', import.meta.url));
+const DOWNLOADS_ROOT = join(homedir(), 'Downloads');
+const SRC_LOCKUP = join(DOWNLOADS_ROOT, 'Motselisi Mosiana.svg');
+const SRC_MARK = join(DOWNLOADS_ROOT, 'Motselisi Mosiana (1).svg');
 
 const BRAND = { start: '#00AEEF', end: '#2E3192', word: '#004AAD', figure: '#F7F7F7' };
 /* Dark-ground ramp: keep the cyan identity but lift the deep end off the navy
@@ -98,7 +103,7 @@ const lockDark = collapseStops(lock, DARK.start, DARK.end)
   .replace(new RegExp(BRAND.word, 'gi'), '#FFFFFF');
 out.push(['assets/lockup-light.svg', titled(lockDark, 'InsureSPR — Precision Healthcare')]);
 
-for (const [path, svg] of out) {
-  writeFileSync(path, svg + '\n');
-  console.log(`${path.padEnd(28)} ${(svg.length / 1024).toFixed(1)} KB`);
+for (const [relativePath, svg] of out) {
+  writeFileSync(join(REPO_ROOT, relativePath), svg + '\n');
+  console.log(`${relativePath.padEnd(28)} ${(svg.length / 1024).toFixed(1)} KB`);
 }

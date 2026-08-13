@@ -54,6 +54,38 @@ const SLOTS = {
   clinic:      'modern medical clinic reception interior bright',
   coach:       'health coach talking with client notes desk',
   family:      'grandmother grandchild playing garden happy',
+
+  /* --- production slots ---------------------------------------------------
+     The slots above were sourced for the CONCEPT site, whose subject was bone
+     longevity — hence the exercise and outdoors register. The production site
+     sells three concrete clinical services (x-ray, scans, workforce medicals),
+     and illustrating a radiography waiting room with a park walk is the exact
+     mismatch that made the service pages feel like stock filler.
+
+     These queries therefore stay inside the building: a radiographer at a
+     machine, a form being completed, a worker being screened. Same rule as
+     above still applies on subjects — the practice is in Randburg. */
+  'xray-primary':  'radiographer positioning patient for x-ray in radiology room',
+  'xray-visa':     'doctor examining chest x-ray film on light box',
+  'xray-admin':    'doctor completing medical form paperwork at desk',
+  'workforce-med': 'occupational health nurse checking worker blood pressure',
+  'workforce-team':'group of industrial workers in safety helmets on site',
+  'workforce-quote':'business people meeting handshake office documents',
+  'scan-body':     'health professional measuring body composition assessment',
+  reception:       'friendly receptionist at medical clinic front desk',
+
+  /* --- hero slots ---------------------------------------------------------
+     Hero frames have a harder brief than card frames. They are cropped to a
+     wide band behind a headline, so the subject must sit RIGHT of centre with
+     the left third readable — the same rule the concept hero was picked on.
+     Everything here is clinical: the site's hero carousel was three activewear
+     frames on a running path, which sells a gym, not a practice that does
+     x-rays, bone-density scans and workforce medicals. */
+  'hero-clinical':  'radiology technologist at control monitor hospital wide',
+  'hero-clinical-b':'doctor and patient consultation bright modern clinic room',
+  'hero-scan':      'patient lying on open scanner table radiographer nearby',
+  'hero-workforce': 'nurse screening worker in occupational health clinic',
+  'hero-progress':  'clinician showing results on tablet to patient smiling',
 };
 
 async function search(query, perPage = 6) {

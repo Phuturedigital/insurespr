@@ -1,10 +1,7 @@
 /* ============================================================================
-   InsureSPR Health — concept redesign by Phuture Digital
+   InsureSPR Precision Healthcare — website design system
    ----------------------------------------------------------------------------
-   A DESIGN CONCEPT. InsureSPR Health is a real practice in Randburg; this is
-   not their site and is not affiliated with them. See the banner on every page.
-
-   BUILT FROM SCRATCH against a longevity-clinic reference layout: a pale
+   Built around a pale
    blue-grey ground, everything living inside generously rounded white cards, a
    floating pill navigation, light-weight display type and circular arrow
    badges on every action. The register is premium-clinical rather than
@@ -38,7 +35,15 @@
   --ink: #0a1c3d;          /* headings and the deepest surface */
   --ink-2: #14305f;
   --body: #4a5875;         /* body copy, softer than headings */
-  --muted: #6b7a96;
+  /* Was #6b7a96, which computes to 4.35:1 on white — under the 4.5 AA floor
+     for body text, on every card on every page.
+
+     Solved against the DARKEST ground it sits on, not against white. Muted
+     text appears on --paper, --ground and --ground-2, and a value that passes
+     on white can still fail on the pale bands: the first fix here was #66738f,
+     which passes at 4.76 on paper and fails at 3.99 on --ground-2. This value
+     clears 4.5 on all three (5.43 / 4.87 / 4.56). */
+  --muted: #5d6a85;
 
   /* Text ON the dark panels. Six near-identical blue-greys had drifted in doing
      this one job (#c3d2e8 #a9bcd8 #b9c9e2 #d6e2f2 #cfdcef #8ea3c2). Three
@@ -80,9 +85,9 @@
   --f-body: 'IBM Plex Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
   --f-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
 
-  --wrap: 1180px;
-  --gutter: clamp(1rem, 3vw, 2.25rem);
-  --step: clamp(2.5rem, 6vw, 5.5rem);   /* vertical rhythm between bands */
+  --wrap: 1480px;
+  --gutter: clamp(1rem, 2.25vw, 2.5rem);
+  --step: clamp(2.25rem, 4.5vw, 4.75rem);   /* vertical rhythm between bands */
 
   --shadow-sm: 0 1px 2px rgb(10 28 61 / .04), 0 8px 24px -12px rgb(10 28 61 / .12);
   --shadow: 0 2px 4px rgb(10 28 61 / .04), 0 22px 50px -20px rgb(10 28 61 / .18);
@@ -170,6 +175,7 @@ p:last-child { margin-bottom: 0; }
 .wrap--narrow { width: min(100% - (var(--gutter) * 2), 820px); margin-inline: auto; }
 
 section { padding-block: var(--step); }
+main > section + section { padding-top: 0; }
 .pad-sm { padding-block: calc(var(--step) * .6); }
 
 .section-head { max-width: 42rem; margin-bottom: clamp(1.75rem, 3.5vw, 3rem); }
@@ -187,6 +193,7 @@ section { padding-block: var(--step); }
 }
 .head-split h2 { margin: 0; }
 .head-split p { margin: 0; color: var(--muted); font-size: 1rem; }
+.page-intro .head-split { margin-bottom: 0; }
 
 /* --------------------------------------------------------------- surfaces -- */
 .card {
@@ -207,11 +214,12 @@ section { padding-block: var(--step); }
 
 /* --------------------------------------------------------------- buttons -- */
 .btn {
-  display: inline-flex; align-items: center; gap: .7rem;
-  padding: .5rem .5rem .5rem 1.35rem;
+  display: inline-flex; align-items: center; justify-content: center; gap: .7rem;
+  min-height: 44px; padding: .68rem 1.25rem;
   border: 1px solid transparent; border-radius: var(--r-pill);
   font-family: var(--f-body); font-size: .9688rem; font-weight: 600;
-  letter-spacing: -.005em; text-decoration: none; cursor: pointer;
+  line-height: 1.2; letter-spacing: -.005em; text-align: center;
+  text-decoration: none; cursor: pointer;
   transition: background .18s ease, color .18s ease, border-color .18s ease;
 }
 .btn-badge {
@@ -238,11 +246,15 @@ section { padding-block: var(--step); }
 .btn--on-ink:hover { background: rgb(255 255 255 / .18); color: #fff; }
 .btn--on-ink .btn-badge { background: var(--cyan); color: var(--ink); }
 
-.btn--sm { font-size: .875rem; padding: .3rem .3rem .3rem 1rem; gap: .5rem; }
+.btn--sm { min-height: 44px; font-size: .875rem; padding: .58rem 1rem; gap: .5rem; }
 .btn--sm .btn-badge { width: 1.6rem; height: 1.6rem; }
 .btn--sm .btn-badge .icon { width: 13px; height: 13px; }
+.btn > .icon { width: 1.05rem; height: 1.05rem; }
+.btn--back > .icon { transform: scaleX(-1); }
+.btn > span { min-width: 0; }
 
 .btn-row { display: flex; flex-wrap: wrap; gap: .75rem; align-items: center; }
+.btn-row .btn { min-width: 0; }
 
 /* A bare circular control, used for the carousel. */
 .rbtn {
@@ -257,7 +269,42 @@ section { padding-block: var(--step); }
 .rbtn .icon { width: 17px; height: 17px; }
 .rbtn--flip .icon { transform: scaleX(-1); }
 
-.icon { width: 20px; height: 20px; flex: none; }
+/* ------------------------------------------------------------------ icons -- */
+/* ONE stroke weight for the whole set.
+   The sprite's header says the icons are "drawn at 24x24 on a 1.7px stroke …
+   so the icons read as part of the same hand". They are drawn that way — all
+   37 stroked symbols are built identically — but they were not RENDERED that
+   way. Measured across the 11 production pages, 80 icons drew at three
+   different weights:
+
+       1.8   43%   from `.btn > .icon`
+       1.0   35%   nothing reached them, so SVG's own default applied
+       1.7   23%   the documented brand value
+
+   The 35% is the real damage: a third of the site's icons were drawing at the
+   browser default, noticeably lighter than the ones beside them.
+
+   Setting it on `.icon` itself means an icon cannot be added anywhere in
+   future and quietly miss the brand weight. The four filled brand glyphs
+   (facebook/linkedin/x/whatsapp) carry no stroke, so this is a no-op on them.
+
+   Stroke stays in viewBox units and therefore scales with rendered size —
+   1.02px optical on a 14.4px chip up to 1.56px at 22px. That is deliberate
+   and is how 24-grid sets are built; a large icon needs a proportionally
+   larger stroke or it reads as spindly next to its own label. */
+.icon {
+  width: 20px; height: 20px; flex: none;
+  stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round;
+}
+.icon-sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
+/* These four contexts additionally force fill/stroke, because they place an
+   icon on a coloured chip where an inherited fill would fill the glyph solid. */
+.route-icon .icon,
+.journey-icon .icon,
+.statstrip dt .icon,
+.mobile-quick-action .icon {
+  fill: none; stroke: currentColor;
+}
 
 /* --------------------------------------------------------- concept banner -- */
 /* This must never be mistaken for the practice's own site. The banner is the
@@ -302,6 +349,12 @@ section { padding-block: var(--step); }
 }
 .nav-links a:hover { background: var(--ground); color: var(--ink); }
 .nav-links a[aria-current="page"] { color: var(--ink); font-weight: 600; background: var(--ground-2); }
+.nav-links a.nav-spr {
+  margin-inline: .2rem; padding-inline: 1rem;
+  background: var(--azure); color: #fff; font-weight: 700;
+}
+.nav-links a.nav-spr:hover,
+.nav-links a.nav-spr[aria-current="page"] { background: var(--indigo); color: #fff; }
 /* The CTA exists twice in the markup: once inside the collapsible panel (where
    it belongs on a phone) and once outside it (where it belongs on a desktop).
    Exactly one must be visible at any width, or it renders twice. */
@@ -326,34 +379,82 @@ section { padding-block: var(--step); }
   .nav-links a { padding: .7rem .9rem; }
   .js .nav-links[data-open="false"] { display: none; }
   .nav .btn { display: none; }
-  .nav-links .btn { display: inline-flex; justify-content: space-between; margin-top: .35rem; }
+  .nav-links .btn { display: inline-flex; justify-content: center; margin-top: .35rem; }
 }
 
 /* ----------------------------------------------------------------- hero -- */
-/* One big rounded photo card rather than a full-bleed band. The rounding is
-   what keeps it feeling like an object on the page. */
+/* Full-viewport editorial hero: the imagery carries the page while every
+   message and control stays inside the intentionally face-free zones. */
 .hero { padding-top: .85rem; }
 .hero-card {
   position: relative; isolation: isolate;
   border-radius: var(--r-xl); overflow: hidden;
-  min-height: clamp(430px, 66vh, 620px);
-  display: flex; align-items: flex-end;
-  padding: clamp(1.5rem, 4vw, 3.25rem);
+  min-height: clamp(450px, 60vh, 550px);
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(360px, .95fr);
   background: var(--ink);
 }
-.hero-card > img {
-  position: absolute; inset: 0; z-index: -2;
-  width: 100%; height: 100%; object-fit: cover; object-position: var(--focal, 50% 45%);
+.nav-toggle .icon { width: 1rem; height: 1rem; }
+.hero-copy {
+  align-self: center; max-width: none;
+  padding: clamp(2rem, 5vw, 4.5rem);
+  color: var(--on-ink);
 }
-/* Directional scrim: heavy where the words sit, light over the rest, so the
-   photograph stays a photograph. */
-.hero-card::after {
-  content: ""; position: absolute; inset: 0; z-index: -1;
-  background:
-    linear-gradient(95deg, rgb(6 18 40 / .9) 0%, rgb(6 18 40 / .74) 38%, rgb(6 18 40 / .3) 66%, rgb(6 18 40 / .16) 100%),
-    linear-gradient(to top, rgb(6 18 40 / .5), transparent 45%);
+.hero-visual { position: relative; min-width: 0; min-height: 100%; overflow: hidden; background: var(--ink-2); }
+.hero-visual .hero-slide {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; object-position: var(--slide-focal, 50% 45%);
+  opacity: 0; visibility: hidden;
+  transition: opacity .7s ease, visibility .7s ease;
 }
-.hero-copy { max-width: 40rem; color: var(--on-ink); }
+.hero-visual .hero-slide[width][height] { height: 100%; }
+.hero-visual .hero-slide.is-active { opacity: 1; visibility: visible; }
+/* ⚠️ The dots and the booking panel are both absolutely positioned in the
+   bottom-right of the hero, and they used to be offset in DIFFERENT UNITS —
+   the panel `bottom: clamp(1rem, 2.5vw, 2.5rem)` (viewport WIDTH), the dots
+   `bottom: clamp(7.6rem, 14vh, 9rem)` (viewport HEIGHT). Each rule is
+   individually sensible, and the pair silently collided whenever the window
+   was short relative to its width: clean at 1440x1080, overlapping by 6px at
+   1440x900 and by 10px at 1440x720.
+
+   Both now derive from ONE inset plus the panel's own reserved height, so the
+   gap between them is a constant that cannot drift with the viewport.
+   tools/overlaps.mjs asserts this across nine window sizes. */
+:root { --hero-inset: clamp(1rem, 2.5vw, 2.5rem); --hero-panel-h: 96px; --hero-stack-gap: .85rem; }
+.hero-booking-panel {
+  position: absolute; z-index: 5; right: var(--hero-inset); bottom: var(--hero-inset);
+  display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: .85rem;
+  width: min(360px, calc(100% - 2rem)); min-height: var(--hero-panel-h); padding: .8rem .85rem;
+  border: 1px solid rgb(255 255 255 / .58); border-radius: 14px; background: rgb(255 255 255 / .93);
+  box-shadow: 0 18px 45px rgb(6 18 40 / .24); color: var(--ink); text-decoration: none;
+  backdrop-filter: blur(14px); transition: transform .25s ease, box-shadow .25s ease;
+}
+.hero-booking-panel:hover { transform: translateY(-3px); box-shadow: 0 22px 50px rgb(6 18 40 / .32); }
+.hero-booking-panel small,
+.hero-booking-panel strong,
+.hero-booking-panel em { display: block; }
+.hero-booking-panel small { margin-bottom: .2rem; font-family: var(--f-mono); font-size: .62rem; font-style: normal; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--cyan-ink); }
+.hero-booking-panel strong { font-family: var(--f-display); font-size: 1.08rem; font-weight: 600; line-height: 1.15; }
+.hero-booking-panel em { margin-top: .22rem; font-size: .72rem; font-style: normal; color: var(--muted); }
+.hero-booking-icon { display: inline-grid; place-items: center; width: 48px; height: 48px; border-radius: 10px; background: var(--ink); color: #fff; }
+.hero-booking-icon .icon { width: 22px; height: 22px; }
+.hero-booking-arrow { display: inline-grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: var(--blue); color: #fff; font-size: 1.2rem; }
+.hero-dots {
+  position: absolute; z-index: 6; right: var(--hero-inset);
+  bottom: calc(var(--hero-inset) + var(--hero-panel-h) + var(--hero-stack-gap));
+  display: flex; align-items: center; gap: .3rem; padding: .35rem .55rem; border-radius: var(--r-pill);
+  background: rgb(6 18 40 / .65); backdrop-filter: blur(8px);
+}
+.hero-dots > span { min-width: 1.45rem; font-family: var(--f-mono); font-size: .58rem; letter-spacing: .08em; color: #fff; text-align: center; }
+.hero-dots button {
+  position: relative; width: 2.3rem; height: 2.3rem; padding: 0; border: 0;
+  border-radius: var(--r-pill); background: transparent; cursor: pointer;
+}
+.hero-dots button::after {
+  content: ''; position: absolute; inset: 50% auto auto 50%; width: 1.65rem; height: 2px;
+  transform: translate(-50%, -50%); background: rgb(255 255 255 / .55); border-radius: var(--r-pill);
+}
+.hero-dots button.is-active::after { height: 4px; background: var(--cyan-lift); }
 .hero-copy h1 { color: #fff; }
 .hero-copy .lede { color: var(--on-ink); }
 .hero .btn-row { margin-top: 1.6rem; }
@@ -362,6 +463,139 @@ section { padding-block: var(--step); }
   margin-top: 1.35rem; font-size: .9375rem; color: var(--on-ink-soft);
 }
 .hero-note .icon { width: 17px; height: 17px; color: var(--cyan-lift); }
+/* These were 38px tall carrying 12.5px text, sitting under an 80px headline —
+   they read as captions rather than as the three ways into the site. Sized to
+   the same 48px rhythm as .btn so the hero has one button scale, not two. */
+.hero-route-pills { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: 1.6rem; }
+.hero-route-pills a {
+  display: inline-flex; align-items: center; justify-content: center; gap: .5rem; min-height: 48px;
+  padding: .7rem 1.35rem; border: 1px solid rgb(255 255 255 / .38); border-radius: var(--r-pill);
+  color: #fff; font-size: .95rem; font-weight: 600; line-height: 1; text-decoration: none;
+  background: rgb(10 28 61 / .34); backdrop-filter: blur(8px);
+  transition: background .2s ease, border-color .2s ease, color .2s ease;
+}
+.hero-route-pills .icon { width: 1.05rem; height: 1.05rem; }
+.hero-route-pills a:hover { border-color: #fff; background: #fff; color: var(--ink); }
+
+@media (min-width: 1000px) and (min-aspect-ratio: 3/2) {
+  .hero-card {
+    display: grid; grid-template-columns: 1fr; min-height: clamp(560px, calc(100svh - 125px), 760px);
+  }
+  .hero-copy {
+    position: relative; z-index: 4; grid-area: 1 / 1; align-self: center;
+    width: min(56%, 820px);
+    /* The hero card is full-bleed to the viewport edge while the nav above it
+       is inset, so the headline was landing 72px from the screen edge at 1440
+       and only 48px at 1280 — tight under 80px display type, and visibly out
+       of line with the nav. The left inset now tracks the nav's own gutter
+       and grows with the viewport instead of being capped at 4.5rem. */
+    padding-left: clamp(1.75rem, 6vw, 7rem);
+    padding-right: clamp(1rem, 4vw, 3rem);
+  }
+  /* Outfit LIGHT, sentence case — the site's own display voice, which every
+     other page uses and which the base `h1` rule already sets at weight 300.
+     This override arrived with an imported visual reference and forced
+     `font-weight: 500` + `text-transform: uppercase` at 92px, so the homepage
+     shouted in a register nothing else on the site speaks. Light-at-large-size
+     is most of the premium feel; uppercase heavy is a different brand. */
+  /* max-width in `ch` scales WITH the font, so at a hero size 15ch resolved to
+     a ~256px column at 1280 and broke the headline to one word per line. A
+     px measure is stable: the line breaks where the design wants it to. */
+  .hero-copy h1 { max-width: 13em; font-size: clamp(2.9rem, 5vw, 4.9rem); line-height: 1.04; letter-spacing: -.038em; }
+  .hero-copy .lede { max-width: 590px; }
+  .hero-visual { grid-area: 1 / 1; min-height: 100%; }
+  /* ⚠️ The legibility scrim lives on .hero-card, NOT on .hero-visual::after.
+     It was written as `.hero-visual::after` — the same element and the same
+     pseudo the scan line at the bottom of this file already owns. Media
+     queries add no specificity, so the later scan-line rule won outright and
+     this scrim never rendered at all: the white headline was relying on
+     whatever the photograph happened to be doing behind it.
+
+     The card is the better owner anyway; the scrim protects the copy column,
+     which is the card's left half, not the image's. .hero-copy is z-index 4,
+     so it stays above this at z-index 2. */
+  .hero-card::after {
+    content: ''; position: absolute; z-index: 2; inset: 0; pointer-events: none;
+    background: linear-gradient(90deg, rgb(6 18 40 / .92) 0%, rgb(6 18 40 / .8) 34%, rgb(6 18 40 / .28) 52%, transparent 70%);
+  }
+  .hero-dots { z-index: 6; }
+}
+
+/* ----------------------------------------------------------------- bands -- */
+/* A two-tone page rhythm. The site was one continuous pale-blue field from the
+   hero to the footer, so every section ran into the next and the eye had no
+   landmarks to travel between — a long page read as one undifferentiated
+   scroll regardless of how good the individual sections were.
+
+   Two grounds only, alternating: the default --ground, and --paper for the
+   bands that carry photography or a grid. Deliberately NOT a third tone —
+   more than two reads as decoration rather than structure, and the dark navy
+   panels (journey-flow, home-before-travel) already provide the third beat.
+
+   The band paints full-bleed while its content stays inside .wrap, so the
+   colour change spans the window and the reading measure does not. */
+.band-paper { background: var(--paper); }
+.band-ground { background: var(--ground-2); }
+
+/* The navy band. This is the hard break in the rhythm — the page goes from
+   pale to ink and back, which is what stops a long scroll reading as one
+   continuous field.
+
+   ⚠️ A navy band inverts every text colour inside it. The tokens below are
+   the same three-step hierarchy the footer uses (--on-ink / --on-ink-soft /
+   --on-ink-dim) rather than new values, because six near-identical blue-greys
+   had already drifted into doing this job once before. White CARDS are left
+   alone: a white card on navy is the strongest object this design makes, and
+   the whole point of putting a card grid in a navy band. */
+.band-ink { background: var(--ink); color: var(--on-ink); }
+.band-ink h1, .band-ink h2, .band-ink h3, .band-ink .card-title { color: #fff; }
+/* --cyan-ink is the partner that carries small text on PALE grounds; on navy
+   it computes to 3.19:1 and is unreadable. Every element that uses it needs
+   the light partner instead inside a navy band. */
+.band-ink .eyebrow, .band-ink .eyebrow--plain,
+.band-ink .route-card-label .eyebrow,
+.band-ink .service-choice-icon,
+.band-ink .statstrip dt .icon { color: var(--cyan-lift); }
+.band-ink p, .band-ink .lede, .band-ink .section-intro { color: var(--on-ink-soft); }
+.band-ink dt { color: var(--on-ink-soft); }
+/* ⚠️ Scoped to links sitting DIRECTLY on the navy. A blanket
+   `.band-ink a { color: var(--cyan-lift) }` also repainted the phone and email
+   links inside the statstrip's WHITE cells, where pale cyan on white computes
+   to 1.5:1 — an unreadable phone number on the booking page. A navy band
+   inverts its own text, not the text of light cards sitting on it. */
+.band-ink a:not(.btn):not(.card):not(.route-card) { color: var(--cyan-lift); }
+/* ⚠️ The :not() chain above is worth counting. Each :not(.class) contributes a
+   CLASS to specificity, so that selector is (0,4,1) — not the (0,1,1) it looks
+   like. A plain `.band-ink .statstrip a` override is (0,2,1) and silently
+   loses, which is exactly what happened: the phone number stayed at 1.5:1
+   through a "fix" that never applied. These carry the same chain so they win
+   on source order. */
+.band-ink .card a:not(.btn):not(.card):not(.route-card),
+.band-ink .statstrip a:not(.btn):not(.card):not(.route-card),
+.band-ink .route-card a:not(.btn):not(.card):not(.route-card) { color: var(--azure); }
+/* …but anything inside a light card keeps the card's own colours. */
+.band-ink .card, .band-ink .route-card, .band-ink .statstrip > div { color: var(--body); }
+.band-ink .card h1, .band-ink .card h2, .band-ink .card h3, .band-ink .card .card-title,
+.band-ink .route-card .card-title, .band-ink .statstrip dd { color: var(--ink); }
+.band-ink .card p, .band-ink .route-card p { color: var(--muted); }
+.band-ink .statstrip dt { color: var(--muted); }
+/* The pale hairline that separates statstrip cells vanishes on navy. */
+.band-ink .statstrip { background: rgb(255 255 255 / .16); border-color: rgb(255 255 255 / .16); }
+
+.band-paper,
+.band-ground,
+.band-ink { padding-block: clamp(2.75rem, 5.5vw, 5rem); }
+/* A section that already sets its own padding should not gain a second lot. */
+.band-paper.pad-sm,
+.band-ground.pad-sm,
+.band-ink.pad-sm { padding-block: clamp(2.25rem, 4.5vw, 4rem); }
+/* Hairlines only where two like-toned bands meet, so the seam is legible
+   without drawing a rule across every join. Navy needs none — it is its own
+   boundary. */
+.band-paper + .band-paper,
+.band-ground + .band-ground { border-top: 1px solid var(--line); }
+/* A navy band running straight into the navy footer would merge with it. */
+.band-ink:last-of-type { margin-bottom: var(--step); }
 
 /* ------------------------------------------------------------ stat strip -- */
 .statstrip {
@@ -370,9 +604,140 @@ section { padding-block: var(--step); }
   grid-template-columns: repeat(4, 1fr); overflow: hidden;
 }
 .statstrip > div { background: var(--paper); padding: 1.25rem 1.35rem; min-width: 0; }
-.statstrip dt { font-family: var(--f-mono); font-size: .6875rem; font-weight: 500; letter-spacing: .13em; text-transform: uppercase; color: var(--muted); margin-bottom: .35rem; }
+.statstrip dt { display: flex; align-items: center; gap: .45rem; font-family: var(--f-mono); font-size: .6875rem; font-weight: 500; letter-spacing: .13em; text-transform: uppercase; color: var(--muted); margin-bottom: .35rem; }
+.statstrip dt .icon { width: .9rem; height: .9rem; color: var(--cyan-ink); }
 .statstrip dd { margin: 0; font-family: var(--f-display); font-size: clamp(1.35rem, 2.2vw, 1.75rem); font-weight: 400; color: var(--ink); letter-spacing: -.03em; line-height: 1.15; }
 .statstrip dd small { display: block; font-family: var(--f-body); font-size: .8125rem; font-weight: 400; color: var(--muted); letter-spacing: 0; margin-top: .2rem; }
+
+/* ----------------------------------------------------------- SPR story -- */
+.spr-story {
+  display: grid; grid-template-columns: minmax(420px, .92fr) minmax(0, 1.08fr);
+  gap: clamp(2rem, 4vw, 4.5rem); align-items: center;
+}
+.spr-visual-grid {
+  display: grid; grid-template-columns: minmax(0, .42fr) minmax(0, .58fr);
+  grid-template-rows: minmax(210px, 1.35fr) minmax(130px, .75fr); gap: .85rem;
+  min-height: 470px;
+}
+.spr-visual-grid figure { margin: 0; overflow: hidden; border-radius: 12px; background: var(--ground-2); }
+.spr-visual-grid img { width: 100%; height: 100%; object-fit: cover; }
+.spr-feature-photo { grid-column: 1 / -1; }
+.spr-feature-photo img { object-position: 50% 35%; }
+.spr-support-photo img { object-position: 50% 45%; }
+.spr-metric {
+  display: flex; flex-direction: column; justify-content: center; min-width: 0;
+  padding: clamp(1rem, 2.2vw, 1.6rem); border-radius: 12px;
+  background: var(--azure); color: #fff;
+}
+.spr-metric strong { font: 500 clamp(2rem, 4vw, 3.5rem)/.95 var(--f-display); letter-spacing: -.05em; }
+.spr-metric span { margin-top: .65rem; font-weight: 700; }
+.spr-metric p { margin: .35rem 0 0; color: rgb(255 255 255 / .78); font-size: .8rem; line-height: 1.4; }
+.spr-content { min-width: 0; }
+.spr-intro { max-width: 760px; }
+.spr-intro h2 { margin: 0 0 .7rem; color: var(--ink); }
+.spr-intro > p { margin: 0; color: var(--body); }
+.spr-intro .btn { margin-top: 1.15rem; }
+.spr-flow {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: stretch; gap: .45rem; min-width: 0; margin-top: clamp(1.5rem, 3vw, 2.5rem);
+}
+.spr-flow-step {
+  min-width: 0; padding: clamp(1rem, 2vw, 1.35rem); border-radius: 12px;
+  background: #fff; box-shadow: 0 8px 26px rgb(10 28 61 / .07);
+}
+.spr-flow-step:nth-of-type(2) { background: #dff7ff; }
+.spr-flow-step:nth-of-type(3) { background: var(--ink); }
+.spr-flow-icon {
+  display: inline-grid; place-items: center; width: 2.35rem; height: 2.35rem;
+  margin-bottom: .8rem; border: 1px solid var(--line-2);
+  border-radius: 50%; color: var(--azure);
+}
+.spr-flow-icon .icon { width: 1.2rem; height: 1.2rem; }
+.spr-flow-code {
+  display: block; color: var(--cyan-ink); font-family: var(--f-mono);
+  font-size: .68rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase;
+}
+.spr-flow-step h3 { margin: .35rem 0 .45rem; color: var(--ink); font-size: 1.15rem; }
+.spr-flow-step p { margin: 0; color: var(--body); font-size: .8rem; line-height: 1.4; }
+.spr-flow-step:nth-of-type(3) .spr-flow-icon { border-color: rgb(127 224 255 / .4); color: var(--cyan-lift); }
+.spr-flow-step:nth-of-type(3) .spr-flow-code { color: var(--cyan-lift); }
+.spr-flow-step:nth-of-type(3) h3 { color: #fff; }
+.spr-flow-step:nth-of-type(3) p { color: var(--on-ink-soft); }
+.spr-flow-link {
+  display: grid; align-content: center; justify-items: center; gap: .15rem;
+  width: 1.7rem; color: var(--azure); font-family: var(--f-mono);
+}
+.spr-flow-link span { font-size: 1.4rem; line-height: 1; }
+.spr-flow-result {
+  margin: 1rem 0 0; color: var(--muted); font-size: .84rem;
+}
+.spr-flow-result strong { color: var(--ink); }
+
+/* ------------------------------------------------------- SPR deep dive -- */
+.spr-page-hero .split { align-items: stretch; }
+.spr-page-hero .split > :first-child { align-self: center; }
+.spr-page-hero .media { min-height: 470px; }
+.spr-page-hero .media img { object-position: 50% 38%; }
+.spr-process-rail {
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: 0; padding: 0; list-style: none; border-top: 2px solid var(--azure);
+}
+.spr-process-rail li { min-width: 0; padding: 1.35rem clamp(1rem, 2vw, 1.8rem) 0; border-left: 1px solid var(--line); }
+.spr-process-rail li:first-child { border-left: 0; padding-left: 0; }
+.spr-process-rail span { display: block; margin-bottom: 1.25rem; color: var(--cyan-ink); font: 600 .68rem/1 var(--f-mono); letter-spacing: .12em; }
+.spr-process-rail strong { display: block; margin-bottom: .45rem; color: var(--ink); font: 500 clamp(1.2rem, 2vw, 1.55rem)/1.15 var(--f-display); }
+.spr-process-rail p { margin: 0; color: var(--muted); font-size: .88rem; line-height: 1.5; }
+.spr-deep-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .85rem; }
+.spr-deep-pillar { min-width: 0; min-height: 390px; padding: clamp(1.4rem, 2.8vw, 2.35rem); border-radius: 14px; }
+
+/* Photographed pillars. The alternating white / pale-cyan / navy fill is a
+   signature of this design and is NOT sacrificed for the image: the picture
+   becomes a banner across the top and the fill still carries the body below,
+   so the three-across colour rhythm reads exactly as before.
+
+   The band is 16/7 rather than the 16/10 used elsewhere. These pillars are
+   already 390px tall by design, and a 16/10 crop on top pushed them past a
+   full viewport at desktop width. */
+.spr-deep-pillar--media { display: flex; flex-direction: column; padding: 0; overflow: hidden; }
+.spr-deep-pillar--media .card-media { aspect-ratio: 16 / 7; }
+.spr-deep-pillar-body { flex: 1; padding: clamp(1.4rem, 2.8vw, 2.35rem); }
+/* Without the photograph the icon needed a big drop to anchor the column.
+   With one above it, that gap reads as a hole. */
+.spr-deep-pillar--media .spr-deep-icon { margin-bottom: 1.35rem; }
+.spr-deep-pillar--strong { background: #fff; }
+.spr-deep-pillar--prevent { background: #dff7ff; }
+.spr-deep-pillar--reclaim { background: var(--ink); color: var(--on-ink); }
+.spr-deep-icon {
+  display: inline-grid; place-items: center; width: 2.8rem; height: 2.8rem; margin-bottom: 2.6rem;
+  border: 1px solid var(--line-2); border-radius: 50%; color: var(--azure);
+}
+.spr-deep-icon .icon { width: 1.25rem; height: 1.25rem; }
+.spr-deep-code { margin: 0 0 .7rem; color: var(--cyan-ink); font: 600 .68rem/1 var(--f-mono); letter-spacing: .12em; text-transform: uppercase; }
+.spr-deep-pillar h2 { margin-bottom: .9rem; font-size: clamp(1.55rem, 2.5vw, 2.15rem); }
+.spr-deep-pillar > p:last-child { margin: 0; color: var(--body); font-size: .94rem; line-height: 1.58; }
+.spr-deep-pillar--reclaim .spr-deep-icon { border-color: rgb(127 224 255 / .38); color: var(--cyan-lift); }
+.spr-deep-pillar--reclaim .spr-deep-code { color: var(--cyan-lift); }
+.spr-deep-pillar--reclaim h2 { color: #fff; }
+.spr-deep-pillar--reclaim > p:last-child { color: var(--on-ink-soft); }
+.spr-route-list { border-top: 1px solid var(--line-2); }
+.spr-route-list a {
+  display: grid; grid-template-columns: 3rem minmax(170px, .55fr) minmax(0, 1fr) 2.5rem;
+  align-items: center; gap: 1rem; min-height: 92px; padding: 1rem 0;
+  border-bottom: 1px solid var(--line-2); color: var(--ink); text-decoration: none;
+}
+.spr-route-list a:hover { color: var(--azure); }
+.spr-route-list span { font: 600 .7rem/1 var(--f-mono); color: var(--cyan-ink); letter-spacing: .1em; }
+.spr-route-list strong { font: 500 clamp(1.2rem, 2.2vw, 1.65rem)/1.15 var(--f-display); }
+.spr-route-list p { margin: 0; color: var(--muted); }
+.spr-route-list b { display: inline-grid; place-items: center; width: 2.35rem; height: 2.35rem; border-radius: 50%; background: var(--ink); color: #fff; }
+.spr-clarity {
+  display: grid; grid-template-columns: .8fr 1.2fr; gap: clamp(2rem, 5vw, 5rem);
+  padding: clamp(1.6rem, 3.5vw, 3.4rem); border-radius: var(--r-lg); background: var(--ink); color: var(--on-ink);
+}
+.spr-clarity h2,
+.spr-clarity h3 { color: #fff; }
+.spr-clarity p { color: var(--on-ink-soft); }
+.spr-clarity .btn-row { margin-top: 1.25rem; }
 
 /* ------------------------------------------------------- programme cards -- */
 .pgrid { display: grid; gap: 1.15rem; grid-template-columns: repeat(3, 1fr); }
@@ -488,7 +853,20 @@ section { padding-block: var(--step); }
 /* ------------------------------------------------------------------ misc -- */
 .split { display: grid; gap: clamp(1.5rem, 4vw, 3.25rem); grid-template-columns: 1fr 1fr; align-items: center; }
 .split > * { min-width: 0; }
-.media { border-radius: var(--r); overflow: hidden; background: var(--ground-2); }
+/* ⚠️ `width: 100%` is load-bearing — the SAME trap as .hero-visual, and this
+   one was live on spr.html at desktop, not just on phones.
+
+   `aspect-ratio` sizes whichever axis is not already definite. `.media--wide`
+   sets 16/10 and `.spr-page-hero .media` sets `min-height: 470px`, so with no
+   definite width the height resolved first and the ratio ran BACKWARDS to
+   demand 470 x 1.6 = 752px of width from a grid column that had far less.
+   Result: 138px of page-level horizontal scroll at 1280, 58px at 1440, 10px
+   at 1536 — the nav visibly cut off.
+
+   Pinning the width makes the ratio derive the HEIGHT, which is the direction
+   intended everywhere .media is used. Any future `min-height` on a .media is
+   then a floor, not a width instruction. */
+.media { width: 100%; border-radius: var(--r); overflow: hidden; background: var(--ground-2); }
 .media img { width: 100%; height: 100%; object-fit: cover; }
 .media--tall { aspect-ratio: 4 / 5; }
 .media--wide { aspect-ratio: 16 / 10; }
@@ -562,6 +940,9 @@ section { padding-block: var(--step); }
 .foot a:hover { color: var(--cyan-lift); text-decoration: underline; }
 .foot .brand-name { color: #fff; }
 .foot p { font-size: .9375rem; }
+/* Was an inline style on index and spr only; a class so the stamped footer
+   carries it to all eleven pages. */
+.foot-blurb { margin-top: 1rem; max-width: 32ch; }
 .foot-bottom { border-top: 1px solid rgb(255 255 255 / .14); padding-top: 1.5rem; display: grid; gap: .7rem; }
 .foot-bottom p { margin: 0; font-size: .8125rem; line-height: 1.6; color: var(--on-ink-dim); max-width: none; }
 .foot-bottom strong { color: var(--on-ink); }
@@ -646,10 +1027,10 @@ section { padding-block: var(--step); }
    ========================================================================= */
 
 /* ----------------------------------------------------------- the scan line -- */
-.hero-card::before {
+.hero-visual::after {
   content: "";
   position: absolute; left: 0; right: 0; top: 0; height: 42%;
-  z-index: 0; pointer-events: none;
+  z-index: 1; pointer-events: none;
   background: linear-gradient(to bottom,
     transparent 0%,
     rgb(0 174 239 / .05) 62%,
@@ -707,7 +1088,7 @@ section { padding-block: var(--step); }
 
 /* --------------------------------------------------------- reduced motion -- */
 @media (prefers-reduced-motion: reduce) {
-  .hero-card::before { animation: none; display: none; }
+  .hero-visual::after { animation: none; display: none; }
   .js .hero-copy > * { animation: none; opacity: 1; transform: none; }
   .pcard, .card, .step, .media, .step > img, .media img, .nav, .statstrip > div { transition: none; }
   .pcard:hover, .card:hover, .step:hover { transform: none; }
@@ -802,3 +1183,735 @@ section { padding-block: var(--step); }
   .pd-network-card a:hover { transform: none; }
 }
 /* pd-network:end */
+
+/* ------------------------------------------------ production journeys -- */
+/* These rules support the live acquisition, booking and intake journeys.
+   Keep hidden content hidden even when a component class sets display. */
+[hidden] { display: none !important; }
+
+.production .concept-banner,
+.production .pd-network { display: none; }
+
+.route-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+.route-card {
+  display: flex; flex-direction: column;
+  padding: 0; overflow: hidden;
+  color: inherit;
+  text-decoration: none;
+}
+.route-card:focus-visible { outline: 3px solid var(--cyan); outline-offset: 3px; }
+
+/* The photograph band inside a card. `.card-media` is the canonical name and
+   `.route-card-media` is kept as its alias: the service pages needed exactly
+   this band and nothing else, so giving them a second, parallel image-card
+   rule would have split one system into two — the mistake the later `.btn`
+   rule made when its asymmetric padding silently squashed 25 existing
+   buttons. New markup should use `.card-media`. */
+.card-media,
+.route-card-media { aspect-ratio: 16 / 10; overflow: hidden; background: var(--ground-2); }
+.card-media img,
+.route-card-media img {
+  width: 100%; height: 100%; object-fit: cover; object-position: center 44%;
+  transition: transform .6s cubic-bezier(.22, 1, .36, 1);
+}
+.card-media img[width][height],
+.route-card-media img[width][height] { height: 100%; }
+.route-card:hover .route-card-media img { transform: scale(1.035); }
+.route-card-body {
+  display: flex; flex: 1; flex-direction: column; align-items: flex-start; gap: .75rem;
+  width: 100%; padding: clamp(1.25rem, 2.4vw, 1.75rem);
+}
+.route-card p { margin: 0; color: var(--muted); }
+.route-card-label { display: flex; align-items: center; gap: .7rem; }
+.route-card-label .eyebrow { color: var(--cyan-ink); }
+.route-action {
+  position: relative; display: inline-flex; align-items: center; justify-content: center;
+  width: 100%; min-height: 42px; margin-top: auto; padding: .6rem 2.2rem;
+  border-radius: var(--r-pill); background: var(--ink); color: #fff;
+  font-size: .875rem; font-weight: 600; line-height: 1.25; text-align: center;
+}
+.route-action > span { position: absolute; right: .9rem; color: var(--cyan-lift); font-size: 1.1rem; }
+.route-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  background: var(--ground-2);
+  color: var(--cyan-ink);
+}
+.route-icon .icon { width: 1.2rem; height: 1.2rem; }
+.card-title { font-size: clamp(1.25rem, 2.2vw, 1.65rem); }
+
+.service-choice { position: relative; min-height: 100%; }
+.service-choice-icon {
+  display: inline-grid; place-items: center; width: 2.8rem; height: 2.8rem;
+  margin-bottom: 1.1rem; border: 1px solid #b9d7e6; border-radius: 50%;
+  background: #eaf8ff; color: var(--azure);
+}
+.service-choice-icon .icon { width: 1.2rem; height: 1.2rem; }
+.service-choice .btn { margin-top: auto; }
+
+/* --- the photographed variant ---------------------------------------------
+   A service-choice that leads on a photograph. The body below the image is
+   deliberately the same stack as .route-card-body — icon chip, title, copy —
+   because these ARE the same object: a service, shown and named. Only the
+   homepage's version happened to keep its picture.
+
+   Zero padding on the card itself so the image can reach the corners; the
+   padding moves to .service-choice-body. */
+.service-choice--media { display: flex; flex-direction: column; padding: 0; overflow: hidden; }
+.service-choice-body {
+  display: flex; flex: 1; flex-direction: column; align-items: flex-start;
+  padding: clamp(1.25rem, 2.4vw, 1.75rem);
+}
+/* The icon chip sits tighter under a photograph than it does floating at the
+   top of a bare card, where it needed the extra space to anchor the column. */
+.service-choice--media .service-choice-icon { margin-bottom: .85rem; }
+.service-choice--media .card-title { margin-bottom: .55rem; }
+.service-choice--media p { margin: 0 0 .7rem; color: var(--muted); }
+.service-choice--media p:last-child { margin-bottom: 0; }
+.service-choice--media:hover .card-media img { transform: scale(1.035); }
+
+/* A plain card that leads on a photograph — the aside variant, for panels that
+   are not part of a service grid. Same deal as .service-choice--media: the
+   padding moves off the card and onto the body so the image reaches the
+   clipped corners. */
+/* The booking page's two columns. This was `align-items: start` inline, which
+   left the short step-1 form card floating against a much taller aside and a
+   large empty patch of ground beside it. Stretching makes both columns one
+   pair of panels; the form's own content stays top-aligned inside its card,
+   so nothing moves as the wizard grows through steps 2-4. */
+.book-split { align-items: stretch; }
+.book-split > aside > .card { height: 100%; }
+
+/* The statstrip's sizes were four repeated inline styles on the homepage.
+   Reusing that strip on the booking page made them classes instead — an inline
+   style would have had to be retyped correctly a second time.
+
+   ⚠️ Both selectors are qualified with `dd` deliberately. An inline style wins
+   the cascade outright, but a bare `.statstrip-lead` (0-1-0) LOSES to the
+   `.statstrip dd` rule above (0-1-1) that sets a clamp() display size. The
+   page still renders — just at the wrong size — which is exactly the kind of
+   regression a visual check waves through. It surfaced here as the email
+   address breaking mid-word, because it was being drawn at 1.75rem. */
+.statstrip dd.statstrip-lead { font-size: 1.05rem; line-height: 1.4; }
+.statstrip dd.statstrip-mail { font-size: .95rem; overflow-wrap: anywhere; }
+
+.card--media-top { padding: 0; overflow: hidden; }
+.card-media-body { padding: clamp(1.25rem, 2.4vw, 1.75rem); }
+.card-media-body > :first-child { margin-top: 0; }
+.card-media-body > :last-child { margin-bottom: 0; }
+
+@media (min-width: 861px) {
+  /* Above 861px a bare service-choice sheds its card entirely and becomes a
+     column separated by a hairline. That is what left the service pages
+     reading as loose text in a lot of dead space — and it must NOT apply to
+     the photographed variant, whose image needs the card's clipped corners
+     and whose fill is what separates it from its neighbour. */
+  .route-grid > .service-choice:not(.service-choice--media) {
+    padding: clamp(1.25rem, 2.5vw, 2.25rem); border: 0; border-left: 1px solid var(--line-2);
+    border-radius: 0; background: transparent; box-shadow: none;
+  }
+  .route-grid > .service-choice:not(.service-choice--media):first-child { border-left: 0; padding-left: 0; }
+  .route-grid > .service-choice:not(.service-choice--media):last-child { padding-right: 0; }
+}
+
+.service-flow-section { padding: 0 0 clamp(2.1rem, 4vw, 3.6rem); }
+.service-flow-section .wrap {
+  display: grid; grid-template-columns: minmax(210px, .55fr) minmax(0, 1.45fr);
+  align-items: stretch; gap: clamp(1.25rem, 3vw, 3rem);
+  padding-top: clamp(1.15rem, 2vw, 1.75rem); border-top: 1px solid var(--line-2);
+}
+.service-flow-head { align-self: center; }
+.service-flow-head h2 { max-width: 12ch; margin: 0 0 .5rem; font-size: clamp(1.45rem, 2.5vw, 2rem); }
+.service-flow-head p { margin: 0; color: var(--muted); font-size: .9rem; }
+.service-flow {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 0; padding: 0; list-style: none;
+}
+.service-flow li {
+  position: relative; display: grid; grid-template-columns: auto 1fr; align-content: center;
+  gap: .8rem; min-width: 0; padding: 1rem clamp(.8rem, 1.8vw, 1.35rem);
+  border-left: 1px solid var(--line);
+}
+.service-flow li:first-child { border-left: 0; }
+.service-flow li:not(:last-child)::after {
+  content: ''; position: absolute; z-index: 1; top: 50%; right: -.28rem;
+  width: .55rem; height: .55rem; border-top: 1px solid var(--azure); border-right: 1px solid var(--azure);
+  background: var(--ground); transform: translateY(-50%) rotate(45deg);
+}
+.service-flow-icon {
+  display: inline-grid; place-items: center; width: 2.55rem; height: 2.55rem;
+  border-radius: 50%; background: var(--ink); color: var(--cyan-lift);
+}
+.service-flow-icon .icon { width: 1.05rem; height: 1.05rem; }
+.service-flow strong { display: block; margin-bottom: .25rem; color: var(--ink); font-family: var(--f-display); font-size: 1.05rem; }
+.service-flow p { margin: 0; color: var(--muted); font-size: .78rem; line-height: 1.4; }
+
+/* The practical answers. This was a hairline table — a continuous 3x3 grid of
+   shared 1px borders on a 66%-opacity fill — which read as a spreadsheet and
+   flattened nine genuinely useful answers into data. Everything else on this
+   site is an object sitting ON the pale ground, so these become cards too.
+
+   Several answers are honestly "not yet approved for publication", and those
+   carry .is-pending so an unknown looks deliberate rather than unfinished. */
+.service-answers {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: .7rem; margin: clamp(1.4rem, 3vw, 2.25rem) 0 0;
+}
+.service-answers > div {
+  position: relative; min-width: 0; padding: 1.25rem 1.35rem;
+  border: 1px solid var(--line); border-radius: var(--r-sm);
+  background: var(--paper); box-shadow: var(--shadow-sm);
+}
+/* A short cyan rule above the question, in place of the old cell border. It
+   gives the card a top edge to hang from without re-drawing a table. */
+.service-answers > div::before {
+  content: ''; position: absolute; top: 0; left: 1.35rem;
+  width: 1.75rem; height: 2px; border-radius: 0 0 2px 2px; background: var(--cyan);
+}
+.service-answers dt {
+  margin-bottom: .5rem; color: var(--ink);
+  font-family: var(--f-display); font-size: 1.02rem; font-weight: 500; line-height: 1.3;
+}
+.service-answers dd { margin: 0; color: var(--muted); font-size: .88rem; line-height: 1.55; }
+.service-answers .is-pending::before { background: var(--warn-line); }
+.service-answers .is-pending dd { color: var(--warn-ink); }
+/* The old hairline table butted straight up against the action row beneath
+   it, so the primary call-to-action read as another table cell. */
+.service-answers + .btn-row { margin-top: clamp(1.5rem, 3vw, 2.25rem); }
+
+.journey-flow {
+  position: relative; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1px; margin: 0; padding: 0; overflow: hidden; list-style: none;
+  border: 1px solid rgb(255 255 255 / .12); border-radius: var(--r-lg);
+  background: rgb(255 255 255 / .12); color: var(--on-ink);
+}
+.journey-flow::before {
+  content: ""; position: absolute; z-index: 1;
+  top: 3.15rem; left: 16.666%; right: 16.666%; height: 1px;
+  background: linear-gradient(90deg, var(--cyan), var(--cyan-lift), var(--cyan));
+  transform-origin: left center; transition: transform .9s cubic-bezier(.22, 1, .36, 1) .15s;
+}
+.js .journey-flow::before { transform: scaleX(0); }
+.js .journey-flow.in::before { transform: scaleX(1); }
+.journey-step { position: relative; z-index: 2; min-width: 0; padding: clamp(1.25rem, 3vw, 2rem); background: var(--ink); }
+.journey-step-top { display: flex; align-items: center; justify-content: space-between; gap: .75rem; margin-bottom: 1.1rem; }
+.journey-number { font-family: var(--f-mono); font-size: .72rem; letter-spacing: .12em; color: var(--cyan-lift); }
+.journey-icon {
+  display: inline-grid; place-items: center; width: 2.25rem; height: 2.25rem;
+  border: 1px solid rgb(127 224 255 / .35); border-radius: 50%;
+  background: var(--ink); color: var(--cyan-lift);
+}
+.journey-icon .icon { width: 1rem; height: 1rem; }
+.journey-step h3 { margin: 0 0 .55rem; color: #fff; font-size: clamp(1.15rem, 2vw, 1.4rem); }
+.journey-step p { margin: 0; color: var(--on-ink-soft); font-size: .94rem; line-height: 1.55; }
+
+.mobile-quick-actions { display: none; }
+
+.booking-progress {
+  display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 1px;
+  margin: 0 0 1.5rem; padding: 0; overflow: hidden; list-style: none;
+  border: 1px solid var(--line); border-radius: var(--r-sm); background: var(--line);
+}
+.booking-progress li {
+  display: flex; align-items: center; justify-content: center; gap: .45rem;
+  min-width: 0; padding: .7rem .5rem; background: var(--ground);
+  color: var(--ink); font-size: .78rem; line-height: 1.2; text-align: center;
+}
+.booking-progress span {
+  display: inline-grid; place-items: center; width: 1.45rem; height: 1.45rem;
+  border-radius: 50%; background: var(--ink); color: #fff;
+  font-family: var(--f-mono); font-size: .67rem; flex: none;
+}
+.booking-progress li[aria-current="step"] { background: #dff7ff; color: var(--ink); }
+.booking-progress li[aria-current="step"] span { background: var(--azure); }
+.booking-step-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: .65rem; margin-top: 1.15rem; }
+.booking-step-actions .btn { min-width: 9rem; }
+.booking-actions .btn { flex: 1 1 13rem; }
+.booking-review dl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .8rem 1rem; margin: 1rem 0; }
+.booking-review dl > div { padding: .8rem 0; border-bottom: 1px solid var(--line); }
+.booking-review dt { margin-bottom: .25rem; color: var(--muted); font-family: var(--f-mono); font-size: .68rem; letter-spacing: .12em; text-transform: uppercase; }
+.booking-review dd { margin: 0; overflow-wrap: anywhere; color: var(--ink); }
+.turnstile-field { margin-top: 1rem; }
+.turnstile-field > p { margin: .45rem 0 0; color: var(--muted); font-size: .82rem; }
+
+.booking-dialog {
+  width: min(720px, calc(100% - 1rem)); height: min(92dvh, 860px);
+  max-width: none; max-height: none; margin: auto auto 0; padding: 0;
+  overflow: hidden; border: 0; border-radius: 26px 26px 0 0;
+  background: var(--paper); box-shadow: 0 -18px 60px rgb(10 28 61 / .3);
+}
+.booking-dialog::backdrop { background: rgb(6 18 40 / .58); backdrop-filter: blur(5px); }
+.booking-dialog-bar {
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  min-height: 58px; padding: .75rem 1rem .75rem 1.25rem; border-bottom: 1px solid var(--line);
+  background: #fff; color: var(--ink);
+}
+.booking-dialog-bar button {
+  display: inline-grid; place-items: center; width: 2.35rem; height: 2.35rem;
+  padding: 0; border: 0; border-radius: 50%; background: var(--ground-2);
+  color: var(--ink); font: 500 1.5rem/1 var(--f-body); cursor: pointer;
+}
+.booking-dialog iframe { display: block; width: 100%; height: calc(100% - 58px); border: 0; background: var(--paper); }
+.booking-dialog-focus-guard {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip-path: inset(50%); white-space: nowrap;
+}
+.booking-open { overflow: hidden; }
+@media (min-width: 861px) {
+  .booking-dialog { width: min(760px, calc(100% - 2rem)); height: min(88dvh, 840px); margin: auto; border-radius: 24px; }
+}
+
+html.booking-embed .nav-shell,
+html.booking-embed main > section:first-child,
+html.booking-embed main aside,
+html.booking-embed .mobile-quick-actions,
+html.booking-embed .foot { display: none; }
+html.booking-embed body { min-height: 0; padding: 0; background: var(--paper); }
+html.booking-embed main > section { padding: 0; }
+html.booking-embed main > section .wrap { width: 100%; }
+html.booking-embed main .split { display: block; }
+html.booking-embed main .card { border: 0; border-radius: 0; box-shadow: none; }
+
+.narrow { max-width: 780px; }
+.prose > * + * { margin-top: 1rem; }
+.prose h2 { margin-top: 2.4rem; }
+.prose ul { padding-left: 1.25rem; }
+
+.hp-field {
+  position: absolute !important;
+  left: -10000px !important;
+  width: 1px !important;
+  height: 1px !important;
+  overflow: hidden !important;
+}
+.optional { color: var(--muted); font-weight: 400; }
+.form-help {
+  margin: .5rem 0 1rem;
+  color: var(--muted);
+  font-size: .9rem;
+  line-height: 1.55;
+}
+.js-form-gate {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.js-form-gate[disabled] {
+  display: none;
+}
+.form-gate-notice { margin: 1rem 0 1.25rem; }
+.form-gate-notice [data-form-gate-copy],
+.form-gate-options { margin-top: .3rem; }
+.form-consent-version {
+  margin: -1rem 0 1.25rem;
+  font-family: var(--f-mono);
+  font-size: .72rem;
+  letter-spacing: .02em;
+}
+.form-consent-version strong { color: var(--ink); }
+.service-facts {
+  margin: -.25rem 0 1.2rem;
+  padding: 1rem;
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  background: var(--ground);
+}
+.service-facts p { margin: 0; }
+.service-facts p + p { margin-top: .45rem; }
+.verification-note { color: var(--muted); font-size: .88rem; }
+
+fieldset.field,
+.field fieldset {
+  min-width: 0;
+  margin: 0 0 1rem;
+  padding: 0;
+  border: 0;
+}
+fieldset.field legend,
+.field legend {
+  margin-bottom: .55rem;
+  font-weight: 600;
+}
+.check-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .65rem;
+}
+.check-grid label,
+.check-field,
+.slot-option {
+  display: flex;
+  align-items: flex-start;
+  gap: .65rem;
+  line-height: 1.45;
+}
+.check-grid input,
+.check-field input,
+.slot-option input {
+  flex: 0 0 auto;
+  /* 1.5rem = 24px, the WCAG 2.5.8 (AA) minimum target size. These were 1.1rem
+     = 17.6px. The wrapping <label> already made the whole row clickable, but
+     the box itself is what a finger aims at, and the consent checkbox in
+     particular gates form submission — an 18px target that is hard to hit is
+     a conversion problem as well as an accessibility one.
+
+     Note this exemption does NOT apply the way it does to links: the 2.5.8
+     inline-text exemption covers targets sized by the line-height of a
+     sentence they sit inside. A form control is not inline text. */
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-top: 0;
+  accent-color: var(--cyan);
+}
+.check-field {
+  margin: 1rem 0 1.25rem;
+  padding: .9rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  background: var(--ground);
+  font-size: .9rem;
+}
+.slot-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: .65rem;
+}
+.slot-option {
+  padding: .75rem;
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  background: #fff;
+  cursor: pointer;
+}
+.slot-option:has(input:checked) {
+  border-color: var(--cyan-ink);
+  background: var(--ground-2);
+}
+.note--success {
+  border-color: #9cd9bc;
+  background: #edf9f3;
+  color: #145c3c;
+}
+.confirmation-card { padding: clamp(1.35rem, 4vw, 2.5rem); }
+.confirmation-list { margin: 1.5rem 0; }
+.confirmation-list > div {
+  display: grid;
+  grid-template-columns: minmax(7rem, .35fr) 1fr;
+  gap: 1rem;
+  padding: .85rem 0;
+  border-bottom: 1px solid var(--line);
+}
+.confirmation-list dt { color: var(--muted); }
+.confirmation-list dd { margin: 0; font-weight: 600; overflow-wrap: anywhere; }
+
+@media (max-width: 860px) {
+  .hero-card { min-height: 0; grid-template-columns: 1fr; }
+  .hero-copy { padding: clamp(1.65rem, 6vw, 2.5rem); }
+  /* ⚠️ `width: 100%` is load-bearing, not tidying.
+     `aspect-ratio` is bidirectional: it sizes whichever axis is not already
+     definite. With only `min-height: 260px` set and no definite width, the
+     browser resolved the HEIGHT first and then ran the ratio backwards to get
+     a width — 240 x 16/9 = 427px — inside a 390px (and a 320px) card.
+
+     Because .hero-card is `overflow: hidden` this never produced page-level
+     horizontal scroll, so documentElement.scrollWidth stayed clean and an
+     overflow check passed. It silently cropped the right of the photograph
+     and pushed the booking panel, which anchors to `right` of THIS box, 26px
+     past the edge of the screen. Pinning the width makes the ratio derive the
+     height, which is the direction intended. */
+  .hero-visual { width: 100%; min-height: 260px; aspect-ratio: 16 / 9; }
+  /* The slides are focal-pointed to their right-hand third so the desktop
+     hero keeps faces clear of the copy column on the left. Once the copy
+     stacks ABOVE the image there is no column to avoid, and holding the right
+     edge just crops people out of a much narrower frame. */
+  .hero-visual .hero-slide { object-position: 50% 42%; }
+  .hero-route-pills { display: none; }
+  .hero-visual .hero-dots { left: .7rem; right: auto; }
+  .route-grid { grid-template-columns: 1fr; }
+  .service-hero .split {
+    gap: 0; overflow: hidden; border: 1px solid var(--line); border-radius: var(--r);
+    background: var(--paper); box-shadow: var(--shadow-sm);
+  }
+  .service-hero .split > :first-child { order: 2; padding: clamp(1.2rem, 5vw, 1.75rem); }
+  .service-hero .media { order: 1; min-height: 210px; margin: 0; border: 0; border-radius: 0; }
+  .service-hero .media img[width][height] { width: 100%; height: 100%; object-fit: cover; }
+  .spr-story { grid-template-columns: 1fr; }
+  .spr-visual-grid { min-height: 400px; }
+  .spr-page-hero .media { min-height: 250px; }
+  .spr-process-rail { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem 0; }
+  .spr-process-rail li:nth-child(3) { border-left: 0; padding-left: 0; }
+  .spr-deep-grid { grid-template-columns: 1fr; }
+  .spr-deep-pillar { min-height: 0; }
+  .spr-clarity { grid-template-columns: 1fr; }
+  .route-card { display: grid; grid-template-columns: minmax(112px, 34%) 1fr; min-height: 170px; }
+  .route-card-media { height: 100%; aspect-ratio: auto; }
+  .route-card-body { gap: .5rem; padding: 1.05rem; }
+  .route-icon { width: 2.25rem; height: 2.25rem; }
+  .route-icon .icon { width: 1rem; height: 1rem; }
+  .route-action { min-height: 38px; padding-block: .5rem; }
+  .mobile-quick-actions {
+    position: fixed; z-index: 160; display: grid; grid-template-columns: 1fr 1fr;
+    left: max(.75rem, env(safe-area-inset-left)); right: max(.75rem, env(safe-area-inset-right));
+    bottom: max(.65rem, env(safe-area-inset-bottom)); gap: .5rem; padding: .45rem;
+    border: 1px solid var(--line); border-radius: var(--r-pill);
+    background: rgb(255 255 255 / .94); box-shadow: 0 12px 40px rgb(10 28 61 / .24);
+    backdrop-filter: blur(16px) saturate(160%);
+  }
+  .mobile-quick-action {
+    position: relative; display: inline-flex; align-items: center; justify-content: center;
+    min-height: 48px; padding: .65rem 1rem; border-radius: var(--r-pill);
+    color: var(--ink); font-size: .9rem; font-weight: 600; line-height: 1;
+    text-align: center; text-decoration: none;
+  }
+  .mobile-quick-action--primary { background: var(--ink); color: #fff; }
+  .mobile-quick-action:hover { color: var(--ink); background: var(--ground); }
+  .mobile-quick-action--primary:hover { color: #fff; background: var(--ink-2); }
+  .mobile-quick-action .icon,
+  .mobile-quick-glyph { position: absolute; left: 1rem; width: 1.05rem; height: 1.05rem; }
+  .mobile-quick-glyph { display: inline-grid; place-items: center; font-size: 1.05rem; line-height: 1; }
+  .has-mobile-actions { padding-bottom: 5.25rem; }
+}
+@media (max-width: 620px) {
+  .check-grid { grid-template-columns: 1fr; }
+  .confirmation-list > div { grid-template-columns: 1fr; gap: .2rem; }
+  .home-page section { padding-block: 2.1rem; }
+  .home-page main > section + section { padding-top: 0; }
+  .home-page .hero { padding-top: .65rem; padding-bottom: 1.8rem; }
+  .hero-card { border-radius: var(--r-lg); }
+  .hero-copy { padding: 1.4rem; }
+  .hero-copy h1 { font-size: clamp(2rem, 10vw, 3rem); }
+  .hero-copy .lede { font-size: .98rem; line-height: 1.5; }
+  .hero .btn-row { margin-top: 1.1rem; }
+  .hero .btn-row .btn { flex: 1 1 100%; }
+  .hero-note { margin-top: 1rem; font-size: .84rem; }
+  /* Same width pin as the 860px block — this rule re-declares min-height and
+     aspect-ratio together, so without it the 427px miscomputation returns
+     below 620px. */
+  .hero-visual { width: 100%; min-height: 240px; aspect-ratio: 16 / 9; }
+  .hero-media-actions { gap: .45rem; padding: 3rem .75rem .75rem; }
+  .hero-media-actions .btn { min-height: 38px; padding: .5rem .7rem; font-size: .78rem; }
+  .hero-dots { top: .7rem; right: .7rem; }
+  .hero-visual .hero-dots { left: .7rem; right: auto; }
+  .home-page .head-split { margin-bottom: 1.15rem; }
+  .home-page .head-split .section-intro { display: none; }
+  .home-page .spr-section { padding-block: 1.6rem; }
+  .spr-story { gap: 1.35rem; }
+  .spr-visual-grid { min-height: 292px; grid-template-rows: 170px 108px; gap: .55rem; }
+  .spr-visual-grid figure,
+  .spr-metric { border-radius: 10px; }
+  .spr-metric { padding: .75rem; }
+  .spr-metric strong { font-size: 1.75rem; }
+  .spr-metric span { margin-top: .35rem; font-size: .72rem; }
+  .spr-metric p { display: none; }
+  .spr-intro h2 { font-size: 1.85rem; }
+  .spr-intro > p { font-size: .88rem; line-height: 1.5; }
+  .spr-flow { grid-template-columns: minmax(0, 1fr) .8rem minmax(0, 1fr) .8rem minmax(0, 1fr); gap: .2rem; margin-top: 1.25rem; }
+  .spr-flow-step { padding: .72rem .5rem; border-radius: 10px; }
+  .spr-flow-icon { width: 1.8rem; height: 1.8rem; margin-bottom: .55rem; }
+  .spr-flow-icon .icon { width: .9rem; height: .9rem; }
+  .spr-flow-code { font-size: .5rem; letter-spacing: .06em; }
+  .spr-flow-step h3 { margin: .25rem 0 0; font-size: .86rem; }
+  .spr-flow-step p { display: none; }
+  .spr-flow-link { width: .8rem; }
+  .spr-flow-link span { font-size: .9rem; }
+  .spr-flow-result { margin-top: .75rem; font-size: .72rem; line-height: 1.4; }
+  .spr-page-hero .media { min-height: 220px; }
+  .spr-process-rail { grid-template-columns: 1fr; gap: 0; }
+  .spr-process-rail li,
+  .spr-process-rail li:first-child,
+  .spr-process-rail li:nth-child(3) { padding: 1rem 0; border-left: 0; border-bottom: 1px solid var(--line); }
+  .spr-process-rail span { margin-bottom: .55rem; }
+  .spr-process-rail p { font-size: .82rem; }
+  .spr-deep-pillar { padding: 1.15rem; border-radius: 11px; }
+  .spr-deep-icon { margin-bottom: 1.35rem; }
+  .spr-route-list a { grid-template-columns: 2rem 1fr 2.2rem; gap: .65rem; min-height: 82px; }
+  .spr-route-list p { display: none; }
+  .spr-clarity { gap: 1.25rem; padding: 1.3rem; border-radius: 18px; }
+  .route-grid { gap: .75rem; }
+  /* 104px of a 390px screen left the photograph an unreadable vertical
+     sliver — the x-ray frame in particular became abstract grey. Widening to
+     38% with a taller card makes the subject legible while keeping the
+     horizontal layout, so three route cards still fit in roughly a screen
+     rather than tripling the page's scroll depth. */
+  .route-card { grid-template-columns: 38% 1fr; min-height: 188px; border-radius: 18px; }
+  .route-card-body { padding: .85rem; }
+  .route-card-label { gap: .5rem; }
+  .route-icon { width: 1.9rem; height: 1.9rem; }
+  .route-card .card-title { font-size: 1.08rem; line-height: 1.15; }
+  .route-card-copy {
+    display: -webkit-box; overflow: hidden; -webkit-box-orient: vertical; -webkit-line-clamp: 2;
+    font-size: .78rem; line-height: 1.35;
+  }
+  .route-action { min-height: 34px; padding: .4rem .7rem; font-size: .76rem; }
+  /* Three steps STACK on a phone rather than staying three-across.
+     At 390px three columns leave roughly 110px of content each, which broke
+     "Choose the right route" over three lines in a column narrower than the
+     words in it. These are sequential steps, and a phone reads a sequence
+     down the page perfectly well.
+
+     The connector rail is HIDDEN rather than rotated. .journey-step paints an
+     opaque --ink background at z-index 2 over the z-index-1 rail, so the rail
+     only ever shows through the 1px grid gaps. Rotated vertically that leaves
+     two cyan dots. The horizontal rules between stacked steps already carry
+     the sequence, and the numbers say it outright. */
+  .journey-flow { grid-template-columns: 1fr; border-radius: 18px; }
+  .journey-flow::before { display: none; }
+  /* Number and icon lead the row together instead of being pushed to opposite
+     ends of a column that no longer exists. */
+  .journey-step-top { justify-content: flex-start; gap: .85rem; margin-bottom: .65rem; }
+  .journey-step { padding: 1rem .95rem 1.15rem; }
+  .journey-number { font-size: .62rem; }
+  .journey-icon { width: 1.8rem; height: 1.8rem; }
+  /* Full width restores the title to a readable size and brings the
+     descriptions back. Both were shrunk and then hidden outright only because
+     three columns at 390px had nowhere to put them — the text was never the
+     problem, the column count was. These lines carry the actual detail
+     ("Give only the practical details needed for a booking request"), so
+     losing them left three bare labels explaining nothing. */
+  .journey-step h3 { margin: 0 0 .35rem; font-size: 1.05rem; line-height: 1.25; }
+  .journey-step p { font-size: .85rem; line-height: 1.5; }
+  .home-page .home-contact-strip { display: none; }
+  .home-before-travel .lede,
+  .home-before-travel .card { display: none; }
+  .home-before-travel h2 { font-size: 1.55rem; }
+  .home-before-travel .btn-row .btn { flex: 1 1 100%; }
+  .home-page .foot { margin-top: 2rem; }
+  .home-page .foot-in { padding-top: 1.75rem; }
+  .home-page .foot-top { gap: 1.25rem; margin-bottom: 1.5rem; }
+  /* Services and Information used to be `display: none` here, to keep the
+     phone footer short. That removed the site's ONLY always-visible list of
+     pages on mobile — the main nav is behind the hamburger — and it did so on
+     the homepage, which is the most common mobile entry point.
+
+     Pairing them on one row costs roughly the vertical space the hiding was
+     protecting, and keeps the navigation. */
+  .home-page .foot-top > :nth-child(2),
+  .home-page .foot-top > :nth-child(3) { grid-column: span 1; }
+  .home-page .foot-top {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .home-page .foot-top > :first-child,
+  .home-page .foot-top > :last-child { grid-column: 1 / -1; }
+  .booking-progress li { flex-direction: column; gap: .35rem; padding: .65rem .15rem; font-size: .64rem; }
+  .booking-step-actions .btn { flex: 1 1 8rem; min-width: 0; }
+  .booking-review dl { grid-template-columns: 1fr; gap: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .journey-flow::before { transform: none !important; transition: none; }
+  /* Both card systems, not just the alias. The reduced-motion rules were
+     written when .route-card was the only photographed card; leaving
+     .service-choice--media and .card--media-top out would have recreated the
+     exact split these two classes were merged to avoid. */
+  .card-media img,
+  .route-card-media img { transition: none; }
+  .route-card:hover .route-card-media img,
+  .service-choice--media:hover .card-media img { transform: none; }
+  .hero-visual .hero-slide { transition: none; }
+}
+
+/* The homepage opens as one uninterrupted canvas. The floating navigation is
+   intentionally taken out of document flow here only; service pages retain
+   their compact sticky navigation and practical page rhythm. */
+.home-page .nav-shell { position: fixed; left: 0; right: 0; top: 0; }
+.home-page .hero { padding: 0; }
+.home-page .hero > .wrap { width: 100%; max-width: none; }
+.home-page .hero-card { min-height: 100svh; border-radius: 0; }
+
+@media (max-width: 860px) {
+  .home-page .hero-card { min-height: 0; }
+  .home-page .hero-copy { padding-top: 6.5rem; }
+  .hero-visual .hero-dots { top: .65rem; bottom: auto; left: .65rem; right: auto; }
+  .hero-booking-panel {
+    right: .65rem; bottom: .65rem; width: min(285px, calc(100% - 1.3rem)); min-height: 78px;
+    grid-template-columns: auto minmax(0, 1fr) auto; gap: .55rem; padding: .6rem;
+  }
+  .hero-booking-icon { width: 40px; height: 40px; }
+  .hero-booking-icon .icon { width: 19px; height: 19px; }
+  .hero-booking-panel small { font-size: .52rem; }
+  .hero-booking-panel strong { font-size: .9rem; }
+  .hero-booking-panel em { display: none; }
+  .hero-booking-arrow { width: 30px; height: 30px; }
+  .service-flow-section .wrap { grid-template-columns: 1fr; gap: .85rem; }
+  .service-flow-head { display: flex; align-items: end; justify-content: space-between; gap: 1rem; }
+  .service-flow-head h2 { max-width: 18ch; margin: 0; }
+  .service-flow-head p { max-width: 28ch; text-align: right; }
+  .service-flow li { padding-inline: .7rem; gap: .55rem; }
+  .service-flow-icon { width: 2.15rem; height: 2.15rem; }
+  .service-flow p { font-size: .72rem; }
+  .service-answers { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* Tablet keeps one continuous hero, but uses a hard visual split because the
+   taller crop removes the photograph's negative space. Copy and faces never
+   share a layer. */
+@media (min-width: 621px) and (max-width: 999px),
+       (min-width: 1000px) and (max-aspect-ratio: 149/100) {
+  .home-page .hero-card {
+    display: grid; grid-template-columns: minmax(0, .43fr) minmax(0, .57fr);
+    min-height: min(720px, 100svh); background: var(--ink);
+  }
+  .home-page .hero-copy {
+    position: relative; z-index: 4; grid-area: auto; align-self: center;
+    width: auto; padding: 7.5rem clamp(1.35rem, 3vw, 2.25rem) 4rem clamp(2rem, 4vw, 3rem);
+  }
+  .home-page .hero-copy h1 {
+    max-width: 8ch; font-size: clamp(2.7rem, 6.2vw, 3.65rem); font-weight: 500;
+    line-height: .92; letter-spacing: -.05em; text-transform: uppercase;
+  }
+  .home-page .hero-copy .lede { font-size: .9rem; line-height: 1.48; }
+  .home-page .hero-note { font-size: .76rem; }
+  .home-page .hero-visual { grid-area: auto; min-height: 100%; aspect-ratio: auto; }
+  .home-page .hero-visual::after { display: none; }
+  .home-page .hero-visual::before {
+    content: ''; position: absolute; z-index: 3; inset: 0 auto 0 0; width: 52px;
+    pointer-events: none; background: linear-gradient(90deg, var(--ink), rgb(6 18 40 / .75) 42%, transparent);
+  }
+  .home-page .hero-visual .hero-dots { top: auto; bottom: 7rem; left: auto; right: .8rem; }
+  .home-page .hero-booking-panel { right: 1rem; bottom: 1rem; }
+}
+
+@media (max-width: 620px) {
+  .service-flow-section { padding-bottom: 2rem; }
+  .service-flow-section .wrap { gap: .75rem; }
+  .service-flow-head { display: block; }
+  .service-flow-head h2 { max-width: none; font-size: 1.35rem; }
+  /* The Ask/Confirm/Visit rail stacks on a phone for the same reason the
+     journey-flow does: three columns of ~120px forced 0.66rem type and broke
+     every caption over three lines. Stacked, each step gets the full width and
+     its normal size back, and the supporting line no longer has to be hidden
+     to make room. */
+  .service-flow { grid-template-columns: 1fr; }
+  .service-flow li {
+    display: grid; grid-template-columns: auto 1fr; align-items: start;
+    gap: .75rem; padding: .7rem .2rem; text-align: left;
+    border-left: 0; border-top: 1px solid var(--line);
+  }
+  .service-flow li:first-child { border-top: 0; }
+  /* The connector chevron pointed right, between columns. Stacked, it would
+     sit in the middle of a row pointing at nothing. */
+  .service-flow li:not(:last-child)::after { display: none; }
+  .service-flow-icon { margin: 0; }
+  .service-flow strong { font-size: .96rem; }
+  .service-flow p { font-size: .8rem; line-height: 1.45; }
+  .service-answers { grid-template-columns: 1fr; }
+  .service-answers > div { padding: .95rem 1rem; }
+  .spr-visual-grid { position: relative; min-height: 205px; display: block; }
+  .spr-feature-photo { height: 205px; }
+  .spr-support-photo { display: none; }
+  .spr-metric {
+    position: absolute; left: .65rem; bottom: .65rem; width: 124px; min-height: 78px;
+    padding: .7rem .8rem; box-shadow: 0 10px 28px rgb(6 18 40 / .22);
+  }
+  .spr-metric strong { font-size: 1.5rem; }
+  .spr-metric span { margin-top: .25rem; font-size: .64rem; }
+  .spr-story { gap: 1rem; }
+}
