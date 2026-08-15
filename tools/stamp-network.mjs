@@ -37,6 +37,7 @@ const CONCEPTS = [
      not raw characters. A bare `&` renders fine and is still invalid HTML. */
   { key: 'insurespr', name: 'InsureSPR Health',     sector: 'Bone &amp; muscle health', url: 'https://insurespr-concept.phuturedigital.co.za' },
   { key: 'blueleaf',  name: 'Blue Leaf Ice',        sector: 'Ice supply &amp; delivery', url: 'https://blueleaf-concept.phuturedigital.co.za' },
+  { key: 'thorn-grain', name: 'Thorn &amp; Grain',  sector: 'Online furniture store', url: 'https://thorn-grain-concept.phuturedigital.co.za' },
 ];
 
 /* Fallback disclaimer, used ONLY when a page has no pd-network block yet.
@@ -70,6 +71,11 @@ const SITES = [
     mark: '<strong>Concept redesign.</strong> InsureSPR Health is a real practice. This is Phuture Digital&rsquo;s own take on their site, built to demonstrate design and build work. It is not their official site, is not affiliated with them, and nothing here is medical advice.' },
   { key: 'blueleaf', dir: 'blueleaf',
     mark: '<strong>Concept redesign.</strong> Blue Leaf Ice Company is a real business. This is Phuture Digital&rsquo;s own take on their site, built to demonstrate design and build work. It is not their official site, is not affiliated with them, and no order placed on it reaches anyone.' },
+  /* Thorn &amp; Grain is a working STORE, not a brochure — basket, filters and
+     search all function. The disclaimer therefore has to close the one thing a
+     visitor could reasonably act on: that nothing can actually be bought. */
+  { key: 'thorn-grain', dir: 'thorn-grain',
+    mark: '<strong>Concept demo.</strong> Thorn &amp; Grain is an invented brand, created by Phuture Digital to demonstrate design and build work. Nothing shown is for sale, there is no checkout behind the basket, and every workshop, price and figure is illustrative.' },
 ];
 
 const card = (c) => `        <li class="pd-network-card">
