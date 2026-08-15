@@ -36,6 +36,7 @@ const CONCEPTS = [
   /* `name` and `sector` are interpolated straight into markup — write entities,
      not raw characters. A bare `&` renders fine and is still invalid HTML. */
   { key: 'insurespr', name: 'InsureSPR Health',     sector: 'Bone &amp; muscle health', url: 'https://insurespr-concept.phuturedigital.co.za' },
+  { key: 'blueleaf',  name: 'Blue Leaf Ice',        sector: 'Ice supply &amp; delivery', url: 'https://blueleaf-concept.phuturedigital.co.za' },
 ];
 
 /* Fallback disclaimer, used ONLY when a page has no pd-network block yet.
@@ -67,6 +68,8 @@ const SITES = [
     mark: '<strong>Concept redesign.</strong> Africrest Properties is a real company. This is Phuture Digital&rsquo;s own take on their brand, built to demonstrate design and build work. It is not their official site and is not affiliated with them.' },
   { key: 'insurespr', dir: 'insurespr',
     mark: '<strong>Concept redesign.</strong> InsureSPR Health is a real practice. This is Phuture Digital&rsquo;s own take on their site, built to demonstrate design and build work. It is not their official site, is not affiliated with them, and nothing here is medical advice.' },
+  { key: 'blueleaf', dir: 'blueleaf',
+    mark: '<strong>Concept redesign.</strong> Blue Leaf Ice Company is a real business. This is Phuture Digital&rsquo;s own take on their site, built to demonstrate design and build work. It is not their official site, is not affiliated with them, and no order placed on it reaches anyone.' },
 ];
 
 const card = (c) => `        <li class="pd-network-card">
