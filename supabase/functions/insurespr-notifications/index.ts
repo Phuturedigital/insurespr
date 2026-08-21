@@ -347,7 +347,6 @@ export function renderEmail(claim: ClaimedNotification): EmailContent {
 
   const practice = asRecord(claim.payload.practice);
   const practiceName = asString(practice.name, 'InsureSPR');
-  const practicePhone = asString(practice.phone, 'the practice');
   const practiceAddress = asString(practice.address);
   const practiceTimezone = asString(practice.timezone, 'Africa/Johannesburg');
 
@@ -389,7 +388,7 @@ export function renderEmail(claim: ClaimedNotification): EmailContent {
         [
           referenceLine(reference),
           scheduling,
-          `To change or cancel this request, reply to this email or call ${practicePhone}.`,
+          'To change or cancel this request, reply to this email.',
           practiceAddress ? `${practiceName}: ${practiceAddress}` : practiceName,
         ],
       );
@@ -405,7 +404,7 @@ export function renderEmail(claim: ClaimedNotification): EmailContent {
           appointmentTime ? `Appointment: ${appointmentTime}` : `Appointment date: ${preferredDate}`,
           practiceAddress ? `Location: ${practiceAddress}` : '',
           preparationInstructions ? `Preparation: ${preparationInstructions}` : '',
-          `To request a change or cancellation, reply to this email or call ${practicePhone}.`,
+          'To request a change or cancellation, reply to this email.',
         ],
       );
     }
@@ -417,7 +416,7 @@ export function renderEmail(claim: ClaimedNotification): EmailContent {
         [
           referenceLine(reference),
           `The booking for ${service} is now cancelled.`,
-          `If you did not request this or need another appointment, reply to this email or call ${practicePhone}.`,
+          'If you did not request this or need another appointment, reply to this email.',
         ],
       );
     }
@@ -432,7 +431,7 @@ export function renderEmail(claim: ClaimedNotification): EmailContent {
             ? `Requested date: ${preferredDate} (${preferredPeriod})`
             : 'The requested timing is recorded on your booking.',
           'This is not a confirmed new appointment. The practice will confirm the replacement time separately.',
-          `For urgent corrections, reply to this email or call ${practicePhone}.`,
+          'For urgent corrections, reply to this email.',
         ],
       );
     }
@@ -485,7 +484,7 @@ export function renderEmail(claim: ClaimedNotification): EmailContent {
         [
           referenceLine(reference),
           `We received the workforce health enquiry for ${company}. A member of the practice team will review it and respond using the contact details you supplied.`,
-          `For urgent corrections, reply to this email or call ${practicePhone}.`,
+          'For urgent corrections, reply to this email.',
         ],
       );
     }
@@ -520,7 +519,7 @@ export function renderEmail(claim: ClaimedNotification): EmailContent {
         [
           referenceLine(reference),
           'A member of the practice team will review your enquiry and respond using the contact details you supplied.',
-          `For urgent corrections, reply to this email or call ${practicePhone}.`,
+          'For urgent corrections, reply to this email.',
         ],
       );
     }

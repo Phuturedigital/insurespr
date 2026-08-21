@@ -10,11 +10,11 @@
  * footers then drifted exactly the way that script's own header warned they
  * would: index.html and spr.html kept the full four-column footer, and the
  * other nine silently degraded to a one-line legal strip — no Services list,
- * no address, no phone number.
+ * no address or direct contact route.
  *
  * That is worst on precisely the pages where it matters most. A visitor who
  * lands on xray.html from search and scrolls to the bottom got a copyright
- * line and no way to reach Contact, Booking or the practice's number.
+ * line and no way to reach Contact, Booking or the practice's email.
  *
  * This script replaces the whole <footer class="foot">...</footer> element,
  * which is a uniquely-identifiable, well-bounded node — not an offset pair
@@ -29,18 +29,24 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 
-/* The production surface, as listed in vercel.json / sitemap.xml. The five
-   concept-era pages (about, brand, learn, programmes, scan) are excluded from
-   the deploy by .vercelignore and are deliberately left alone. */
+/* The production surface, as listed in vercel.json / sitemap.xml. The four
+   concept-era pages (brand, learn, programmes, scan) are excluded from the
+   deploy by .vercelignore and are deliberately left alone. */
 const PAGES = [
-  'index.html', 'spr.html', 'xray.html', 'scanning.html', 'workforce.html',
+  'index.html', 'spr.html', 'about.html', 'xray.html', 'scanning.html', 'workforce.html',
   'book.html', 'contact.html', 'privacy.html',
   'booking-confirmation.html', 'manage-booking.html', '404.html',
+  'dxa-body-composition.html', 'dxa-bone-density.html',
+  'osteoporosis-care.html', 'primary-healthcare-x-ray.html',
+  'visa-chest-x-ray.html', 'workplace-medicals.html',
+  'musculoskeletal-x-ray.html', 'chest-x-ray.html',
+  'orthopaedic-follow-up-x-ray.html', 'workplace-chest-x-ray.html',
+  'runner-athlete-bone-health.html', 'menopause-bone-health.html',
+  'treatment-related-bone-health.html', 'post-fracture-bone-health.html',
+  'body-composition-progress.html', 'long-term-condition-bone-health.html',
 ];
 
 const PRACTICE = {
-  phone: '083 450 7861',
-  phoneHref: '+27834507861',
   email: 'health@insuresprhealth.co.za',
   address: '7 Malibongwe Drive, EmedCentre, Randburg',
   hours: 'Monday–Friday, 08:00–17:00',
@@ -55,6 +61,7 @@ const COLUMNS = [
     ['workforce.html', 'Workforce medicals'],
   ]],
   ['Information', [
+    ['about.html', 'About the owner'],
     ['book.html', 'Request a booking'],
     ['contact.html', 'Contact &amp; directions'],
     ['privacy.html', 'Privacy notice'],
@@ -76,8 +83,7 @@ const FOOTER =
   COLUMNS.map(col).join('') +
   '<div><h4>Find the practice</h4><ul>' +
   `<li><a href="${PRACTICE.maps}" rel="noopener" target="_blank">${PRACTICE.address}</a></li>` +
-  `<li><a href="tel:${PRACTICE.phoneHref}" data-track="call_clicked">${PRACTICE.phone}</a></li>` +
-  `<li><a href="mailto:${PRACTICE.email}">${PRACTICE.email}</a></li>` +
+  `<li><a href="mailto:${PRACTICE.email}" data-track="email_clicked">${PRACTICE.email}</a></li>` +
   `<li>${PRACTICE.hours}</li>` +
   '</ul></div></div>' +
   '<div class="foot-bottom">' +
@@ -106,7 +112,7 @@ for (const page of PAGES) {
   /* booking-confirmation, manage-booking and 404 shipped with NO footer node
      at all. That is worst on booking-confirmation: it is where someone lands
      immediately after requesting an appointment, and it offered no route to
-     the practice's phone number. Insert after </main> rather than skipping. */
+     the practice's contact details. Insert after </main> rather than skipping. */
   if (start === -1 || end === -1) {
     const anchor = html.lastIndexOf('</main>');
     if (anchor === -1) {

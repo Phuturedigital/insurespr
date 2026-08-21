@@ -773,15 +773,15 @@ export type Database = {
           locality: string;
           maps_url: string;
           opening_hours: Json;
-          phone_display: string;
-          phone_e164: string;
+          phone_display: string | null;
+          phone_e164: string | null;
           practice_name: string;
           privacy_notice_version: string;
           public_email: string;
           region: string;
           timezone: string;
           updated_at: string;
-          whatsapp_e164: string;
+          whatsapp_e164: string | null;
         };
         Insert: {
           address_line: string;
@@ -793,15 +793,15 @@ export type Database = {
           locality: string;
           maps_url: string;
           opening_hours?: Json;
-          phone_display: string;
-          phone_e164: string;
+          phone_display?: string | null;
+          phone_e164?: string | null;
           practice_name: string;
           privacy_notice_version?: string;
           public_email: string;
           region: string;
           timezone?: string;
           updated_at?: string;
-          whatsapp_e164: string;
+          whatsapp_e164?: string | null;
         };
         Update: {
           address_line?: string;
@@ -813,15 +813,15 @@ export type Database = {
           locality?: string;
           maps_url?: string;
           opening_hours?: Json;
-          phone_display?: string;
-          phone_e164?: string;
+          phone_display?: string | null;
+          phone_e164?: string | null;
           practice_name?: string;
           privacy_notice_version?: string;
           public_email?: string;
           region?: string;
           timezone?: string;
           updated_at?: string;
-          whatsapp_e164?: string;
+          whatsapp_e164?: string | null;
         };
         Relationships: [];
       };

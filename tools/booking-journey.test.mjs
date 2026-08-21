@@ -15,7 +15,7 @@ const appointmentService = {
   slug: 'dxa-body-composition',
   name: 'DXA Body Composition Scan',
   short_description: 'A focused body-composition scan.',
-  audience: 'individual',
+  audience: 'scanning',
   booking_mode: 'appointment',
   confirmation_mode: 'staff',
   appointment_duration_minutes: 30,
@@ -25,7 +25,7 @@ const appointmentService = {
   currency: 'ZAR',
   price_note: null,
   medical_aid_status: 'needs_confirmation',
-  referral_requirement: 'Call the practice if you are unsure.',
+  referral_requirement: 'Email the practice if you are unsure.',
   appointment_requirement: 'An appointment is required.',
   what_to_bring: null,
   expected_duration: null,
@@ -39,6 +39,7 @@ const requestService = {
   id: '22222222-2222-4222-8222-222222222222',
   slug: 'primary-healthcare-x-ray',
   name: 'Primary Healthcare X-Ray',
+  audience: 'individual',
   booking_mode: 'request',
   appointment_duration_minutes: null,
   appointment_requirement: 'Submit a preferred time and staff will confirm.',
@@ -52,9 +53,9 @@ const approvedConfig = {
     locality: 'Randburg',
     region: 'Gauteng',
     country_code: 'ZA',
-    phone_display: '083 450 7861',
-    phone_e164: '+27834507861',
-    whatsapp_e164: '+27834507861',
+    phone_display: null,
+    phone_e164: null,
+    whatsapp_e164: null,
     public_email: 'health@insuresprhealth.co.za',
     timezone: 'Africa/Johannesburg',
     opening_hours: { monday: ['08:00', '17:00'] },
@@ -297,7 +298,11 @@ async function installApi(context, options = {}) {
 }
 
 async function withContext(browser, options, callback) {
-  const context = await browser.newContext();
+  // Keep functional journey assertions deterministic. The production UI still
+  // exercises smooth motion in its dedicated motion/accessibility coverage;
+  // this suite should not race Chromium's animated focus scrolling between
+  // validation attempts.
+  const context = await browser.newContext({ reducedMotion: 'reduce' });
   try {
     await context.route('https://fonts.googleapis.com/**', (route) => {
       return route.fulfill({ status: 200, contentType: 'text/css; charset=utf-8', body: '' });
@@ -403,6 +408,11 @@ async function testCompleteJourneyHistoryIdempotencyAndRefresh(browser, base) {
   }, async (context, calls) => {
     const page = await openBooking(context, base);
     await waitForTurnstile(page);
+    assert.deepEqual(
+      await page.locator('#bservice optgroup').evaluateAll((groups) => groups.map((group) => group.label)),
+      ['X-Ray examinations', 'DXA scans & bone services'],
+      'the generic selector must distinguish examinations from DXA services'
+    );
     await selectServiceAndDate(page, { date, slot });
     await fillDetails(page, { slot });
     await reviewBooking(page);
@@ -806,9 +816,9 @@ async function testTurnstileAndHoneypotBotFailures(browser, base) {
   });
 }
 
-async function testWhatsAppPopupBlockedFallback(browser, base) {
+async function testEmailPopupBlockedFallback(browser, base) {
   const date = futureDate(28);
-  const reference = 'ISR-WHATSAPP-0001';
+  const reference = 'ISR-EMAIL-0001';
   await withContext(browser, {
     initScript: 'window.open = function () { return null; };',
     api: {
@@ -833,30 +843,31 @@ async function testWhatsAppPopupBlockedFallback(browser, base) {
     await fillDetails(page, { preferredTime: 'morning' });
     await page.locator('[data-book-next="5"]').click();
     await waitForStep(page, 5);
-    await page.locator('#booking-whatsapp').click();
+    await page.locator('#booking-email').click();
     const status = await waitForBookStatus(page, new RegExp(`Booking request saved\\. Reference: ${reference}`));
 
     assert.equal(page.url(), `${base}/book.html`, 'blocked popup must not navigate away from the booking page');
     assert.equal(calls.bookings.length, 1);
     const manualLink = status.locator('a');
     await manualLink.waitFor();
-    assert.equal(await manualLink.textContent(), 'Open WhatsApp');
+    assert.equal(await manualLink.textContent(), 'Open email');
     assert.equal(await manualLink.getAttribute('target'), '_blank');
     assert.match(await manualLink.getAttribute('rel'), /noopener/);
     assert.match(await manualLink.getAttribute('rel'), /noreferrer/);
     const href = await manualLink.getAttribute('href');
-    const whatsapp = new URL(href);
-    assert.equal(whatsapp.origin, 'https://wa.me');
-    assert.equal(whatsapp.pathname, '/27834507861');
+    const email = new URL(href);
+    assert.equal(email.protocol, 'mailto:');
+    assert.equal(email.pathname, 'health@insuresprhealth.co.za');
     assert.equal(
-      whatsapp.searchParams.get('text'),
+      email.searchParams.get('body'),
       `Hi InsureSPR, I submitted website booking request ${reference}. Please help me continue.`
     );
+    assert.equal(email.searchParams.get('subject'), `Booking request ${reference}`);
     const decoded = decodeURIComponent(href).toLowerCase();
     for (const forbidden of [patient.firstName, patient.surname, patient.mobile, patient.email, patient.notes]) {
-      assert.equal(decoded.includes(forbidden.toLowerCase()), false, 'WhatsApp fallback may contain only the booking reference, not intake PII');
+      assert.equal(decoded.includes(forbidden.toLowerCase()), false, 'Email fallback may contain only the booking reference, not intake PII');
     }
-    assert.equal(await page.locator('#booking-whatsapp').isDisabled(), false);
+    assert.equal(await page.locator('#booking-email').isDisabled(), false);
   });
 }
 
@@ -937,7 +948,7 @@ const tests = [
   ['no-slot preferred-time fallback', testNoSlotPreferredTimeFallback],
   ['cancellation and reschedule wording', testCancellationAndRescheduleWording],
   ['Turnstile and honeypot bot failures', testTurnstileAndHoneypotBotFailures],
-  ['blocked WhatsApp popup manual reference-only fallback', testWhatsAppPopupBlockedFallback],
+  ['blocked email popup manual reference-only fallback', testEmailPopupBlockedFallback],
   ['abandonment analytics contains no PII', testAbandonmentEventContainsNoPii],
   ['partial JavaScript failure fails closed', testPartialJavaScriptFailureFailsClosed]
 ];

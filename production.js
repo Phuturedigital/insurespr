@@ -1,14 +1,67 @@
 /* InsureSPR Precision Healthcare production integrations.
  *
- * The static site remains usable without this file: telephone, email, WhatsApp
- * and directions are ordinary links. JavaScript progressively adds structured
+ * The static site remains usable without this file: email and directions are
+ * ordinary links. JavaScript progressively adds structured
  * booking, quote, contact, management and measurement flows.
  */
 (function () {
   'use strict';
 
+  var CONCEPT_PREVIEW_HOST = 'insurespr-concept.phuturedigital.co.za';
+
+  /**
+   * The same immutable deployment is aliased to the real practice domain and
+   * to Phuture Digital's proof-only concept hostname. The official domain is a
+   * working site; the concept hostname must never look like client work,
+   * collect personal information, fire analytics, or open a real contact
+   * channel. Vercel adds the authoritative no-index/no-store response headers;
+   * this branch adds the visible and interactive browser boundary.
+   */
+  function activateConceptPreview() {
+    if (window.location.hostname.toLowerCase() !== CONCEPT_PREVIEW_HOST) return false;
+
+    document.documentElement.classList.add('is-concept-preview');
+    var robots = document.querySelector('meta[name="robots"]');
+    if (robots) robots.setAttribute('content', 'noindex, nofollow, noarchive, nosnippet, noimageindex');
+
+    var banner = document.createElement('aside');
+    banner.className = 'concept-preview-banner';
+    banner.setAttribute('role', 'note');
+    banner.setAttribute('aria-label', 'Concept preview notice');
+    banner.textContent = 'Phuture Digital concept preview — design direction only. This is not a completed client case study or the live practice website.';
+    document.body.prepend(banner);
+
+    function syncBannerHeight() {
+      var height = Math.max(44, Math.ceil(banner.getBoundingClientRect().height));
+      document.documentElement.style.setProperty('--concept-preview-banner-height', height + 'px');
+    }
+    syncBannerHeight();
+    window.addEventListener('resize', syncBannerHeight, { passive: true });
+
+    document.querySelectorAll('form').forEach(function (form) {
+      form.setAttribute('aria-disabled', 'true');
+      form.setAttribute('inert', '');
+      form.querySelectorAll('input, select, textarea, button').forEach(function (control) {
+        control.disabled = true;
+      });
+      form.addEventListener('submit', function (event) { event.preventDefault(); }, true);
+    });
+
+    document.querySelectorAll('a[href^="tel:"], a[href^="mailto:"], a[href*="wa.me/"], a[href*="maps.google."], a[href*="google.com/maps"]').forEach(function (link) {
+      link.removeAttribute('href');
+      link.removeAttribute('target');
+      link.setAttribute('aria-disabled', 'true');
+      link.classList.add('concept-preview-disabled-action');
+    });
+
+    return true;
+  }
+
+  // Stop before marketing capture, API configuration, analytics, Turnstile,
+  // form activation, or booking-management logic on the proof-only hostname.
+  if (activateConceptPreview()) return;
+
   var API = 'https://ffdmmxffzewqiacsuvhr.supabase.co/functions/v1/insurespr-api';
-  var WHATSAPP_NUMBER = '27834507861';
   var STORAGE_PREFIX = 'insurespr.';
   var configPromise;
   var turnstileScriptPromise;
@@ -138,12 +191,12 @@
       });
     }).catch(function (error) {
       if (error && error.name === 'AbortError') {
-        var timeoutError = new Error('The service is taking too long to respond. Please try again, or call 083 450 7861.');
+        var timeoutError = new Error('The service is taking too long to respond. Please try again, or email health@insuresprhealth.co.za.');
         timeoutError.code = 'REQUEST_TIMEOUT';
         throw timeoutError;
       }
       if (error instanceof TypeError) {
-        var networkError = new Error('We could not connect right now. Check your connection and try again, or call 083 450 7861.');
+        var networkError = new Error('We could not connect right now. Check your connection and try again, or email health@insuresprhealth.co.za.');
         networkError.code = 'NETWORK_ERROR';
         throw networkError;
       }
@@ -193,8 +246,8 @@
     form.setAttribute('aria-busy', 'false');
     form.dataset.ready = 'false';
     setFormGateNotice(form, title, copy);
-    var assistedWhatsApp = form.querySelector('#booking-whatsapp');
-    if (assistedWhatsApp) assistedWhatsApp.disabled = true;
+    var assistedEmail = form.querySelector('#booking-email');
+    if (assistedEmail) assistedEmail.disabled = true;
   }
 
   function activateBoundForm(form) {
@@ -207,8 +260,8 @@
     form.dataset.ready = 'true';
     var notice = formGateNotice(form);
     if (notice) notice.hidden = true;
-    var assistedWhatsApp = form.querySelector('#booking-whatsapp');
-    if (assistedWhatsApp) assistedWhatsApp.disabled = false;
+    var assistedEmail = form.querySelector('#booking-email');
+    if (assistedEmail) assistedEmail.disabled = false;
   }
 
   function approvedPrivacyVersion(config) {
@@ -409,13 +462,13 @@
           },
           'error-callback': function () {
             hidden.value = '';
-            status.textContent = 'The anti-spam check could not be completed. Please retry or call 083 450 7861.';
+            status.textContent = 'The anti-spam check could not be completed. Please retry or email health@insuresprhealth.co.za.';
           }
         });
         form.dataset.turnstileWidgetId = String(widgetId);
       }).catch(function () {
         form.dataset.turnstileUnavailable = 'true';
-        status.textContent = 'The anti-spam check is unavailable. Please refresh, retry, or call 083 450 7861.';
+        status.textContent = 'The anti-spam check is unavailable. Please refresh, retry, or email health@insuresprhealth.co.za.';
       });
     }
 
@@ -434,7 +487,7 @@
     if (form.dataset.turnstileRequired !== 'true') return true;
     if (value(form, 'turnstile_token')) return true;
     var message = form.dataset.turnstileUnavailable === 'true'
-      ? 'The anti-spam check is unavailable. Please refresh, retry, or call 083 450 7861.'
+      ? 'The anti-spam check is unavailable. Please refresh, retry, or email health@insuresprhealth.co.za.'
       : 'Please complete the anti-spam check before sending.';
     setStatus(form, message, 'error');
     var field = form.querySelector('.turnstile-field');
@@ -499,7 +552,7 @@
 
   function formatPrice(service) {
     if (!service || service.price_type === 'unpublished') {
-      return 'Price awaiting practice approval — call 083 450 7861 to confirm.';
+      return 'Price awaiting practice approval — email health@insuresprhealth.co.za to confirm.';
     }
     if (service.price_type === 'quote') return 'Employer pricing is provided by quote.';
     var formatter = new Intl.NumberFormat('en-ZA', { style: 'currency', currency: 'ZAR' });
@@ -560,7 +613,7 @@
     var slotNote = document.getElementById('slot-note');
     var serviceFacts = document.getElementById('booking-service-facts');
     var review = document.getElementById('booking-review');
-    var whatsapp = document.getElementById('booking-whatsapp');
+    var emailContinue = document.getElementById('booking-email');
     var completed = false;
     var started = false;
     var servicesById = {};
@@ -731,8 +784,25 @@
       serviceSelect.textContent = '';
       var placeholder = document.createElement('option');
       placeholder.value = '';
-      placeholder.textContent = 'Choose a service';
+      placeholder.textContent = 'Choose a procedure or pathway';
       serviceSelect.appendChild(placeholder);
+      var pathwaySlugs = new Set([
+        'runner-athlete-bone-health',
+        'menopause-bone-health',
+        'treatment-related-bone-health',
+        'post-fracture-bone-health',
+        'body-composition-progress',
+        'long-term-condition-bone-health'
+      ]);
+      var groups = {
+        xray: { label: 'X-Ray examinations', element: document.createElement('optgroup') },
+        dxa: { label: 'DXA scans & bone services', element: document.createElement('optgroup') },
+        pathway: { label: 'Choose by health or performance need', element: document.createElement('optgroup') },
+        other: { label: 'Other requests', element: document.createElement('optgroup') }
+      };
+      Object.keys(groups).forEach(function (key) {
+        groups[key].element.label = groups[key].label;
+      });
       config.services.filter(function (service) {
         return service.booking_mode === 'appointment' || service.booking_mode === 'request';
       }).forEach(function (service) {
@@ -742,7 +812,17 @@
         option.textContent = service.name;
         option.dataset.slug = service.slug;
         if (requested === service.slug) option.selected = true;
-        serviceSelect.appendChild(option);
+        var group = pathwaySlugs.has(service.slug)
+          ? groups.pathway
+          : service.audience === 'individual'
+            ? groups.xray
+            : service.audience === 'scanning'
+              ? groups.dxa
+              : groups.other;
+        group.element.appendChild(option);
+      });
+      Object.keys(groups).forEach(function (key) {
+        if (groups[key].element.children.length) serviceSelect.appendChild(groups[key].element);
       });
       if (serviceSelect.value) {
         renderServiceFacts();
@@ -805,45 +885,46 @@
       track('booking_request_submitted', payload.service_id);
     }
 
-    if (whatsapp) whatsapp.addEventListener('click', function () {
+    if (emailContinue) emailContinue.addEventListener('click', function () {
       clearStatus(form);
       if (!validateWholeBooking()) return;
       if (!validateTurnstile(form)) return;
       setBusy(form, true);
-      whatsapp.disabled = true;
+      emailContinue.disabled = true;
       var payload = bookingPayload();
       api('/bookings', { method: 'POST', body: JSON.stringify(payload) }).then(function (body) {
         rememberBooking(body, payload);
         removeTurnstile(form);
-        track('whatsapp_clicked', payload.service_id);
+        track('email_clicked', payload.service_id);
+        var subject = 'Booking request ' + body.booking.reference;
         var message = "Hi InsureSPR, I submitted website booking request " + body.booking.reference + '. Please help me continue.';
-        var whatsappUrl = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(message);
-        var opened = window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+        var emailUrl = 'mailto:health@insuresprhealth.co.za?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(message);
+        var opened = window.open(emailUrl, '_blank', 'noopener,noreferrer');
         setStatus(
           form,
-          'Booking request saved. Reference: ' + body.booking.reference + '. WhatsApp opens separately so this confirmation stays available.',
+          'Booking request saved. Reference: ' + body.booking.reference + '. Your email app opens separately so this confirmation stays available.',
           'success'
         );
         if (!opened) {
           var status = document.getElementById('book-status');
           var manualLink = document.createElement('a');
           manualLink.className = 'btn btn--ghost btn--sm';
-          manualLink.href = whatsappUrl;
+          manualLink.href = emailUrl;
           manualLink.target = '_blank';
           manualLink.rel = 'noopener noreferrer';
-          manualLink.textContent = 'Open WhatsApp';
-          manualLink.setAttribute('aria-label', 'Open WhatsApp for booking reference ' + body.booking.reference);
+          manualLink.textContent = 'Open email';
+          manualLink.setAttribute('aria-label', 'Open email for booking reference ' + body.booking.reference);
           status.append(document.createElement('br'), manualLink);
         }
         setBusy(form, false);
-        whatsapp.disabled = false;
+        emailContinue.disabled = false;
       }).catch(function (error) {
         if (handlePrivacyNoticeChanged(form, error)) return;
         if (error.code === 'SLOT_UNAVAILABLE') loadAvailability();
         resetTurnstile(form);
         setStatus(form, error.message, 'error');
         setBusy(form, false);
-        whatsapp.disabled = false;
+        emailContinue.disabled = false;
       });
     });
 
@@ -853,7 +934,7 @@
       if (!validateWholeBooking()) return;
       if (!validateTurnstile(form)) return;
       setBusy(form, true);
-      if (whatsapp) whatsapp.disabled = true;
+      if (emailContinue) emailContinue.disabled = true;
       var payload = bookingPayload();
       api('/bookings', { method: 'POST', body: JSON.stringify(payload) }).then(function (body) {
         rememberBooking(body, payload);
@@ -869,7 +950,7 @@
         resetTurnstile(form);
         setStatus(form, error.message, 'error');
         setBusy(form, false);
-        if (whatsapp) whatsapp.disabled = false;
+        if (emailContinue) emailContinue.disabled = false;
       });
     });
 
@@ -895,7 +976,7 @@
         message: value(form, 'message')
       });
       api('/contact-enquiries', { method: 'POST', body: JSON.stringify(payload) }).then(function (body) {
-        setStatus(form, 'Thank you. Your enquiry reference is ' + body.enquiry.reference + '. Save the reference and call the practice if your question is time-sensitive.', 'success');
+        setStatus(form, 'Thank you. Your enquiry reference is ' + body.enquiry.reference + '. Save the reference and email the practice if your question is time-sensitive.', 'success');
         form.reset();
         form.dataset.idempotency = '';
         removeTurnstile(form);

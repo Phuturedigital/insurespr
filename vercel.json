@@ -7,6 +7,9 @@
     { "source": "/programmes", "destination": "/scanning", "permanent": true },
     { "source": "/learn", "destination": "/", "permanent": false }
   ],
+  "rewrites": [
+    { "source": "/", "destination": "/index.html" }
+  ],
   "headers": [
     {
       "source": "/(.*)",
@@ -29,6 +32,17 @@
       "source": "/(.*).(css|js)",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
+      ]
+    },
+    {
+      "source": "/(.*)",
+      "has": [
+        { "type": "host", "value": "insurespr-concept.phuturedigital.co.za" }
+      ],
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive, nosnippet, noimageindex" },
+        { "key": "Cache-Control", "value": "private, no-store, max-age=0" },
+        { "key": "Referrer-Policy", "value": "no-referrer" }
       ]
     }
   ]

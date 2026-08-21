@@ -1,6 +1,6 @@
 # InsureSPR production readiness
 
-Status date: 13 August 2026
+Status date: 21 August 2026
 Target Supabase project: `ffdmmxffzewqiacsuvhr`  
 Public frontend status: **live at `https://www.insuresprhealth.co.za/`**
 
@@ -17,13 +17,20 @@ workflow and domain transition must all be ready at the same time.
 - Master-brand homepage, not a scan-only campaign.
 - Separate individual, workforce and DXA-scanning journeys.
 - Dedicated employer quote form rather than a patient booking form.
-- Persistent call, directions, email and WhatsApp fallbacks.
+- Persistent email and directions fallbacks.
 - Explicit “request received” versus “confirmed” booking language.
 - No public cash prices, preparation instructions, durations, report timing,
   mobile-service promises or practitioner credentials have been invented.
 - Confirmation and booking-management pages are `noindex`.
 - Sitemap, robots rules, clean URLs, a 404 page and initial route redirects are
   included.
+- The public catalogue now contains 16 staff-confirmed routes: six core
+  services, four additional request-led X-Ray examinations and six DXA/bone-
+  health pathways shaped around Johannesburg needs. The booking selector
+  separates X-Ray examinations, DXA procedures and need-led pathways instead
+  of presenting one undifferentiated list. Ten new crawlable detail pages are
+  in the sitemap and linked from the appropriate X-Ray, scanning or workforce
+  hub.
 
 ### Database and API
 
@@ -79,6 +86,22 @@ workflow and domain transition must all be ready at the same time.
   fail-closed Turnstile verification for public form mutations. Raw IP
   addresses are not persisted by the app.
 - Supabase security advisor: zero findings after hardening.
+- Live migration
+  `20260820234210_expand_johannesburg_xray_dxa_pathways` publishes the expanded
+  catalogue in request/quote, staff-confirmed mode. All 16 live services remain
+  `needs_confirmation`; prices, duration, preparation, report timing,
+  medical-aid arrangements and slot availability remain unpublished. The
+  migration also replaces the old generic X-Ray walk-in mode with a written-
+  request/suitability-first route and corrects the administrative chest-X-Ray
+  wording so it is not represented as a current South African DHA visa
+  requirement.
+- Live migration
+  `20260821001443_restore_hardened_analytics_event_contract` preserves the new
+  email-click event while restoring canonical UUID sessions, safe page paths,
+  sanitized attribution and the truthful `booking_request_submitted` taxonomy.
+  Browser input cannot create the staff-reserved `booking_completed` event;
+  legacy input is normalized to a request submission. Its rollback contract
+  left the existing 24 privacy-minimised QA events unchanged.
 - Supabase performance advisor: only expected `unused_index` informational
   notices on the newly created, empty operational database. Keep the indexes
   until real query statistics exist; reference:
@@ -104,7 +127,7 @@ workflow and domain transition must all be ready at the same time.
   including the five booking steps and review, Back/Forward restoration,
   invalid fields, no slots, slot races, duplicate clicks, stable idempotent
   retries, API/database/network failures, confirmation refresh, cancel and
-  reschedule wording, Turnstile/honeypot rejection, reference-only WhatsApp
+  reschedule wording, Turnstile/honeypot rejection, reference-only email
   fallback, analytics minimisation and partial-JavaScript fail-closed behavior.
 - A bounded keyboard/focus regression passes eight critical scenarios: skip
   navigation, visible focus, mobile-menu Enter/Escape return, booking validation
@@ -135,14 +158,14 @@ workflow and domain transition must all be ready at the same time.
   JSON-LD all use that same `www` origin.
 - Migration
   `20260813194724_include_confirmed_booking_preparation_in_notifications` and
-  notification worker v7 are deployed. Only a verified service's trimmed,
+  notification worker v9 are deployed. Only a verified service's trimmed,
   nonblank preparation text can enter a confirmed/rescheduled patient
   confirmation. All live services remain `needs_confirmation`, so no draft
   preparation text is currently eligible. Public worker readiness remains
   `200`, `ready:false` and `no-store` until approved provider configuration is
   supplied.
 - Live migration
-  `20260813210017_immutable_ordered_booking_notification_events` and worker v7
+  `20260813210017_immutable_ordered_booking_notification_events` and worker v9
   snapshot minimal status-transition context, enforce kind/status compatibility
   and release only the head unresolved delivery per entity/channel/recipient.
   Any legacy unsent status event without a trustworthy snapshot is safely

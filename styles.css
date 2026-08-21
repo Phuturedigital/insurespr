@@ -1197,6 +1197,97 @@ main > section + section { padding-top: 0; }
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1rem;
 }
+
+/* ------------------------------------------------------- SPR pathway rail -- */
+/* These are audience routes, not extra machines.  The rail deliberately uses
+   shared rules instead of cards-inside-cards: on desktop it reads as one
+   continuous decision surface; on a phone it becomes a short, swipeable row
+   so adding useful pathways does not create an endless vertical page. */
+.pathway-section { overflow: hidden; }
+.pathway-section .head-split { margin-bottom: clamp(1.25rem, 2.5vw, 2rem); }
+.pathway-rail {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1px;
+  overflow: hidden;
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-lg);
+  background: var(--line-2);
+}
+.pathway-link {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: start;
+  gap: .9rem;
+  min-width: 0;
+  min-height: 168px;
+  padding: clamp(1.15rem, 2.2vw, 1.65rem);
+  background: var(--paper);
+  color: var(--ink);
+  text-decoration: none;
+}
+.pathway-link:nth-child(3n + 2) { background: #e9f8ff; }
+.pathway-link:nth-child(3n) { background: var(--ink); color: #fff; }
+.pathway-link:hover { color: var(--azure); }
+.pathway-link:nth-child(3n):hover { color: var(--cyan-lift); }
+.pathway-link:focus-visible { z-index: 2; outline: 3px solid var(--cyan); outline-offset: -4px; }
+.pathway-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 2.55rem;
+  height: 2.55rem;
+  border: 1px solid #b9d7e6;
+  border-radius: 50%;
+  color: var(--azure);
+}
+.pathway-link:nth-child(3n) .pathway-icon { border-color: rgb(127 224 255 / .35); color: var(--cyan-lift); }
+.pathway-icon .icon { width: 1.1rem; height: 1.1rem; }
+.pathway-copy { min-width: 0; }
+.pathway-kicker {
+  display: block;
+  margin-bottom: .5rem;
+  color: var(--cyan-ink);
+  font: 600 .64rem/1.2 var(--f-mono);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+.pathway-link:nth-child(3n) .pathway-kicker { color: var(--cyan-lift); }
+.pathway-copy strong {
+  display: block;
+  font: 500 clamp(1.1rem, 1.8vw, 1.35rem)/1.18 var(--f-display);
+  letter-spacing: -.02em;
+}
+.pathway-copy p { margin: .55rem 0 0; color: var(--muted); font-size: .84rem; line-height: 1.45; }
+.pathway-link:nth-child(3n) .pathway-copy p { color: var(--on-ink-soft); }
+.pathway-arrow { align-self: end; color: var(--azure); font-size: 1.2rem; }
+.pathway-link:nth-child(3n) .pathway-arrow { color: var(--cyan-lift); }
+
+.procedure-strip {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 1px;
+  overflow: hidden;
+  border-block: 1px solid var(--line-2);
+  background: var(--line-2);
+}
+.procedure-link {
+  display: flex;
+  min-width: 0;
+  min-height: 142px;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: clamp(1rem, 2vw, 1.45rem);
+  background: var(--paper);
+  color: var(--ink);
+  text-decoration: none;
+}
+.procedure-link:hover { color: var(--azure); }
+.procedure-link:focus-visible { z-index: 2; outline: 3px solid var(--cyan); outline-offset: -4px; }
+.procedure-link span:first-child { color: var(--cyan-ink); font: 600 .64rem/1.2 var(--f-mono); letter-spacing: .1em; text-transform: uppercase; }
+.procedure-link strong { font: 500 clamp(1.02rem, 1.7vw, 1.28rem)/1.18 var(--f-display); }
+.procedure-link b { align-self: flex-end; color: var(--azure); font-weight: 500; }
 .route-card {
   display: flex; flex-direction: column;
   padding: 0; overflow: hidden;
@@ -1636,6 +1727,15 @@ fieldset.field legend,
   .hero-route-pills { display: none; }
   .hero-visual .hero-dots { left: .7rem; right: auto; }
   .route-grid { grid-template-columns: 1fr; }
+  .pathway-rail { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .pathway-link:nth-child(3n),
+  .pathway-link:nth-child(3n + 2) { background: var(--paper); color: var(--ink); }
+  .pathway-link:nth-child(even) { background: #e9f8ff; }
+  .pathway-link:nth-child(3n) .pathway-icon { border-color: #b9d7e6; color: var(--azure); }
+  .pathway-link:nth-child(3n) .pathway-kicker { color: var(--cyan-ink); }
+  .pathway-link:nth-child(3n) .pathway-copy p { color: var(--muted); }
+  .pathway-link:nth-child(3n) .pathway-arrow { color: var(--azure); }
+  .procedure-strip { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .service-hero .split {
     gap: 0; overflow: hidden; border: 1px solid var(--line); border-radius: var(--r);
     background: var(--paper); box-shadow: var(--shadow-sm);
@@ -1736,6 +1836,48 @@ fieldset.field legend,
   .spr-route-list p { display: none; }
   .spr-clarity { gap: 1.25rem; padding: 1.3rem; border-radius: 18px; }
   .route-grid { gap: .75rem; }
+  .pathway-section .head-split .section-intro { display: block; }
+  .pathway-rail {
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(272px, 82vw);
+    gap: .65rem;
+    margin-inline: calc(-1 * var(--gutter));
+    padding-inline: var(--gutter);
+    overflow-x: auto;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+  .pathway-rail::-webkit-scrollbar { display: none; }
+  .pathway-link,
+  .pathway-link:nth-child(even),
+  .pathway-link:nth-child(3n) {
+    min-height: 154px;
+    border: 1px solid var(--line-2);
+    border-radius: 16px;
+    background: var(--paper);
+    color: var(--ink);
+    scroll-snap-align: start;
+  }
+  .pathway-link:nth-child(even) { background: #e9f8ff; }
+  .procedure-strip {
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(210px, 72vw);
+    gap: .65rem;
+    margin-inline: calc(-1 * var(--gutter));
+    padding-inline: var(--gutter);
+    overflow-x: auto;
+    border: 0;
+    background: transparent;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+  .procedure-strip::-webkit-scrollbar { display: none; }
+  .procedure-link { min-height: 132px; border: 1px solid var(--line-2); border-radius: 16px; scroll-snap-align: start; }
   /* 104px of a 390px screen left the photograph an unreadable vertical
      sliver — the x-ray frame in particular became abstract grey. Widening to
      38% with a taller card makes the subject legible while keeping the
@@ -1914,4 +2056,31 @@ fieldset.field legend,
   .spr-metric strong { font-size: 1.5rem; }
   .spr-metric span { margin-top: .25rem; font-size: .64rem; }
   .spr-story { gap: 1rem; }
+}
+
+/* Proof-only domain boundary. The live practice host never receives the
+   is-concept-preview class, so its layout and interactions remain unchanged. */
+.concept-preview-banner {
+  position: fixed;
+  z-index: 10000;
+  inset: 0 0 auto;
+  min-height: 44px;
+  display: grid;
+  place-items: center;
+  padding: .65rem clamp(1rem, 4vw, 2.5rem);
+  border-bottom: 2px solid #06c7c7;
+  background: #061228;
+  color: #fff;
+  font: 600 .78rem/1.35 "IBM Plex Sans", system-ui, sans-serif;
+  letter-spacing: .01em;
+  text-align: center;
+  box-shadow: 0 6px 22px rgb(6 18 40 / .28);
+}
+
+.is-concept-preview body { padding-top: var(--concept-preview-banner-height, 44px); }
+.is-concept-preview .nav-shell { top: var(--concept-preview-banner-height, 44px); }
+.is-concept-preview .concept-preview-disabled-action {
+  cursor: not-allowed;
+  opacity: .62;
+  text-decoration: line-through;
 }

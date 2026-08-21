@@ -310,7 +310,7 @@ export async function verifyTurnstile(
     throw new ApiError(
       503,
       'BOT_CHECK_UNAVAILABLE',
-      'The anti-spam service is temporarily unavailable. Please try again or call 083 450 7861.',
+      'The anti-spam service is temporarily unavailable. Please try again or email health@insuresprhealth.co.za.',
     );
   }
 
@@ -336,7 +336,7 @@ export async function verifyTurnstile(
     throw new ApiError(
       503,
       'BOT_CHECK_UNAVAILABLE',
-      'The anti-spam service is temporarily unavailable. Please try again or call 083 450 7861.',
+      'The anti-spam service is temporarily unavailable. Please try again or email health@insuresprhealth.co.za.',
     );
   } finally {
     clearTimeout(timeout);
@@ -346,7 +346,7 @@ export async function verifyTurnstile(
     throw new ApiError(
       503,
       'BOT_CHECK_UNAVAILABLE',
-      'The anti-spam service is temporarily unavailable. Please try again or call 083 450 7861.',
+      'The anti-spam service is temporarily unavailable. Please try again or email health@insuresprhealth.co.za.',
     );
   }
 
@@ -457,7 +457,7 @@ async function requireSubmissionPolicy(deps: ApiDependencies): Promise<void> {
     throw new ApiError(
       503,
       'PRIVACY_NOTICE_NOT_READY',
-      'Online forms are temporarily unavailable. Please call 083 450 7861.',
+      'Online forms are temporarily unavailable. Please email health@insuresprhealth.co.za.',
     );
   }
 
@@ -466,7 +466,7 @@ async function requireSubmissionPolicy(deps: ApiDependencies): Promise<void> {
     throw new ApiError(
       503,
       'PRIVACY_NOTICE_NOT_READY',
-      'Online forms are not open yet. Please call 083 450 7861.',
+      'Online forms are not open yet. Please email health@insuresprhealth.co.za.',
     );
   }
 }

@@ -11,7 +11,8 @@ The public experience is a zero-build static site with three clear route familie
 - employers and workplace medicals (`workforce.html`)
 - DXA bone-density and body-composition scanning (`scanning.html`)
 
-Six standalone, crawlable service-detail pages sit beneath those route pages,
+Sixteen standalone, crawlable service and need-led pathway pages sit beneath
+those route pages, including ten Johannesburg-focused X-Ray and DXA additions,
 with separate SPR and owner/founder stories. Every page remains a portable HTML
 file; there is no framework build step or browser-side database credential.
 

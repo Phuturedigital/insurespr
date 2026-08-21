@@ -482,7 +482,7 @@ PAGES.push({
           <h2 style="font-size:clamp(1.4rem,2.4vw,1.8rem)">Request an appointment</h2>
           <div class="note note--warn" style="margin:1rem 0 1.5rem">
             <svg class="icon" aria-hidden="true"><use href="#i-alert"></use></svg>
-            <span><strong>This form does not go anywhere.</strong> This is a design concept, so nothing you type is sent, stored or seen by anyone — including us. To reach the practice, call <a href="tel:+27834507861">083 450 7861</a> or email <a href="mailto:health@insuresprhealth.co.za">health@insuresprhealth.co.za</a>.</span>
+            <span><strong>This form does not go anywhere.</strong> This is a design concept, so nothing you type is sent, stored or seen by anyone — including us. To reach the practice, email <a href="mailto:health@insuresprhealth.co.za">health@insuresprhealth.co.za</a>.</span>
           </div>
           <form id="book-form" novalidate>
             <div class="field-row">
@@ -520,11 +520,11 @@ PAGES.push({
             <p style="color:var(--muted)">You stay dressed. Avoid anything with metal through the middle — zips, heavy buckles — and you are set.</p>
           </div>
           <div class="card">
-            <p class="eyebrow eyebrow--plain">Prefer to call</p>
-            <h3>083 450 7861</h3>
-            <p style="color:var(--muted)">Monday to Friday, 08:00–17:00. Usually the fastest way to get a time confirmed.</p>
+            <p class="eyebrow eyebrow--plain">Prefer to email</p>
+            <h3 style="overflow-wrap:anywhere">health@insuresprhealth.co.za</h3>
+            <p style="color:var(--muted)">Email the practice to ask about availability or confirm a time.</p>
             <div class="btn-row" style="margin-top:1rem">
-              <a class="btn btn--primary btn--sm" href="tel:+27834507861">Call the practice <span class="btn-badge"><svg class="icon" aria-hidden="true"><use href="#i-phone"></use></svg></span></a>
+              <a class="btn btn--primary btn--sm" href="mailto:health@insuresprhealth.co.za">Email the practice <span class="btn-badge"><svg class="icon" aria-hidden="true"><use href="#i-mail"></use></svg></span></a>
             </div>
           </div>
         </div>
@@ -541,7 +541,7 @@ PAGES.push({
   header: pagehead(
     'Contact',
     'Get in touch',
-    'A question before you book is a perfectly good reason to call. Most of them take two minutes to answer.',
+    'A question before you book is a perfectly good reason to email. Keep it short and practical.',
     'nurse.webp',
     'A nurse in conversation with a patient across a desk in a consulting room.',
   ),
@@ -551,7 +551,6 @@ PAGES.push({
       <dl class="statstrip reveal">
         <div><dt>Where</dt><dd style="font-size:1.05rem;line-height:1.4">7 Malibongwe Drive<small>EmedCentre, Randburg</small></dd></div>
         <div><dt>When</dt><dd style="font-size:1.05rem;line-height:1.4">08:00 – 17:00<small>Monday to Friday</small></dd></div>
-        <div><dt>Call</dt><dd style="font-size:1.05rem;line-height:1.4"><a href="tel:+27834507861">083 450 7861</a><small>Usually the fastest way</small></dd></div>
         <div><dt>Email</dt><dd style="font-size:.95rem;line-height:1.4;overflow-wrap:anywhere"><a href="mailto:health@insuresprhealth.co.za">health@insuresprhealth.co.za</a></dd></div>
       </dl>
     </div>
@@ -564,7 +563,7 @@ PAGES.push({
           <h2 style="font-size:clamp(1.4rem,2.4vw,1.8rem)">Send a question</h2>
           <div class="note note--warn" style="margin:1rem 0 1.5rem">
             <svg class="icon" aria-hidden="true"><use href="#i-alert"></use></svg>
-            <span><strong>This form does not go anywhere.</strong> This is a design concept, so nothing you type is sent, stored or seen by anyone — including us. To reach the practice, call <a href="tel:+27834507861">083 450 7861</a> or email <a href="mailto:health@insuresprhealth.co.za">health@insuresprhealth.co.za</a>.</span>
+            <span><strong>This form does not go anywhere.</strong> This is a design concept, so nothing you type is sent, stored or seen by anyone — including us. To reach the practice, email <a href="mailto:health@insuresprhealth.co.za">health@insuresprhealth.co.za</a>.</span>
           </div>
           <form id="contact-form" novalidate>
             <div class="field-row">

@@ -23,8 +23,18 @@ const DEFAULT_REQUIRED_SERVICES = [
   'dxa-body-composition',
   'osteoporosis-care',
   'primary-healthcare-x-ray',
+  'musculoskeletal-x-ray',
+  'chest-x-ray',
+  'orthopaedic-follow-up-x-ray',
   'visa-chest-x-ray',
   'workplace-medicals',
+  'workplace-chest-x-ray',
+  'runner-athlete-bone-health',
+  'menopause-bone-health',
+  'treatment-related-bone-health',
+  'post-fracture-bone-health',
+  'body-composition-progress',
+  'long-term-condition-bone-health',
 ];
 const FORM_ENDPOINTS = ['bookings', 'employer-leads', 'contact-enquiries'];
 const USER_AGENT = 'InsureSPR-Release-Audit/1.0';
