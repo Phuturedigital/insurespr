@@ -431,6 +431,19 @@ function validateLegacyManifest(payload, expectedCount = null) {
   const sources = new Set();
   const terminalStatuses = new Set(['redirect', 'preserve', 'gone', '410']);
   const pendingStatuses = new Set(['hold', 'needs_review', 'pending', 'unresolved']);
+  const holdApproval = !Array.isArray(payload) && payload?.holdApproval;
+  const approvedGlobalHold = !Array.isArray(payload) &&
+    payload?.status === 'approved-hold-no-routing' &&
+    payload?.activationAuthorized === false &&
+    holdApproval?.status === 'approved' &&
+    typeof holdApproval?.approvedBy === 'string' &&
+    holdApproval.approvedBy.trim().length >= 2 &&
+    typeof holdApproval?.approvedAt === 'string' &&
+    !Number.isNaN(Date.parse(holdApproval.approvedAt));
+
+  if (!Array.isArray(payload) && payload?.status === 'approved-hold-no-routing' && !approvedGlobalHold) {
+    problems.push('approved hold requires inactive routing, a named approver and a valid approval timestamp');
+  }
 
   for (const [index, entry] of redirects.entries()) {
     const source = entry?.source ?? entry?.from ?? entry?.url;
@@ -442,7 +455,7 @@ function validateLegacyManifest(payload, expectedCount = null) {
     }
     if (sources.has(source)) problems.push(`duplicate source: ${source}`);
     sources.add(source);
-    if (!terminalStatuses.has(status)) {
+    if (!terminalStatuses.has(status) && !(status === 'hold' && approvedGlobalHold)) {
       const detail = pendingStatuses.has(status) ? 'is unresolved' : `has unsupported status ${status || 'missing'}`;
       problems.push(`${source} ${detail}`);
     }
@@ -913,6 +926,22 @@ async function runSelfTest() {
   assert.equal(validateLegacyManifest({ redirects: manifest }, manifest.length).ok, true);
   manifest[0].status = 'needs_review';
   assert.equal(validateLegacyManifest({ redirects: manifest }, manifest.length).ok, false);
+  const approvedHold = {
+    status: 'approved-hold-no-routing',
+    activationAuthorized: false,
+    holdApproval: {
+      status: 'approved',
+      approvedBy: 'Test Owner',
+      approvedAt: '2026-08-21T00:00:00.000Z',
+    },
+    entries: manifest.map((entry) => ({ source: entry.source, state: 'hold', destination: null })),
+  };
+  assert.equal(validateLegacyManifest(approvedHold, manifest.length).ok, true);
+  approvedHold.activationAuthorized = true;
+  assert.equal(validateLegacyManifest(approvedHold, manifest.length).ok, false);
+  approvedHold.activationAuthorized = false;
+  delete approvedHold.holdApproval.approvedBy;
+  assert.equal(validateLegacyManifest(approvedHold, manifest.length).ok, false);
   assert.equal(inventoryExpectedCount('contains **153 unique sitemap-listed URLs** across two sites'), 153);
 
   const headers = new Headers({
@@ -923,7 +952,7 @@ async function runSelfTest() {
     'permissions-policy': 'camera=(), microphone=()',
   });
   assert.equal(inspectSecurityHeaders(headers).ok, true);
-  console.log('release-audit offline self-test: PASS (12 assertions)');
+  console.log('release-audit offline self-test: PASS (15 assertions)');
 }
 
 async function main() {
