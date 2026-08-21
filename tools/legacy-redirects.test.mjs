@@ -75,8 +75,14 @@ function validateApproval(entry) {
 
 export function validateManifest(manifest, inventoryMarkdown) {
   assert.equal(manifest.manifestVersion, 1, 'manifestVersion must be 1');
-  assert.equal(manifest.status, 'decision-review-only', 'manifest must remain review-only');
+  assert.equal(manifest.status, 'approved-hold-no-routing', 'manifest must record the approved inactive hold');
   assert.equal(manifest.activationAuthorized, false, 'this manifest must not activate routing');
+  validateApproval({ source: 'the inventory-wide hold decision', approval: manifest.holdApproval });
+  assert.equal(
+    manifest.holdApproval.scope,
+    'All 153 inventoried URLs remain held without redirects until a later URL-specific content, licensing and clinical decision.',
+    'hold approval scope changed unexpectedly',
+  );
   assert.equal(manifest.inventory, 'LEGACY-SEO-URL-INVENTORY.md', 'unexpected inventory source');
   assert.equal(manifest.canonicalDestinationOrigin, 'https://www.insuresprhealth.co.za', 'unexpected canonical destination origin');
   assert.deepEqual(manifest.allowedStates, ['preserve', 'redirect', '410', 'hold'], 'allowedStates changed unexpectedly');
@@ -158,6 +164,7 @@ test('production manifest is complete, deterministic, and inactive', async () =>
     decisionCounts: { preserve: 0, redirect: 0, 410: 0, hold: 153 },
   });
   assert.deepEqual(manifest.approvedDestinations, []);
+  assert.equal(manifest.holdApproval.approvedBy, 'Motselisi R. Mosiana, owner');
 });
 
 test('approved preserve, redirect, and 410 decisions have a valid in-memory shape', async () => {

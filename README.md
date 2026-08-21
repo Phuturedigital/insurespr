@@ -35,11 +35,15 @@ has no database key and cannot query operational tables directly.
 - Fact provenance: `CONTENT-NOTES.md`
 - Supplied rate evidence review: `XOM-RATES-2026-REVIEW.md`
 - Exact legacy URL inventory: `LEGACY-SEO-URL-INVENTORY.md`
+- Owner decisions and evidence boundaries: `LAUNCH-APPROVALS.md`
+- Website retention and data-subject procedure: `PRIVACY-OPERATIONS.md`
+- Turnstile, email and contact-channel activation: `PROVIDER-ACTIVATION.md`
 
 The database schema, public API and canonical frontend are deployed. The public
-site is served at `https://www.insuresprhealth.co.za/`. Transactional intake is
-still deliberately fail-closed until the privacy notice, Turnstile, service
-facts, availability and notification dependencies in
+site is served at `https://www.insuresprhealth.co.za/`. Privacy publication
+version `2026-08-21.1` is owner-approved, but transactional intake is still
+deliberately fail-closed until Information Officer evidence, Turnstile,
+service facts, availability and notification dependencies in
 `PRODUCTION-READINESS.md` are approved and configured.
 
 ## Local preview

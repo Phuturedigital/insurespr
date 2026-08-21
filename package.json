@@ -9,9 +9,10 @@
   "scripts": {
     "test": "npm run test:syntax && npm run test:unit && npm run test:deno && npm run test:browser",
     "test:syntax": "node tools/syntax-check.mjs",
-    "test:unit": "npm run test:release-audit && npm run test:legacy-redirects && npm run test:concept-preview && npm run test:service-expansion",
+    "test:unit": "npm run test:release-audit && npm run test:legacy-redirects && npm run test:launch-approvals && npm run test:concept-preview && npm run test:service-expansion",
     "test:release-audit": "node tools/release-audit.mjs --self-test",
     "test:legacy-redirects": "node --test tools/legacy-redirects.test.mjs",
+    "test:launch-approvals": "node --test tools/launch-approvals.test.mjs",
     "test:concept-preview": "node --test tools/concept-preview-safety.test.mjs",
     "test:service-expansion": "node tools/service-expansion.test.mjs",
     "test:deno": "npm run test:deno:fmt && npm run test:deno:lint && npm run test:deno:check && npm run test:deno:api && npm run test:deno:notifications",

@@ -1,7 +1,13 @@
 {
   "manifestVersion": 1,
-  "status": "decision-review-only",
+  "status": "approved-hold-no-routing",
   "activationAuthorized": false,
+  "holdApproval": {
+    "status": "approved",
+    "approvedBy": "Motselisi R. Mosiana, owner",
+    "approvedAt": "2026-08-21T07:26:22.472Z",
+    "scope": "All 153 inventoried URLs remain held without redirects until a later URL-specific content, licensing and clinical decision."
+  },
   "inventory": "LEGACY-SEO-URL-INVENTORY.md",
   "expectedSourceCount": 153,
   "canonicalDestinationOrigin": "https://www.insuresprhealth.co.za",

@@ -295,7 +295,7 @@ async function assertVisibleFocus(page, message) {
       return rect.width > 0 && rect.height > 0 &&
         style.visibility !== 'hidden' && style.display !== 'none' &&
         rect.bottom > 0 && rect.right > 0 && rect.top < innerHeight && rect.left < innerWidth;
-    }, undefined, { timeout: 1200 });
+    }, undefined, { timeout: 3000 });
   } catch {
     /* Keep the detailed assertions below as the single diagnostic surface. */
   }

@@ -102,6 +102,13 @@ workflow and domain transition must all be ready at the same time.
   Browser input cannot create the staff-reserved `booking_completed` event;
   legacy input is normalized to a request submission. Its rollback contract
   left the existing 24 privacy-minimised QA events unchanged.
+- Live migration
+  `20260821074451_record_owner_approved_launch_decisions` records the approved
+  website retention schedule, confirms the conservative catalogue and the
+  inactive legacy-content hold, and deliberately leaves privacy, anti-spam,
+  email, credentials, prices, clinical requirements and booking rules open.
+  Its contract requires the database privacy version to remain pending, so it
+  cannot open transactional intake.
 - Supabase performance advisor: only expected `unused_index` informational
   notices on the newly created, empty operational database. Keep the indexes
   until real query statistics exist; reference:
@@ -213,27 +220,32 @@ and `20260813172127_harden_marketing_and_booking_analytics`:
   analytics use `booking_request_submitted`; `booking_completed` is reserved for
   a trusted staff completion workflow.
 
-The technical release order was completed while the policy version remained
-pending: the client displays/sends the version, the API forwards and maps it,
-and the migrations were applied and verified. The remaining controlled step is
-to publish approved privacy wording and set that exact approved version in
-`practice_settings`, only after both Turnstile keys and the other intake
-dependencies are ready. Submissions must remain closed until then.
+The technical release order was completed while the database policy version
+remained pending: the client displays/sends the version, the API forwards and
+maps it, and the migrations were applied and verified. Privacy notice
+`2026-08-21.1` is approved for publication, but it must not be copied into
+`practice_settings.privacy_notice_version` until the Information Officer
+evidence, both Turnstile keys and the other intake dependencies are ready.
+Submissions must remain closed until then.
 
-## Release blockers — practice decisions or credentials required
+## Owner decisions recorded; activation evidence still required
 
 These also exist as rows in `public.launch_dependencies` so an operator can
-track them in the Supabase dashboard.
+track them in the Supabase dashboard. Motselisi R. Mosiana recorded the owner
+decisions in `LAUNCH-APPROVALS.md` on 21 August 2026. The owner approved the
+conservative catalogue, privacy publication copy and retention schedule,
+Cloudflare Turnstile, the Resend adapter, the email-only contact state and the
+inactive 153-URL hold. That approval does not fabricate account keys,
+registrations, licences, tariffs, schedules or provider/DNS evidence.
 
 1. **Authority and ownership**
-   - Written confirmation that this repository may represent InsureSPR as its
-     official website.
+   - Website publication authority is recorded in `LAUNCH-APPROVALS.md`.
    - Named owner for the domain, hosting account, Supabase project and incident
      response.
 
 2. **Service catalogue and operating rules**
-   - Approve each service name, status and category.
-   - Confirm which services are walk-in, request-only or live-slot bookable.
+   - The 16-service conservative catalogue and current request-led modes are
+     owner-approved; individual service evidence remains unverified.
    - Approve opening hours, closures, booking horizon, slot length, capacity,
      buffers, minimum notice and cancellation/reschedule rules.
    - Publish real `booking_slots` only after those rules are approved.
@@ -252,16 +264,16 @@ track them in the Supabase dashboard.
      date.
 
 5. **Privacy / POPIA**
-   - Confirm the responsible party and registered Information Officer contact.
-   - Approve the lawful-purpose wording, processor/subprocessor list,
-     cross-border position, retention schedule, backup deletion behaviour,
-     access controls and data-subject request procedure.
-   - Replace the visible pending-approval notice in `privacy.html` only after
-     counsel or the responsible owner approves it.
+   - Publication notice `2026-08-21.1`, the responsible-party wording,
+     processor register, website retention schedule and request procedure are
+     owner-approved and published.
+   - Obtain and file the Information Officer registration and legal-entity
+     evidence. Keep the database privacy version pending until that evidence,
+     Turnstile and processor activation checks are complete.
 
 6. **Email and staff notifications**
-   - Approve the proposed Resend adapter (or replace it with the selected
-     transactional provider) and verify the sending domain.
+   - Resend is the owner-approved adapter; create the account and verify the
+     sending domain.
    - Approve patient, staff and employer templates plus reply-to addresses.
    - Add `RESEND_API_KEY`, `EMAIL_FROM`, `EMAIL_REPLY_TO` and a strong independent
      `NOTIFICATION_WORKER_SECRET` to Supabase function secrets, then configure
@@ -273,7 +285,8 @@ track them in the Supabase dashboard.
      email is sent until the missing secrets and schedule are configured.
 
 7. **Anti-spam production secret**
-   - Create the Cloudflare Turnstile site/secret pair for the official domains.
+   - Cloudflare Turnstile is owner-approved; create its site/secret pair for the
+     official domains.
    - Configure `TURNSTILE_SITE_KEY` and `TURNSTILE_SECRET_KEY` together in
      Supabase Edge Function secrets, then redeploy `insurespr-api`. The site key
      is deliberately returned to the browser by `GET /services`; the secret

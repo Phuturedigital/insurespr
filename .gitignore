@@ -6,6 +6,7 @@ node_modules/
 # and must never be committed.
 .vercel
 .env*
+!supabase/functions/.env.example
 
 # Playwright + image-pipeline output — ~77MB, all regenerable on demand.
 # The scripts under tools/ ARE committed; the pixels they produce are not.
