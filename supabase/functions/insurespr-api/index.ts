@@ -310,7 +310,7 @@ export async function verifyTurnstile(
     throw new ApiError(
       503,
       'BOT_CHECK_UNAVAILABLE',
-      'The anti-spam service is temporarily unavailable. Please try again or email health@insuresprhealth.co.za.',
+      'The anti-spam service is temporarily unavailable. Please try again or email motselisi@bonevc.co.za.',
     );
   }
 
@@ -336,7 +336,7 @@ export async function verifyTurnstile(
     throw new ApiError(
       503,
       'BOT_CHECK_UNAVAILABLE',
-      'The anti-spam service is temporarily unavailable. Please try again or email health@insuresprhealth.co.za.',
+      'The anti-spam service is temporarily unavailable. Please try again or email motselisi@bonevc.co.za.',
     );
   } finally {
     clearTimeout(timeout);
@@ -346,7 +346,7 @@ export async function verifyTurnstile(
     throw new ApiError(
       503,
       'BOT_CHECK_UNAVAILABLE',
-      'The anti-spam service is temporarily unavailable. Please try again or email health@insuresprhealth.co.za.',
+      'The anti-spam service is temporarily unavailable. Please try again or email motselisi@bonevc.co.za.',
     );
   }
 
@@ -457,7 +457,7 @@ async function requireSubmissionPolicy(deps: ApiDependencies): Promise<void> {
     throw new ApiError(
       503,
       'PRIVACY_NOTICE_NOT_READY',
-      'Online forms are temporarily unavailable. Please email health@insuresprhealth.co.za.',
+      'Online forms are temporarily unavailable. Please email motselisi@bonevc.co.za.',
     );
   }
 
@@ -466,7 +466,7 @@ async function requireSubmissionPolicy(deps: ApiDependencies): Promise<void> {
     throw new ApiError(
       503,
       'PRIVACY_NOTICE_NOT_READY',
-      'Online forms are not open yet. Please email health@insuresprhealth.co.za.',
+      'Online forms are not open yet. Please email motselisi@bonevc.co.za.',
     );
   }
 }

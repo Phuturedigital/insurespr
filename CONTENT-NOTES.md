@@ -14,8 +14,16 @@ Book Appointment pages. Verified 7 Aug 2026.
 |---|---|
 | Address | 7 Malibongwe Drive, EmedCentre, Randburg |
 | Hours | 08:00 – 17:00 |
-| Email | health@insuresprhealth.co.za |
+| Booking contact | Motselisi Mosiana · 083 450 7861 · WhatsApp on the same number |
+| Email | motselisi@bonevc.co.za |
 | Social | Facebook `/InsureSPR` · LinkedIn `/company/InsureSPR` · Twitter `@Bonevitalityc` |
+
+The booking number, owner name and email are supported by the public QSIGHT
+supplier record at
+`https://www.webportunities.net/tab_pages/general/supplier_info/supplier_info.aspx?SupplierId=MjIyMjA%3D&prth_act=info`.
+The owner separately approved Motselisi as booking monitor and designated
+Information Officer on 21 August 2026. The designation is not described as an
+Information Regulator registration.
 
 ## The three programmes — the practice's own names and definitions
 

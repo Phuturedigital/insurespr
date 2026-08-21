@@ -24,7 +24,7 @@ Current public DNS has no MX, SPF or DMARC record. Do not schedule the worker or
 use `@insuresprhealth.co.za` as a reply-to address until the mailbox exists and
 can receive replies.
 
-1. Create/confirm the receiving mailbox for `health@insuresprhealth.co.za`.
+1. Create/confirm the receiving mailbox for `motselisi@bonevc.co.za`.
 2. Verify the sending domain in Resend and publish its exact SPF and DKIM records.
 3. Publish a deliberate DMARC policy at `_dmarc.insuresprhealth.co.za`; begin
    with monitored reporting and tighten only after legitimate mail is aligned.
@@ -42,7 +42,18 @@ can receive replies.
 
 ## Phone and WhatsApp
 
-These channels remain intentionally absent. To restore either channel, obtain a
-number controlled by the practice, verify a live incoming call/message, name the
-person responsible for monitoring it, approve response hours, update the
-database in a forward-only migration, and rerun every page/contact audit.
+Approved booking contact: Motselisi R. Mosiana
+
+Approved phone and WhatsApp: `083 450 7861` (`+27834507861`)
+
+Approved receiving email: `motselisi@bonevc.co.za`
+
+These direct channels may be published. Public business evidence links the
+number and email to Motselisi/QSIGHT, and the email domain had a receiving MX
+record on 21 August 2026. A controlled handset/WhatsApp receipt check and an
+out-of-hours escalation decision should still be logged before claiming a
+response-time service level.
+
+The database and website must retain the exact E.164 values above. Any future
+change requires a new owner instruction, a forward-only migration and the full
+page/contact audit; do not silently replace the number in static markup alone.

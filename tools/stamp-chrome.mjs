@@ -24,7 +24,7 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 /* Single source of truth for the practice's published details. Every value is
    taken from the practice's own live site — nothing here is invented. */
 const PRACTICE = {
-  email: 'health@insuresprhealth.co.za',
+  email: 'motselisi@bonevc.co.za',
   address: '7 Malibongwe Drive, EmedCentre, Randburg',
   hours: 'Monday to Friday, 08:00 – 17:00',
   facebook: 'https://www.facebook.com/InsureSPR/',

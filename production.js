@@ -191,12 +191,12 @@
       });
     }).catch(function (error) {
       if (error && error.name === 'AbortError') {
-        var timeoutError = new Error('The service is taking too long to respond. Please try again, or email health@insuresprhealth.co.za.');
+        var timeoutError = new Error('The service is taking too long to respond. Please try again, or email motselisi@bonevc.co.za.');
         timeoutError.code = 'REQUEST_TIMEOUT';
         throw timeoutError;
       }
       if (error instanceof TypeError) {
-        var networkError = new Error('We could not connect right now. Check your connection and try again, or email health@insuresprhealth.co.za.');
+        var networkError = new Error('We could not connect right now. Check your connection and try again, or email motselisi@bonevc.co.za.');
         networkError.code = 'NETWORK_ERROR';
         throw networkError;
       }
@@ -462,13 +462,13 @@
           },
           'error-callback': function () {
             hidden.value = '';
-            status.textContent = 'The anti-spam check could not be completed. Please retry or email health@insuresprhealth.co.za.';
+            status.textContent = 'The anti-spam check could not be completed. Please retry or email motselisi@bonevc.co.za.';
           }
         });
         form.dataset.turnstileWidgetId = String(widgetId);
       }).catch(function () {
         form.dataset.turnstileUnavailable = 'true';
-        status.textContent = 'The anti-spam check is unavailable. Please refresh, retry, or email health@insuresprhealth.co.za.';
+        status.textContent = 'The anti-spam check is unavailable. Please refresh, retry, or email motselisi@bonevc.co.za.';
       });
     }
 
@@ -487,7 +487,7 @@
     if (form.dataset.turnstileRequired !== 'true') return true;
     if (value(form, 'turnstile_token')) return true;
     var message = form.dataset.turnstileUnavailable === 'true'
-      ? 'The anti-spam check is unavailable. Please refresh, retry, or email health@insuresprhealth.co.za.'
+      ? 'The anti-spam check is unavailable. Please refresh, retry, or email motselisi@bonevc.co.za.'
       : 'Please complete the anti-spam check before sending.';
     setStatus(form, message, 'error');
     var field = form.querySelector('.turnstile-field');
@@ -552,7 +552,7 @@
 
   function formatPrice(service) {
     if (!service || service.price_type === 'unpublished') {
-      return 'Price awaiting practice approval — email health@insuresprhealth.co.za to confirm.';
+      return 'Price awaiting practice approval — email motselisi@bonevc.co.za to confirm.';
     }
     if (service.price_type === 'quote') return 'Employer pricing is provided by quote.';
     var formatter = new Intl.NumberFormat('en-ZA', { style: 'currency', currency: 'ZAR' });
@@ -898,7 +898,7 @@
         track('email_clicked', payload.service_id);
         var subject = 'Booking request ' + body.booking.reference;
         var message = "Hi InsureSPR, I submitted website booking request " + body.booking.reference + '. Please help me continue.';
-        var emailUrl = 'mailto:health@insuresprhealth.co.za?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(message);
+        var emailUrl = 'mailto:motselisi@bonevc.co.za?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(message);
         var opened = window.open(emailUrl, '_blank', 'noopener,noreferrer');
         setStatus(
           form,

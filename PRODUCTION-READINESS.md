@@ -109,6 +109,13 @@ workflow and domain transition must all be ready at the same time.
   email, credentials, prices, clinical requirements and booking rules open.
   Its contract requires the database privacy version to remain pending, so it
   cannot open transactional intake.
+- Live migration
+  `20260821140910_restore_owner_booking_contacts` records Motselisi R. Mosiana
+  as the booking contact and owner-designated Information Officer, restores
+  `083 450 7861` for phone/WhatsApp, and routes public booking email to
+  `motselisi@bonevc.co.za`. The contact fields are live, but the migration
+  deliberately preserves the pending privacy version and every remaining
+  registration, anti-spam and delivery gate.
 - Supabase performance advisor: only expected `unused_index` informational
   notices on the newly created, empty operational database. Keep the indexes
   until real query statistics exist; reference:
@@ -234,8 +241,8 @@ These also exist as rows in `public.launch_dependencies` so an operator can
 track them in the Supabase dashboard. Motselisi R. Mosiana recorded the owner
 decisions in `LAUNCH-APPROVALS.md` on 21 August 2026. The owner approved the
 conservative catalogue, privacy publication copy and retention schedule,
-Cloudflare Turnstile, the Resend adapter, the email-only contact state and the
-inactive 153-URL hold. That approval does not fabricate account keys,
+Cloudflare Turnstile, the Resend adapter, the owner-approved booking contacts
+and the inactive 153-URL hold. That approval does not fabricate account keys,
 registrations, licences, tariffs, schedules or provider/DNS evidence.
 
 1. **Authority and ownership**

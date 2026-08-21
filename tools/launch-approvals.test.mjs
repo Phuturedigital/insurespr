@@ -17,10 +17,44 @@ test('approved privacy publication is explicit without claiming registration', a
   for (const source of [page, operations]) {
     assert.match(source, /2026-08-21\.1/);
     assert.match(source, /Motselisi R\. Mosiana/);
-    assert.match(source, /health@insuresprhealth\.co\.za/);
+    assert.match(source, /motselisi@bonevc\.co\.za/);
   }
-  assert.match(page, /does not claim that Information Officer registration is complete/);
+  assert.match(page, /Designated Information Officer/);
+  assert.match(page, /does not claim that Information Regulator registration is complete/);
   assert.match(approvals, /does not turn a missing fact into a\s+verified fact/);
+});
+
+test('owner-approved booking contacts are consistent across every production page', async () => {
+  const pages = [
+    'index.html', 'spr.html', 'about.html', 'xray.html', 'scanning.html', 'workforce.html',
+    'book.html', 'contact.html', 'privacy.html', 'booking-confirmation.html',
+    'manage-booking.html', '404.html', 'dxa-body-composition.html', 'dxa-bone-density.html',
+    'osteoporosis-care.html', 'primary-healthcare-x-ray.html', 'visa-chest-x-ray.html',
+    'workplace-medicals.html', 'musculoskeletal-x-ray.html', 'chest-x-ray.html',
+    'orthopaedic-follow-up-x-ray.html', 'workplace-chest-x-ray.html',
+    'runner-athlete-bone-health.html', 'menopause-bone-health.html',
+    'treatment-related-bone-health.html', 'post-fracture-bone-health.html',
+    'body-composition-progress.html', 'long-term-condition-bone-health.html',
+  ];
+
+  for (const pageName of pages) {
+    const page = await read(pageName);
+    assert.match(page, /Bookings: Motselisi Mosiana/, `${pageName} must name the booking contact`);
+    assert.match(page, /href="tel:\+27834507861"/, `${pageName} must expose the approved phone`);
+    assert.match(page, /href="https:\/\/wa\.me\/27834507861\?text=Hello%20InsureSPR%2C%20I%20would%20like%20help%20with%20a%20booking\."/, `${pageName} must expose the approved generic WhatsApp route`);
+    assert.match(page, /href="mailto:motselisi@bonevc\.co\.za"/, `${pageName} must expose the approved receiving email`);
+    assert.doesNotMatch(page, /health@insuresprhealth\.co\.za/, `${pageName} must not route bookings to a domain without verified mail routing`);
+  }
+});
+
+test('forward-only migration stores the exact contacts without opening intake', async () => {
+  const migration = await read('supabase/migrations/20260821140910_restore_owner_booking_contacts.sql');
+  assert.match(migration, /phone_display = '083 450 7861'/);
+  assert.match(migration, /phone_e164 = '\+27834507861'/);
+  assert.match(migration, /whatsapp_e164 = '27834507861'/);
+  assert.match(migration, /public_email = 'motselisi@bonevc\.co\.za'/);
+  assert.match(migration, /designated Motselisi R\. Mosiana as the Information Officer/);
+  assert.match(migration, /privacy_notice_version is distinct from 'pending-approval'/);
 });
 
 test('provider template contains every runtime key without a secret value', async () => {

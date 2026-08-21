@@ -4,13 +4,16 @@ Approved publication version: `2026-08-21.1`
 
 Responsible party: InsureSPR Precision Healthcare
 
-Owner and privacy lead: Motselisi R. Mosiana
+Owner-designated Information Officer: Motselisi R. Mosiana
 
-Public privacy contact: `health@insuresprhealth.co.za`
+Designation recorded: 21 August 2026
 
-The owner has approved this website-specific schedule and procedure. It is not
-a substitute for the private body’s PAIA manual, Information Officer
-registration, clinical-record policy or professional record-retention duties.
+Public privacy contact: `motselisi@bonevc.co.za`
+
+The owner has approved this website-specific schedule and procedure and has
+designated Motselisi R. Mosiana as Information Officer. The designation is not
+a substitute for the private body’s PAIA manual, Information Regulator
+registration record, clinical-record policy or professional record-retention duties.
 Where another law or a defensible legal hold requires longer retention, that
 documented requirement takes precedence and access must be restricted.
 
@@ -35,7 +38,7 @@ that destination’s approved retention policy governs the copied record.
 ## Data-subject request procedure
 
 1. Accept access, correction, deletion, restriction or objection requests at
-   `health@insuresprhealth.co.za`. Do not require the requester to send medical
+   `motselisi@bonevc.co.za`. Do not require the requester to send medical
    details in the first email.
 2. Acknowledge the request within two working days and give it an internal
    reference. Verify identity proportionately before disclosing or changing a
@@ -65,8 +68,8 @@ Cross-border processing must have a documented POPIA section 72 basis.
 
 ## Security compromise procedure
 
-Immediately contain the incident, preserve evidence, notify the owner/privacy
-lead and determine the affected records and people. The responsible party must
+Immediately contain the incident, preserve evidence, notify the designated
+Information Officer and determine the affected records and people. The responsible party must
 report security compromises to the Information Regulator and affected data
 subjects as required; provider incidents must be escalated to InsureSPR without
 delay. Record notification time, scope, mitigation and follow-up actions in the

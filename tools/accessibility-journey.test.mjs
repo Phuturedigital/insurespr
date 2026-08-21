@@ -58,7 +58,7 @@ const approvedConfig = {
     phone_display: null,
     phone_e164: null,
     whatsapp_e164: null,
-    public_email: 'health@insuresprhealth.co.za',
+    public_email: 'motselisi@bonevc.co.za',
     timezone: 'Africa/Johannesburg',
     opening_hours: { monday: ['08:00', '17:00'] },
     maps_url: 'https://maps.google.com/?q=7+Malibongwe+Drive+EmedCentre+Randburg',

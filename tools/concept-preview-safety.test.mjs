@@ -42,7 +42,7 @@ test('concept hostname labels itself and exits before production integrations', 
     setAttribute(name, value) { this.attributes.set(name, value); },
     classList: { add(name) { this.owner.className = name; }, owner: null }
   });
-  const contactLink = link('mailto:health@insuresprhealth.co.za');
+  const contactLink = link('mailto:motselisi@bonevc.co.za');
   const directionsLink = link('https://www.google.com/maps/dir/?api=1&destination=7+Malibongwe+Drive');
   contactLink.classList.owner = contactLink;
   directionsLink.classList.owner = directionsLink;

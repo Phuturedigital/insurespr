@@ -41,7 +41,9 @@ for (const [slug, hub] of newServices) {
   assert.equal((html.match(/<h1(?:\s|>)/g) || []).length, 1, `${file} must contain one H1`);
   assert.equal((html.match(/<dl class="service-answers">/g) || []).length, 1, `${file} must contain one practical-answer list`);
   assert.ok((html.match(/<dt>/g) || []).length >= 11, `${file} must answer at least 11 practical questions`);
-  assert.doesNotMatch(html, /(?:083\s*450\s*7861|tel:|wa\.me\/)/i, `${file} must preserve the current email-only contact state`);
+  assert.match(html, /href="tel:\+27834507861"/, `${file} must expose the approved booking phone`);
+  assert.match(html, /href="https:\/\/wa\.me\/27834507861\?text=/, `${file} must expose the approved WhatsApp route`);
+  assert.match(html, /href="mailto:motselisi@bonevc\.co\.za"/, `${file} must expose the approved booking email`);
 
   const scripts = [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)];
   assert.ok(scripts.length > 0, `${file} must include JSON-LD`);

@@ -47,7 +47,11 @@ const PAGES = [
 ];
 
 const PRACTICE = {
-  email: 'health@insuresprhealth.co.za',
+  bookingContact: 'Motselisi Mosiana',
+  phoneDisplay: '083 450 7861',
+  phoneE164: '+27834507861',
+  whatsappE164: '27834507861',
+  email: 'motselisi@bonevc.co.za',
   address: '7 Malibongwe Drive, EmedCentre, Randburg',
   hours: 'Monday–Friday, 08:00–17:00',
   maps: 'https://maps.google.com/?q=7+Malibongwe+Drive+EmedCentre+Randburg',
@@ -83,6 +87,9 @@ const FOOTER =
   COLUMNS.map(col).join('') +
   '<div><h4>Find the practice</h4><ul>' +
   `<li><a href="${PRACTICE.maps}" rel="noopener" target="_blank">${PRACTICE.address}</a></li>` +
+  `<li>Bookings: ${PRACTICE.bookingContact}</li>` +
+  `<li><a href="tel:${PRACTICE.phoneE164}" data-track="call_clicked">${PRACTICE.phoneDisplay}</a></li>` +
+  `<li><a href="https://wa.me/${PRACTICE.whatsappE164}?text=Hello%20InsureSPR%2C%20I%20would%20like%20help%20with%20a%20booking." rel="noopener" target="_blank" data-track="whatsapp_clicked">WhatsApp bookings</a></li>` +
   `<li><a href="mailto:${PRACTICE.email}" data-track="email_clicked">${PRACTICE.email}</a></li>` +
   `<li>${PRACTICE.hours}</li>` +
   '</ul></div></div>' +
