@@ -181,6 +181,16 @@ workflow and domain transition must all be ready at the same time.
   contains only the exact apex and `www` official origins. `/services` is
   `no-store` so a privacy or Turnstile configuration change cannot be masked by
   a stale public response.
+- The 29 August provider audit confirms that both Edge Functions are active,
+  while the notification readiness signal remains `ready:false`, Supabase Vault
+  contains no configured secret, and `pg_cron` is not installed. Vercel has no
+  production environment variable because the public frontend is deliberately
+  static and receives no server credential. Cloudflare and Google DNS both
+  resolve the approved `bonevc.co.za` Reply-To MX route, but neither resolver
+  finds SPF/MX on the default `send.insuresprhealth.co.za` Return-Path, Resend
+  DKIM, DMARC or an inbound MX route for `insuresprhealth.co.za`. These are
+  observed configuration facts, not inferred secret values; email delivery and
+  scheduling remain open launch dependencies.
 - The official apex now returns a one-hop `308` to the canonical `www` host,
   and the repository's Auth `site_url`, page canonicals, sitemap, Open Graph and
   JSON-LD all use that same `www` origin.

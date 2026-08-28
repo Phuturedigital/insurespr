@@ -3,12 +3,14 @@
 /**
  * Read-only production preflight for InsureSPR.
  *
- * Network behaviour is deliberately limited to public GET requests and three
- * invalid empty-object form probes. The invalid probes contain no PII and
- * cannot satisfy the API's validation contract, so they cannot create records.
+ * Network behaviour is deliberately limited to public GET requests, public DNS
+ * lookups and three invalid empty-object form probes. The invalid probes contain
+ * no PII and cannot satisfy the API's validation contract, so they cannot create
+ * records.
  */
 
 import assert from 'node:assert/strict';
+import { Resolver } from 'node:dns/promises';
 import { existsSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
@@ -18,6 +20,11 @@ import { fileURLToPath } from 'node:url';
 const DEFAULT_BASE = 'https://www.insuresprhealth.co.za';
 const DEFAULT_API = 'https://ffdmmxffzewqiacsuvhr.supabase.co/functions/v1/insurespr-api';
 const DEFAULT_NOTIFICATIONS = 'https://ffdmmxffzewqiacsuvhr.supabase.co/functions/v1/insurespr-notifications';
+const DEFAULT_EMAIL_REPLY_TO = 'motselisi@bonevc.co.za';
+const DNS_RESOLVERS = [
+  { name: 'Cloudflare', server: '1.1.1.1' },
+  { name: 'Google', server: '8.8.8.8' },
+];
 const DEFAULT_REQUIRED_SERVICES = [
   'dxa-bone-density',
   'dxa-body-composition',
@@ -52,6 +59,9 @@ Options:
   --api <url>                   Public API base (default: ${DEFAULT_API})
   --notifications <url>         Notification worker URL
   --notification-url <url>      Alias for --notifications
+  --email-reply-to <address>    Approved receiving mailbox (default: ${DEFAULT_EMAIL_REPLY_TO})
+  --dkim-host <hostname>        Exact sender DKIM hostname (default: resend._domainkey.<site domain>)
+  --return-path-host <hostname> Exact provider Return-Path host (default: send.<site domain>)
   --mode <release|preview>      Release is strict; preview downgrades readiness blockers
   --required-services <csv>     Required public service slugs
   --legacy-manifest <path>      Optional JSON redirect manifest to validate
@@ -71,6 +81,9 @@ function parseArgs(argv) {
     base: DEFAULT_BASE,
     api: DEFAULT_API,
     notifications: DEFAULT_NOTIFICATIONS,
+    emailReplyTo: DEFAULT_EMAIL_REPLY_TO,
+    dkimHost: null,
+    returnPathHost: null,
     mode: 'release',
     requiredServices: [...DEFAULT_REQUIRED_SERVICES],
     legacyManifest: null,
@@ -100,6 +113,15 @@ function parseArgs(argv) {
       case '--notifications':
       case '--notification-url':
         config.notifications = takeValue();
+        break;
+      case '--email-reply-to':
+        config.emailReplyTo = takeValue();
+        break;
+      case '--dkim-host':
+        config.dkimHost = takeValue();
+        break;
+      case '--return-path-host':
+        config.returnPathHost = takeValue();
         break;
       case '--mode':
         config.mode = takeValue();
@@ -144,6 +166,16 @@ function parseArgs(argv) {
   config.base = normalizeOrigin(config.base, '--base');
   config.api = normalizeEndpoint(config.api, '--api');
   config.notifications = normalizeEndpoint(config.notifications, '--notifications');
+  config.emailReplyTo = normalizeEmail(config.emailReplyTo, '--email-reply-to');
+  const mailDomain = new URL(config.base).hostname.replace(/^www\./i, '');
+  config.dkimHost = normalizeHostname(
+    config.dkimHost || `resend._domainkey.${mailDomain}`,
+    '--dkim-host',
+  );
+  config.returnPathHost = normalizeHostname(
+    config.returnPathHost || `send.${mailDomain}`,
+    '--return-path-host',
+  );
   return config;
 }
 
@@ -165,6 +197,27 @@ function normalizeEndpoint(value, flag) {
   }
   url.pathname = url.pathname.replace(/\/+$/, '');
   return url.href.replace(/\/$/, '');
+}
+
+function normalizeEmail(value, flag) {
+  const email = String(value).trim().toLowerCase();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    throw new Error(`${flag} must be a valid email address`);
+  }
+  return email;
+}
+
+function normalizeHostname(value, flag) {
+  const hostname = String(value).trim().toLowerCase().replace(/\.$/, '');
+  if (
+    hostname.length > 253 ||
+    !hostname.includes('.') ||
+    hostname.split('.').some((label) =>
+      !label || label.length > 63 || !/^[a-z0-9_](?:[a-z0-9_-]*[a-z0-9_])?$/.test(label))
+  ) {
+    throw new Error(`${flag} must be a valid DNS hostname`);
+  }
+  return hostname;
 }
 
 function result(id, title, status, message, evidence = null, kind = 'technical') {
@@ -805,6 +858,154 @@ async function auditNotifications(config, results) {
   }
 }
 
+const DNS_ABSENCE_CODES = new Set(['ENODATA', 'ENOTFOUND', 'ENONAME', 'ENOENT']);
+
+async function resolveDnsRecord(resolver, hostname, type) {
+  try {
+    const records = type === 'MX'
+      ? await resolver.resolveMx(hostname)
+      : await resolver.resolveTxt(hostname);
+    return {
+      records: type === 'TXT'
+        ? records.map((segments) => segments.join(''))
+        : records,
+      error: null,
+    };
+  } catch (error) {
+    const code = typeof error?.code === 'string' ? error.code : 'DNS_ERROR';
+    if (DNS_ABSENCE_CODES.has(code)) return { records: [], error: null };
+    return { records: [], error: `${code}: ${safeMessage(error)}` };
+  }
+}
+
+async function collectEmailDns(config) {
+  const senderDomain = new URL(config.base).hostname.replace(/^www\./i, '');
+  const replyDomain = config.emailReplyTo.split('@')[1];
+  const queryDefinitions = [
+    ['senderMx', senderDomain, 'MX'],
+    ['returnPathMx', config.returnPathHost, 'MX'],
+    ['returnPathTxt', config.returnPathHost, 'TXT'],
+    ['dmarcTxt', `_dmarc.${senderDomain}`, 'TXT'],
+    ['dkimTxt', config.dkimHost, 'TXT'],
+    ['replyMx', replyDomain, 'MX'],
+  ];
+
+  const resolverResults = await Promise.all(DNS_RESOLVERS.map(async ({ name, server }) => {
+    const resolver = new Resolver({ timeout: Math.min(config.timeoutMs, 10_000), tries: 1 });
+    resolver.setServers([server]);
+    const entries = await Promise.all(queryDefinitions.map(async ([key, hostname, type]) => [
+      key,
+      await resolveDnsRecord(resolver, hostname, type),
+    ]));
+    return [name, Object.fromEntries(entries)];
+  }));
+
+  return {
+    senderDomain,
+    replyDomain,
+    dkimHost: config.dkimHost,
+    returnPathHost: config.returnPathHost,
+    resolvers: Object.fromEntries(resolverResults),
+  };
+}
+
+function resolverNamesMissing(snapshot, predicate) {
+  return Object.entries(snapshot.resolvers)
+    .filter(([, records]) => !predicate(records))
+    .map(([name]) => name);
+}
+
+function evaluateEmailDns(snapshot) {
+  const checks = [
+    {
+      id: 'email-spf',
+      title: 'Transactional email SPF',
+      message: `SPF is published at ${snapshot.returnPathHost} on both public resolvers`,
+      missingMessage: `No Resend-compatible SPF record is published at ${snapshot.returnPathHost}`,
+      predicate: (records) => records.returnPathTxt.records.some((value) => /^v=spf1\b/i.test(value.trim())),
+    },
+    {
+      id: 'email-return-path-mx',
+      title: 'Transactional email Return-Path MX',
+      message: `The provider Return-Path ${snapshot.returnPathHost} has an MX record on both public resolvers`,
+      missingMessage: `The provider Return-Path ${snapshot.returnPathHost} has no MX record`,
+      predicate: (records) => records.returnPathMx.records.length > 0,
+    },
+    {
+      id: 'email-dkim',
+      title: 'Transactional email DKIM',
+      message: `DKIM is published at ${snapshot.dkimHost} on both public resolvers`,
+      missingMessage: `No DKIM public key is published at ${snapshot.dkimHost}`,
+      predicate: (records) => records.dkimTxt.records.some((value) => /(?:^|;)\s*p\s*=\s*[^;\s]+/i.test(value)),
+    },
+    {
+      id: 'email-dmarc',
+      title: 'Transactional email DMARC',
+      message: `DMARC is published for ${snapshot.senderDomain} on both public resolvers`,
+      missingMessage: `No DMARC policy is published at _dmarc.${snapshot.senderDomain}`,
+      predicate: (records) => records.dmarcTxt.records.some((value) => /^v=DMARC1\b/i.test(value.trim())),
+    },
+    {
+      id: 'email-reply-mx',
+      title: 'Approved reply mailbox DNS',
+      message: `The approved reply domain ${snapshot.replyDomain} has an MX record on both public resolvers`,
+      missingMessage: `The approved reply domain ${snapshot.replyDomain} has no MX record`,
+      predicate: (records) => records.replyMx.records.length > 0,
+    },
+  ];
+
+  return checks.map((check) => ({
+    ...check,
+    missingResolvers: resolverNamesMissing(snapshot, check.predicate),
+  }));
+}
+
+async function auditEmailDns(config, results) {
+  let snapshot;
+  try {
+    snapshot = await collectEmailDns(config);
+  } catch (error) {
+    results.push(issue(config, 'email-dns-network', 'Transactional email DNS', 'technical',
+      `DNS readiness audit failed: ${safeMessage(error)}`));
+    return;
+  }
+
+  const dnsErrors = [];
+  for (const [resolverName, records] of Object.entries(snapshot.resolvers)) {
+    for (const [queryName, query] of Object.entries(records)) {
+      if (query.error) dnsErrors.push(`${resolverName} ${queryName}: ${query.error}`);
+    }
+  }
+  if (dnsErrors.length > 0) {
+    results.push(issue(config, 'email-dns-network', 'Transactional email DNS', 'technical',
+      'One or more authoritative DNS checks could not be completed', dnsErrors));
+    return;
+  }
+
+  for (const check of evaluateEmailDns(snapshot)) {
+    if (check.missingResolvers.length === 0) {
+      results.push(pass(check.id, check.title, check.message));
+    } else {
+      results.push(issue(config, check.id, check.title, 'readiness', check.missingMessage, {
+        checkedResolvers: DNS_RESOLVERS.map(({ name }) => name),
+        missingOn: check.missingResolvers,
+      }));
+    }
+  }
+
+  const senderMxMissing = resolverNamesMissing(snapshot, (records) => records.senderMx.records.length > 0);
+  if (senderMxMissing.length === 0) {
+    results.push(pass('email-sender-mx', 'Official-domain mailbox DNS',
+      `${snapshot.senderDomain} has an inbound MX route on both public resolvers`));
+  } else {
+    results.push(warning('email-sender-mx', 'Official-domain mailbox DNS',
+      `${snapshot.senderDomain} has no inbound MX route; keep Reply-To on ${config.emailReplyTo} and do not publish an @${snapshot.senderDomain} receiving address`, {
+        checkedResolvers: DNS_RESOLVERS.map(({ name }) => name),
+        missingOn: senderMxMissing,
+      }));
+  }
+}
+
 async function auditLegacyManifest(config, results) {
   const inventoryPath = path.join(PROJECT_ROOT, 'LEGACY-SEO-URL-INVENTORY.md');
   let expectedCount = null;
@@ -860,7 +1061,7 @@ function summaryFor(results) {
 function printHuman(config, results, summary) {
   console.log('InsureSPR read-only production preflight');
   console.log(`Mode: ${config.mode} | Site: ${config.base} | API: ${config.api}`);
-  console.log('Safety: public GET probes plus invalid empty form payloads only; no PII, secrets or stateful writes.');
+  console.log('Safety: public GET and DNS probes plus invalid empty form payloads only; no PII, secrets or stateful writes.');
   console.log('');
   for (const item of results) {
     const marker = item.status === 'pass' ? 'PASS' : item.status === 'warn' ? 'WARN' : 'FAIL';
@@ -918,6 +1119,49 @@ async function runSelfTest() {
     ['privacy', 'turnstile', 'service-unverified'],
   );
 
+  const parsedDefaults = parseArgs([]);
+  assert.equal(parsedDefaults.emailReplyTo, DEFAULT_EMAIL_REPLY_TO);
+  assert.equal(parsedDefaults.dkimHost, 'resend._domainkey.insuresprhealth.co.za');
+  assert.equal(parsedDefaults.returnPathHost, 'send.insuresprhealth.co.za');
+  const readyDnsRecords = {
+    senderMx: { records: [], error: null },
+    returnPathMx: { records: [{ exchange: 'feedback-smtp.example', priority: 10 }], error: null },
+    returnPathTxt: { records: ['v=spf1 include:amazonses.com ~all'], error: null },
+    dmarcTxt: { records: ['v=DMARC1; p=none'], error: null },
+    dkimTxt: { records: ['v=DKIM1; p=TESTKEY'], error: null },
+    replyMx: { records: [{ exchange: 'mx.example', priority: 10 }], error: null },
+  };
+  const readyDnsSnapshot = {
+    senderDomain: 'insuresprhealth.co.za',
+    replyDomain: 'bonevc.co.za',
+    dkimHost: 'resend._domainkey.insuresprhealth.co.za',
+    returnPathHost: 'send.insuresprhealth.co.za',
+    resolvers: {
+      Cloudflare: structuredClone(readyDnsRecords),
+      Google: structuredClone(readyDnsRecords),
+    },
+  };
+  assert.equal(evaluateEmailDns(readyDnsSnapshot).length, 5);
+  assert.equal(evaluateEmailDns(readyDnsSnapshot).every((check) => check.missingResolvers.length === 0), true);
+  const missingDnsSnapshot = structuredClone(readyDnsSnapshot);
+  missingDnsSnapshot.resolvers.Google.returnPathTxt.records = [];
+  missingDnsSnapshot.resolvers.Google.returnPathMx.records = [];
+  missingDnsSnapshot.resolvers.Google.dmarcTxt.records = [];
+  missingDnsSnapshot.resolvers.Google.dkimTxt.records = [];
+  missingDnsSnapshot.resolvers.Google.replyMx.records = [];
+  assert.deepEqual(
+    evaluateEmailDns(missingDnsSnapshot).map((check) => [check.id, check.missingResolvers]),
+    [
+      ['email-spf', ['Google']],
+      ['email-return-path-mx', ['Google']],
+      ['email-dkim', ['Google']],
+      ['email-dmarc', ['Google']],
+      ['email-reply-mx', ['Google']],
+    ],
+  );
+  assert.throws(() => normalizeEmail('not-an-email', '--email-reply-to'));
+  assert.throws(() => normalizeHostname('bad host', '--dkim-host'));
+
   const manifest = DEFAULT_REQUIRED_SERVICES.map((slug) => ({
     source: `https://legacy.example/${slug}`,
     destination: `${base}/${slug}`,
@@ -952,7 +1196,7 @@ async function runSelfTest() {
     'permissions-policy': 'camera=(), microphone=()',
   });
   assert.equal(inspectSecurityHeaders(headers).ok, true);
-  console.log('release-audit offline self-test: PASS (15 assertions)');
+  console.log('release-audit offline self-test: PASS (22 assertions)');
 }
 
 async function main() {
@@ -979,6 +1223,7 @@ async function main() {
   await auditServices(config, results);
   await auditForms(config, results);
   await auditNotifications(config, results);
+  await auditEmailDns(config, results);
   await auditLegacyManifest(config, results);
   const summary = summaryFor(results);
   const report = {
@@ -988,6 +1233,9 @@ async function main() {
     base: config.base,
     api: config.api,
     notifications: config.notifications,
+    emailReplyTo: config.emailReplyTo,
+    dkimHost: config.dkimHost,
+    returnPathHost: config.returnPathHost,
     summary,
     results,
   };

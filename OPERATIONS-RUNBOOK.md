@@ -88,10 +88,15 @@ Before requeueing:
 
 ## Enabling outbound email after approval
 
-The deployed `insurespr-notifications` function returns `503` until all required
+The deployed `insurespr-notifications` function reports `ready:false` on its
+read-only `GET` and returns `503` for delivery invocations until all required
 configuration exists. This is intentional.
 
 1. Verify the selected sender domain and complete SPF, DKIM and DMARC setup.
+   Run `node tools/release-audit.mjs --mode preview` and require matching results
+   from both Cloudflare and Google DNS. Pass Resend's exact selector and
+   Return-Path through `--dkim-host` and `--return-path-host` if either differs
+   from the documented default.
 2. Put `RESEND_API_KEY`, `EMAIL_FROM`, `EMAIL_REPLY_TO`, and a random
    `NOTIFICATION_WORKER_SECRET` of at least 32 characters in Supabase Edge
    Function secrets. Never put them in this repository.
@@ -107,6 +112,10 @@ configuration exists. This is intentional.
    sees it.
 6. Approve the rendered patient, employer and practice templates before enabling
    the recurring schedule.
+
+The 29 August 2026 audit found no Supabase Vault secret and no installed
+`pg_cron` extension. Treat both as absent until a later metadata-only inspection
+proves otherwise; do not infer scheduler readiness from a deployed function.
 
 Do not put the service-role key in the Cron request. The worker has access to the
 server-side key inside Supabase; the scheduler authenticates with the separate

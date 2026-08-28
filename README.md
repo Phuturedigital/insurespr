@@ -92,8 +92,9 @@ Do not put a secret/service-role key in HTML, `production.js`, Vercel browser
 environment variables or screenshots. Edge Function secrets belong in
 Supabase's encrypted function-secret store.
 
-The notification worker is deployed but intentionally returns `503` until an
-approved sender, provider key, reply-to address and independent worker secret
+The notification worker is deployed, but its read-only `GET` readiness signal
+returns `ready:false` and authenticated delivery invocations return `503` until
+an approved sender, provider key, reply-to address and independent worker secret
 are configured. It uses atomic queue leases, provider idempotency keys, bounded
 backoff and a terminal `dead` state; deploying it does not authorize or enable
 outbound mail.
@@ -117,17 +118,25 @@ node tools/release-audit.mjs --self-test
 ```
 
 `--base`, `--api` and `--notifications` can target another candidate release;
-`--legacy-manifest` can point to a machine-readable redirect manifest. Preview
-mode downgrades practice-owned readiness items, while metadata, crawlability,
-security and API-integrity checks remain strict. `--report-only` always exits
-zero for dashboards, and `--json` emits structured output.
+`--email-reply-to` selects the approved receiving mailbox; `--dkim-host` selects
+the exact provider-issued DKIM hostname; and `--return-path-host` selects the
+provider-issued SPF/MX Return-Path. `--legacy-manifest` can point to a
+machine-readable redirect manifest. Preview mode downgrades practice-owned
+readiness items, while metadata, crawlability, DNS resolution, security and
+API-integrity checks remain strict. `--report-only` always exits zero for
+dashboards, and `--json` emits structured output.
 
 The audit is read-only. It performs public `GET` requests and sends only an
 invalid empty JSON object to each official form endpoint to confirm that origin,
 privacy and validation gates respond safely. Those probes contain no personal
 information and cannot satisfy the write contract. Notification readiness is
 checked only through an unauthenticated `GET`; no scheduler secret is supplied
-and the notification worker is never invoked.
+and the notification worker is never invoked. Return-Path SPF/MX, sender DKIM
+and DMARC plus the approved Reply-To domain's MX route are resolved independently
+through Cloudflare and Google DNS. An official-domain MX record is reported
+separately: it is not required while the approved Reply-To remains on
+`bonevc.co.za`, but its absence prevents publication of an
+`@insuresprhealth.co.za` receiving address.
 
 ### Deterministic browser and SEO gates
 

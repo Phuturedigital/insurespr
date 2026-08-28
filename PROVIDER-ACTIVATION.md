@@ -20,12 +20,17 @@ git, HTML, browser JavaScript, screenshots or issue comments.
 
 ## Resend and domain mail
 
-Current public DNS has no MX, SPF or DMARC record. Do not schedule the worker or
-use `@insuresprhealth.co.za` as a reply-to address until the mailbox exists and
-can receive replies.
+As checked through both Cloudflare and Google public DNS on 29 August 2026,
+`insuresprhealth.co.za` has no inbound MX or DMARC record; the default Resend
+Return-Path `send.insuresprhealth.co.za` has neither its required MX nor SPF TXT
+record; and `resend._domainkey.insuresprhealth.co.za` has no DKIM record. The
+approved Reply-To domain `bonevc.co.za` has an MX route on both resolvers. Do not
+schedule the worker or use `@insuresprhealth.co.za` as a receiving/reply-to
+address until the mailbox exists and can receive replies.
 
 1. Create/confirm the receiving mailbox for `motselisi@bonevc.co.za`.
-2. Verify the sending domain in Resend and publish its exact SPF and DKIM records.
+2. Verify the sending domain in Resend and publish its exact DKIM record plus
+   the provider-issued SPF TXT and MX records on the exact Return-Path host.
 3. Publish a deliberate DMARC policy at `_dmarc.insuresprhealth.co.za`; begin
    with monitored reporting and tighten only after legitimate mail is aligned.
 4. Confirm MX, SPF, DKIM and DMARC from two public resolvers and send a test to
@@ -39,6 +44,20 @@ can receive replies.
    success, provider rejection, retry, ordering and dead-letter behavior.
 8. Only then install the documented once-per-minute scheduler with the worker
    secret in Supabase Vault and record the Cron owner and alert recipient.
+
+Run the non-mutating provider checks before and after every DNS/provider change:
+
+```powershell
+node tools/release-audit.mjs --mode preview
+node tools/release-audit.mjs --mode release
+```
+
+The audit checks SPF and MX on the provider Return-Path, the exact configured
+DKIM hostname, DMARC and the approved Reply-To domain's MX route through both
+Cloudflare (`1.1.1.1`) and Google (`8.8.8.8`). Use `--return-path-host` or
+`--dkim-host` when Resend supplies values other than the documented defaults;
+do not guess or duplicate provider DNS. Use `--email-reply-to` only for a
+separately approved receiving mailbox.
 
 ## Phone and WhatsApp
 
