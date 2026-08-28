@@ -1,6 +1,6 @@
 # InsureSPR production readiness
 
-Status date: 21 August 2026
+Status date: 29 August 2026
 Target Supabase project: `ffdmmxffzewqiacsuvhr`  
 Public frontend status: **live at `https://www.insuresprhealth.co.za/`**
 
@@ -116,6 +116,20 @@ workflow and domain transition must all be ready at the same time.
   `motselisi@bonevc.co.za`. The contact fields are live, but the migration
   deliberately preserves the pending privacy version and every remaining
   registration, anti-spam and delivery gate.
+- Live migrations
+  `20260828230538_record_operational_readiness_evidence` and
+  `20260828230930_harden_readiness_evidence_access` register the private
+  25 August readiness form by filename and SHA-256, classify 19 field-level
+  claims, link unresolved claims to launch dependencies, and keep the source
+  PDF outside the repository. The review records seven missing claims, eight
+  needing evidence, two internal/production contradictions, two prior
+  owner-approved public facts and zero newly verified facts. Explicit deny
+  policies, RLS and revoked `PUBLIC`/browser/service-role data privileges keep
+  the evidence register outside the website and Edge Function surface.
+- The evidence-form reconciliation deliberately leaves all 16 services as
+  `needs_confirmation`, all public prices and durations null, all availability
+  policy/rule/exception/slot tables empty, the approved public contact and
+  Monday-Friday hours unchanged, and the database privacy version pending.
 - Supabase performance advisor: only expected `unused_index` informational
   notices on the newly created, empty operational database. Keep the indexes
   until real query statistics exist; reference:

@@ -213,3 +213,26 @@ every release test. Follow Cloudflare's server-side validation guidance:
 - Use `RECOVERY-RESTORE-DRILL.md` for the technical inventory, isolated
   quarterly rehearsal, evidence checklist and production restoration order.
   Its blank owner/RPO/RTO/retention fields are launch dependencies, not defaults.
+
+## Operational evidence review
+
+- Use `OPERATIONAL-EVIDENCE-REGISTER.md` for the evidence-state vocabulary and
+  current readiness-form reconciliation. A checked questionnaire box is an
+  owner-supplied claim until its required source, verifier and verification
+  date exist.
+- Keep source PDFs, licence records, practitioner documents and regulator
+  records in controlled private custody. Do not commit them, upload them to the
+  public website or paste secrets/identity documents into a database note.
+- Register each new document version by filename and SHA-256 in
+  `private.readiness_evidence_documents`; never replace an existing digest.
+  Record material claims in `private.readiness_evidence_claims` with the linked
+  launch dependency and an explicit review state.
+- The private evidence tables are database-owner review surfaces. They have RLS,
+  explicit deny policies and no browser or service-role privileges. Do not add
+  an Edge Function or public RPC for them merely for convenience.
+- Change `review_status` to `verified` only when the authoritative evidence is
+  held and `verified_by` plus `verified_at` are recorded. Publication permission
+  is a separate decision and must remain false for private/internal facts.
+- Activate a price, service fact, privacy version, availability policy, provider
+  or public credential only through a forward migration that also closes the
+  corresponding launch dependency and proves the real operational test.

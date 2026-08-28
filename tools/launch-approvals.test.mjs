@@ -94,3 +94,54 @@ test('legacy decision is owner-approved hold with routing inactive', async () =>
   assert.equal(manifest.entries.length, 153);
   assert(manifest.entries.every((entry) => entry.state === 'hold' && entry.destination === null));
 });
+
+test('readiness form is hash-bound privately without promoting unsupported claims', async () => {
+  const [migration, hardening, register, ignored] = await Promise.all([
+    read('supabase/migrations/20260828230538_record_operational_readiness_evidence.sql'),
+    read('supabase/migrations/20260828230930_harden_readiness_evidence_access.sql'),
+    read('OPERATIONAL-EVIDENCE-REGISTER.md'),
+    read('.vercelignore'),
+  ]);
+
+  assert.match(migration, /create table private\.readiness_evidence_documents/);
+  assert.match(migration, /create table private\.readiness_evidence_claims/);
+  assert.match(migration, /3a7558854583a363cc0961fbed68345dc362a873f6d3bfcb57679809e6dbd301/g);
+  assert.match(migration, /review_status = 'partially_accepted'/);
+  assert.match(migration, /v_claim_count <> 19/);
+  assert.match(migration, /only prior owner-approved public contact and designation claims may be public/);
+  assert.match(migration, /this form supplies no independently verified claim/);
+  assert.match(migration, /submitted readiness boxes must not verify published services/);
+  assert.match(migration, /candidate availability values must not activate booking capacity/);
+  assert.match(migration, /readiness evidence must not open transactional intake/);
+  assert.doesNotMatch(migration, /C:\\Users|AppData|102 Kathleen|0472492/);
+
+  assert.match(hardening, /create policy readiness_evidence_documents_deny_all/);
+  assert.match(hardening, /create policy readiness_evidence_claims_deny_all/);
+  assert.match(hardening, /create index readiness_evidence_claims_dependency_idx/);
+  assert.match(hardening, /from public, anon, authenticated, service_role/);
+
+  assert.match(register, /`owner_approved` \| 2/);
+  assert.match(register, /`needs_evidence` \| 8/);
+  assert.match(register, /`contradicted` \| 2/);
+  assert.match(register, /`missing` \| 7/);
+  assert.match(register, /`verified` \| 0/);
+  assert.match(ignored, /^OPERATIONAL-EVIDENCE-REGISTER\.md$/m);
+});
+
+test('readiness evidence leaves every activation dependency explicit', async () => {
+  const migration = await read('supabase/migrations/20260828230538_record_operational_readiness_evidence.sql');
+  for (const dependency of [
+    'privacy-popia',
+    'verified-credentials',
+    'clinical-requirements',
+    'booking-rules',
+    'approved-prices',
+    'anti-spam-secrets',
+    'email-delivery',
+    'notification-operations',
+    'google-business-profile',
+  ]) {
+    assert.match(migration, new RegExp(`where dependency_key = '${dependency}'`));
+  }
+  assert.match(migration, /v_open_blockers <> 9/);
+});

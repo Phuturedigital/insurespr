@@ -68,3 +68,14 @@ or activate a legacy route solely because this document exists. The approved
 phone, WhatsApp and receiving email may be published; the remaining provider,
 registration and clinical evidence must be attached to the release record and
 the strict release audit must pass.
+
+## Readiness form received after these decisions
+
+The owner-supplied `InsureSPR Evidence & Operational Readiness Form`, version
+`20260825-01`, was reviewed on 29 August 2026 and registered by SHA-256 in the
+private database evidence register. It corroborates the already-approved phone,
+WhatsApp and Information Officer designation, but it does not close a launch
+dependency: the form contains conflicting company-registration years, no
+Information Regulator reference, no controlled credential evidence, no clinical
+workflow, no pricing approval, incomplete scheduling data, no provider/DNS
+test, and no final release decision. See `OPERATIONAL-EVIDENCE-REGISTER.md`.

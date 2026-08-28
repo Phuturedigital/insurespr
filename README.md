@@ -36,6 +36,7 @@ has no database key and cannot query operational tables directly.
 - Supplied rate evidence review: `XOM-RATES-2026-REVIEW.md`
 - Exact legacy URL inventory: `LEGACY-SEO-URL-INVENTORY.md`
 - Owner decisions and evidence boundaries: `LAUNCH-APPROVALS.md`
+- Private operational evidence reconciliation: `OPERATIONAL-EVIDENCE-REGISTER.md`
 - Website retention and data-subject procedure: `PRIVACY-OPERATIONS.md`
 - Turnstile, email and contact-channel activation: `PROVIDER-ACTIVATION.md`
 
@@ -74,6 +75,11 @@ The Supabase CLI configuration deliberately disables automatic exposure of new
 tables. All public-schema tables use row-level security; direct `anon` and
 `authenticated` access to operational records is revoked. Server-side RPCs own
 the transactional writes.
+
+Owner-supplied readiness documents are represented by private, hash-bound
+metadata and field-level claims rather than being copied into the public
+website or repository. A supplied claim remains distinct from independent
+verification and publication permission; see `OPERATIONAL-EVIDENCE-REGISTER.md`.
 
 ```powershell
 node --check production.js
