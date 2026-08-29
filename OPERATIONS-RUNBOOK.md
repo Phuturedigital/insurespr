@@ -12,8 +12,11 @@ practice approves and remove access promptly when responsibilities change.
 ## Start and end of each operating day
 
 1. Open the project dashboard and run
-   `supabase/snippets/staff_work_queues.sql` in the SQL editor. Start with the
-   identifier-free summary, then open only the bounded queue needed for the
+   `supabase/snippets/launch_readiness.sql` in the SQL editor. Stop if its
+   `status` is `blocked`; the `dependencies.blockers` array is the authoritative
+   aggregate launch-control list. Then run
+   `supabase/snippets/staff_work_queues.sql`. Start with the identifier-free
+   summary, then open only the bounded queue needed for the
    current task. Use `supabase/snippets/daily_operations.sql` only for deeper
    diagnostic and availability checks.
 2. Work oldest unresolved booking requests first, then workforce leads and
@@ -39,6 +42,27 @@ Motselisi R. Mosiana is the named first-line booking contact. The practice must
 still provision named operator accounts, appoint deputy/leave coverage, assign
 the remaining operational queues and approve response-time targets. Until then,
 this is a technical procedure, not a promise to patients or employers.
+
+## Owner-only launch control snapshot
+
+Migration `20260829083836_add_private_launch_readiness_snapshot` adds
+`private.launch_readiness_snapshot()`. It reconciles the effective privacy
+version, every open or blocking launch dependency, service-verification totals,
+appointment-policy and slot counts, notification and recovery configuration
+states, recovery evidence classes, and aggregate operational queue counts.
+
+The function is read-only, stable, security-definer with an empty search path,
+and unavailable to `PUBLIC`, `anon`, `authenticated`, and `service_role`. It
+returns only status labels, dependency keys/categories/owners, public service
+slugs and counts. It deliberately excludes submission fields, contact values,
+messages, booking notes, evidence locations, provider references, hashes,
+fingerprints, and secrets.
+
+Run `supabase/snippets/launch_readiness.sql` only as the database owner in
+Supabase Studio. `ready_for_public_intake` is calculated by the same fail-closed
+database gate used by the API. The snapshot is diagnostic: it cannot approve a
+claim, resolve a dependency, promote a configuration, publish a slot, or enable
+intake. Investigate any unexpected difference instead of editing the result.
 
 ## Owner-only staff work queues
 

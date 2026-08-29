@@ -39,6 +39,11 @@ workflow and domain transition must all be ready at the same time.
 
 ### Database and API
 
+- `private.launch_readiness_snapshot()` and
+  `supabase/snippets/launch_readiness.sql` provide one owner-only, aggregate
+  launch-control result across privacy, dependencies, services, availability,
+  notification, recovery and operational queues. API roles cannot execute the
+  function, and the snapshot cannot mutate or approve anything.
 - Practice settings, categories, services, availability rules/exceptions,
   bookable slots, customers, bookings, status history, management tokens,
   booking actions, employer leads, contact enquiries, consent records,

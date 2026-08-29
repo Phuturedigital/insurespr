@@ -65,6 +65,9 @@ session storage as soon as it is rendered.
   `supabase/snippets/acquisition_reporting.sql`
 - Owner-only bounded daily work queues:
   `supabase/snippets/staff_work_queues.sql`
+- Owner-only aggregate launch-control snapshot:
+  `supabase/snippets/launch_readiness.sql` (no submission fields, contact
+  values, evidence locations or secrets)
 - Turnstile, email and contact-channel activation: `PROVIDER-ACTIVATION.md`
 
 The database schema, public API and canonical frontend are deployed. The public
