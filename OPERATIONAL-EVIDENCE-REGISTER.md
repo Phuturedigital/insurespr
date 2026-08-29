@@ -119,3 +119,20 @@ and evidenced before this form was supplied:
 The evidence register is a provenance and gating mechanism. It is not a
 clinical record, licence repository, password manager or substitute for the
 authoritative regulator/provider record.
+
+## Later verified public DNS evidence
+
+On 29 August 2026, the public TXT record
+`_dmarc.insuresprhealth.co.za = v=DMARC1; p=none` was returned by both
+Cloudflare (`1.1.1.1`) and Google (`8.8.8.8`). Migration
+`20260829045554_record_dmarc_monitoring_policy` records the canonical
+observation as a separate accepted external-source document and one verified
+claim. It does not modify the 19 claims extracted from readiness form
+`20260825-01`.
+
+The DMARC policy is deliberately non-enforcing. `email-delivery` remains open
+until the selected provider's exact SPF, Return-Path MX and DKIM records,
+verified sender and Reply-To, provider/worker secrets, notification schedule
+ownership, failure alerts and controlled delivery tests are complete. The
+absence of an inbound MX route also means `info@insuresprhealth.co.za` remains
+an unverified candidate rather than the public receiving mailbox.

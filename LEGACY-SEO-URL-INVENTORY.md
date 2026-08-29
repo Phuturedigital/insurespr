@@ -4,6 +4,22 @@ Snapshot date: 2026-08-13 (Africa/Johannesburg)
 
 Status: review document only. No redirects, DNS changes, sitemap changes, frontend changes, or content migration are implemented by this document.
 
+## Recoverability evidence after cutover
+
+`LEGACY-SNAPSHOT-EVIDENCE.json` now binds this exact 153-URL inventory to
+public Internet Archive capture metadata through 28 August 2026. The initial
+recovery pass found HTML captures for 61 sources, including 36 of the 52
+historical article URLs and 17 of the 19 WordPress pages. Sixteen articles,
+both remaining WordPress pages, all five X-Ray-site routes and most taxonomy
+archives still lack a matched public snapshot.
+
+The evidence file records only source URLs, capture timestamps, archive URLs
+and archive digests. It copies no article body, patient information, private
+credential or local path. A capture proves that recovery may be possible; it
+does not prove ownership of every embedded asset, clinical approval, current
+accuracy or permission to republish. The approved hold and inactive routing
+state therefore remain unchanged.
+
 ## Executive result
 
 The current public footprint contains **153 unique sitemap-listed URLs** across two sites:

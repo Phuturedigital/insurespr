@@ -5,6 +5,7 @@ PRODUCTION-READINESS.md
 OPERATIONS-RUNBOOK.md
 LEGACY-SEO-URL-INVENTORY.md
 LEGACY-REDIRECT-MANIFEST.json
+LEGACY-SNAPSHOT-EVIDENCE.json
 XOM-RATES-2026-REVIEW.md
 AVAILABILITY-ACTIVATION.md
 PERFORMANCE-BUDGETS.md
@@ -31,6 +32,7 @@ pd-concepts/
 # and third-party stock preview JPEGs, none of which should be publicly
 # reachable. Anything added here must be assumed public unless it is listed.
 tools/
+tmp/
 node_modules/
 package.json
 package-lock.json

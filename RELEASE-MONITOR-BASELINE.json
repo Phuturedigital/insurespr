@@ -32,6 +32,7 @@
     "apex-redirect",
     "services-cors",
     "services-cache",
+    "email-dmarc",
     "email-reply-mx",
     "legacy-manifest"
   ],
@@ -45,7 +46,6 @@
     "email-spf",
     "email-return-path-mx",
     "email-dkim",
-    "email-dmarc",
     "recovery-readiness"
   ],
   "allowedReadinessWarnings": [

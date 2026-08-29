@@ -272,6 +272,13 @@ workflow and domain transition must all be ready at the same time.
   and passes its deterministic contract test. Every decision remains `hold`,
   and activation is false, until named content, clinical and redirect approval
   is recorded; the manifest does not change live routing.
+- `LEGACY-SNAPSHOT-EVIDENCE.json` records non-content recovery evidence for the
+  same 153 sources using public Internet Archive timestamps, source URLs and
+  digests through 28 August 2026. Sixty-one sources have a matched HTML
+  capture, including 36 of 52 historical article URLs and 17 of 19 WordPress
+  pages. The remaining 92 sources have no matched capture in this pass. The
+  evidence is excluded from Vercel and neither republishes nor approves the
+  archived clinical content; the 153-URL routing hold remains inactive.
 - Live API release checks return `200` for health/services, `403` for an
   unapproved origin after the privacy gate is open, `503
   PRIVACY_NOTICE_NOT_READY` for every form-mutation origin while approval is
@@ -288,9 +295,20 @@ workflow and domain transition must all be ready at the same time.
   static and receives no server credential. Cloudflare and Google DNS both
   resolve the approved `bonevc.co.za` Reply-To MX route, but neither resolver
   finds SPF/MX on the default `send.insuresprhealth.co.za` Return-Path, Resend
-  DKIM, DMARC or an inbound MX route for `insuresprhealth.co.za`. These are
-  observed configuration facts, not inferred secret values; email delivery and
+  DKIM or an inbound MX route for `insuresprhealth.co.za`. These are observed
+  configuration facts, not inferred secret values; email delivery and
   scheduling remain open launch dependencies.
+- A non-enforcing DMARC monitoring record, `v=DMARC1; p=none`, is now
+  published at `_dmarc.insuresprhealth.co.za` and was observed through both
+  Cloudflare and Google public resolvers on 29 August. Migration
+  `20260829045554_record_dmarc_monitoring_policy` binds the exact public
+  observation to a verified external-source evidence claim while deliberately
+  leaving `email-delivery` open and blocking. The record requests no delivery
+  enforcement and does not substitute for the provider's exact SPF,
+  Return-Path MX, DKIM, sender/reply-to, secrets, scheduler or delivery tests.
+  `RELEASE-MONITOR-BASELINE.json` now treats `email-dmarc` as a required pass,
+  so the scheduled read-only production monitor will fail if the record later
+  disappears or stops producing a valid DMARC result.
 - The official apex now returns a one-hop `308` to the canonical `www` host,
   and the repository's Auth `site_url`, page canonicals, sitemap, Open Graph and
   JSON-LD all use that same `www` origin.

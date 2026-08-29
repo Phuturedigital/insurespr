@@ -7,6 +7,7 @@ import test from 'node:test';
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const INVENTORY_PATH = path.join(REPO_ROOT, 'LEGACY-SEO-URL-INVENTORY.md');
 const MANIFEST_PATH = path.join(REPO_ROOT, 'LEGACY-REDIRECT-MANIFEST.json');
+const SNAPSHOT_EVIDENCE_PATH = path.join(REPO_ROOT, 'LEGACY-SNAPSHOT-EVIDENCE.json');
 const SOURCE_HOSTS = new Set([
   'insuresprhealth.co.za',
   'xrayonmalebongwe.co.za',
@@ -165,6 +166,46 @@ test('production manifest is complete, deterministic, and inactive', async () =>
   });
   assert.deepEqual(manifest.approvedDestinations, []);
   assert.equal(manifest.holdApproval.approvedBy, 'Motselisi R. Mosiana, owner');
+});
+
+test('public archive evidence covers the exact inventory without approving content', async () => {
+  const { manifest } = await fixtures();
+  const raw = await readFile(SNAPSHOT_EVIDENCE_PATH, 'utf8');
+  const evidence = JSON.parse(raw);
+
+  assert.equal(evidence.schemaVersion, 1);
+  assert.equal(evidence.sourceManifest, 'LEGACY-REDIRECT-MANIFEST.json');
+  assert.equal(evidence.sourceManifestStatus, 'approved-hold-no-routing');
+  assert.equal(evidence.summary.inventoryEntries, 153);
+  assert.equal(evidence.entries.length, 153);
+  assert.equal(evidence.summary.captured + evidence.summary.missing, 153);
+  assert(evidence.summary.captured >= 1, 'at least one historical source must have recoverable archive evidence');
+  assert.match(evidence.purpose, /does not approve, republish, or redirect clinical content/);
+  assert.doesNotMatch(raw, /C:\\Users|AppData|<html|<script/i);
+
+  const manifestBySource = new Map(manifest.entries.map((entry) => [entry.source, entry]));
+  assertUnique(evidence.entries.map((entry) => entry.source), 'snapshot evidence');
+  assert.deepEqual(
+    new Set(evidence.entries.map((entry) => entry.source)),
+    new Set(manifest.entries.map((entry) => entry.source)),
+    'snapshot evidence must cover the approved inventory exactly',
+  );
+
+  let captured = 0;
+  for (const entry of evidence.entries) {
+    validateSource(entry.source);
+    assert.equal(entry.disposition, manifestBySource.get(entry.source).state);
+    if (entry.snapshot === null) continue;
+    captured += 1;
+    assert.match(entry.snapshot.timestamp, /^20\d{12}$/);
+    assert.match(entry.snapshot.digest, /^[A-Z2-7]{32}$/);
+    assert.equal(new URL(entry.snapshot.original).protocol, 'https:');
+    assert.equal(
+      entry.snapshot.url,
+      `https://web.archive.org/web/${entry.snapshot.timestamp}/${entry.snapshot.original}`,
+    );
+  }
+  assert.equal(captured, evidence.summary.captured);
 });
 
 test('approved preserve, redirect, and 410 decisions have a valid in-memory shape', async () => {

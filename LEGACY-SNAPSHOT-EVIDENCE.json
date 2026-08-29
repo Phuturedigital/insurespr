@@ -1,0 +1,1085 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-08-29T04:48:22.854Z",
+  "throughDate": "20260828",
+  "sourceManifest": "LEGACY-REDIRECT-MANIFEST.json",
+  "sourceManifestStatus": "approved-hold-no-routing",
+  "purpose": "Recovery evidence for the legacy content migration. This file records public archive metadata only; it does not approve, republish, or redirect clinical content.",
+  "summary": {
+    "inventoryEntries": 153,
+    "captured": 61,
+    "missing": 92
+  },
+  "entries": [
+    {
+      "source": "https://insuresprhealth.co.za/2022/03/31/confident-step-for-life/",
+      "disposition": "hold",
+      "snapshot": {
+        "timestamp": "20260307185701",
+        "original": "https://insuresprhealth.co.za/2022/03/31/confident-step-for-life/",
+        "digest": "HZGF556NORI253FPJ6FCZCS2Z6MXX47P",
+        "url": "https://web.archive.org/web/20260307185701/https://insuresprhealth.co.za/2022/03/31/confident-step-for-life/"
+      }
+    },
+    {
+      "source": "https://insuresprhealth.co.za/2022/10/13/osteoporosis/",
+      "disposition": "hold",
+      "snapshot": {
+        "timestamp": "20260411173952",
+        "original": "https://insuresprhealth.co.za/2022/10/13/osteoporosis/",
+        "digest": "73B23SMZ426MCNIPNLFVQRQJGPK6JEVB",
+        "url": "https://web.archive.org/web/20260411173952/https://insuresprhealth.co.za/2022/10/13/osteoporosis/"
+      }
+    },
+    {
+      "source": "https://insuresprhealth.co.za/2022/10/24/diabetes-and-osteoporosisbone/",
+      "disposition": "hold",
+      "snapshot": {
+        "timestamp": "20260307182110",
+        "original": "https://insuresprhealth.co.za/2022/10/24/diabetes-and-osteoporosisbone/",
+        "digest": "NZBBGBPNGFH4TMWRWL2IUIRMO3EVN3QD",
+        "url": "https://web.archive.org/web/20260307182110/https://insuresprhealth.co.za/2022/10/24/diabetes-and-osteoporosisbone/"
+      }
+    },
+    {
+      "source": "https://insuresprhealth.co.za/2023/02/06/keep-your-bones-healthmove-freely-maintain-your-posture-and-balance/",
+      "disposition": "hold",
+      "snapshot": {
+        "timestamp": "20260307184826",
+        "original": "https://insuresprhealth.co.za/2023/02/06/keep-your-bones-healthmove-freely-maintain-your-posture-and-balance/",
+        "digest": "3MAYLR26SZJUJMDCLHCKAFPFYESQZDD3",
+        "url": "https://web.archive.org/web/20260307184826/https://insuresprhealth.co.za/2023/02/06/keep-your-bones-healthmove-freely-maintain-your-posture-and-balance/"
+      }
+    },
+    {
+      "source": "https://insuresprhealth.co.za/2023/03/05/https-insuresprhealth-co-za-diabetes-prevention-musclehealth-fractures/",
+      "disposition": "hold",
+      "snapshot": {
+        "timestamp": "20250421143246",
+        "original": "https://insuresprhealth.co.za/2023/03/05/https-insuresprhealth-co-za-diabetes-prevention-musclehealth-fractures/",
+        "digest": "DOLH2UK4NPCAXODBJOHEZUOZXPHDB2RF",
+        "url": "https://web.archive.org/web/20250421143246/https://insuresprhealth.co.za/2023/03/05/https-insuresprhealth-co-za-diabetes-prevention-musclehealth-fractures/"
+      }
+    },
+    {
+      "source": "https://insuresprhealth.co.za/2023/03/31/https-www-insuresprhealth-co-za-blog-physicalhealthphysical-function/",
+      "disposition": "hold",
+      "snapshot": {
+        "timestamp": "20250517205830",
+        "original": "https://insuresprhealth.co.za/2023/03/31/https-www-insuresprhealth-co-za-blog-physicalhealthphysical-function/",
+        "digest": "OCFEOQNRXLXNLISOL46OEYFY2Z3S2BLX",
+        "url": "https://web.archive.org/web/20250517205830/https://insuresprhealth.co.za/2023/03/31/https-www-insuresprhealth-co-za-blog-physicalhealthphysical-function/"
+      }
+    },
+    {
+      "source": "https://insuresprhealth.co.za/2023/04/13/insurespr-bone-vitality-health-what-does-spr-stands-for/",
+      "disposition": "hold",
+      "snapshot": {
+        "timestamp": "20260307181652",
+        "original": "https://insuresprhealth.co.za/2023/04/13/insurespr-bone-vitality-health-what-does-spr-stands-for/",
+        "digest": "H2IMN7RJKBUMB65GJF7RSFVG6JTQMZR4",
+        "url": "https://web.archive.org/web/20260307181652/https://insuresprhealth.co.za/2023/04/13/insurespr-bone-vitality-health-what-does-spr-stands-for/"
+      }
+    },
+    {
+      "source": "https://insuresprhealth.co.za/2023/05/03/is-calciuma-friend-or-a-foe/",
+      "disposition": "hold",
+      "snapshot": {
+        "timestamp": "20250618043047",
+        "original": "https://insuresprhealth.co.za/2023/05/03/is-calciuma-friend-or-a-foe/",
+        "digest": "2BU3ESUNGC6QERLNTWTO6ROBES2TFLBL",
+        "url": "https://web.archive.org/web/20250618043047/https://insuresprhealth.co.za/2023/05/03/is-calciuma-friend-or-a-foe/"
+      }
+    },
+    {
+      "source": "https://insuresprhealth.co.za/2023/05/21/the-dynamic-link-the-invincible-bond-between-your-mighty-bones-and-resilient-kidneys/",
+      "disposition": "hold",
+      "snapshot": {
+        "timestamp": "20260307180717",
+        "original": "https://insuresprhealth.co.za/2023/05/21/the-dynamic-link-the-invincible-bond-between-your-mighty-bones-and-resilient-kidneys/",
+        "digest": "N2H4TGCOFYXMVGC7TRGNOOK5ZQDXY2BA",
+        "url": "https://web.archive.org/web/20260307180717/https://insuresprhealth.co.za/2023/05/21/the-dynamic-link-the-invincible-bond-between-your-mighty-bones-and-resilient-kidneys/"
+      }
+    },
+    {
+      "source": "https://insuresprhealth.co.za/2023/11/02/www-insuresprhealth-co-za-body-composition-blog/",
+      "disposition": "hold",
+      "snapshot": {
+        "timestamp": "20250820034637",
+        "original": "https://insuresprhealth.co.za/2023/11/02/www-insuresprhealth-co-za-body-composition-blog/",
+        "digest": "36MGBVP3DS6ABLDFLAOK4EAJAINIU6GP",
+        "url": "https://web.archive.org/web/20250820034637/https://insuresprhealth.co.za/2023/11/02/www-insuresprhealth-co-za-body-composition-blog/"
+      }
+    },
+    {
+      "source": "https://insuresprhealth.co.za/2023/11/29/www-insuresprhealth-co-za-blog-menopause/",
+      "disposition": "hold",
+      "snapshot": {
+        "timestamp": "20260307181036",
+        "original": "https://insuresprhealth.co.za/2023/11/29/www-insuresprhealth-co-za-blog-menopause/",
+        "digest": "OEZOPOZZG35VYZKGSMGCK226Y7E6ZLD6",
+        "url": "https://web.archive.org/web/20260307181036/https://insuresprhealth.co.za/2023/11/29/www-insuresprhealth-co-za-blog-menopause/"
+      }
+    },
+    {
+      "source": "https://insuresprhealth.co.za/2023/12/11/www-insuresprhealth-co-za-blog/",
+      "disposition": "hold",
+      "snapshot": {
+        "timestamp": "20250806235533",
+        "original": "https://insuresprhealth.co.za/2023/12/11/www-insuresprhealth-co-za-blog/",
+        "digest": "BHWU3Z2GMCQU76FDZXXDTUBC775CP5QD",
+        "url": "https://web.archive.org/web/20250806235533/https://insuresprhealth.co.za/2023/12/11/www-insuresprhealth-co-za-blog/"
+      }
+    },
+    {
+      "source": "https://insuresprhealth.co.za/2024/02/15/www-insuresprhealth-co-za-dxa-body-composition/",
+      "disposition": "hold",
+      "snapshot": {
+        "timestamp": "20260411171120",
+        "original": "https://insuresprhealth.co.za/2024/02/15/www-insuresprhealth-co-za-dxa-body-composition/",
+        "digest": "4DSE2ZQPBS2VIMOBGWIHZZ2VFS3IBJQS",
+        "url": "https://web.archive.org/web/20260411171120/https://insuresprhealth.co.za/2024/02/15/www-insuresprhealth-co-za-dxa-body-composition/"
+      }
+    },
+    {
+      "source": "https://insuresprhealth.co.za/2024/03/04/refine-your-fitness-focus-instantly/",
+      "disposition": "hold",
+      "snapshot": {
+        "timestamp": "20250421151135",
+        "original": "https://insuresprhealth.co.za/2024/03/04/refine-your-fitness-focus-instantly/",
+        "digest": "PQ5OKQGWJMESF7HEXUNLT4KBWTEUATLN",
+        "url": "https://web.archive.org/web/20250421151135/https://insuresprhealth.co.za/2024/03/04/refine-your-fitness-focus-instantly/"
+      }
+    },
+    {
+      "source": "https://insuresprhealth.co.za/2024/04/28/chronic-kidney-disease-meets-osteoporosis/",
+      "disposition": "hold",
+      "snapshot": {
+        "timestamp": "20260508142133",
+        "original": "https://insuresprhealth.co.za/2024/04/28/chronic-kidney-disease-meets-osteoporosis/",
+        "digest": "QMJAUPU5T4ZOBYSMVWKP2K55ROFNTBYL",
+        "url": "https://web.archive.org/web/20260508142133/https://insuresprhealth.co.za/2024/04/28/chronic-kidney-disease-meets-osteoporosis/"
+      }
+    },
+    {
+      "source": "https://insuresprhealth.co.za/2024/07/11/insurespr-health-nurse-led-comprehensive-osteoporosis-management/",
+      "disposition": "hold",
+      "snapshot": {
+        "timestamp": "20250517203831",
+        "original": "https://insuresprhealth.co.za/2024/07/11/insurespr-health-nurse-led-comprehensive-osteoporosis-management/",
+        "digest": "WY4US5LNCVREJGTMMGJULEB6BNUYQNPT",
+        "url": "https://web.archive.org/web/20250517203831/https://insuresprhealth.co.za/2024/07/11/insurespr-health-nurse-led-comprehensive-osteoporosis-management/"
+      }
+    },
+    {
+      "source": "https://insuresprhealth.co.za/2024/10/03/dxa-body-composition-for-sports/",
+      "disposition": "hold",
+      "snapshot": {
+        "timestamp": "20260411164533",
+        "original": "https://insuresprhealth.co.za/2024/10/03/dxa-body-composition-for-sports/",
+        "digest": "2VZIVPNJ7FCXKIKC7YQPDSJ2R7IWKR35",
+        "url": "https://web.archive.org/web/20260411164533/https://insuresprhealth.co.za/2024/10/03/dxa-body-composition-for-sports/"
+      }
+    },
+    {
+      "source": "https://insuresprhealth.co.za/2024/11/18/neuromuscular-training/",
+      "disposition": "hold",
+      "snapshot": {
+        "timestamp": "20260411171309",
+        "original": "https://insuresprhealth.co.za/2024/11/18/neuromuscular-training/",
+        "digest": "XKK24XYCNII676QUXAHASUT3QD2XPL7A",
+        "url": "https://web.archive.org/web/20260411171309/https://insuresprhealth.co.za/2024/11/18/neuromuscular-training/"
+      }
+    },
+    {
+      "source": "https://insuresprhealth.co.za/2024/11/22/www-insuresprhealth-co-za-blog-2/",
+      "disposition": "hold",
+      "snapshot": {
+        "timestamp": "20260411180825",
+        "original": "https://insuresprhealth.co.za/2024/11/22/www-insuresprhealth-co-za-blog-2/",
+        "digest": "BE77WHKMU5RTDXSUZB6UR6B5GFL6VK7D",
+        "url": "https://web.archive.org/web/20260411180825/https://insuresprhealth.co.za/2024/11/22/www-insuresprhealth-co-za-blog-2/"
+      }
+    },
+    {
+      "source": "https://insuresprhealth.co.za/2025/02/13/unlocking-health-insightsthe-power-of-dxa-body-composition-indices/",
+      "disposition": "hold",
+      "snapshot": {
+        "timestamp": "20260411173829",
+        "original": "https://insuresprhealth.co.za/2025/02/13/unlocking-health-insightsthe-power-of-dxa-body-composition-indices/",
+        "digest": "AGE3AQ52GPH5XUGQZS4P3EX777QVVSEQ",
+        "url": "https://web.archive.org/web/20260411173829/https://insuresprhealth.co.za/2025/02/13/unlocking-health-insightsthe-power-of-dxa-body-composition-indices/"
+      }
+    },
+    {
+      "source": "https://insuresprhealth.co.za/2025/02/17/understanding-your-body-composition-a-comprehensive-analysis-with-dxa/",
+      "disposition": "hold",
+      "snapshot": {
+        "timestamp": "20260307183523",
+        "original": "https://insuresprhealth.co.za/2025/02/17/understanding-your-body-composition-a-comprehensive-analysis-with-dxa/",
+        "digest": "HYDWN2GLB4FZ73JU577ZQJHQNJDXGGFR",
+        "url": "https://web.archive.org/web/20260307183523/https://insuresprhealth.co.za/2025/02/17/understanding-your-body-composition-a-comprehensive-analysis-with-dxa/"
+      }
+    },
+    {
+      "source": "https://insuresprhealth.co.za/2025/03/26/health-coach-for-bone-muscle-health-preservation/",
+      "disposition": "hold",
+      "snapshot": {
+        "timestamp": "20260307180930",
+        "original": "https://insuresprhealth.co.za/2025/03/26/health-coach-for-bone-muscle-health-preservation/",
+        "digest": "ABFSCWCDFSMNXJLO3AHL5ROLP7ZIEGDM",
+        "url": "https://web.archive.org/web/20260307180930/https://insuresprhealth.co.za/2025/03/26/health-coach-for-bone-muscle-health-preservation/"
+      }
+    },
+    {
+      "source": "https://insuresprhealth.co.za/2025/03/29/after-50-youve-earned-wisdom-now-protect-your-strength/",
+      "disposition": "hold",
+      "snapshot": {
+        "timestamp": "20260411181832",
+        "original": "https://insuresprhealth.co.za/2025/03/29/after-50-youve-earned-wisdom-now-protect-your-strength/",
+        "digest": "2FBZN64Q5WJG7L6FEBJIS6QJLEOHWHPV",
+        "url": "https://web.archive.org/web/20260411181832/https://insuresprhealth.co.za/2025/03/29/after-50-youve-earned-wisdom-now-protect-your-strength/"
+      }
+    },
+    {
+      "source": "https://insuresprhealth.co.za/2025/03/31/understanding-perimenopause-and-the-role-of-dxa-in-body-composition-analysis/",
+      "disposition": "hold",
+      "snapshot": {
+        "timestamp": "20260411182409",
+        "original": "https://insuresprhealth.co.za/2025/03/31/understanding-perimenopause-and-the-role-of-dxa-in-body-composition-analysis/",
+        "digest": "UGHRBKFPPGWOZWQ2IX3DGF7J5JT4NU2E",
+        "url": "https://web.archive.org/web/20260411182409/https://insuresprhealth.co.za/2025/03/31/understanding-perimenopause-and-the-role-of-dxa-in-body-composition-analysis/"
+      }
+    },
+    {
+      "source": "https://insuresprhealth.co.za/2025/04/14/morning-stiffness-how-to-protect-your-bones-with-a-simple-morning-routine/",
+      "disposition": "hold",
+      "snapshot": {
+        "timestamp": "20260307183929",
+        "original": "https://insuresprhealth.co.za/2025/04/14/morning-stiffness-how-to-protect-your-bones-with-a-simple-morning-routine/",
+        "digest": "UQPDQLSKCIM7WNRMTGVRVY4YGGOCMY5P",
+        "url": "https://web.archive.org/web/20260307183929/https://insuresprhealth.co.za/2025/04/14/morning-stiffness-how-to-protect-your-bones-with-a-simple-morning-routine/"
+      }
+    },
+    {
+      "source": "https://insuresprhealth.co.za/2025/04/16/sitting-is-the-new-smoking-but-what-is-it-doing-to-your-bones-and-muscles/",
+      "disposition": "hold",
+      "snapshot": {
+        "timestamp": "20260307182208",
+        "original": "https://insuresprhealth.co.za/2025/04/16/sitting-is-the-new-smoking-but-what-is-it-doing-to-your-bones-and-muscles/",
+        "digest": "CEW7ZVLMJ6KOGWFDZ7G2U52LMKV2DK4U",
+        "url": "https://web.archive.org/web/20260307182208/https://insuresprhealth.co.za/2025/04/16/sitting-is-the-new-smoking-but-what-is-it-doing-to-your-bones-and-muscles/"
+      }
+    },
+    {
+      "source": "https://insuresprhealth.co.za/2025/05/19/affordable-osteoporosis-screening-in-randburg-dxa-bone-scans-at-insurespr-health/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/2025/06/10/gut-health-for-stronger-bones-a-vital-connection/",
+      "disposition": "hold",
+      "snapshot": {
+        "timestamp": "20260508135506",
+        "original": "https://insuresprhealth.co.za/2025/06/10/gut-health-for-stronger-bones-a-vital-connection/",
+        "digest": "VQK3SV2UBORNGC2DPL4VQJEGPOMPGPFC",
+        "url": "https://web.archive.org/web/20260508135506/https://insuresprhealth.co.za/2025/06/10/gut-health-for-stronger-bones-a-vital-connection/"
+      }
+    },
+    {
+      "source": "https://insuresprhealth.co.za/2025/06/11/www-insuresprhealth-co-za-blog-3/",
+      "disposition": "hold",
+      "snapshot": {
+        "timestamp": "20260508144523",
+        "original": "https://insuresprhealth.co.za/2025/06/11/www-insuresprhealth-co-za-blog-3/",
+        "digest": "QXO74TH4HUYYSRTBMKB6F3CFNUNPW75A",
+        "url": "https://web.archive.org/web/20260508144523/https://insuresprhealth.co.za/2025/06/11/www-insuresprhealth-co-za-blog-3/"
+      }
+    },
+    {
+      "source": "https://insuresprhealth.co.za/2025/06/19/mens-true-power-comes-from-within-strengthen-your-bones-strengthen-your-life/",
+      "disposition": "hold",
+      "snapshot": {
+        "timestamp": "20260307172451",
+        "original": "https://insuresprhealth.co.za/2025/06/19/mens-true-power-comes-from-within-strengthen-your-bones-strengthen-your-life/",
+        "digest": "QME7PBWYTA4ZKSFN4ZFTMGDTD6AA7SE5",
+        "url": "https://web.archive.org/web/20260307172451/https://insuresprhealth.co.za/2025/06/19/mens-true-power-comes-from-within-strengthen-your-bones-strengthen-your-life/"
+      }
+    },
+    {
+      "source": "https://insuresprhealth.co.za/2025/06/20/www-insuresprhealth-co-za-blog-4/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/2025/06/25/when-back-pain-is-more-than-just/",
+      "disposition": "hold",
+      "snapshot": {
+        "timestamp": "20260508141407",
+        "original": "https://insuresprhealth.co.za/2025/06/25/when-back-pain-is-more-than-just/",
+        "digest": "K44PLYKQADOHEHT2AN6FKBIUPTHK7VK4",
+        "url": "https://web.archive.org/web/20260508141407/https://insuresprhealth.co.za/2025/06/25/when-back-pain-is-more-than-just/"
+      }
+    },
+    {
+      "source": "https://insuresprhealth.co.za/2025/06/27/www-insuresprhealth-co-za-blog-5/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/2025/07/14/www-insuresprhealth-co-za-blog-6/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/2025/07/30/www-insuresprhealth-co-za-blog-7/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/2025/08/08/www-insuresprhealth-co-za-blog-8/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/2025/08/20/www-insuresprhealth-co-za-blog-9/",
+      "disposition": "hold",
+      "snapshot": {
+        "timestamp": "20260411181855",
+        "original": "https://insuresprhealth.co.za/2025/08/20/www-insuresprhealth-co-za-blog-9/",
+        "digest": "4K6ZF56DRC2IZIJQLMXTHENWURV7COQI",
+        "url": "https://web.archive.org/web/20260411181855/https://insuresprhealth.co.za/2025/08/20/www-insuresprhealth-co-za-blog-9/"
+      }
+    },
+    {
+      "source": "https://insuresprhealth.co.za/2025/08/25/osteoporosis-your-smile-what-to-know-and-do/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/2025/09/02/www-insuresprhealth-co-za/",
+      "disposition": "hold",
+      "snapshot": {
+        "timestamp": "20260508141336",
+        "original": "https://insuresprhealth.co.za/2025/09/02/www-insuresprhealth-co-za/",
+        "digest": "IOER4FUQ65NYFFN4F4C6ILJU5ZWINXKW",
+        "url": "https://web.archive.org/web/20260508141336/https://insuresprhealth.co.za/2025/09/02/www-insuresprhealth-co-za/"
+      }
+    },
+    {
+      "source": "https://insuresprhealth.co.za/2025/09/19/to-do-or-not-do-dxa-vs-inbody/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/2025/10/02/collagen-for-muscle-strength-mobility-and-bone-density/",
+      "disposition": "hold",
+      "snapshot": {
+        "timestamp": "20260411172912",
+        "original": "https://insuresprhealth.co.za/2025/10/02/collagen-for-muscle-strength-mobility-and-bone-density/",
+        "digest": "7LM4XKLBZ7N5477OU37IGIGQJJGPC7WX",
+        "url": "https://web.archive.org/web/20260411172912/https://insuresprhealth.co.za/2025/10/02/collagen-for-muscle-strength-mobility-and-bone-density/"
+      }
+    },
+    {
+      "source": "https://insuresprhealth.co.za/2025/10/18/www-insuresprhealth-co-za-blog-10/",
+      "disposition": "hold",
+      "snapshot": {
+        "timestamp": "20260411183954",
+        "original": "https://insuresprhealth.co.za/2025/10/18/www-insuresprhealth-co-za-blog-10/",
+        "digest": "TGT4GSNE5R7XNE7JCVIIJ7EC4KTEADO4",
+        "url": "https://web.archive.org/web/20260411183954/https://insuresprhealth.co.za/2025/10/18/www-insuresprhealth-co-za-blog-10/"
+      }
+    },
+    {
+      "source": "https://insuresprhealth.co.za/2026/01/15/dxa-body-composition/",
+      "disposition": "hold",
+      "snapshot": {
+        "timestamp": "20260411173256",
+        "original": "https://insuresprhealth.co.za/2026/01/15/dxa-body-composition/",
+        "digest": "KF3HUC7CGJBBMGBKWXAWUFHSF3G7X7SI",
+        "url": "https://web.archive.org/web/20260411173256/https://insuresprhealth.co.za/2026/01/15/dxa-body-composition/"
+      }
+    },
+    {
+      "source": "https://insuresprhealth.co.za/2026/02/11/insuresprhealth-co-za/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/2026/02/17/healthy-ageing-starts-with-what-you-measure-why-dxa-body-composition-matters/",
+      "disposition": "hold",
+      "snapshot": {
+        "timestamp": "20260411173326",
+        "original": "https://insuresprhealth.co.za/2026/02/17/healthy-ageing-starts-with-what-you-measure-why-dxa-body-composition-matters/",
+        "digest": "DEO2YA6YP4O32EA77S6GTDZ65QFUANRS",
+        "url": "https://web.archive.org/web/20260411173326/https://insuresprhealth.co.za/2026/02/17/healthy-ageing-starts-with-what-you-measure-why-dxa-body-composition-matters/"
+      }
+    },
+    {
+      "source": "https://insuresprhealth.co.za/2026/03/02/www-insuresprhealth-co-za-2/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/2026/03/17/www-insuresprhealth-co-za-blog-11/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/2026/03/23/www-insuresprhealth-co-za-3/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/2026/04/01/why-mobility-decline-often-starts-at-the-ankle/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/2026/04/13/muscle-and-bone-health-our-focus-at-insurespr-health/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/2026/05/11/www-insuresprhealth-co-za-family-history/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/2026/06/03/understanding-osteoporosis-medications/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/privacy-policy-2/",
+      "disposition": "hold",
+      "snapshot": {
+        "timestamp": "20250807001516",
+        "original": "https://insuresprhealth.co.za/privacy-policy-2/",
+        "digest": "IBSIBI2BPI5GHP3KAYLQIG7UUG27QMW5",
+        "url": "https://web.archive.org/web/20250807001516/https://insuresprhealth.co.za/privacy-policy-2/"
+      }
+    },
+    {
+      "source": "https://insuresprhealth.co.za/falls-results-in-broken-bones/",
+      "disposition": "hold",
+      "snapshot": {
+        "timestamp": "20260508145342",
+        "original": "https://insuresprhealth.co.za/falls-results-in-broken-bones/",
+        "digest": "7TW36IIQLZFAAXFZAWYNJ3WAXSKS76PF",
+        "url": "https://web.archive.org/web/20260508145342/https://insuresprhealth.co.za/falls-results-in-broken-bones/"
+      }
+    },
+    {
+      "source": "https://insuresprhealth.co.za/insuresprhealth-blog/",
+      "disposition": "hold",
+      "snapshot": {
+        "timestamp": "20260307182622",
+        "original": "https://insuresprhealth.co.za/insuresprhealth-blog/",
+        "digest": "M6Q3227QJAET7FXAP554JHCNLJVMLXAE",
+        "url": "https://web.archive.org/web/20260307182622/https://insuresprhealth.co.za/insuresprhealth-blog/"
+      }
+    },
+    {
+      "source": "https://insuresprhealth.co.za/",
+      "disposition": "hold",
+      "snapshot": {
+        "timestamp": "20260609000024",
+        "original": "https://insuresprhealth.co.za/",
+        "digest": "NQ526VANFBJILIWFNUCT5J6KYKDWKO6T",
+        "url": "https://web.archive.org/web/20260609000024/https://insuresprhealth.co.za/"
+      }
+    },
+    {
+      "source": "https://insuresprhealth.co.za/book-appointment-today/",
+      "disposition": "hold",
+      "snapshot": {
+        "timestamp": "20260608232048",
+        "original": "https://insuresprhealth.co.za/book-appointment-today/",
+        "digest": "MA7BWZGGJGBRTXV3OF4A7D6K7XHJJEDI",
+        "url": "https://web.archive.org/web/20260608232048/https://insuresprhealth.co.za/book-appointment-today/"
+      }
+    },
+    {
+      "source": "https://insuresprhealth.co.za/my-bookings/",
+      "disposition": "hold",
+      "snapshot": {
+        "timestamp": "20250517205349",
+        "original": "https://insuresprhealth.co.za/my-bookings/",
+        "digest": "YFHJS2TY2WRHWSF6ERSQF7OE3PMVIYJV",
+        "url": "https://web.archive.org/web/20250517205349/https://insuresprhealth.co.za/my-bookings/"
+      }
+    },
+    {
+      "source": "https://insuresprhealth.co.za/thank-you/",
+      "disposition": "hold",
+      "snapshot": {
+        "timestamp": "20260508144631",
+        "original": "https://insuresprhealth.co.za/thank-you/",
+        "digest": "PMX5S5HIJSNKNC3CG3RVXMCYRC7XWDUP",
+        "url": "https://web.archive.org/web/20260508144631/https://insuresprhealth.co.za/thank-you/"
+      }
+    },
+    {
+      "source": "https://insuresprhealth.co.za/cancel-appointment/",
+      "disposition": "hold",
+      "snapshot": {
+        "timestamp": "20250517205442",
+        "original": "https://insuresprhealth.co.za/cancel-appointment/",
+        "digest": "NJFL3FME7QHMNC6M3GLJ7QP2W4Z3WPE3",
+        "url": "https://web.archive.org/web/20250517205442/https://insuresprhealth.co.za/cancel-appointment/"
+      }
+    },
+    {
+      "source": "https://insuresprhealth.co.za/cancel-payment/",
+      "disposition": "hold",
+      "snapshot": {
+        "timestamp": "20260307181503",
+        "original": "https://insuresprhealth.co.za/cancel-payment/",
+        "digest": "42PQ7ZE6WCPPTVFKGYRFK2SCCB2HBXRY",
+        "url": "https://web.archive.org/web/20260307181503/https://insuresprhealth.co.za/cancel-payment/"
+      }
+    },
+    {
+      "source": "https://insuresprhealth.co.za/https-insuresprhealth-co-za-contact-now/",
+      "disposition": "hold",
+      "snapshot": {
+        "timestamp": "20260508135153",
+        "original": "https://insuresprhealth.co.za/https-insuresprhealth-co-za-contact-now/",
+        "digest": "EFEA4MFQWJBODLERR7CAXNMZGETS33BI",
+        "url": "https://web.archive.org/web/20260508135153/https://insuresprhealth.co.za/https-insuresprhealth-co-za-contact-now/"
+      }
+    },
+    {
+      "source": "https://insuresprhealth.co.za/insuresprhealth-dxa-bone-density-test/",
+      "disposition": "hold",
+      "snapshot": {
+        "timestamp": "20241113172600",
+        "original": "https://insuresprhealth.co.za/insuresprhealth-dxa-bone-density-test/",
+        "digest": "4WNEIDL7VVPAPYDTOYYUXIDBXSK4TO4D",
+        "url": "https://web.archive.org/web/20241113172600/https://insuresprhealth.co.za/insuresprhealth-dxa-bone-density-test/"
+      }
+    },
+    {
+      "source": "https://insuresprhealth.co.za/waitlist/",
+      "disposition": "hold",
+      "snapshot": {
+        "timestamp": "20251006225803",
+        "original": "https://insuresprhealth.co.za/waitlist/",
+        "digest": "ZMBW2RI2ZO4YG7DUDCKARGUH36LWUBVF",
+        "url": "https://web.archive.org/web/20251006225803/https://insuresprhealth.co.za/waitlist/"
+      }
+    },
+    {
+      "source": "https://insuresprhealth.co.za/appointment-cancellation-confirmation/",
+      "disposition": "hold",
+      "snapshot": {
+        "timestamp": "20260307183915",
+        "original": "https://insuresprhealth.co.za/appointment-cancellation-confirmation/",
+        "digest": "UNQWDI5BNXBB6DDENLSIAIN3G7ANCS7Y",
+        "url": "https://web.archive.org/web/20260307183915/https://insuresprhealth.co.za/appointment-cancellation-confirmation/"
+      }
+    },
+    {
+      "source": "https://insuresprhealth.co.za/insuresprhealth-blog/https-insuresprhealth-co-za-blog-resources/",
+      "disposition": "hold",
+      "snapshot": {
+        "timestamp": "20260307183028",
+        "original": "https://insuresprhealth.co.za/insuresprhealth-blog/https-insuresprhealth-co-za-blog-resources/",
+        "digest": "NWQN66PE4CBOB7MRJ7E46AYGEGQ6NNWC",
+        "url": "https://web.archive.org/web/20260307183028/https://insuresprhealth.co.za/insuresprhealth-blog/https-insuresprhealth-co-za-blog-resources/"
+      }
+    },
+    {
+      "source": "https://insuresprhealth.co.za/shop/",
+      "disposition": "hold",
+      "snapshot": {
+        "timestamp": "20260307183757",
+        "original": "https://insuresprhealth.co.za/shop/",
+        "digest": "NWGZR76AWW3O5O7RXHWAYIEGMWXESQN4",
+        "url": "https://web.archive.org/web/20260307183757/https://insuresprhealth.co.za/shop/"
+      }
+    },
+    {
+      "source": "https://insuresprhealth.co.za/cart/",
+      "disposition": "hold",
+      "snapshot": {
+        "timestamp": "20260307184311",
+        "original": "https://insuresprhealth.co.za/cart/",
+        "digest": "3FE7WXCOD2O3APNXHQFX6QEOJLPKX5QQ",
+        "url": "https://web.archive.org/web/20260307184311/https://insuresprhealth.co.za/cart/"
+      }
+    },
+    {
+      "source": "https://insuresprhealth.co.za/checkout/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/my-account/",
+      "disposition": "hold",
+      "snapshot": {
+        "timestamp": "20260307175944",
+        "original": "https://insuresprhealth.co.za/my-account/",
+        "digest": "M5SUMZWBRNMNP6HCJHUWJBIC6ICJOV2P",
+        "url": "https://web.archive.org/web/20260307175944/https://insuresprhealth.co.za/my-account/"
+      }
+    },
+    {
+      "source": "https://insuresprhealth.co.za/privacy-policy-3/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/category/insurespr-brand/bone/osteoporosis/",
+      "disposition": "hold",
+      "snapshot": {
+        "timestamp": "20260307184626",
+        "original": "https://insuresprhealth.co.za/category/insurespr-brand/bone/osteoporosis/",
+        "digest": "MMUX2DSMA6IXP4SGU6EOOUXDO2HNUEYV",
+        "url": "https://web.archive.org/web/20260307184626/https://insuresprhealth.co.za/category/insurespr-brand/bone/osteoporosis/"
+      }
+    },
+    {
+      "source": "https://insuresprhealth.co.za/category/insurespr-brand/",
+      "disposition": "hold",
+      "snapshot": {
+        "timestamp": "20260307181541",
+        "original": "https://insuresprhealth.co.za/category/insurespr-brand/",
+        "digest": "JHV65KUTLJBFQNACIT5EOGAX7K6UEW54",
+        "url": "https://web.archive.org/web/20260307181541/https://insuresprhealth.co.za/category/insurespr-brand/"
+      }
+    },
+    {
+      "source": "https://insuresprhealth.co.za/category/insurespr-brand/bone/",
+      "disposition": "hold",
+      "snapshot": {
+        "timestamp": "20260307174512",
+        "original": "https://insuresprhealth.co.za/category/insurespr-brand/bone/",
+        "digest": "TBHIHCMCMYW4U4IYL57MCFZFVFHJKPYR",
+        "url": "https://web.archive.org/web/20260307174512/https://insuresprhealth.co.za/category/insurespr-brand/bone/"
+      }
+    },
+    {
+      "source": "https://insuresprhealth.co.za/category/insurespr-brand/muscles/",
+      "disposition": "hold",
+      "snapshot": {
+        "timestamp": "20260307185151",
+        "original": "https://insuresprhealth.co.za/category/insurespr-brand/muscles/",
+        "digest": "PLQC4MYMDBJFAD66NIB6KVS6COAQYMZL",
+        "url": "https://web.archive.org/web/20260307185151/https://insuresprhealth.co.za/category/insurespr-brand/muscles/"
+      }
+    },
+    {
+      "source": "https://insuresprhealth.co.za/category/dxa-body-composition/",
+      "disposition": "hold",
+      "snapshot": {
+        "timestamp": "20260307185758",
+        "original": "https://insuresprhealth.co.za/category/dxa-body-composition/",
+        "digest": "YY5ESNR22QE4RFNZVCRX3NORDOTMN6TN",
+        "url": "https://web.archive.org/web/20260307185758/https://insuresprhealth.co.za/category/dxa-body-composition/"
+      }
+    },
+    {
+      "source": "https://insuresprhealth.co.za/category/workplace-wellness/",
+      "disposition": "hold",
+      "snapshot": {
+        "timestamp": "20260307191206",
+        "original": "https://insuresprhealth.co.za/category/workplace-wellness/",
+        "digest": "VYA4EIELSEVGGSQDX24ZMXWP6TEJ5BLH",
+        "url": "https://web.archive.org/web/20260307191206/https://insuresprhealth.co.za/category/workplace-wellness/"
+      }
+    },
+    {
+      "source": "https://insuresprhealth.co.za/category/insurespr-brand/workplace-wellness-insurespr-brand/",
+      "disposition": "hold",
+      "snapshot": {
+        "timestamp": "20250517204143",
+        "original": "https://insuresprhealth.co.za/category/insurespr-brand/workplace-wellness-insurespr-brand/",
+        "digest": "Y33UDHOJK5F4OYQN7LK7T62PYZGPYL5U",
+        "url": "https://web.archive.org/web/20250517204143/https://insuresprhealth.co.za/category/insurespr-brand/workplace-wellness-insurespr-brand/"
+      }
+    },
+    {
+      "source": "https://insuresprhealth.co.za/tag/bone-health/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/tag/musclehealth/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/tag/osteoporosis/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/tag/boneloss/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/tag/muscleloss/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/tag/wellness/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/tag/diabetes/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/tag/preventivehealth/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/tag/calcium/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/tag/vitamin-d/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/tag/bonehealth/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/tag/bone-density/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/tag/cushing/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/tag/menopause/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/tag/gut-health/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/tag/gut-bone-axis/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/tag/dxa-body-composition/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/tag/weight-loss/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/tag/weight-management/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/tag/sportsperformance/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/tag/eliteathletes/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/tag/soccerteams/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/tag/ckd/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/tag/vitamind/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/tag/chronic-kidney-disease/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/tag/osteoporosis-management/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/tag/neuromuscular/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/tag/sports-injuries/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/tag/sports-performance/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/tag/resistant-training/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/tag/weight-bearing/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/tag/rugby/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/tag/athletes/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/tag/health-coach/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/tag/workplace-wellness/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/tag/executive-wellness/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/tag/executive-wellness-near-me/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/tag/digestive-health/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/tag/immune-health/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/tag/thyroid-function/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/tag/testosterone/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/tag/early-screening/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/tag/musclehealth-2/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/tag/fall-prevention/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/tag/nurse-led-clinic/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/tag/weightloss/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/tag/constipation/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/tag/fibre/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/tag/gen-z/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/tag/mental-health/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/tag/fads-diets/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/tag/inbody/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/tag/fitness/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/tag/type-1-collagen/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/tag/joint-cartilage/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/tag/muscle-health/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/tag/weightloss-2/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/tag/healthy-ageing/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/tag/dexa/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/tag/bone-density-near-me/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/tag/vitality/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/tag/chronic-disease/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/tag/mobility/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/tag/ankle/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/tag/joint-health/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/tag/muscle/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/tag/family-history/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/tag/osateoporosis/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/tag/osteoporosis-medications/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://insuresprhealth.co.za/author/patloma/",
+      "disposition": "hold",
+      "snapshot": {
+        "timestamp": "20260411181759",
+        "original": "https://insuresprhealth.co.za/author/patloma/",
+        "digest": "5GLAXDOTM5ARYRPVZNMAWZKW2YF2JAS6",
+        "url": "https://web.archive.org/web/20260411181759/https://insuresprhealth.co.za/author/patloma/"
+      }
+    },
+    {
+      "source": "https://xrayonmalebongwe.co.za/",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://xrayonmalebongwe.co.za/about",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://xrayonmalebongwe.co.za/services",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://xrayonmalebongwe.co.za/contact",
+      "disposition": "hold",
+      "snapshot": null
+    },
+    {
+      "source": "https://xrayonmalebongwe.co.za/referral",
+      "disposition": "hold",
+      "snapshot": null
+    }
+  ]
+}

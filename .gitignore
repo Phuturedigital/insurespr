@@ -25,6 +25,7 @@ tools/shots-fe/
 *.restore-evidence.json
 production-monitor-report.json
 artifacts/
+tmp/
 
 # OS
 .DS_Store

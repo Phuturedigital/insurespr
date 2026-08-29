@@ -41,7 +41,9 @@ test('current known blockers pass the production regression monitor', () => {
   const report = evaluateAudit(currentAudit(), baseline);
   assert.equal(report.monitorStatus, 'pass');
   assert.deepEqual(report.regressions, []);
-  assert.equal(report.open.length, 12);
+  assert.equal(report.open.length, 11);
+  assert(baseline.requiredPasses.includes('email-dmarc'));
+  assert(!baseline.allowedReadinessFailures.includes('email-dmarc'));
 });
 
 test('known readiness improvements are accepted without weakening the baseline', () => {
@@ -58,10 +60,12 @@ test('known readiness improvements are accepted without weakening the baseline',
 test('technical regressions and required-pass regressions fail', () => {
   const audit = currentAudit(new Map([
     ['robots', result('robots', 'fail', 'technical')],
+    ['email-dmarc', result('email-dmarc', 'fail')],
   ]));
   const report = evaluateAudit(audit, baseline);
   assert.equal(report.monitorStatus, 'regression');
   assert.match(report.regressions.join('\n'), /required pass regressed: robots/);
+  assert.match(report.regressions.join('\n'), /required pass regressed: email-dmarc/);
   assert.match(report.regressions.join('\n'), /technical fail: robots/);
 });
 

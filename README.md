@@ -43,6 +43,9 @@ session storage as soon as it is rendered.
 - Fact provenance: `CONTENT-NOTES.md`
 - Supplied rate evidence review: `XOM-RATES-2026-REVIEW.md`
 - Exact legacy URL inventory: `LEGACY-SEO-URL-INVENTORY.md`
+- Public-archive recovery metadata for the exact inventory:
+  `LEGACY-SNAPSHOT-EVIDENCE.json` (timestamps and digests only; no copied or
+  approved clinical article content)
 - Owner decisions and evidence boundaries: `LAUNCH-APPROVALS.md`
 - Private operational evidence reconciliation: `OPERATIONAL-EVIDENCE-REGISTER.md`
 - Website retention and data-subject procedure: `PRIVACY-OPERATIONS.md`

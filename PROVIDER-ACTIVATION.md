@@ -21,18 +21,23 @@ git, HTML, browser JavaScript, screenshots or issue comments.
 ## Resend and domain mail
 
 As checked through both Cloudflare and Google public DNS on 29 August 2026,
-`insuresprhealth.co.za` has no inbound MX or DMARC record; the default Resend
+`insuresprhealth.co.za` has no inbound MX; the default Resend
 Return-Path `send.insuresprhealth.co.za` has neither its required MX nor SPF TXT
 record; and `resend._domainkey.insuresprhealth.co.za` has no DKIM record. The
 approved Reply-To domain `bonevc.co.za` has an MX route on both resolvers. Do not
 schedule the worker or use `@insuresprhealth.co.za` as a receiving/reply-to
 address until the mailbox exists and can receive replies.
 
+`_dmarc.insuresprhealth.co.za` now publishes `v=DMARC1; p=none`, observed
+through both public resolvers on 29 August. This is a non-enforcing monitoring
+policy, not evidence that outbound or inbound email works.
+
 1. Create/confirm the receiving mailbox for `motselisi@bonevc.co.za`.
 2. Verify the sending domain in Resend and publish its exact DKIM record plus
    the provider-issued SPF TXT and MX records on the exact Return-Path host.
-3. Publish a deliberate DMARC policy at `_dmarc.insuresprhealth.co.za`; begin
-   with monitored reporting and tighten only after legitimate mail is aligned.
+3. Keep the published DMARC monitoring policy under review and tighten it only
+   after legitimate mail is aligned and the reporting/ownership decision is
+   approved.
 4. Confirm MX, SPF, DKIM and DMARC from two public resolvers and send a test to
    an external mailbox. Verify From, Reply-To, SPF, DKIM and DMARC results in the
    received headers.

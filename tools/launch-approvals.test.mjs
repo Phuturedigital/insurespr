@@ -146,6 +146,25 @@ test('readiness evidence leaves every activation dependency explicit', async () 
   assert.match(migration, /v_open_blockers <> 9/);
 });
 
+test('verified DMARC monitoring evidence cannot imply email readiness', async () => {
+  const migration = await read('supabase/migrations/20260829045554_record_dmarc_monitoring_policy.sql');
+  assert.match(migration, /insurespr-dmarc-public-dns-20260829/);
+  assert.match(migration, /0f0dd845d5be21169fc8d140a841ebc0a6aff639eae39971301d6ba1f2a371df/g);
+  assert.match(migration, /'external_public_source'/);
+  assert.match(migration, /'dmarc-monitoring-policy'/);
+  assert.match(migration, /'v=DMARC1; p=none'/g);
+  assert.match(migration, /'verified'/);
+  assert.match(migration, /status = 'open'/);
+  assert.match(migration, /blocks_launch = true/);
+  assert.match(migration, /SPF, Return-Path MX and DKIM/);
+  assert.match(migration, /motselisi@bonevc\.co\.za/);
+  assert.match(migration, /privacy_notice_version !~\* '\^pending'/);
+  assert.match(migration, /v_unverified_service_count is distinct from 16::bigint/);
+  assert.match(migration, /exists \(select 1 from public\.booking_slots\)/);
+  assert.doesNotMatch(migration, /RESEND_API_KEY|TURNSTILE_SECRET_KEY|NOTIFICATION_WORKER_SECRET/);
+  assert.doesNotMatch(migration, /update public\.practice_settings\s+set/i);
+});
+
 test('retention enforcement is private, dry-run-first and cannot purge business records', async () => {
   const [operations, hardening, privacy, runbook, readme] = await Promise.all([
     read('supabase/migrations/20260829000849_add_guarded_retention_operations.sql'),
