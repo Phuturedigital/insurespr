@@ -297,6 +297,11 @@ control.
 - Use `RECOVERY-RESTORE-DRILL.md` for the technical inventory, isolated
   quarterly rehearsal, evidence checklist and production restoration order.
   Its blank owner/RPO/RTO/retention fields are launch dependencies, not defaults.
+- The encrypted logical-backup tool is implemented and tested, but is not a
+  scheduled production backup. Only a named authorized operator may load its
+  database URL and vault-held key on the approved runner. Every artifact must
+  be authenticated before off-site upload; every failure or stale run must page
+  the recovery owner. Never mark recovery ready from a command exit alone.
 
 ### Private privacy-request, record-locator and security-incident controls
 

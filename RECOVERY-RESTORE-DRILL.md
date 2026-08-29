@@ -49,6 +49,78 @@ that has never been restored is also insufficient. Do not place a plaintext
 production dump, database URL or password in this repository, Vercel, a ticket,
 or a personal device.
 
+## Implemented encrypted logical-backup tooling
+
+`tools/recovery-backup.mjs` now implements the technical portion of the Free-plan
+off-site route, but it is deliberately inactive. It streams PostgreSQL's custom
+archive directly through AES-256-GCM, writes only an authenticated encrypted
+artifact, creates it through a restrictive `.partial` file and atomic rename,
+and records its byte count and SHA-256 digest in a sidecar manifest. It refuses
+to overwrite an artifact or manifest. The database URL, password, encryption
+key and restore confirmation are passed through process environment only; the
+tool removes the recovery secrets before starting `pg_dump` or `pg_restore`.
+
+The companion verification command checks the manifest, size, SHA-256 digest,
+GCM authentication tag and `pg_restore --list` readability without writing a
+plaintext dump. The restore command decrypts directly into `pg_restore`,
+requires the exact confirmation `RESTORE APPROVED ISOLATED TARGET`, refuses a
+target host or pooler username identifying production project reference
+`ffdmmxffzewqiacsuvhr`, refuses the same source and target database endpoint,
+and writes
+evidence with application checks, delivery isolation and target deletion still
+explicitly pending. It cannot change `RECOVERY-READINESS.json` or authorize
+production recovery.
+
+Use only a trusted, access-controlled operator runner with a compatible
+PostgreSQL 17 client. Load these values from the approved secret manager without
+printing them or saving them in shell history:
+
+- `INSURESPR_BACKUP_KEY_B64`: canonical base64 for exactly 32 random bytes;
+- `INSURESPR_BACKUP_DATABASE_URL`: the controlled read-capable production
+  connection;
+- `INSURESPR_RESTORE_DATABASE_URL`: an approved isolated target only;
+- `INSURESPR_RESTORE_CONFIRMATION`: required only for an authorized restore;
+- optional `INSURESPR_PG_DUMP_COMMAND`, `INSURESPR_PG_RESTORE_COMMAND` and JSON
+  command prefixes for an approved containerized client.
+
+Create and immediately authenticate an encrypted artifact:
+
+```powershell
+node tools/recovery-backup.mjs backup --output <controlled-path>.isprbackup --project-ref ffdmmxffzewqiacsuvhr --key-id <vault-key-version>
+node tools/recovery-backup.mjs verify --input <controlled-path>.isprbackup
+```
+
+After written drill authorization, load the isolated target URL and exact
+confirmation, then restore while creating a new evidence record:
+
+```powershell
+node tools/recovery-backup.mjs restore --input <controlled-path>.isprbackup --target-label <isolated-target-label> --evidence-output <controlled-evidence-path>.restore-evidence.json
+```
+
+The artifact, manifest and restore evidence are ignored by Git and must be moved
+to approved encrypted off-site storage. Configure retention/versioning only
+after its period is approved. Alert the named owner on every missed run,
+non-zero exit, verification failure, upload failure or stale last-success time.
+Keep the encryption key in a separately controlled vault and test recovery of
+that key. Never use Vercel's public-site runtime or an unapproved personal
+machine as the backup runner.
+
+Deterministic tests cover wrong keys, tampering, overwrite refusal, secret/URL
+argument leakage, production-host refusal and evidence state. The opt-in local
+integration drill uses disposable synthetic PostgreSQL databases and deletes
+its exact temporary container and files:
+
+```powershell
+npm run test:recovery
+npm run test:recovery:docker
+```
+
+These passing tests prove the repository tooling, not operational recovery.
+The `backup-recovery` dependency remains open until the practice approves the
+owner, runner, off-site location, key custody, retention, RPO and RTO; a real
+scheduled encrypted backup is monitored; and an authorized isolated restore
+drill completes every evidence item below.
+
 ## Recovery inventory
 
 - GitHub is the source of truth for the static site, migrations, Edge Function

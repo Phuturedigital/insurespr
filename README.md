@@ -186,6 +186,12 @@ evidence records an active, healthy Supabase project on the Free plan, with no
 managed daily backup/PITR and no verified encrypted off-site export, approved
 RPO/RTO, named owner or successful restore drill. The non-secret state is held
 in `RECOVERY-READINESS.json`; it is kept out of the public Vercel artifact.
+The repository includes streamed AES-256-GCM logical-backup, authenticated
+verification and isolated-restore tooling in `tools/recovery-backup.mjs`, plus
+deterministic and disposable-PostgreSQL tests. The tooling writes no plaintext
+dump and cannot make the recovery manifest ready; scheduling, off-site storage,
+key custody, monitoring, ownership, objectives and a completed authorized drill
+remain operational approvals.
 
 ### Deterministic browser and SEO gates
 
@@ -217,6 +223,7 @@ node tools/booking-journey.test.mjs
 node tools/accessibility-journey.test.mjs
 node --test tools/legacy-redirects.test.mjs
 npm run test:performance
+npm run test:recovery:docker
 ```
 
 The browser suites use an ephemeral loopback server and mocked public API
@@ -226,8 +233,9 @@ manifest covers every inventoried URL but remains inactive and fail-closed until
 each non-hold decision has named approval. Availability activation, rehearsal,
 monitoring and rollback are documented in `AVAILABILITY-ACTIVATION.md`.
 Recovery inventory, approval fields, isolation rules and restoration order are
-documented in `RECOVERY-RESTORE-DRILL.md`; it does not authorize a production
-restore or invent the practice's RPO, RTO or retention period.
+documented in `RECOVERY-RESTORE-DRILL.md`, including the encrypted backup tool's
+operator contract. It does not authorize a production restore or invent the
+practice's owner, off-site store, key custodian, RPO, RTO or retention period.
 
 The canonical frontend is live on the practice domain. Keep online form intake
 fail-closed and do not publish unapproved healthcare claims, prices, schedules

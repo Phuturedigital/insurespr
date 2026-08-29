@@ -18,6 +18,12 @@ tools/shots-fe/
 # Backups only — assets/ is committed (the shipped site imagery)
 *.html.bak
 
+# Encrypted recovery artifacts and restore evidence are operational records,
+# never source files. Store them only in approved controlled locations.
+*.isprbackup
+*.isprbackup.manifest.json
+*.restore-evidence.json
+
 # OS
 .DS_Store
 Thumbs.db

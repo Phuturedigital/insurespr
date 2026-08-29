@@ -184,7 +184,7 @@ test('retention enforcement is private, dry-run-first and cannot purge business 
 });
 
 test('verified Free-plan recovery gap is private, machine-readable and release-blocking', async () => {
-  const [migration, manifestText, audit, drill, provider, readiness, ignored] = await Promise.all([
+  const [migration, manifestText, audit, drill, provider, readiness, ignored, gitignored, tool, packageText] = await Promise.all([
     read('supabase/migrations/20260829003006_record_backup_recovery_readiness.sql'),
     read('RECOVERY-READINESS.json'),
     read('tools/release-audit.mjs'),
@@ -192,6 +192,9 @@ test('verified Free-plan recovery gap is private, machine-readable and release-b
     read('PROVIDER-ACTIVATION.md'),
     read('PRODUCTION-READINESS.md'),
     read('.vercelignore'),
+    read('.gitignore'),
+    read('tools/recovery-backup.mjs'),
+    read('package.json'),
   ]);
   const manifest = JSON.parse(manifestText);
 
@@ -235,6 +238,26 @@ test('verified Free-plan recovery gap is private, machine-readable and release-b
     assert.match(document, /restore drill/i);
   }
   assert.match(ignored, /^RECOVERY-READINESS\.json$/m);
+  assert.match(ignored, /^tools\/$/m);
+  assert.match(gitignored, /^\*\.isprbackup$/m);
+  assert.match(gitignored, /^\*\.restore-evidence\.json$/m);
+
+  assert.match(tool, /createCipheriv\('aes-256-gcm'/);
+  assert.match(tool, /createDecipheriv\('aes-256-gcm'/);
+  assert.match(tool, /plaintextStored: false/);
+  assert.match(tool, /INSURESPR_RESTORE_CONFIRMATION/);
+  assert.match(tool, /RESTORE APPROVED ISOLATED TARGET/);
+  assert.match(tool, /Refusing to restore into a connection identifying the production project reference/);
+  assert.match(tool, /productionRecoveryVerified: false/);
+  assert.match(tool, /activationAuthorized: false/);
+  assert.doesNotMatch(tool, /--dbname=-/);
+
+  const packageJson = JSON.parse(packageText);
+  assert.match(packageJson.scripts['test:unit'], /test:recovery/);
+  assert.equal(packageJson.scripts['test:recovery'], 'node --test tools/recovery-backup.test.mjs');
+  assert.equal(packageJson.scripts['test:recovery:docker'], 'node --test tools/recovery-backup-docker.test.mjs');
+  assert.match(drill, /tooling, not operational recovery/);
+  assert.match(drill, /backup-recovery.*remains open/s);
 });
 
 test('privacy requests and security incidents use private guarded registers with no retained probes', async () => {

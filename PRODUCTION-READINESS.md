@@ -170,6 +170,13 @@ workflow and domain transition must all be ready at the same time.
   recovery capability as a readiness blocker. A plan upgrade alone cannot pass:
   a verified restore point or encrypted off-site backup, approved RPO/RTO,
   named owner, explicit approval and successful restore drill are all required.
+- `tools/recovery-backup.mjs` implements streamed AES-256-GCM `pg_dump`,
+  authenticated artifact verification and confirmation-gated isolated
+  `pg_restore`. It refuses overwrite and the production project hostname, keeps
+  connection credentials out of arguments, and emits deliberately incomplete
+  drill evidence. Unit tests and a disposable PostgreSQL 17 integration drill
+  pass, but repository tooling is not evidence that a scheduled off-site backup
+  exists. `RECOVERY-READINESS.json` therefore remains blocked and unchanged.
 - Live migration
   `20260829012324_add_private_privacy_operations_registers` implements the
   approved data-subject request and security-compromise procedures as four
@@ -424,9 +431,10 @@ registrations, licences, tariffs, schedules or provider/DNS evidence.
      panel is exposed. The underlying status procedures and audit log are
      implemented, but named accounts and routine ownership remain prerequisites.
    - `RECOVERY-RESTORE-DRILL.md` defines the technical inventory, safe isolated
-     rehearsal, restoration order and evidence checklist. Incident authority,
-     RPO, RTO, backup plan, data access and retention remain deliberately blank
-     until the practice approves them.
+     rehearsal, encrypted logical-backup command contract, restoration order
+     and evidence checklist. Incident authority, runner, off-site store, key
+     custodian, RPO, RTO, data access and retention remain deliberately blank
+     until the practice approves them and completes a monitored restore drill.
 
 9. **Domain, search and migration**
    - Inventory every indexed URL on the current official property.
