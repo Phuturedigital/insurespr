@@ -173,6 +173,21 @@ test('verified DMARC monitoring evidence cannot imply email readiness', async ()
   assert.doesNotMatch(migration, /update public\.practice_settings\s+set/i);
 });
 
+test('live bridge evidence is exact, non-secret and cannot close intake', async () => {
+  const migration = await read(
+    'supabase/migrations/20260829063000_record_live_bridge_verification.sql',
+  );
+  assert.match(migration, /dpl_DWV8fQjravFSbCN7NLbhAb21SzR6/);
+  assert.match(migration, /'function_region', 'fra1'/);
+  assert.match(migration, /'secret_marker_present', false/);
+  assert.match(migration, /'github_quality_run', '33238030337'/);
+  assert.match(migration, /'release_audit', jsonb_build_object\('pass', 11, 'warn', 1, 'fail', 10\)/);
+  assert.match(migration, /status = 'open'/);
+  assert.match(migration, /blocks_launch = true/);
+  assert.match(migration, /privacy_notice_version[\s\S]*'\^pending'/);
+  assert.doesNotMatch(migration, /TURNSTILE_SECRET_KEY\s*=|INSURESPR_PROXY_PRIVATE_KEY_B64\s*=/);
+});
+
 test('retention enforcement is private, dry-run-first and cannot purge business records', async () => {
   const [operations, hardening, privacy, runbook, readme] = await Promise.all([
     read('supabase/migrations/20260829000849_add_guarded_retention_operations.sql'),
