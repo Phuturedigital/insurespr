@@ -57,8 +57,11 @@ test('forward-only migration stores the exact contacts without opening intake', 
   assert.match(migration, /privacy_notice_version is distinct from 'pending-approval'/);
 });
 
-test('provider template contains every runtime key without a secret value', async () => {
-  const env = await read('supabase/functions/.env.example');
+test('provider templates contain every scoped runtime key without a secret value', async () => {
+  const [env, vercelEnv] = await Promise.all([
+    read('supabase/functions/.env.example'),
+    read('vercel.env.example'),
+  ]);
   for (const key of [
     'TURNSTILE_SITE_KEY',
     'TURNSTILE_SECRET_KEY',
@@ -73,6 +76,11 @@ test('provider template contains every runtime key without a secret value', asyn
     assert.match(env, new RegExp(`^${secret}=$`, 'm'), `${secret} must remain blank in git`);
   }
   assert.doesNotMatch(env, /BOOKING_FROM_EMAIL|SITE_URL/);
+  for (const key of ['TURNSTILE_SITE_KEY', 'TURNSTILE_SECRET_KEY', 'INSURESPR_PROXY_PRIVATE_KEY_B64']) {
+    assert.match(vercelEnv, new RegExp(`^${key}=$`, 'm'), `${key} must remain blank in git`);
+  }
+  assert.match(vercelEnv, /server-only Vercel Function variables/i);
+  assert.doesNotMatch(vercelEnv, /NEXT_PUBLIC_/);
 });
 
 test('decision migration records policy but cannot open intake', async () => {

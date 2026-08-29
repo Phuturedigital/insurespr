@@ -61,7 +61,9 @@
   // form activation, or booking-management logic on the proof-only hostname.
   if (activateConceptPreview()) return;
 
-  var API = 'https://ffdmmxffzewqiacsuvhr.supabase.co/functions/v1/insurespr-api';
+  var DIRECT_API = 'https://ffdmmxffzewqiacsuvhr.supabase.co/functions/v1/insurespr-api';
+  var OFFICIAL_HOSTS = ['insuresprhealth.co.za', 'www.insuresprhealth.co.za'];
+  var USE_SAME_ORIGIN_BRIDGE = OFFICIAL_HOSTS.indexOf(window.location.hostname.toLowerCase()) !== -1;
   var STORAGE_PREFIX = 'insurespr.';
   var configPromise;
   var turnstileScriptPromise;
@@ -180,7 +182,10 @@
     var controller = new AbortController();
     var timeout = window.setTimeout(function () { controller.abort(); }, REQUEST_TIMEOUT_MS);
     init.signal = controller.signal;
-    return fetch(API + path, init).then(function (response) {
+    var endpoint = USE_SAME_ORIGIN_BRIDGE
+      ? '/api/insurespr?route=' + encodeURIComponent(String(path || '').replace(/^\//, ''))
+      : DIRECT_API + path;
+    return fetch(endpoint, init).then(function (response) {
       if (response.status === 204) return null;
       return response.json().catch(function () { return {}; }).then(function (body) {
         if (!response.ok) {

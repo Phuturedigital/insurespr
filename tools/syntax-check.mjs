@@ -5,10 +5,18 @@ import { fileURLToPath } from 'node:url';
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const toolsRoot = path.join(projectRoot, 'tools');
+const apiRoot = path.join(projectRoot, 'api');
+const libRoot = path.join(projectRoot, 'lib');
 const toolFiles = (await readdir(toolsRoot, { withFileTypes: true }))
   .filter((entry) => entry.isFile() && entry.name.endsWith('.mjs'))
   .map((entry) => path.join('tools', entry.name));
-const files = ['production.js', 'site.js', ...toolFiles].sort();
+const apiFiles = (await readdir(apiRoot, { withFileTypes: true }))
+  .filter((entry) => entry.isFile() && entry.name.endsWith('.mjs'))
+  .map((entry) => path.join('api', entry.name));
+const libFiles = (await readdir(libRoot, { withFileTypes: true }))
+  .filter((entry) => entry.isFile() && entry.name.endsWith('.mjs'))
+  .map((entry) => path.join('lib', entry.name));
+const files = ['production.js', 'site.js', ...toolFiles, ...apiFiles, ...libFiles].sort();
 const failures = [];
 
 for (const file of files) {

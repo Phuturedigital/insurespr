@@ -8,14 +8,23 @@ git, HTML, browser JavaScript, screenshots or issue comments.
 
 1. Create one managed Turnstile widget for exactly
    `insuresprhealth.co.za` and `www.insuresprhealth.co.za`.
-2. Store `TURNSTILE_SITE_KEY` and `TURNSTILE_SECRET_KEY` together in Supabase
-   Edge Function secrets. A partial pair is a deployment failure.
-3. Redeploy `insurespr-api`; confirm `/services` returns the site key and
-   `Cache-Control: no-store` without exposing the secret.
-4. Test booking, contact and employer routes for missing, expired, wrong-action,
+2. Store `TURNSTILE_SITE_KEY` and `TURNSTILE_SECRET_KEY` together as sensitive,
+   server-only Vercel variables for Production and Preview. A partial pair is a
+   deployment failure. Never use a `NEXT_PUBLIC_` or browser-exposed variable.
+3. Keep `INSURESPR_PROXY_PRIVATE_KEY_B64` in the same Vercel environments. Its
+   matching Ed25519 public key is committed in the Supabase verifier; the
+   private value must never enter Supabase, Git, HTML, logs or screenshots.
+4. Redeploy Vercel; confirm the official-domain
+   `/api/insurespr?route=services` returns the site key and
+   `Cache-Control: no-store` without exposing either secret. The direct
+   Supabase `/services` response may keep a null site key in this architecture.
+5. Test booking, contact and employer routes for missing, expired, wrong-action,
    wrong-hostname, replayed and valid tokens. Confirm every rejection writes
    zero business, consent and notification rows.
-5. Record the Cloudflare account owner, widget ID, key-rotation owner and date in
+6. Confirm that Vercel verifies Siteverify first, Supabase accepts only an exact
+   signed body no more than 90 seconds old, and a repeated nonce is rejected by
+   `private.proxy_attestation_nonces` without storing a raw IP or form value.
+7. Record the Cloudflare account owner, widget ID, key-rotation owner and date in
    the private release evidence.
 
 ## Resend and domain mail

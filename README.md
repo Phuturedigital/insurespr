@@ -152,9 +152,11 @@ deno check supabase/functions/insurespr-api/index.ts
 deno check supabase/functions/insurespr-notifications/index.ts
 ```
 
-Do not put a secret/service-role key in HTML, `production.js`, Vercel browser
-environment variables or screenshots. Edge Function secrets belong in
-Supabase's encrypted function-secret store.
+Do not put a secret/service-role key in HTML, `production.js`, browser-exposed
+environment variables or screenshots. Notification-worker secrets belong in
+Supabase's encrypted function-secret store. Turnstile and the Ed25519 signing
+private key belong in sensitive server-only Vercel variables; only the matching
+public verification key is committed. See `PROVIDER-ACTIVATION.md`.
 
 The notification worker is deployed, but its read-only `GET` readiness signal
 returns `ready:false` and authenticated delivery invocations return `503` until

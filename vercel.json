@@ -2,6 +2,12 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "cleanUrls": true,
   "trailingSlash": false,
+  "functions": {
+    "api/insurespr.mjs": {
+      "regions": ["fra1"],
+      "maxDuration": 10
+    }
+  },
   "redirects": [
     { "source": "/scan", "destination": "/scanning", "permanent": true },
     { "source": "/programmes", "destination": "/scanning", "permanent": true },

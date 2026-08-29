@@ -68,7 +68,7 @@ for (
       },
       verifyTurnstile: () => {
         turnstileCalls += 1;
-        return Promise.resolve();
+        return Promise.resolve(null);
       },
       enforceRateLimit: () => {
         rateLimitCalls += 1;
@@ -170,6 +170,7 @@ for (
   Deno.test(`${scenario.route} forwards the displayed privacy version unchanged`, async () => {
     const displayedVersion = 'privacy-2026-08-13-approved';
     let capturedRpc = '';
+    let capturedTrustedRateLimitHash: string | null | undefined;
     const capturedPayloads: JsonRecord[] = [];
     const handler = createHandler({
       getAllowedOrigins: () => new Set(['https://www.insuresprhealth.co.za']),
@@ -180,8 +181,11 @@ for (
             headers: { 'Content-Type': 'application/json' },
           }),
         ),
-      verifyTurnstile: () => Promise.resolve(),
-      enforceRateLimit: () => Promise.resolve('test-ip-hash'),
+      verifyTurnstile: () => Promise.resolve('trusted-proxy-ip-hash'),
+      enforceRateLimit: (_req, _endpoint, _limit, _windowSeconds, trustedKeyHash) => {
+        capturedTrustedRateLimitHash = trustedKeyHash;
+        return Promise.resolve('test-ip-hash');
+      },
       rpc: <T>(name: string, payload: JsonRecord) => {
         capturedRpc = name;
         capturedPayloads.push(payload);
@@ -211,5 +215,6 @@ for (
     assertEquals(capturedRpc, scenario.rpcName);
     const rpcPayload = capturedPayloads[0]?.p_payload as JsonRecord;
     assertEquals(rpcPayload.privacy_version, displayedVersion);
+    assertEquals(capturedTrustedRateLimitHash, 'trusted-proxy-ip-hash');
   });
 }

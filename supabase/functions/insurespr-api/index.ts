@@ -1,4 +1,5 @@
 import { matchesTurnstileContext, type TurnstileVerification } from './turnstile.ts';
+import { ProxyAttestationError, verifyProxyAttestation } from './proxy-attestation.ts';
 
 const FUNCTION_NAME = 'insurespr-api';
 const MAX_BODY_BYTES = 32_000;
@@ -27,12 +28,13 @@ type ApiDependencies = {
     req: Request,
     expectedAction: string,
     allowedOrigin: string | null,
-  ) => Promise<void>;
+  ) => Promise<string | null>;
   enforceRateLimit: (
     req: Request,
     endpoint: string,
     limit: number,
     windowSeconds: number,
+    trustedKeyHash?: string | null,
   ) => Promise<string>;
   rpc: <T>(name: string, payload: JsonRecord) => Promise<T>;
   requestId: () => string;
@@ -242,8 +244,9 @@ async function enforceRateLimit(
   endpoint: string,
   limit: number,
   windowSeconds: number,
+  trustedKeyHash: string | null = null,
 ): Promise<string> {
-  const ipHash = await hmacHex(clientIp(req));
+  const ipHash = trustedKeyHash || await hmacHex(clientIp(req));
   const result = await rpc<Array<{ allowed: boolean; remaining: number; retry_after_seconds: number }>>(
     'check_rate_limit',
     {
@@ -298,8 +301,39 @@ export async function verifyTurnstile(
   req: Request,
   expectedAction: string,
   allowedOrigin: string | null,
-  configuration?: { siteKey?: string; secretKey?: string },
-): Promise<void> {
+  configuration?: {
+    siteKey?: string;
+    secretKey?: string;
+    publicKeySpkiBase64?: string;
+    now?: () => number;
+    claimNonce?: (nonceHash: string, expiresAt: string) => Promise<boolean>;
+  },
+): Promise<string | null> {
+  try {
+    const attestation = await verifyProxyAttestation(
+      req,
+      body,
+      expectedAction,
+      allowedOrigin,
+      configuration?.claimNonce || (async (nonceHash, expiresAt) => {
+        return await rpc<boolean>('claim_proxy_attestation_nonce', {
+          p_nonce_hash: nonceHash,
+          p_expires_at: expiresAt,
+        });
+      }),
+      {
+        publicKeySpkiBase64: configuration?.publicKeySpkiBase64,
+        now: configuration?.now,
+      },
+    );
+    if (attestation) return attestation.ipHash;
+  } catch (error) {
+    if (error instanceof ProxyAttestationError) {
+      throw new ApiError(422, error.code, 'The protected request could not be verified. Please try again.');
+    }
+    throw error;
+  }
+
   const turnstileSiteKey = (
     configuration ? configuration.siteKey : Deno.env.get('TURNSTILE_SITE_KEY')
   )?.trim();
@@ -354,6 +388,7 @@ export async function verifyTurnstile(
   if (!matchesTurnstileContext(result, expectedAction, allowedOrigin)) {
     throw new ApiError(422, 'BOT_CHECK_FAILED', 'The anti-spam check failed. Please try again.');
   }
+  return null;
 }
 
 function normalizePhone(value: Json): string {
@@ -478,8 +513,8 @@ async function handleBooking(
 ): Promise<Response> {
   const body = await readBody(req);
   rejectBot(body);
-  await deps.verifyTurnstile(body, req, 'book', origin);
-  const ipHash = await deps.enforceRateLimit(req, 'bookings', 10, 3_600);
+  const attestedIpHash = await deps.verifyTurnstile(body, req, 'book', origin);
+  const ipHash = await deps.enforceRateLimit(req, 'bookings', 10, 3_600, attestedIpHash);
 
   const payload: JsonRecord = {
     idempotency_key: text(body.idempotency_key, 36),
@@ -510,8 +545,8 @@ async function handleEmployerLead(
 ): Promise<Response> {
   const body = await readBody(req);
   rejectBot(body);
-  await deps.verifyTurnstile(body, req, 'employer', origin);
-  const ipHash = await deps.enforceRateLimit(req, 'employer-leads', 6, 3_600);
+  const attestedIpHash = await deps.verifyTurnstile(body, req, 'employer', origin);
+  const ipHash = await deps.enforceRateLimit(req, 'employer-leads', 6, 3_600, attestedIpHash);
   const services = Array.isArray(body.services_required)
     ? body.services_required.filter((value): value is string => typeof value === 'string').slice(0, 20)
     : [];
@@ -544,8 +579,8 @@ async function handleContact(
 ): Promise<Response> {
   const body = await readBody(req);
   rejectBot(body);
-  await deps.verifyTurnstile(body, req, 'contact', origin);
-  const ipHash = await deps.enforceRateLimit(req, 'contact-enquiries', 6, 3_600);
+  const attestedIpHash = await deps.verifyTurnstile(body, req, 'contact', origin);
+  const ipHash = await deps.enforceRateLimit(req, 'contact-enquiries', 6, 3_600, attestedIpHash);
   const payload: JsonRecord = {
     idempotency_key: text(body.idempotency_key, 36),
     name: text(body.name, 160),

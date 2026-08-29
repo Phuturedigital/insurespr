@@ -52,7 +52,7 @@ verified fact and does not override the application’s fail-closed controls.
 | Area | Required evidence | Safe state until received |
 | --- | --- | --- |
 | Information Officer | Information Regulator registration record and the legal identity of the responsible private body | Motselisi is shown as owner-designated Information Officer; intake version stays pending |
-| Turnstile | Official-domain site key and matching secret | All public mutations return a configuration error before writing |
+| Turnstile | Official-domain site key and matching secret in Vercel plus the tested signed Vercel-to-Supabase verification path | All public mutations return a configuration error before writing |
 | Clinical operations | Equipment/use licence, responsible person, practitioner registrations, reporting route and approved service facts | `needs_confirmation`; no invented claims |
 | Pricing and aid | Signed current patient tariff, billing/VAT interpretation and scheme arrangements | Prices unpublished or quote-only |
 | Availability | Duration, notice, horizon, buffers, weekly rota, closures and named schedule owner | No policies, rules or slots |

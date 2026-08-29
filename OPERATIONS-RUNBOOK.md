@@ -230,29 +230,34 @@ Do not configure or release them independently.
    release configuration in both Turnstile and `ALLOWED_ORIGINS`; it is not in
    the cloud default. Use Cloudflare's test keys with a local/mock API for
    localhost rather than weakening the production hostname or Origin lists.
-2. Put both `TURNSTILE_SITE_KEY` and `TURNSTILE_SECRET_KEY` in Supabase Edge
-   Function secrets. The site key is public configuration; the secret must
-   never enter git, HTML, `production.js`, Vercel browser variables, logs or
-   screenshots.
-3. Redeploy `insurespr-api` after setting both secrets. Missing both keys and a
-   partial configuration are unusable and fail closed: site-key-only renders a
-   challenge but the API refuses submissions, while secret-only makes the
-   server require a token that the browser cannot obtain. Approving the privacy
-   notice without both keys must therefore leave form mutations at `503
+2. Put both `TURNSTILE_SITE_KEY` and `TURNSTILE_SECRET_KEY` in the sensitive,
+   server-only Vercel environments for the same-origin function. The site key
+   is public configuration; the secret must never enter git, HTML,
+   `production.js`, a browser-exposed variable, logs or screenshots.
+3. Keep the generated `INSURESPR_PROXY_PRIVATE_KEY_B64` only in Vercel. Its
+   public Ed25519 key is compiled into `insurespr-api`; Supabase also claims a
+   hash of every signed nonce once. Rotating this key requires a coordinated
+   Edge-then-Vercel release or a short documented maintenance window.
+4. Redeploy the Vercel site after setting both Turnstile keys. Missing both keys
+   and a partial configuration fail closed. Approving the privacy notice
+   without both keys must still leave form mutations at `503
    BOT_CHECK_UNAVAILABLE`.
-4. From each explicitly approved release origin, call `GET /services` and
+5. From each explicitly approved release origin, call
+   `GET /api/insurespr?route=services` and
    verify that `turnstile_site_key` is non-null. Confirm that the response never
    exposes `TURNSTILE_SECRET_KEY` or any other server credential, then load the
    booking, workforce and contact forms and verify that each renders a widget.
-5. Complete one synthetic form flow. Confirm that completion populates a token,
+6. Complete one synthetic form flow. Confirm that completion populates a token,
    one submission consumes it, and an expiry, error or retry requires a new
    token. Turnstile tokens are single-use and expire after five minutes; never
    cache or reuse them between forms or requests.
-6. Test missing, invalid, expired and replayed tokens. The API must reject them
+7. Test missing, invalid, expired and replayed tokens plus missing, expired,
+   altered and replayed proxy attestations. The API must reject them
    without creating a booking, lead, enquiry, consent or notification row. Also
    simulate an unreachable or non-successful Siteverify response and confirm
    the API fails closed with a service error rather than accepting the form.
-7. Inspect Edge Function logs and database counts after the test. Logs must not
+8. Inspect Vercel and Edge Function logs plus database counts after the test.
+   Logs must not
    contain form contents, Turnstile tokens, the secret or raw IP addresses;
    remove only the explicitly identified synthetic records through a reviewed,
    self-cleaning migration.
