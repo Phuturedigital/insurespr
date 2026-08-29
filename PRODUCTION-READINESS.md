@@ -102,6 +102,17 @@ workflow and domain transition must all be ready at the same time.
   Browser input cannot create the staff-reserved `booking_completed` event;
   legacy input is normalized to a request submission. Its rollback contract
   left the existing 24 privacy-minimised QA events unchanged.
+- Migration `20260829021145_add_private_acquisition_funnel_reporting` adds two
+  owner-only aggregate reports, `private.acquisition_outcome_report()` and
+  `private.acquisition_event_report()`, that connect safe source/campaign dimensions to
+  booking, employer-lead and enquiry outcomes, and summarize allowlisted
+  conversion events without returning people, messages, record references or
+  anonymous session identifiers. Invalid and greater-than-366-day windows are
+  rejected; browser, authenticated and service roles cannot execute either
+  function. Revenue remains null with an explicit unavailable status until an
+  approved payment/claim data source and financial reporting policy exist.
+  The migration's transaction-scoped outcome/event probe rolled back every
+  synthetic record.
 - Live migration
   `20260821074451_record_owner_approved_launch_decisions` records the approved
   website retention schedule, confirms the conservative catalogue and the

@@ -168,6 +168,31 @@ staff lifecycle fact. Campaign/referrer metadata must remain attribution-only.
 If a campaign value resembles an email address, phone/identity number, explicit
 PII key/value or contains control characters, the database sanitizer omits it.
 
+### Acquisition and conversion reporting
+
+Run `supabase/snippets/acquisition_reporting.sql` as the database owner for an
+aggregate 30-day acquisition review. `private.acquisition_outcome_report()`
+groups stored bookings, employer quote requests and contact enquiries by safe
+UTM, landing-path, referrer and service dimensions. Its workflow meanings are:
+
+- Booking progressed: `confirmed`, `rescheduled`, `completed` or `no_show`;
+  successful: `completed`; unsuccessful: `cancelled` or `no_show`.
+- Employer quote progressed: `contacted`, `qualified` or `won`; successful:
+  `won`; unsuccessful: `lost` or `spam`.
+- Contact enquiry progressed: `contacted` or `resolved`; successful:
+  `resolved`; unsuccessful: `spam`.
+
+`private.acquisition_event_report()` groups the allowlisted browser and trusted
+completion events and counts distinct anonymous sessions inside the database.
+Neither function returns names, companies, contact details, messages, notes,
+references, record IDs or anonymous session IDs. Both reject invalid or
+greater-than-366-day windows and are unavailable to browser and service roles.
+
+Revenue remains explicitly unavailable: there is no approved price/payment or
+claim-settlement ledger. Do not multiply request counts by proposed prices or
+describe enquiries as revenue. Add financial attribution only after its source,
+refund/claim rules, access, retention and accountable owner are approved.
+
 ## Enabling Cloudflare Turnstile after approval
 
 Turnstile protects the booking, workforce-lead and contact forms in addition to

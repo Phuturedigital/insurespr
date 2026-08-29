@@ -332,3 +332,37 @@ test('verified privacy requests use a private audited record locator without ret
   assert.match(readiness, /20260829015243_index_privacy_locator_foreign_keys/);
   assert.match(privacy, /does not disclose,?\s*correct,?\s*restrict or delete/i);
 });
+
+test('acquisition reporting is aggregate, owner-only and never invents revenue', async () => {
+  const [migration, snippet, runbook, readiness, readme] = await Promise.all([
+    read('supabase/migrations/20260829021145_add_private_acquisition_funnel_reporting.sql'),
+    read('supabase/snippets/acquisition_reporting.sql'),
+    read('OPERATIONS-RUNBOOK.md'),
+    read('PRODUCTION-READINESS.md'),
+    read('README.md'),
+  ]);
+
+  for (const fn of ['acquisition_outcome_report', 'acquisition_event_report']) {
+    assert.match(migration, new RegExp(`create or replace function private\\.${fn}`));
+    assert.match(migration, new RegExp(`revoke all on function private\\.${fn}`));
+    for (const document of [snippet, runbook, readiness, readme]) {
+      assert.match(document, new RegExp(fn));
+    }
+  }
+
+  assert.match(migration, /security invoker/g);
+  assert.match(migration, /set search_path = ''/g);
+  assert.match(migration, /reporting window cannot exceed 366 days/g);
+  assert.match(migration, /attributed_value_cents/);
+  assert.match(migration, /null::bigint as attributed_value_cents/);
+  assert.match(migration, /unavailable_until_approved_pricing_and_payment_data_exists/);
+  assert.match(migration, /acquisition_reporting_probe_rollback/);
+  assert.match(migration, /acquisition reporting probe did not roll back synthetic records/);
+  assert.match(migration, /application roles must not execute private acquisition reports/);
+  assert.doesNotMatch(migration, /grant\s+execute[\s\S]*?(?:anon|authenticated|service_role)/i);
+
+  assert.match(runbook, /Neither function returns names, companies, contact details/);
+  assert.match(snippet, /Do not replace null[\s\S]*list-price estimates/);
+  assert.match(readiness, /20260829021145_add_private_acquisition_funnel_reporting/);
+  assert.match(readme, /Revenue[\s\S]*deliberately reported as unavailable/);
+});

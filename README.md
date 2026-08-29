@@ -40,6 +40,8 @@ has no database key and cannot query operational tables directly.
 - Website retention and data-subject procedure: `PRIVACY-OPERATIONS.md`
 - Owner-only privacy-request and incident templates:
   `supabase/snippets/privacy_operations.sql`
+- Owner-only acquisition funnel templates:
+  `supabase/snippets/acquisition_reporting.sql`
 - Turnstile, email and contact-channel activation: `PROVIDER-ACTIVATION.md`
 
 The database schema, public API and canonical frontend are deployed. The public
@@ -111,6 +113,15 @@ separate from any disclosure, correction, restriction or deletion action. The
 locator tables and functions are unavailable to
 `anon`, `authenticated` and `service_role`; use the controlled privacy
 operations snippet only as the database owner.
+
+Acquisition measurement is available without installing a third-party tracker.
+The owner-only `private.acquisition_outcome_report()` connects safe campaign,
+landing, referrer and service dimensions to aggregate booking, employer and
+enquiry outcomes. `private.acquisition_event_report()` summarizes allowlisted
+conversion events without returning anonymous session identifiers. Both reject
+unbounded reporting windows and are unavailable to application roles. Revenue
+is deliberately reported as unavailable until approved price and actual
+payment/claim data exist; see `supabase/snippets/acquisition_reporting.sql`.
 
 ```powershell
 node --check production.js
