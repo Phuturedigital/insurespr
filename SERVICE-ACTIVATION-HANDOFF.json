@@ -1,0 +1,205 @@
+{
+  "schemaVersion": 1,
+  "status": "prepared-not-approved",
+  "activationAuthorized": false,
+  "preparedAt": "2026-08-29T06:45:00Z",
+  "source": {
+    "specification": "pasted-text-1.txt sections 7, 9, 10, 12, 20 and 31",
+    "servicesEndpoint": "https://www.insuresprhealth.co.za/api/insurespr?route=services",
+    "observedServiceCount": 16,
+    "observedVerificationStatus": "needs_confirmation"
+  },
+  "globalEvidence": {
+    "legalEntityEvidenceRef": null,
+    "licenceAndEquipmentEvidenceRef": null,
+    "responsiblePractitionerRosterRef": null,
+    "writtenClinicalRequestPolicyRef": null,
+    "reportingAndResultsWorkflowRef": null,
+    "medicalAidAndPaymentPolicyRef": null,
+    "approvedPriceScheduleRef": null,
+    "privacyApprovalRef": null,
+    "availabilityPolicyRef": null,
+    "finalApprover": null,
+    "finalApprovalAt": null
+  },
+  "approvalRecordSchema": {
+    "decision": "approve-or-hold",
+    "capabilityEvidenceRef": "required-for-approve",
+    "licenceAndEquipmentApplicabilityRef": "required-for-radiography-or-DXA-approve",
+    "responsiblePractitionerRef": "required-for-approve",
+    "bookingMode": "walk_in-or-appointment-or-request-or-quote",
+    "confirmationMode": "instant-or-staff",
+    "appointmentDurationMinutes": "required-for-appointment",
+    "referralRequirement": "required-explicit-value-or-not-required",
+    "appointmentRequirement": "required-explicit-value",
+    "priceType": "fixed-or-from-or-range-or-quote-or-unpublished",
+    "cashPriceCents": "required-for-fixed-from-or-range",
+    "cashPriceMaxCents": "required-for-range",
+    "currency": "ZAR",
+    "priceNote": "required-explicit-value-or-null-approved",
+    "medicalAidStatus": "required-explicit-value",
+    "whatToBring": "required-explicit-value",
+    "expectedDuration": "required-explicit-value",
+    "resultsProcess": "required-explicit-value",
+    "preparationInstructions": "required-explicit-value-or-none-approved",
+    "availabilityPolicyRef": "required-for-appointment",
+    "approvedBy": "required",
+    "approvedAt": "required-ISO-8601",
+    "evidenceRefs": "required-nonempty-array"
+  },
+  "services": [
+    {
+      "slug": "primary-healthcare-x-ray",
+      "name": "Primary Healthcare X-Ray",
+      "audience": "individual",
+      "currentBookingMode": "request",
+      "currentPriceType": "unpublished",
+      "currentVerificationStatus": "needs_confirmation",
+      "approval": null
+    },
+    {
+      "slug": "musculoskeletal-x-ray",
+      "name": "Musculoskeletal X-Ray",
+      "audience": "individual",
+      "currentBookingMode": "request",
+      "currentPriceType": "unpublished",
+      "currentVerificationStatus": "needs_confirmation",
+      "approval": null
+    },
+    {
+      "slug": "chest-x-ray",
+      "name": "Chest X-Ray",
+      "audience": "individual",
+      "currentBookingMode": "request",
+      "currentPriceType": "unpublished",
+      "currentVerificationStatus": "needs_confirmation",
+      "approval": null
+    },
+    {
+      "slug": "orthopaedic-follow-up-x-ray",
+      "name": "Orthopaedic Follow-Up X-Ray",
+      "audience": "individual",
+      "currentBookingMode": "request",
+      "currentPriceType": "unpublished",
+      "currentVerificationStatus": "needs_confirmation",
+      "approval": null
+    },
+    {
+      "slug": "visa-chest-x-ray",
+      "name": "Administrative & Foreign-Programme Chest X-Ray",
+      "audience": "individual",
+      "currentBookingMode": "request",
+      "currentPriceType": "unpublished",
+      "currentVerificationStatus": "needs_confirmation",
+      "approval": null
+    },
+    {
+      "slug": "workplace-medicals",
+      "name": "Workplace Medicals",
+      "audience": "workforce",
+      "currentBookingMode": "quote",
+      "currentPriceType": "quote",
+      "currentVerificationStatus": "needs_confirmation",
+      "approval": null
+    },
+    {
+      "slug": "workplace-chest-x-ray",
+      "name": "Workplace Chest X-Ray",
+      "audience": "workforce",
+      "currentBookingMode": "quote",
+      "currentPriceType": "quote",
+      "currentVerificationStatus": "needs_confirmation",
+      "approval": null
+    },
+    {
+      "slug": "dxa-bone-density",
+      "name": "DXA Bone Density",
+      "audience": "scanning",
+      "currentBookingMode": "appointment",
+      "currentPriceType": "unpublished",
+      "currentVerificationStatus": "needs_confirmation",
+      "approval": null
+    },
+    {
+      "slug": "dxa-body-composition",
+      "name": "DXA Body Composition",
+      "audience": "scanning",
+      "currentBookingMode": "appointment",
+      "currentPriceType": "unpublished",
+      "currentVerificationStatus": "needs_confirmation",
+      "approval": null
+    },
+    {
+      "slug": "osteoporosis-care",
+      "name": "Nurse-led Osteoporosis Care",
+      "audience": "scanning",
+      "currentBookingMode": "request",
+      "currentPriceType": "unpublished",
+      "currentVerificationStatus": "needs_confirmation",
+      "approval": null
+    },
+    {
+      "slug": "runner-athlete-bone-health",
+      "name": "Runner & Athlete Bone Health",
+      "audience": "scanning",
+      "currentBookingMode": "request",
+      "currentPriceType": "unpublished",
+      "currentVerificationStatus": "needs_confirmation",
+      "approval": null
+    },
+    {
+      "slug": "menopause-bone-health",
+      "name": "Menopause & Bone Health",
+      "audience": "scanning",
+      "currentBookingMode": "request",
+      "currentPriceType": "unpublished",
+      "currentVerificationStatus": "needs_confirmation",
+      "approval": null
+    },
+    {
+      "slug": "treatment-related-bone-health",
+      "name": "Treatment-Related Bone Health",
+      "audience": "scanning",
+      "currentBookingMode": "request",
+      "currentPriceType": "unpublished",
+      "currentVerificationStatus": "needs_confirmation",
+      "approval": null
+    },
+    {
+      "slug": "post-fracture-bone-health",
+      "name": "Post-Fracture Bone Health",
+      "audience": "scanning",
+      "currentBookingMode": "request",
+      "currentPriceType": "unpublished",
+      "currentVerificationStatus": "needs_confirmation",
+      "approval": null
+    },
+    {
+      "slug": "body-composition-progress",
+      "name": "Body Composition Progress",
+      "audience": "scanning",
+      "currentBookingMode": "request",
+      "currentPriceType": "unpublished",
+      "currentVerificationStatus": "needs_confirmation",
+      "approval": null
+    },
+    {
+      "slug": "long-term-condition-bone-health",
+      "name": "Long-Term Condition Bone Health",
+      "audience": "scanning",
+      "currentBookingMode": "request",
+      "currentPriceType": "unpublished",
+      "currentVerificationStatus": "needs_confirmation",
+      "approval": null
+    }
+  ],
+  "activationSequence": [
+    "Attach controlled evidence references; never embed licence scans, identity documents, patient information or credentials in this file.",
+    "Complete one approval record per service with an approve or hold decision.",
+    "Validate the completed handoff in approved mode and resolve every rejected field.",
+    "Generate a reviewed forward-only migration that updates only approved services and records evidence provenance.",
+    "Keep every held or incomplete service at needs_confirmation and preserve fail-closed intake.",
+    "For appointment services, approve availability separately and materialise only a bounded real slot set.",
+    "Run the strict release audit, browser journeys, migration checks and a controlled no-PII submission test before opening intake."
+  ]
+}

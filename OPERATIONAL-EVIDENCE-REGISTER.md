@@ -56,6 +56,13 @@ resource, authorised editor, categories, special hours and account review as
 explicit nulls. The file is retained in git, excluded from Vercel and does not
 authorise or imply a Google account change.
 
+Migration `20260829065000_record_service_activation_handoff` records the exact
+SHA-256 of `SERVICE-ACTIVATION-HANDOFF.json` and five scoped evidence claims
+covering catalogue, credentials, clinical requirements, booking rules and
+prices. The packet matches all 16 live services but every service approval and
+global evidence reference is null. All five linked launch gates remain open;
+the migration cannot verify a service, create a slot or open intake.
+
 The recorded 19 claims currently resolve to:
 
 | Review status | Count | Meaning |

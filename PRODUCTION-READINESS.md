@@ -389,6 +389,20 @@ Cloudflare Turnstile, the Resend adapter, the owner-approved booking contacts
 and the inactive 153-URL hold. That approval does not fabricate account keys,
 registrations, licences, tariffs, schedules or provider/DNS evidence.
 
+`SERVICE-ACTIVATION-HANDOFF.json` is the fail-closed approval packet for the
+16 live service records. Validate the untouched packet with:
+
+```powershell
+node tools/service-activation-handoff.mjs --mode draft --live-url "https://www.insuresprhealth.co.za/api/insurespr?route=services"
+```
+
+After controlled evidence references and one explicit approve-or-hold record
+per service are supplied, validate a reviewed copy with `--mode approved`.
+Approved mode rejects missing credentials, clinical fields, price logic,
+reviewer identity, evidence, DXA duration and availability policy. A passing
+packet is still an input to a reviewed forward-only migration; it does not
+change `verification_status` or create slots by itself.
+
 1. **Authority and ownership**
    - Website publication authority is recorded in `LAUNCH-APPROVALS.md`.
    - Named owner for the domain, hosting account, Supabase project and incident

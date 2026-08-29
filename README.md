@@ -41,6 +41,8 @@ session storage as soon as it is rendered.
 - Launch and approval checklist: `PRODUCTION-READINESS.md`
 - Prepared Google Business Profile account handoff:
   `GOOGLE-BUSINESS-PROFILE-ALIGNMENT.json` (excluded from Vercel; not applied)
+- Prepared 16-service evidence and approval handoff:
+  `SERVICE-ACTIVATION-HANDOFF.json` (excluded from Vercel; not approved)
 - Recovery ownership and restore drill: `RECOVERY-RESTORE-DRILL.md`
 - Fact provenance: `CONTENT-NOTES.md`
 - Supplied rate evidence review: `XOM-RATES-2026-REVIEW.md`
