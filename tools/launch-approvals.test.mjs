@@ -389,3 +389,46 @@ test('acquisition reporting is aggregate, owner-only and never invents revenue',
   assert.match(readiness, /20260829021145_add_private_acquisition_funnel_reporting/);
   assert.match(readme, /Revenue[\s\S]*deliberately reported as unavailable/);
 });
+
+test('staff work queues are bounded, owner-only, actionable, and read-only', async () => {
+  const [migration, queues, diagnostics, actions, runbook, readiness, readme] = await Promise.all([
+    read('supabase/migrations/20260829034523_add_private_staff_work_queues.sql'),
+    read('supabase/snippets/staff_work_queues.sql'),
+    read('supabase/snippets/daily_operations.sql'),
+    read('supabase/snippets/staff_actions.sql'),
+    read('OPERATIONS-RUNBOOK.md'),
+    read('PRODUCTION-READINESS.md'),
+    read('README.md'),
+  ]);
+
+  const functions = [
+    'staff_operations_summary',
+    'staff_booking_work_queue',
+    'staff_employer_lead_work_queue',
+    'staff_contact_enquiry_work_queue',
+    'staff_notification_exception_queue',
+  ];
+
+  for (const fn of functions) {
+    assert.match(migration, new RegExp(`create or replace function private\\.${fn}`));
+    assert.match(migration, new RegExp(`revoke execute on function private\\.${fn}`));
+    assert.match(runbook, new RegExp(`private\\.${fn}`));
+  }
+
+  assert.ok((migration.match(/security invoker/g) || []).length >= 5);
+  assert.ok((migration.match(/set search_path = ''/g) || []).length >= 5);
+  assert.match(migration, /p_limit not between 1 and 200/);
+  assert.match(migration, /application roles must not execute private staff work queues/);
+  assert.match(migration, /staff_work_queue_probe_rollback/);
+  assert.match(migration, /staff work queue probe did not roll back synthetic records/);
+  assert.doesNotMatch(migration, /grant\s+execute[\s\S]*?(?:anon|authenticated|service_role)/i);
+
+  assert.match(queues, /Start here: counts only, with no patient or prospect identifiers/);
+  assert.match(queues, /Results contain patient\/prospect contact information/);
+  assert.match(queues, /Never directly edit a status column/);
+  assert.match(diagnostics, /For routine triage, start with staff_work_queues\.sql/);
+  assert.match(actions, /Do not bypass these procedures with direct status edits/);
+  assert.match(runbook, /Do\s+not export them to personal devices, tickets, chat, analytics or unapproved/);
+  assert.match(readiness, /20260829034523_add_private_staff_work_queues/);
+  assert.match(readme, /four owner-only active work queues/);
+});

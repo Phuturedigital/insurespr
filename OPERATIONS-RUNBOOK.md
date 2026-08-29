@@ -1,7 +1,8 @@
 # InsureSPR operations runbook
 
-Status: technically implemented; practice ownership, response targets and named
-staff access are still awaiting approval.
+Status: technically implemented. Motselisi R. Mosiana is the owner-designated
+booking contact and first-line response owner. Least-privilege account
+provisioning, deputy coverage and response-time targets still require evidence.
 
 This runbook uses the Supabase dashboard as the initial staff interface. Do not
 share a service-role key with staff, embed it in browser code, or build a public
@@ -10,8 +11,11 @@ practice approves and remove access promptly when responsibilities change.
 
 ## Start and end of each operating day
 
-1. Open the project dashboard and run `supabase/snippets/daily_operations.sql`
-   in the SQL editor.
+1. Open the project dashboard and run
+   `supabase/snippets/staff_work_queues.sql` in the SQL editor. Start with the
+   identifier-free summary, then open only the bounded queue needed for the
+   current task. Use `supabase/snippets/daily_operations.sql` only for deeper
+   diagnostic and availability checks.
 2. Work oldest unresolved booking requests first, then workforce leads and
    general enquiries, subject to the practice's approved clinical escalation
    rules.
@@ -31,9 +35,31 @@ practice approves and remove access promptly when responsibilities change.
    `supabase/snippets/privacy_operations.sql`. Do not place these records in the
    ordinary contact-enquiry queue.
 
-The practice must still name the person responsible for each queue and approve
-response-time targets. Until then, this is a technical procedure, not a promise
-to patients or employers.
+Motselisi R. Mosiana is the named first-line booking contact. The practice must
+still provision named operator accounts, appoint deputy/leave coverage, assign
+the remaining operational queues and approve response-time targets. Until then,
+this is a technical procedure, not a promise to patients or employers.
+
+## Owner-only staff work queues
+
+Live migration `20260829034523_add_private_staff_work_queues` provides one
+identifier-free summary and four detailed next-action queues:
+
+- `private.staff_operations_summary()`
+- `private.staff_booking_work_queue(p_limit)`
+- `private.staff_employer_lead_work_queue(p_limit)`
+- `private.staff_contact_enquiry_work_queue(p_limit)`
+- `private.staff_notification_exception_queue(p_limit)`
+
+Each detailed queue is limited to 1-200 rows, ordered for operational triage and
+includes an explicit next action. The functions are read-only, stable,
+security-invoker functions in the private schema with a cleared search path.
+They are unavailable to `anon`, `authenticated` and `service_role`; run the
+controlled snippet only as an approved named operator in the Supabase SQL
+Editor. Detailed results contain patient or prospect personal information. Do
+not export them to personal devices, tickets, chat, analytics or unapproved
+spreadsheets. Use `supabase/snippets/staff_actions.sql` for every status change
+or reviewed notification requeue; never directly edit a status column.
 
 ## Booking handling
 

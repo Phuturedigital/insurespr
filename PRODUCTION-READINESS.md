@@ -113,6 +113,17 @@ workflow and domain transition must all be ready at the same time.
   approved payment/claim data source and financial reporting policy exist.
   The migration's transaction-scoped outcome/event probe rolled back every
   synthetic record.
+- Live migration `20260829034523_add_private_staff_work_queues` adds an
+  identifier-free operational summary and four detailed, bounded work queues
+  for bookings, employer leads, contact enquiries and notification exceptions.
+  Each detailed result is limited to 1-200 rows and includes an explicit next
+  action plus safe attribution fields. Detailed outputs contain operational
+  personal information. All five functions are stable security-invoker
+  functions in the private schema with a cleared search path, and execute
+  access is revoked from `anon`, `authenticated` and `service_role`. The
+  migration exercised every queue, both limit guards and its ACL boundary in a
+  rollback-only synthetic probe; it left zero probe records and the post-
+  migration Supabase Security Advisor returned zero findings.
 - Live migration
   `20260821074451_record_owner_approved_launch_decisions` records the approved
   website retention schedule, confirms the conservative catalogue and the
@@ -428,8 +439,11 @@ registrations, licences, tariffs, schedules or provider/DNS evidence.
    - Review and approve `OPERATIONS-RUNBOOK.md`, including duplicate handling,
      manual recovery and audit review.
    - The Supabase dashboard is the initial internal interface; no public admin
-     panel is exposed. The underlying status procedures and audit log are
-     implemented, but named accounts and routine ownership remain prerequisites.
+     panel is exposed. Bounded owner-only work queues, guarded status procedures
+     and the audit log are implemented. Motselisi R. Mosiana is the named first-
+     line booking contact, while least-privilege operator accounts, deputy
+     coverage, remaining queue ownership and response targets remain
+     prerequisites.
    - `RECOVERY-RESTORE-DRILL.md` defines the technical inventory, safe isolated
      rehearsal, encrypted logical-backup command contract, restoration order
      and evidence checklist. Incident authority, runner, off-site store, key

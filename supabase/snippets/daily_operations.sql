@@ -1,6 +1,9 @@
 -- InsureSPR daily dashboard queries.
 -- Run in the Supabase SQL editor as an approved operator. Results contain PII.
 -- Do not export them to personal devices or paste them into tickets/chat.
+-- For routine triage, start with staff_work_queues.sql. The bounded private
+-- functions there provide a coherent next-action view; the raw queries below
+-- remain deeper diagnostic and availability checks.
 
 -- 1. New and reschedule-requested bookings, oldest first.
 select

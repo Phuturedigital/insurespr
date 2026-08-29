@@ -42,6 +42,8 @@ has no database key and cannot query operational tables directly.
   `supabase/snippets/privacy_operations.sql`
 - Owner-only acquisition funnel templates:
   `supabase/snippets/acquisition_reporting.sql`
+- Owner-only bounded daily work queues:
+  `supabase/snippets/staff_work_queues.sql`
 - Turnstile, email and contact-channel activation: `PROVIDER-ACTIVATION.md`
 
 The database schema, public API and canonical frontend are deployed. The public
@@ -122,6 +124,15 @@ conversion events without returning anonymous session identifiers. Both reject
 unbounded reporting windows and are unavailable to application roles. Revenue
 is deliberately reported as unavailable until approved price and actual
 payment/claim data exist; see `supabase/snippets/acquisition_reporting.sql`.
+
+Daily staff triage is available through the Supabase SQL Editor without a
+public admin panel. `private.staff_operations_summary()` returns counts without
+identifiers; four owner-only active work queues return bounded next-action views
+for bookings, employer leads, enquiries and notification exceptions. Detailed
+results contain operational personal information, accept only limits from
+1-200, and are unavailable to `anon`, `authenticated` and `service_role`. Use
+`supabase/snippets/staff_work_queues.sql` to review work and the guarded
+procedures in `supabase/snippets/staff_actions.sql` to make status changes.
 
 ```powershell
 node --check production.js
