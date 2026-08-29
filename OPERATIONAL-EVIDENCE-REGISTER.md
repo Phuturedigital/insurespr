@@ -70,6 +70,13 @@ Turnstile, Resend, privacy operations and backup retention. The packet matches
 the live notice/API but remains `prepared-not-approved`; the database privacy
 version and all five linked launch dependencies remain pending/open.
 
+Migrations `20260829071000_harden_availability_approval_provenance` and
+`20260829072000_record_availability_activation_handoff` add revision-bound,
+peer-reviewed availability approval metadata and record the exact SHA-256 of
+`AVAILABILITY-ACTIVATION-HANDOFF.json`. Three scoped claims verify the zero-state
+DXA baseline and prepared policy/operations contract. No duration, policy, rule,
+exception, slot, booking or Cron job is created.
+
 The recorded 19 claims currently resolve to:
 
 | Review status | Count | Meaning |

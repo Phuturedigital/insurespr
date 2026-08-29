@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 1,
+  "status": "prepared-not-approved",
+  "activationAuthorized": false,
+  "preparedAt": "2026-08-29T07:15:00Z",
+  "source": {
+    "servicesEndpoint": "https://www.insuresprhealth.co.za/api/insurespr?route=services",
+    "availabilityEndpoint": "https://www.insuresprhealth.co.za/api/insurespr?route=availability",
+    "timezone": "Africa/Johannesburg",
+    "observedPolicyCount": 0,
+    "observedRuleCount": 0,
+    "observedExceptionCount": 0,
+    "observedSlotCount": 0,
+    "observedConflictCount": 0,
+    "observedBookingCount": 0
+  },
+  "policyLimits": {
+    "appointmentDurationMinutes": { "minimum": 5, "maximum": 480 },
+    "horizonDays": { "minimum": 1, "maximum": 90 },
+    "minimumNoticeMinutes": { "minimum": 0, "maximum": 129600 },
+    "bufferMinutes": { "minimum": 0, "maximum": 1440 },
+    "slotCapacity": 1,
+    "initialMaterializationDays": { "minimum": 1, "maximum": 14 }
+  },
+  "appointmentServices": [
+    {
+      "slug": "dxa-bone-density",
+      "name": "DXA Bone Density",
+      "currentBookingMode": "appointment",
+      "currentDurationMinutes": null,
+      "currentVerificationStatus": "needs_confirmation",
+      "approval": null
+    },
+    {
+      "slug": "dxa-body-composition",
+      "name": "DXA Body Composition",
+      "currentBookingMode": "appointment",
+      "currentDurationMinutes": null,
+      "currentVerificationStatus": "needs_confirmation",
+      "approval": null
+    }
+  ],
+  "approvalRecordSchema": {
+    "decision": "approve-or-hold",
+    "appointmentDurationMinutes": "required-5-to-480-for-approve",
+    "horizonDays": "required-1-to-90-for-approve",
+    "minimumNoticeMinutes": "required-0-to-129600-and-no-more-than-horizon",
+    "bufferMinutes": "required-0-to-1440",
+    "slotCapacity": "must-equal-1",
+    "timezone": "must-equal-Africa/Johannesburg",
+    "weeklyRules": "required-nonempty-nonoverlapping-array-for-approve",
+    "serviceExceptions": "reviewed-array-may-be-empty",
+    "clinicalAndEquipmentAvailabilityRef": "required-for-approve",
+    "staffAndEquipmentRotaRef": "required-for-approve",
+    "approvedBy": "required",
+    "peerReviewedBy": "required-and-different-from-approvedBy",
+    "approvedAt": "required-ISO-8601",
+    "evidenceDocumentKey": "required",
+    "changeReference": "required-minimum-8-characters"
+  },
+  "wholePracticeClosures": [],
+  "wholePracticeClosureReview": {
+    "reviewed": false,
+    "reviewedBy": null,
+    "reviewedAt": null,
+    "sourceRef": null
+  },
+  "operationsApproval": {
+    "scheduleOwner": null,
+    "deputyScheduleOwner": null,
+    "dailyMonitorOwner": null,
+    "alertRecipient": null,
+    "rollbackAuthority": null,
+    "rehearsalEvidenceRef": null,
+    "syntheticJourneyEvidenceRef": null,
+    "initialMaterializationDays": null,
+    "initialMaterializationApprovedBy": null,
+    "initialMaterializationApprovedAt": null
+  },
+  "cronActivation": {
+    "authorized": false,
+    "jobName": null,
+    "runTime": null,
+    "owner": null,
+    "alertRecipient": null,
+    "rollbackAuthority": null,
+    "activationEvidenceRef": null
+  },
+  "activationSequence": [
+    "Attach approved service duration, horizon, notice, buffer, capacity, weekly hours, staff/equipment rota, exception and closure evidence.",
+    "Complete one approve-or-hold record per DXA service with a different peer reviewer.",
+    "Review whole-practice closures explicitly even when the approved list is empty.",
+    "Validate the approved packet and apply a reviewed forward-only policy/rule migration; do not create slots in that migration.",
+    "Rehearse a seven-day-equivalent bounded range outside production with synthetic people, concurrent claims, cancellation, reschedule and rollback.",
+    "Manually materialise only the approved initial 1-14 day production range and inspect provenance, revisions, local wall-clock times and conflicts.",
+    "Complete one authorised synthetic journey and remove its synthetic business rows while retaining count-only evidence.",
+    "Open intake only after privacy, Turnstile, service, notification and recovery gates pass.",
+    "Authorize a named PostgreSQL-owned daily Cron job only after the manual production proof; keep Cron unauthorized in this packet."
+  ]
+}

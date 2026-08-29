@@ -21,6 +21,28 @@ Record and peer-review these for each appointment service:
 The approved values belong in a separate data migration. Schema migrations must
 not guess them.
 
+`AVAILABILITY-ACTIVATION-HANDOFF.json` is the machine-readable approval packet
+for both live DXA appointment services. Verify the untouched zero-state packet
+against the official API without creating a slot:
+
+```powershell
+node tools/availability-activation-handoff.mjs --mode draft --live-services-url "https://www.insuresprhealth.co.za/api/insurespr?route=services" --availability-base-url "https://www.insuresprhealth.co.za/api/insurespr"
+```
+
+Approved mode requires a duration, policy, non-overlapping weekly rules, an
+explicit closure review, staff/equipment rota, different approver and peer
+reviewer, controlled evidence, named monitoring/rollback owners, rehearsal and
+synthetic-journey evidence, and a bounded first materialisation of 1–14 days.
+It keeps Cron unauthorized. A passing packet is still only input to a reviewed
+forward-only migration and manual production proof.
+
+Migration `20260829071000_harden_availability_approval_provenance` binds an
+approved policy to an exact configuration revision, controlled evidence
+document, approver, different peer reviewer, schedule owner, rollback authority
+and rehearsal reference. Any weekly-rule, exception or scheduling-relevant
+service change increments the revision and automatically removes approval and
+its metadata. Approved controls cannot be edited in place.
+
 ## Rehearsal
 
 1. Keep the privacy notice pending and public submissions closed.

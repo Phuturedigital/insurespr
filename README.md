@@ -45,6 +45,8 @@ session storage as soon as it is rendered.
   `SERVICE-ACTIVATION-HANDOFF.json` (excluded from Vercel; not approved)
 - Prepared privacy and processor activation handoff:
   `PRIVACY-ACTIVATION-HANDOFF.json` (excluded from Vercel; privacy still pending)
+- Prepared DXA availability, schedule and rollback handoff:
+  `AVAILABILITY-ACTIVATION-HANDOFF.json` (excluded from Vercel; no slots created)
 - Recovery ownership and restore drill: `RECOVERY-RESTORE-DRILL.md`
 - Fact provenance: `CONTENT-NOTES.md`
 - Supplied rate evidence review: `XOM-RATES-2026-REVIEW.md`
