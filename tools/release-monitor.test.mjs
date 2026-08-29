@@ -42,6 +42,7 @@ test('current known blockers pass the production regression monitor', () => {
   assert.equal(report.monitorStatus, 'pass');
   assert.deepEqual(report.regressions, []);
   assert.equal(report.open.length, 11);
+  assert(baseline.requiredPasses.includes('same-origin-bridge'));
   assert(baseline.requiredPasses.includes('email-dmarc'));
   assert(!baseline.allowedReadinessFailures.includes('email-dmarc'));
 });

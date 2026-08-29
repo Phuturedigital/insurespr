@@ -4,7 +4,7 @@
  * Read-only production preflight for InsureSPR.
  *
  * Network behaviour is deliberately limited to public GET requests, public DNS
- * lookups and three invalid empty-object form probes. The invalid probes contain
+ * lookups and six invalid empty-object form probes. The invalid probes contain
  * no PII and cannot satisfy the API's validation contract, so they cannot create
  * records.
  */
@@ -15,6 +15,7 @@ import { existsSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import process from 'node:process';
+import { isDeepStrictEqual } from 'node:util';
 import { fileURLToPath } from 'node:url';
 
 const DEFAULT_BASE = 'https://www.insuresprhealth.co.za';
@@ -73,7 +74,8 @@ Options:
   --help                        Show this help
 
 The audit performs no stateful writes. Form checks send only an invalid empty
-JSON object with no personal information. Notification readiness is checked by
+JSON object with no personal information to the direct API and same-origin
+verification bridge. Notification readiness is checked by
 unauthenticated GET only; the worker is never invoked with scheduler secrets.`;
 }
 
@@ -474,6 +476,40 @@ function parseApiError(text) {
   }
 }
 
+function inspectSameOriginBridge(directPayload, bridgePayload, headers) {
+  const problems = [];
+  const expectedKeys = ['categories', 'practice', 'services', 'turnstile_site_key'];
+  const actualKeys = bridgePayload && typeof bridgePayload === 'object' && !Array.isArray(bridgePayload)
+    ? Object.keys(bridgePayload).sort()
+    : [];
+  if (!isDeepStrictEqual(actualKeys, expectedKeys)) {
+    problems.push(`response keys are ${actualKeys.join(', ') || 'missing'}`);
+  }
+  for (const key of ['practice', 'categories', 'services']) {
+    if (!isDeepStrictEqual(bridgePayload?.[key], directPayload?.[key])) {
+      problems.push(`${key} differs from the authoritative Supabase response`);
+    }
+  }
+  const siteKey = bridgePayload?.turnstile_site_key;
+  if (siteKey !== null && (typeof siteKey !== 'string' || !siteKey.trim())) {
+    problems.push('turnstile_site_key must be null or a non-empty string');
+  }
+  if (/TURNSTILE_SECRET_KEY|INSURESPR_PROXY_PRIVATE_KEY_B64|secret-key/i.test(JSON.stringify(bridgePayload))) {
+    problems.push('response contains a server-secret marker');
+  }
+  const cacheControl = headers.get('cache-control') ?? '';
+  if (!/\bno-store\b/i.test(cacheControl)) {
+    problems.push(`Cache-Control must include no-store; received ${cacheControl || 'missing'}`);
+  }
+  const vercelId = headers.get('x-vercel-id') ?? '';
+  if (!/::fra1::/i.test(vercelId)) {
+    problems.push(`x-vercel-id does not prove the configured fra1 execution region: ${vercelId || 'missing'}`);
+  }
+  const security = inspectSecurityHeaders(headers);
+  for (const problem of security.problems) problems.push(`security header: ${problem}`);
+  return { ok: problems.length === 0, problems, vercelId };
+}
+
 function inventoryExpectedCount(markdown) {
   const match = markdown.match(/contains\s+\*\*(\d+)\s+unique sitemap-listed URLs\*\*/i)
     ?? markdown.match(/\|\s*\*\*Total\*\*\s*\|\s*\*\*(\d+)\*\*/i);
@@ -862,6 +898,84 @@ async function auditServices(config, results) {
     results.push(issue(config, 'availability', 'Appointment availability', 'readiness',
         availabilityReadinessProblems.join('; ')));
     }
+  }
+  return payload;
+}
+
+async function auditSameOriginBridge(config, results, directPayload) {
+  const problems = [];
+  const safeResponses = [];
+  const endpoint = `${config.base}/api/insurespr?route=services`;
+  try {
+    const fetched = await fetchPublic(endpoint, {
+      headers: { Accept: 'application/json' },
+    }, config.timeoutMs);
+    let bridgePayload = null;
+    try {
+      bridgePayload = JSON.parse(fetched.text);
+    } catch {
+      problems.push('services response is not valid JSON');
+    }
+    if (fetched.response.status !== 200) {
+      const parsed = parseApiError(fetched.text);
+      problems.push(`services returned HTTP ${fetched.response.status} ${parsed.code ?? parsed.message ?? ''}`.trim());
+    } else if (!directPayload) {
+      problems.push('authoritative direct services response is unavailable for comparison');
+    } else if (bridgePayload) {
+      const inspection = inspectSameOriginBridge(directPayload, bridgePayload, fetched.response.headers);
+      problems.push(...inspection.problems);
+    }
+  } catch (error) {
+    problems.push(`services request failed: ${safeMessage(error)}`);
+  }
+
+  const acceptedSafeCodes = new Set(['BOT_CHECK_UNAVAILABLE', 'BOT_CHECK_REQUIRED']);
+  for (const formEndpoint of FORM_ENDPOINTS) {
+    try {
+      const fetched = await fetchPublic(
+        `${config.base}/api/insurespr?route=${encodeURIComponent(formEndpoint)}`,
+        {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Origin: config.base,
+          },
+          body: '{}',
+        },
+        config.timeoutMs,
+      );
+      const parsed = parseApiError(fetched.text);
+      if (fetched.response.status >= 200 && fetched.response.status < 300) {
+        problems.push(`${formEndpoint}: unsafe ${fetched.response.status}; an empty payload was accepted`);
+      } else if (!acceptedSafeCodes.has(parsed.code) || ![422, 503].includes(fetched.response.status)) {
+        problems.push(
+          `${formEndpoint}: HTTP ${fetched.response.status} ${parsed.code ?? parsed.message ?? 'unknown response'}`,
+        );
+      } else {
+        safeResponses.push(`${formEndpoint}: ${parsed.code}`);
+      }
+    } catch (error) {
+      problems.push(`${formEndpoint}: ${safeMessage(error)}`);
+    }
+  }
+
+  if (problems.length > 0) {
+    results.push(issue(
+      config,
+      'same-origin-bridge',
+      'Same-origin verification bridge',
+      'technical',
+      problems.join('; '),
+      { endpoint, safeResponses },
+    ));
+  } else {
+    results.push(pass(
+      'same-origin-bridge',
+      'Same-origin verification bridge',
+      'Official-domain services match Supabase, execute in fra1, expose no secret and all protected routes reject empty probes',
+      { endpoint, safeResponses },
+    ));
   }
 }
 
@@ -1360,7 +1474,26 @@ async function runSelfTest() {
     'permissions-policy': 'camera=(), microphone=()',
   });
   assert.equal(inspectSecurityHeaders(headers).ok, true);
-  console.log('release-audit offline self-test: PASS (26 assertions)');
+  const directServices = {
+    practice: { privacy_notice_version: 'pending-approval' },
+    categories: [{ id: 'category' }],
+    services: [{ id: 'service' }],
+    turnstile_site_key: null,
+  };
+  const bridgedServices = structuredClone(directServices);
+  const bridgeHeaders = new Headers({
+    'cache-control': 'no-store',
+    'x-vercel-id': 'cpt1::fra1::test-id',
+    'strict-transport-security': 'max-age=31536000; includeSubDomains',
+    'content-security-policy': "default-src 'self'; object-src 'none'; frame-ancestors 'none'",
+    'x-content-type-options': 'nosniff',
+    'referrer-policy': 'strict-origin-when-cross-origin',
+    'permissions-policy': 'camera=(), microphone=()',
+  });
+  assert.equal(inspectSameOriginBridge(directServices, bridgedServices, bridgeHeaders).ok, true);
+  bridgedServices.services[0].id = 'changed';
+  assert.equal(inspectSameOriginBridge(directServices, bridgedServices, bridgeHeaders).ok, false);
+  console.log('release-audit offline self-test: PASS (28 assertions)');
 }
 
 async function main() {
@@ -1384,7 +1517,8 @@ async function main() {
 
   const results = [];
   await auditPublicSite(config, results);
-  await auditServices(config, results);
+  const servicesPayload = await auditServices(config, results);
+  await auditSameOriginBridge(config, results, servicesPayload);
   await auditForms(config, results);
   await auditNotifications(config, results);
   await auditEmailDns(config, results);

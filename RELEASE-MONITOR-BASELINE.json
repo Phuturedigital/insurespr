@@ -9,6 +9,7 @@
     "apex-redirect",
     "services-cors",
     "services-cache",
+    "same-origin-bridge",
     "privacy-version",
     "turnstile-key",
     "required-services",
@@ -32,6 +33,7 @@
     "apex-redirect",
     "services-cors",
     "services-cache",
+    "same-origin-bridge",
     "email-dmarc",
     "email-reply-mx",
     "legacy-manifest"

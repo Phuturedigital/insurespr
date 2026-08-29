@@ -194,9 +194,12 @@ API-integrity checks remain strict. `--report-only` always exits zero for
 dashboards, and `--json` emits structured output.
 
 The audit is read-only. It performs public `GET` requests and sends only an
-invalid empty JSON object to each official form endpoint to confirm that origin,
-privacy and validation gates respond safely. Those probes contain no personal
-information and cannot satisfy the write contract. Notification readiness is
+invalid empty JSON object to each official form endpoint through both the direct
+Edge API and the same-origin verification bridge. It requires bridge services
+to match Supabase, run in the configured Frankfurt region, retain security and
+no-store headers, expose no secret marker, and reject every empty protected
+probe. Those probes contain no personal information and cannot satisfy the
+write contract. Notification readiness is
 checked only through an unauthenticated `GET`; no scheduler secret is supplied
 and the notification worker is never invoked. Return-Path SPF/MX, sender DKIM
 and DMARC plus the approved Reply-To domain's MX route are resolved independently
