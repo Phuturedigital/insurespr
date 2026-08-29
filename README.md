@@ -49,6 +49,9 @@ session storage as soon as it is rendered.
   `PRIVACY-ACTIVATION-HANDOFF.json` (excluded from Vercel; privacy still pending)
 - Prepared canonical-hostname Turnstile activation handoff:
   `TURNSTILE-ACTIVATION-HANDOFF.json` (excluded from Vercel; widget and keys not created)
+- Verified non-secret Cloudflare widget inventory and prepared-form observation:
+  `TURNSTILE-PROVIDER-INVENTORY.json` (excluded from Vercel; one unrelated
+  widget found, canonical InsureSPR widget form prepared but not submitted)
 - Prepared DXA availability, schedule and rollback handoff:
   `AVAILABILITY-ACTIVATION-HANDOFF.json` (excluded from Vercel; no slots created)
 - Recovery ownership and restore drill: `RECOVERY-RESTORE-DRILL.md`
@@ -74,7 +77,10 @@ session storage as soon as it is rendered.
 - Turnstile packet validation:
   `npm run test:turnstile-activation-handoff` for the committed draft, then
   `node tools/turnstile-activation-handoff.mjs --mode approved --file <controlled-copy>`
-  before any credential deployment or dependency closure.
+  before any credential deployment or dependency closure. Run
+  `npm run test:turnstile-provider-inventory` to verify that the authenticated
+  provider observation remains credential-free and awaiting action-time
+  confirmation.
 
 The database schema, public API and canonical frontend are deployed. The public
 site is served at `https://www.insuresprhealth.co.za/`. Privacy publication

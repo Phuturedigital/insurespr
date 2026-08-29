@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "status": "verified-prepared-awaiting-confirmation",
+  "observedAt": "2026-08-29T10:40:49Z",
+  "inspection": {
+    "provider": "cloudflare-turnstile",
+    "method": "authenticated-dashboard-read-only",
+    "existingWidgetCount": 1,
+    "equivalentInsureSprWidgetFound": false,
+    "credentialValuesRecorded": false
+  },
+  "existingWidgets": [
+    {
+      "name": "Phuture Digital",
+      "siteKeyLastSix": "OOfGU",
+      "mode": "managed",
+      "hostnameCount": 2,
+      "hostnames": [
+        "www.phuturedigital.co.za",
+        "www.phuturesync.co.za"
+      ],
+      "reusableForInsureSpr": false,
+      "exclusionReason": "The existing widget is shared by two unrelated production websites and is not scoped to the canonical InsureSPR hostname."
+    }
+  ],
+  "preparedWidget": {
+    "name": "InsureSPR Production Forms",
+    "hostname": "www.insuresprhealth.co.za",
+    "mode": "managed",
+    "preclearanceEnabled": false,
+    "previewHostnamesAllowed": false,
+    "localhostAllowed": false,
+    "createControlEnabled": true,
+    "created": false,
+    "creationAwaitingActionTimeConfirmation": true
+  },
+  "credentialCustody": {
+    "siteKeyObserved": false,
+    "secretKeyObserved": false,
+    "siteKeyStored": false,
+    "secretKeyStored": false,
+    "plaintextCredentialRecorded": false
+  },
+  "releaseState": {
+    "officialBridgeSiteKeyPublished": false,
+    "vercelProductionSiteKeyConfigured": false,
+    "vercelProductionSecretKeyConfigured": false,
+    "protectedProbeCode": "BOT_CHECK_UNAVAILABLE",
+    "intakeReady": false,
+    "operationalRecordCount": 0
+  },
+  "nextAuthorizedAction": "After immediate user confirmation, create the prepared widget and transfer both issued values directly to the Vercel Production secret store without exposing either value in Git, SQL, logs, screenshots or chat."
+}
