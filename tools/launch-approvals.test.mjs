@@ -145,3 +145,40 @@ test('readiness evidence leaves every activation dependency explicit', async () 
   }
   assert.match(migration, /v_open_blockers <> 9/);
 });
+
+test('retention enforcement is private, dry-run-first and cannot purge business records', async () => {
+  const [operations, hardening, privacy, runbook, readme] = await Promise.all([
+    read('supabase/migrations/20260829000849_add_guarded_retention_operations.sql'),
+    read('supabase/migrations/20260829001229_harden_retention_access.sql'),
+    read('PRIVACY-OPERATIONS.md'),
+    read('OPERATIONS-RUNBOOK.md'),
+    read('README.md'),
+  ]);
+
+  assert.match(operations, /create table private\.retention_legal_holds/);
+  assert.match(operations, /create table private\.retention_runs/);
+  assert.match(operations, /create or replace function private\.retention_inventory/);
+  assert.match(operations, /create or replace function private\.apply_retention_policy/);
+  assert.match(operations, /p_execute boolean default false/);
+  assert.match(operations, /PURGE APPROVED WEBSITE RETENTION RECORDS/);
+  assert.match(operations, /security invoker/g);
+  assert.match(operations, /from public, anon, authenticated, service_role/g);
+  assert.doesNotMatch(operations, /delete from public\.(bookings|customers|employer_leads|contact_enquiries|consent_records|booking_status_history|booking_actions|operational_audit_log)/i);
+  assert.doesNotMatch(operations, /cron\.|pg_cron|schedule\s*\(/i);
+
+  assert.match(hardening, /create policy retention_legal_holds_deny_all/);
+  assert.match(hardening, /create policy retention_runs_deny_all/);
+  assert.match(hardening, /v_inventory_rows <> 9 or v_supported_rows <> 4/);
+  assert.match(hardening, /initial production retention dry run unexpectedly found an eligible or held disposal candidate/);
+  assert.match(hardening, /run\.status = 'dry_run'/);
+
+  for (const document of [privacy, runbook, readme]) {
+    assert.match(document, /retention_inventory/);
+    assert.match(document, /apply_retention_policy/);
+  }
+  for (const document of [privacy, runbook]) {
+    assert.match(document, /PURGE APPROVED WEBSITE RETENTION RECORDS/);
+  }
+  assert.match(runbook, /There is deliberately no scheduled purge/);
+  assert.match(privacy, /Bookings, customers, booking history, actions, consent, employer leads/);
+});

@@ -35,6 +35,40 @@ No website intake record is to be treated as the complete clinical record. If a
 record is transferred into a clinical or statutory occupational-health record,
 that destination’s approved retention policy governs the copied record.
 
+## Retention enforcement
+
+The live database implements the schedule through private, owner-only controls:
+
+- `private.retention_inventory()` reports all nine record classes without
+  changing data. It distinguishes eligible rows, active legal holds, supported
+  guarded purges and inventory-only classes.
+- `private.apply_retention_policy()` records a dry run by default. It supports
+  deletion only for terminal notification metadata, analytics without a booking
+  link, rate-limit rows older than 30 days and already-expired booking-management
+  token hashes.
+- Bookings, customers, booking history, actions, consent, employer leads,
+  contact enquiries and operational audit evidence are never deleted by the
+  function. Their counts are an owner review queue, not disposal authority.
+- Active holds in `private.retention_legal_holds` exclude an individual record
+  or an entire class when the identifier is `*`. Holds must be resolved before
+  disposal and their release must name the responsible person.
+- Every dry run or executed run writes a count-only entry to
+  `private.retention_runs`. Deleted payloads and management credentials are not
+  copied into the run record.
+- The functions use caller permissions, are executable only by the database
+  owner, and are not exposed to browser, authenticated or service roles. Both
+  private tables have RLS, explicit deny-all policies and revoked application
+  privileges.
+- No Cron job or automatic schedule is installed. Automatic housekeeping must
+  remain disabled until the practice assigns an accountable owner, alert route,
+  legal-hold check and reviewed change procedure.
+
+The production migration recorded an initial dry run with nine inventory
+classes, four guarded-purge classes, zero eligible disposal candidates and zero
+deletions. A future executed run requires the exact confirmation phrase
+`PURGE APPROVED WEBSITE RETENTION RECORDS` and a change reference of at least
+eight characters.
+
 ## Data-subject request procedure
 
 1. Accept access, correction, deletion, restriction or objection requests at

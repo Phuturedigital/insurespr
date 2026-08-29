@@ -81,6 +81,15 @@ metadata and field-level claims rather than being copied into the public
 website or repository. A supplied claim remains distinct from independent
 verification and publication permission; see `OPERATIONAL-EVIDENCE-REGISTER.md`.
 
+The approved website retention schedule is backed by private owner-only
+database controls. `private.retention_inventory()` is non-mutating, and
+`private.apply_retention_policy()` defaults to a recorded dry run. An executed
+run needs the exact confirmation phrase and a change reference, honours active
+legal holds, and can purge only terminal delivery metadata, unlinked anonymous
+analytics, stale rate-limit rows and expired token hashes. No scheduler is
+installed, and bookings, customers, leads, enquiries, consent and audit records
+remain inventory-only. See `PRIVACY-OPERATIONS.md` and `OPERATIONS-RUNBOOK.md`.
+
 ```powershell
 node --check production.js
 node --check site.js

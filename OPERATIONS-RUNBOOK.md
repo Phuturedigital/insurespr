@@ -208,6 +208,52 @@ route. Keep these checks enabled and include action/hostname mismatch cases in
 every release test. Follow Cloudflare's server-side validation guidance:
 <https://developers.cloudflare.com/turnstile/get-started/server-side-validation/>.
 
+## Retention inventory and housekeeping
+
+Run retention work only as the database owner in the Supabase SQL editor. Never
+grant the private functions to `anon`, `authenticated` or `service_role`, and do
+not expose them through an Edge Function or public RPC.
+
+1. Record any active complaint, incident, access request, statutory duty or
+   litigation hold in `private.retention_legal_holds`. Use the concrete record
+   identifier shown by the controlled review process, or `*` to pause an entire
+   class. Name the person opening the hold and set a review date.
+2. Run the non-mutating inventory:
+
+   ```sql
+   select * from private.retention_inventory();
+   ```
+
+3. Run and retain the default dry-run record:
+
+   ```sql
+   select * from private.apply_retention_policy();
+   ```
+
+4. Reconcile every eligible and held count with the Information Officer. Do not
+   proceed while a hold is unresolved, a count is unexpected, the policy has
+   changed, or the change has no accountable approver.
+5. For an approved disposal only, use a unique change reference and the exact
+   confirmation phrase. The function still cannot delete bookings, customers,
+   leads, enquiries, consent, booking history/actions or audit evidence:
+
+   ```sql
+   select *
+   from private.apply_retention_policy(
+     true,
+     'PURGE APPROVED WEBSITE RETENTION RECORDS',
+     'CHANGE-REFERENCE-REQUIRED'
+   );
+   ```
+
+6. Save the returned counts and `run_id` in the controlled change record. Review
+   `private.retention_runs` as the database owner and confirm the deletion counts
+   match the approved dry run.
+
+There is deliberately no scheduled purge. Assigning Cron ownership and failure
+alerts is a separate launch decision; it must not be inferred from this manual
+control.
+
 ## Incident and privacy handling
 
 - Disable or unschedule the worker if the wrong recipient, sender, or template
@@ -216,9 +262,9 @@ every release test. Follow Cloudflare's server-side validation guidance:
   notes and contact messages are intentionally omitted from worker payloads and
   staff emails.
 - Do not export production submissions to personal devices or unapproved tools.
-- Follow the approved POPIA incident, data-subject request, retention and backup
-  procedures once the practice supplies them; this repository cannot define
-  those business/legal decisions.
+- Follow the approved POPIA incident, data-subject request and website-retention
+  procedures in `PRIVACY-OPERATIONS.md`. Backup ownership, RPO and RTO remain
+  unapproved and must not be inferred by this repository.
 - Use `RECOVERY-RESTORE-DRILL.md` for the technical inventory, isolated
   quarterly rehearsal, evidence checklist and production restoration order.
   Its blank owner/RPO/RTO/retention fields are launch dependencies, not defaults.

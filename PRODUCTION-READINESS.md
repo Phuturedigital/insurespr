@@ -130,6 +130,22 @@ workflow and domain transition must all be ready at the same time.
   `needs_confirmation`, all public prices and durations null, all availability
   policy/rule/exception/slot tables empty, the approved public contact and
   Monday-Friday hours unchanged, and the database privacy version pending.
+- Live migrations
+  `20260829000849_add_guarded_retention_operations` and
+  `20260829001229_harden_retention_access` convert the approved website
+  retention schedule into private database controls. The inventory covers nine
+  record classes; only terminal notification metadata, unlinked anonymous
+  analytics, stale rate-limit rows and expired token hashes support a guarded
+  purge. The purge defaults to dry-run, requires an exact confirmation plus a
+  change reference, honours class-wide and record-specific legal holds, uses
+  caller permissions and is executable only by the database owner. Bookings,
+  customers, leads, enquiries, consent, history/actions and operational audit
+  evidence are inventory-only. No Cron schedule was installed.
+- The hardening migration executed the production dry run as the owner and
+  asserted nine inventory rows, four supported purge classes, zero eligible or
+  held disposal candidates and zero deletions. Public, browser and service-role
+  privileges remain revoked; both private tables use explicit deny-all RLS
+  policies. The post-migration Supabase security advisor reports zero findings.
 - Supabase performance advisor: only expected `unused_index` informational
   notices on the newly created, empty operational database. Keep the indexes
   until real query statistics exist; reference:
