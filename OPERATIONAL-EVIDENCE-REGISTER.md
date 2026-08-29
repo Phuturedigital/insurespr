@@ -63,6 +63,13 @@ prices. The packet matches all 16 live services but every service approval and
 global evidence reference is null. All five linked launch gates remain open;
 the migration cannot verify a service, create a slot or open intake.
 
+Migration `20260829070000_record_privacy_activation_handoff` records the exact
+SHA-256 of `PRIVACY-ACTIVATION-HANDOFF.json` and six scoped claims covering
+legal/Information Officer evidence, active platform processor reviews,
+Turnstile, Resend, privacy operations and backup retention. The packet matches
+the live notice/API but remains `prepared-not-approved`; the database privacy
+version and all five linked launch dependencies remain pending/open.
+
 The recorded 19 claims currently resolve to:
 
 | Review status | Count | Meaning |

@@ -199,3 +199,22 @@ must retain a pending privacy version until the Information Officer registration
 evidence, Turnstile keys, processor activation evidence and operational owner
 sign-off are on file. The API’s pending-policy and missing-Turnstile gates remain
 the authoritative protection against premature intake.
+
+## Activation handoff
+
+`PRIVACY-ACTIVATION-HANDOFF.json` separates the already approved public notice,
+designation and website retention schedule from evidence required to change
+the database privacy version. The packet is kept out of Vercel and can be
+checked against the live API and notice without submitting data:
+
+```powershell
+node tools/privacy-activation-handoff.mjs --mode draft --live-services-url "https://www.insuresprhealth.co.za/api/insurespr?route=services" --notice-url "https://www.insuresprhealth.co.za/privacy"
+```
+
+Approved mode requires authoritative legal identity, Information Regulator and
+PAIA evidence; completed Supabase, Vercel, Cloudflare and Resend processor and
+section 72 reviews; operational backup verification; privacy-request,
+retention, incident and operator-access owners; provider activation evidence;
+and a named, dated final migration review. Passing approved mode does not
+change the database. A separate reviewed forward-only migration must preserve
+the linked provider/recovery gates and controlled submission tests.
