@@ -1702,6 +1702,19 @@ fieldset.field legend,
 }
 .confirmation-list dt { color: var(--muted); }
 .confirmation-list dd { margin: 0; font-weight: 600; overflow-wrap: anywhere; }
+.whatsapp-continuation {
+  margin: 1.5rem 0; padding: clamp(1.1rem, 3vw, 1.5rem) 0;
+  border-block: 1px solid var(--line-2);
+  background: linear-gradient(90deg, rgb(8 174 225 / .08), transparent 72%);
+}
+.whatsapp-continuation h3 { margin: .2rem 0 .55rem; font-size: clamp(1.25rem, 2.6vw, 1.65rem); }
+.whatsapp-continuation > p:not(.eyebrow) { max-width: 62ch; margin-top: 0; color: var(--muted); }
+.whatsapp-continuation .field { margin-top: 1rem; }
+.whatsapp-continuation textarea {
+  min-height: 11rem; background: rgb(255 255 255 / .82);
+  font-family: var(--f-mono); font-size: .82rem; line-height: 1.6;
+}
+.whatsapp-continuation [data-whatsapp-status]:empty { display: none; }
 
 @media (max-width: 860px) {
   .hero-card { min-height: 0; grid-template-columns: 1fr; }

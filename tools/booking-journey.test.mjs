@@ -816,11 +816,19 @@ async function testTurnstileAndHoneypotBotFailures(browser, base) {
   });
 }
 
-async function testEmailPopupBlockedFallback(browser, base) {
+async function testStructuredWhatsAppContinuation(browser, base) {
   const date = futureDate(28);
-  const reference = 'ISR-EMAIL-0001';
+  const reference = 'ISR-WHATSAPP-0001';
   await withContext(browser, {
-    initScript: 'window.open = function () { return null; };',
+    initScript: `
+      window.__openedUrls = [];
+      window.__copiedText = '';
+      window.open = function (url) { window.__openedUrls.push(url); return {}; };
+      Object.defineProperty(navigator, 'clipboard', {
+        configurable: true,
+        value: { writeText: async function (text) { window.__copiedText = text; } }
+      });
+    `,
     api: {
       slots: [],
       booking: async ({ payload }) => ({
@@ -843,31 +851,44 @@ async function testEmailPopupBlockedFallback(browser, base) {
     await fillDetails(page, { preferredTime: 'morning' });
     await page.locator('[data-book-next="5"]').click();
     await waitForStep(page, 5);
-    await page.locator('#booking-email').click();
-    const status = await waitForBookStatus(page, new RegExp(`Booking request saved\\. Reference: ${reference}`));
+    await page.locator('#booking-whatsapp').click();
+    await page.waitForURL(`${base}/booking-confirmation.html`);
 
-    assert.equal(page.url(), `${base}/book.html`, 'blocked popup must not navigate away from the booking page');
     assert.equal(calls.bookings.length, 1);
-    const manualLink = status.locator('a');
-    await manualLink.waitFor();
-    assert.equal(await manualLink.textContent(), 'Open email');
-    assert.equal(await manualLink.getAttribute('target'), '_blank');
-    assert.match(await manualLink.getAttribute('rel'), /noopener/);
-    assert.match(await manualLink.getAttribute('rel'), /noreferrer/);
-    const href = await manualLink.getAttribute('href');
-    const email = new URL(href);
-    assert.equal(email.protocol, 'mailto:');
-    assert.equal(email.pathname, 'motselisi@bonevc.co.za');
-    assert.equal(
-      email.searchParams.get('body'),
-      `Hi InsureSPR, I submitted website booking request ${reference}. Please help me continue.`
-    );
-    assert.equal(email.searchParams.get('subject'), `Booking request ${reference}`);
-    const decoded = decodeURIComponent(href).toLowerCase();
-    for (const forbidden of [patient.firstName, patient.surname, patient.mobile, patient.email, patient.notes]) {
-      assert.equal(decoded.includes(forbidden.toLowerCase()), false, 'Email fallback may contain only the booking reference, not intake PII');
+    const continuation = page.locator('[data-whatsapp-continuation]');
+    await continuation.waitFor({ state: 'visible' });
+    const message = await page.locator('[data-whatsapp-message]').inputValue();
+    assert.match(message, new RegExp(`Reference: ${reference}`));
+    assert.match(message, new RegExp(`Name: ${patient.firstName} ${patient.surname}`));
+    assert.match(message, new RegExp(`Service: ${requestService.name}`));
+    assert.match(message, /Preferred date:/);
+    assert.match(message, /Preferred time: Morning/);
+    assert.match(message, /Patient: New patient/);
+    assert.match(message, /Please confirm availability\./);
+    for (const forbidden of [patient.mobile, patient.email, patient.notes]) {
+      assert.equal(message.toLowerCase().includes(forbidden.toLowerCase()), false, 'WhatsApp scheduling message must exclude contact details and notes');
     }
-    assert.equal(await page.locator('#booking-email').isDisabled(), false);
+    assert.equal(
+      await page.evaluate(() => sessionStorage.getItem('insurespr.whatsappContinuation')),
+      null,
+      'one-time scheduling draft must be removed immediately after confirmation renders'
+    );
+
+    await page.locator('[data-copy-open-whatsapp]').click();
+    await page.waitForFunction(() => window.__copiedText && window.__openedUrls.length === 1);
+    const handoff = await page.evaluate(() => ({ copied: window.__copiedText, opened: window.__openedUrls[0] }));
+    assert.equal(handoff.copied, message);
+    assert.equal(handoff.opened, 'https://wa.me/27834507861');
+    const whatsappUrl = new URL(handoff.opened);
+    assert.equal(whatsappUrl.search, '', 'WhatsApp URL must not contain booking or patient data');
+    assert.equal(whatsappUrl.hash, '', 'WhatsApp URL must not contain booking or patient data');
+    for (const forbidden of [reference, patient.firstName, patient.surname, patient.mobile, patient.email, requestService.name]) {
+      assert.equal(handoff.opened.toLowerCase().includes(forbidden.toLowerCase()), false, 'WhatsApp URL must contain no booking or patient information');
+    }
+    assert.match(await page.locator('[data-whatsapp-status]').textContent(), /Message copied/);
+
+    await page.reload();
+    assert.equal(await page.locator('[data-whatsapp-continuation]').isHidden(), true, 'one-time WhatsApp continuation must not reappear after refresh');
   });
 }
 
@@ -948,7 +969,7 @@ const tests = [
   ['no-slot preferred-time fallback', testNoSlotPreferredTimeFallback],
   ['cancellation and reschedule wording', testCancellationAndRescheduleWording],
   ['Turnstile and honeypot bot failures', testTurnstileAndHoneypotBotFailures],
-  ['blocked email popup manual reference-only fallback', testEmailPopupBlockedFallback],
+  ['structured WhatsApp continuation keeps booking data out of URLs', testStructuredWhatsAppContinuation],
   ['abandonment analytics contains no PII', testAbandonmentEventContainsNoPii],
   ['partial JavaScript failure fails closed', testPartialJavaScriptFailureFailsClosed]
 ];

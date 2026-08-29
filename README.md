@@ -21,6 +21,14 @@ validated public Supabase Edge Function. A separate, scheduler-only function
 processes notification intent after the underlying record commits. Browser code
 has no database key and cannot query operational tables directly.
 
+The booking review has two deliberate completion routes: save the request and
+show the confirmation, or save it and continue on WhatsApp. The WhatsApp route
+persists the same structured booking first, carries a one-time scheduling draft
+to the confirmation page, and lets the visitor copy it before opening the
+approved `27834507861` chat. Names, services, contact details, notes and booking
+references are never placed in the WhatsApp URL; the draft is removed from
+session storage as soon as it is rendered.
+
 ## Current state
 
 - Supabase project: `ffdmmxffzewqiacsuvhr`

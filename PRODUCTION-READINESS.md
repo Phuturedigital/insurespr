@@ -18,6 +18,11 @@ workflow and domain transition must all be ready at the same time.
 - Separate individual, workforce and DXA-scanning journeys.
 - Dedicated employer quote form rather than a patient booking form.
 - Persistent email and directions fallbacks.
+- A structured WhatsApp-assisted booking route persists the booking before
+  handoff, renders a one-time scheduling message on the confirmation page and
+  opens the approved `27834507861` chat without putting patient, service, note,
+  contact or booking-reference data in a URL. The visitor still copies, pastes
+  and deliberately sends the message.
 - Explicit “request received” versus “confirmed” booking language.
 - No public cash prices, preparation instructions, durations, report timing,
   mobile-service promises or practitioner credentials have been invented.

@@ -174,7 +174,7 @@ async function assertPendingForms(browser, base) {
     await page.waitForFunction((id) => document.getElementById(id)?.dataset.ready === 'false', formId);
     assert.equal(await page.locator(`#${formId} [data-form-gate]`).evaluate((gate) => gate.disabled), true, `${pageName} pending policy must stay closed`);
     assert.equal(await page.locator(`[data-form-gate-status="${formId}"] [data-form-gate-title]`).textContent(), 'Online requests are not open yet.');
-    if (formId === 'book-form') assert.equal(await page.locator('#booking-email').isDisabled(), true);
+    if (formId === 'book-form') assert.equal(await page.locator('#booking-whatsapp').isDisabled(), true);
     await page.close();
   }
   await context.close();
@@ -192,7 +192,7 @@ async function assertMissingProtectionStaysClosed(browser, base) {
   await page.waitForFunction(() => document.getElementById('book-form')?.dataset.ready === 'false');
   assert.equal(await page.locator('#book-form [data-form-gate]').evaluate((gate) => gate.disabled), true);
   assert.match(await page.locator('[data-form-gate-status="book-form"] [data-form-gate-copy]').textContent(), /anti-spam protection still needs setup/i);
-  assert.equal(await page.locator('#booking-email').isDisabled(), true);
+  assert.equal(await page.locator('#booking-whatsapp').isDisabled(), true);
   await context.close();
 }
 

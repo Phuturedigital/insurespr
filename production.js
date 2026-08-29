@@ -77,7 +77,9 @@
 
   function safeStorage(storage, method, key, value) {
     try {
-      return method === 'getItem' ? storage.getItem(key) : storage.setItem(key, value);
+      if (method === 'getItem') return storage.getItem(key);
+      if (method === 'removeItem') return storage.removeItem(key);
+      return storage.setItem(key, value);
     } catch (_) {
       return null;
     }
@@ -246,8 +248,8 @@
     form.setAttribute('aria-busy', 'false');
     form.dataset.ready = 'false';
     setFormGateNotice(form, title, copy);
-    var assistedEmail = form.querySelector('#booking-email');
-    if (assistedEmail) assistedEmail.disabled = true;
+    var assistedWhatsApp = form.querySelector('#booking-whatsapp');
+    if (assistedWhatsApp) assistedWhatsApp.disabled = true;
   }
 
   function activateBoundForm(form) {
@@ -260,8 +262,8 @@
     form.dataset.ready = 'true';
     var notice = formGateNotice(form);
     if (notice) notice.hidden = true;
-    var assistedEmail = form.querySelector('#booking-email');
-    if (assistedEmail) assistedEmail.disabled = false;
+    var assistedWhatsApp = form.querySelector('#booking-whatsapp');
+    if (assistedWhatsApp) assistedWhatsApp.disabled = false;
   }
 
   function approvedPrivacyVersion(config) {
@@ -613,7 +615,7 @@
     var slotNote = document.getElementById('slot-note');
     var serviceFacts = document.getElementById('booking-service-facts');
     var review = document.getElementById('booking-review');
-    var emailContinue = document.getElementById('booking-email');
+    var whatsappContinue = document.getElementById('booking-whatsapp');
     var completed = false;
     var started = false;
     var servicesById = {};
@@ -885,46 +887,38 @@
       track('booking_request_submitted', payload.service_id);
     }
 
-    if (emailContinue) emailContinue.addEventListener('click', function () {
+    function rememberWhatsAppContinuation(body, payload) {
+      var draft = {
+        reference: body.booking.reference,
+        name: [payload.first_name, payload.surname].filter(Boolean).join(' '),
+        service: selectText(serviceSelect) || body.booking.service_name || 'Requested service',
+        preferred_date: payload.preferred_date,
+        preferred_time: preferredTimeLabel(),
+        patient_status: payload.patient_status,
+        created_at: Date.now()
+      };
+      safeStorage(sessionStorage, 'setItem', STORAGE_PREFIX + 'whatsappContinuation', JSON.stringify(draft));
+    }
+
+    if (whatsappContinue) whatsappContinue.addEventListener('click', function () {
       clearStatus(form);
       if (!validateWholeBooking()) return;
       if (!validateTurnstile(form)) return;
       setBusy(form, true);
-      emailContinue.disabled = true;
+      whatsappContinue.disabled = true;
       var payload = bookingPayload();
       api('/bookings', { method: 'POST', body: JSON.stringify(payload) }).then(function (body) {
         rememberBooking(body, payload);
+        rememberWhatsAppContinuation(body, payload);
         removeTurnstile(form);
-        track('email_clicked', payload.service_id);
-        var subject = 'Booking request ' + body.booking.reference;
-        var message = "Hi InsureSPR, I submitted website booking request " + body.booking.reference + '. Please help me continue.';
-        var emailUrl = 'mailto:motselisi@bonevc.co.za?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(message);
-        var opened = window.open(emailUrl, '_blank', 'noopener,noreferrer');
-        setStatus(
-          form,
-          'Booking request saved. Reference: ' + body.booking.reference + '. Your email app opens separately so this confirmation stays available.',
-          'success'
-        );
-        if (!opened) {
-          var status = document.getElementById('book-status');
-          var manualLink = document.createElement('a');
-          manualLink.className = 'btn btn--ghost btn--sm';
-          manualLink.href = emailUrl;
-          manualLink.target = '_blank';
-          manualLink.rel = 'noopener noreferrer';
-          manualLink.textContent = 'Open email';
-          manualLink.setAttribute('aria-label', 'Open email for booking reference ' + body.booking.reference);
-          status.append(document.createElement('br'), manualLink);
-        }
-        setBusy(form, false);
-        emailContinue.disabled = false;
+        window.location.assign('booking-confirmation.html');
       }).catch(function (error) {
         if (handlePrivacyNoticeChanged(form, error)) return;
         if (error.code === 'SLOT_UNAVAILABLE') loadAvailability();
         resetTurnstile(form);
         setStatus(form, error.message, 'error');
         setBusy(form, false);
-        emailContinue.disabled = false;
+        whatsappContinue.disabled = false;
       });
     });
 
@@ -934,7 +928,7 @@
       if (!validateWholeBooking()) return;
       if (!validateTurnstile(form)) return;
       setBusy(form, true);
-      if (emailContinue) emailContinue.disabled = true;
+      if (whatsappContinue) whatsappContinue.disabled = true;
       var payload = bookingPayload();
       api('/bookings', { method: 'POST', body: JSON.stringify(payload) }).then(function (body) {
         rememberBooking(body, payload);
@@ -950,7 +944,7 @@
         resetTurnstile(form);
         setStatus(form, error.message, 'error');
         setBusy(form, false);
-        if (emailContinue) emailContinue.disabled = false;
+        if (whatsappContinue) whatsappContinue.disabled = false;
       });
     });
 
@@ -1058,6 +1052,100 @@
     });
   }
 
+  function whatsappContinuationMessage(draft) {
+    var patientLabel = draft.patient_status === 'returning' ? 'Returning patient' : 'New patient';
+    return [
+      'Hi InsureSPR, I submitted a website booking request.',
+      '',
+      'Reference: ' + draft.reference,
+      'Name: ' + draft.name,
+      'Service: ' + draft.service,
+      'Preferred date: ' + formatDate(draft.preferred_date),
+      'Preferred time: ' + draft.preferred_time,
+      'Patient: ' + patientLabel,
+      '',
+      'Please confirm availability.'
+    ].join('\n');
+  }
+
+  function fallbackCopyText(text) {
+    var field = document.createElement('textarea');
+    field.value = text;
+    field.setAttribute('readonly', '');
+    field.style.position = 'fixed';
+    field.style.opacity = '0';
+    document.body.appendChild(field);
+    field.select();
+    var copied = false;
+    try { copied = document.execCommand('copy'); } catch (_) { copied = false; }
+    field.remove();
+    return copied;
+  }
+
+  function copyText(text) {
+    if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+      return navigator.clipboard.writeText(text).then(function () { return true; }).catch(function () {
+        return fallbackCopyText(text);
+      });
+    }
+    return Promise.resolve(fallbackCopyText(text));
+  }
+
+  function bindWhatsAppContinuation(root, booking) {
+    var raw = safeStorage(sessionStorage, 'getItem', STORAGE_PREFIX + 'whatsappContinuation');
+    if (!raw) return;
+    safeStorage(sessionStorage, 'removeItem', STORAGE_PREFIX + 'whatsappContinuation');
+
+    var draft;
+    try { draft = JSON.parse(raw); } catch (_) { return; }
+    if (!draft || draft.reference !== booking.reference) return;
+    if (!Number.isFinite(draft.created_at)
+      || Date.now() - draft.created_at > 10 * 60 * 1000
+      || draft.created_at > Date.now() + 60_000) return;
+    if (![draft.name, draft.service, draft.preferred_date, draft.preferred_time].every(function (item) {
+      return typeof item === 'string' && item.trim();
+    })) return;
+    if (!['new', 'returning'].includes(draft.patient_status)) return;
+
+    var section = root.querySelector('[data-whatsapp-continuation]');
+    var messageField = root.querySelector('[data-whatsapp-message]');
+    var copyButton = root.querySelector('[data-copy-whatsapp]');
+    var copyOpenButton = root.querySelector('[data-copy-open-whatsapp]');
+    var status = root.querySelector('[data-whatsapp-status]');
+    if (!section || !messageField || !copyButton || !copyOpenButton || !status) return;
+
+    var message = whatsappContinuationMessage(draft);
+    messageField.value = message;
+    section.hidden = false;
+
+    function copyMessage() {
+      return copyText(message).then(function (copied) {
+        status.textContent = copied
+          ? 'Message copied. Paste it into the WhatsApp chat and choose Send.'
+          : 'Copy was not available. Select the message above, copy it, then paste it into WhatsApp.';
+        return copied;
+      });
+    }
+
+    copyButton.addEventListener('click', copyMessage);
+    copyOpenButton.addEventListener('click', function () {
+      var opened = window.open('https://wa.me/27834507861', '_blank', 'noopener,noreferrer');
+      track('whatsapp_clicked', booking.service_id || null);
+      copyMessage();
+      if (!opened && !section.querySelector('[data-manual-whatsapp]')) {
+        var manualLink = document.createElement('a');
+        manualLink.className = 'btn btn--ghost btn--sm';
+        manualLink.href = 'https://wa.me/27834507861';
+        manualLink.target = '_blank';
+        manualLink.rel = 'noopener noreferrer';
+        manualLink.dataset.manualWhatsapp = '';
+        manualLink.textContent = 'Open WhatsApp';
+        manualLink.setAttribute('aria-label', 'Open WhatsApp for booking reference ' + booking.reference);
+        status.insertAdjacentElement('afterend', manualLink);
+      }
+    });
+  }
+
   function renderConfirmation() {
     var root = document.getElementById('booking-confirmation');
     if (!root) return;
@@ -1075,6 +1163,7 @@
       root.querySelector('[data-booking-state]').textContent = booking.status === 'confirmed'
         ? 'Confirmed'
         : 'Request received — awaiting staff confirmation';
+      bindWhatsAppContinuation(root, booking);
       var manage = root.querySelector('[data-manage-booking]');
       if (booking.management_token) {
         manage.href = 'manage-booking.html#token=' + encodeURIComponent(booking.management_token);
