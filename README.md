@@ -181,6 +181,29 @@ separately: it is not required while the approved Reply-To remains on
 `bonevc.co.za`, but its absence prevents publication of an
 `@insuresprhealth.co.za` receiving address.
 
+### Automated production regression monitor
+
+`tools/release-monitor.mjs` runs the same live, read-only release audit against
+the canonical site and compares it with `RELEASE-MONITOR-BASELINE.json`. The
+baseline requires every currently healthy technical check to remain a pass,
+requires all 21 checks to remain present, permits known readiness blockers to
+improve, and fails on a new technical warning/failure, a missing check, or a new
+or worsened readiness issue. It never converts a known blocker into approval.
+
+GitHub workflow `.github/workflows/production-monitor.yml` runs the monitor each
+day at 04:17 UTC (06:17 South Africa time) and on manual dispatch. It uses no
+database, notification-provider or patient-data secret. Its JSON report contains
+only the public audit state, is retained as a private GitHub Actions artifact for
+30 days, and is kept out of both Git and the Vercel public artifact. A failed run
+is an operational alert to inspect before changing any launch dependency.
+
+Run the same comparison locally:
+
+```powershell
+node tools/release-monitor.mjs
+npm run test:release-monitor
+```
+
 The preflight also fails closed on recovery readiness. The current management
 evidence records an active, healthy Supabase project on the Free plan, with no
 managed daily backup/PITR and no verified encrypted off-site export, approved

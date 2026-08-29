@@ -1,0 +1,44 @@
+name: Production monitor
+
+on:
+  schedule:
+    - cron: "17 4 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: production-monitor
+  cancel-in-progress: false
+
+jobs:
+  live-read-only-audit:
+    name: Live website, API, DNS, and readiness regression check
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Use Node.js 22
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Run production regression monitor
+        run: node tools/release-monitor.mjs --output artifacts/production-monitor-report.json
+
+      - name: Retain the non-PII monitor report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: production-monitor-${{ github.run_id }}
+          path: artifacts/production-monitor-report.json
+          if-no-files-found: error
+          retention-days: 30

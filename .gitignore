@@ -23,6 +23,8 @@ tools/shots-fe/
 *.isprbackup
 *.isprbackup.manifest.json
 *.restore-evidence.json
+production-monitor-report.json
+artifacts/
 
 # OS
 .DS_Store

@@ -302,6 +302,12 @@ control.
   database URL and vault-held key on the approved runner. Every artifact must
   be authenticated before off-site upload; every failure or stale run must page
   the recovery owner. Never mark recovery ready from a command exit alone.
+- The `Production monitor` GitHub workflow performs a daily public read-only
+  website/API/DNS/readiness comparison. A failure means a healthy check
+  regressed, a check disappeared, or a new/worsened issue appeared. Review the
+  retained JSON artifact and rerun `node tools/release-audit.mjs` before making
+  a provider, DNS, privacy, catalogue or availability change. A green monitor
+  does not mean the listed launch blockers have been approved.
 
 ### Private privacy-request, record-locator and security-incident controls
 

@@ -14,6 +14,7 @@ PRIVACY-OPERATIONS.md
 PROVIDER-ACTIVATION.md
 OPERATIONAL-EVIDENCE-REGISTER.md
 RECOVERY-READINESS.json
+RELEASE-MONITOR-BASELINE.json
 supabase/
 
 # Historical concept-only pages and assets are retained in git for provenance,
