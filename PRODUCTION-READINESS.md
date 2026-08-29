@@ -191,8 +191,10 @@ workflow and domain transition must all be ready at the same time.
   `pg_restore`. It refuses overwrite and the production project hostname, keeps
   connection credentials out of arguments, and emits deliberately incomplete
   drill evidence. Unit tests and a disposable PostgreSQL 17 integration drill
-  pass, but repository tooling is not evidence that a scheduled off-site backup
-  exists. `RECOVERY-READINESS.json` therefore remains blocked and unchanged.
+  pass. The same encrypted backup/isolated-restore drill now runs in the required
+  GitHub quality workflow on every pull request. Repository tooling is still not
+  evidence that a scheduled off-site production backup exists, so
+  `RECOVERY-READINESS.json` remains blocked and unchanged.
 - Live migration
   `20260829012324_add_private_privacy_operations_registers` implements the
   approved data-subject request and security-compromise procedures as four

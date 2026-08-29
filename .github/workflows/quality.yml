@@ -46,6 +46,9 @@ jobs:
       - name: Run offline contract tests
         run: npm run test:unit
 
+      - name: Prove encrypted backup and isolated restore
+        run: npm run test:recovery:docker
+
       - name: Check and test Supabase Edge Functions locally
         run: npm run test:deno
 
