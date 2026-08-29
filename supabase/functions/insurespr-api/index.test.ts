@@ -161,6 +161,77 @@ Deno.test('approved privacy still fails closed when a launch or recovery gate is
   assertEquals(rateLimitCalls, 0);
 });
 
+for (const expectedReady of [false, true]) {
+  Deno.test(`services exposes only the ${expectedReady} composite intake-readiness decision`, async () => {
+    let gateCalls = 0;
+    const response = await createHandler({
+      getAllowedOrigins: () => new Set(['https://www.insuresprhealth.co.za']),
+      dbFetch: (path) => {
+        if (path.startsWith('practice_settings?')) {
+          return Promise.resolve(
+            new Response(
+              JSON.stringify([{
+                practice_name: 'InsureSPR Precision Healthcare',
+                privacy_notice_version: 'pending-approval',
+              }]),
+              { status: 200, headers: { 'Content-Type': 'application/json' } },
+            ),
+          );
+        }
+        if (path.startsWith('service_categories?') || path.startsWith('services?')) {
+          return Promise.resolve(
+            new Response('[]', { status: 200, headers: { 'Content-Type': 'application/json' } }),
+          );
+        }
+        throw new Error(`Unexpected path: ${path}`);
+      },
+      rpc: <T>(name: string, payload: JsonRecord) => {
+        assertEquals(name, 'public_intake_activation_ready');
+        assertEquals(Object.keys(payload).length, 0);
+        gateCalls += 1;
+        return Promise.resolve(expectedReady as T);
+      },
+      requestId: () => 'services-readiness-test',
+    })(
+      new Request('https://project.supabase.co/functions/v1/insurespr-api/services', {
+        headers: { Origin: 'https://www.insuresprhealth.co.za' },
+      }),
+    );
+    const body = await responseBody(response);
+    assertEquals(response.status, 200);
+    assertEquals(response.headers.get('Cache-Control'), 'no-store');
+    assertEquals(body.intake_ready, expectedReady);
+    assertEquals(
+      Object.keys(body).sort().join(','),
+      'categories,intake_ready,practice,services,turnstile_site_key',
+    );
+    assertEquals(gateCalls, 1);
+  });
+}
+
+Deno.test('services fails the readiness signal closed when its database RPC is unavailable', async () => {
+  const response = await createHandler({
+    getAllowedOrigins: () => new Set(['https://www.insuresprhealth.co.za']),
+    dbFetch: (path) => {
+      const body = path.startsWith('practice_settings?')
+        ? JSON.stringify([{ privacy_notice_version: 'privacy-approved' }])
+        : '[]';
+      return Promise.resolve(
+        new Response(body, { status: 200, headers: { 'Content-Type': 'application/json' } }),
+      );
+    },
+    rpc: () => Promise.reject(new Error('simulated readiness RPC outage')),
+    requestId: () => 'services-readiness-failure-test',
+  })(
+    new Request('https://project.supabase.co/functions/v1/insurespr-api/services', {
+      headers: { Origin: 'https://www.insuresprhealth.co.za' },
+    }),
+  );
+  const body = await responseBody(response);
+  assertEquals(response.status, 200);
+  assertEquals(body.intake_ready, false);
+});
+
 Deno.test('Turnstile fails closed when both production keys are absent', async () => {
   let thrown: unknown;
   try {

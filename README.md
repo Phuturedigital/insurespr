@@ -75,7 +75,9 @@ site is served at `https://www.insuresprhealth.co.za/`. Privacy publication
 version `2026-08-21.1` is owner-approved, but transactional intake is still
 deliberately fail-closed until Information Officer evidence, Turnstile,
 service facts, availability and notification dependencies in
-`PRODUCTION-READINESS.md` are approved and configured.
+`PRODUCTION-READINESS.md` are approved and configured. The uncached services
+response exposes only the composite `intake_ready` boolean, and the existing
+forms remain disabled unless it is explicitly `true`.
 
 ## Local preview
 
@@ -100,7 +102,8 @@ node tools/audit.mjs http://127.0.0.1:4319
 
 ## Supabase workflow
 
-The committed migration versions match the remote project migration history.
+The committed migration names and SQL correspond to the remote project history;
+MCP-applied rows can have later deployment timestamps than their local files.
 The Supabase CLI configuration deliberately disables automatic exposure of new
 tables. All public-schema tables use row-level security; direct `anon` and
 `authenticated` access to operational records is revoked. Server-side RPCs own

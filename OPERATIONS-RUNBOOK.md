@@ -268,9 +268,12 @@ Do not configure or release them independently.
    BOT_CHECK_UNAVAILABLE`.
 5. From each explicitly approved release origin, call
    `GET /api/insurespr?route=services` and
-   verify that `turnstile_site_key` is non-null. Confirm that the response never
-   exposes `TURNSTILE_SECRET_KEY` or any other server credential, then load the
-   booking, workforce and contact forms and verify that each renders a widget.
+   verify that `turnstile_site_key` is non-null and `intake_ready` is exactly
+   `true`. The readiness field is the same boolean database decision enforced
+   on every mutation; it must never contain dependency or evidence details.
+   Confirm that the response never exposes `TURNSTILE_SECRET_KEY` or any other
+   server credential, then load the booking, workforce and contact forms and
+   verify that each renders a widget.
 6. Complete one synthetic form flow. Confirm that completion populates a token,
    one submission consumes it, and an expiry, error or retry requires a new
    token. Turnstile tokens are single-use and expire after five minutes; never

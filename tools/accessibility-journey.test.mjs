@@ -66,6 +66,7 @@ const approvedConfig = {
   },
   categories: [],
   services: [requestService],
+  intake_ready: true,
   turnstile_site_key: '1x00000000000000000000AA'
 };
 

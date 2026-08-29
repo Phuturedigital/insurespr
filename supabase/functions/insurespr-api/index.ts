@@ -423,7 +423,7 @@ function marketing(body: JsonRecord): JsonRecord {
 }
 
 async function handleServices(origin: string | null, deps: ApiDependencies): Promise<Response> {
-  const [practiceResponse, categoriesResponse, servicesResponse] = await Promise.all([
+  const [practiceResponse, categoriesResponse, servicesResponse, intakeReady] = await Promise.all([
     deps.dbFetch(
       'practice_settings?select=practice_name,descriptor,address_line,locality,region,country_code,phone_display,phone_e164,whatsapp_e164,public_email,timezone,opening_hours,maps_url,privacy_notice_version&id=eq.primary',
     ),
@@ -433,6 +433,10 @@ async function handleServices(origin: string | null, deps: ApiDependencies): Pro
     deps.dbFetch(
       'services?select=id,category_id,slug,name,short_description,audience,booking_mode,confirmation_mode,appointment_duration_minutes,price_type,cash_price_cents,cash_price_max_cents,currency,price_note,medical_aid_status,referral_requirement,appointment_requirement,what_to_bring,expected_duration,results_process,preparation_instructions,verification_status,display_order&is_published=eq.true&order=display_order.asc',
     ),
+    deps.rpc<boolean>('public_intake_activation_ready', {}).then((ready) => ready === true).catch(() => {
+      console.error(JSON.stringify({ error: 'intake_readiness_check_failed' }));
+      return false;
+    }),
   ]);
 
   const [practice, categories, services] = await Promise.all([
@@ -447,6 +451,7 @@ async function handleServices(origin: string | null, deps: ApiDependencies): Pro
       practice: practice[0] || null,
       categories,
       services,
+      intake_ready: intakeReady,
       turnstile_site_key: Deno.env.get('TURNSTILE_SITE_KEY') || null,
     },
     200,

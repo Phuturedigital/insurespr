@@ -478,14 +478,14 @@ function parseApiError(text) {
 
 function inspectSameOriginBridge(directPayload, bridgePayload, headers) {
   const problems = [];
-  const expectedKeys = ['categories', 'practice', 'services', 'turnstile_site_key'];
+  const expectedKeys = ['categories', 'intake_ready', 'practice', 'services', 'turnstile_site_key'];
   const actualKeys = bridgePayload && typeof bridgePayload === 'object' && !Array.isArray(bridgePayload)
     ? Object.keys(bridgePayload).sort()
     : [];
   if (!isDeepStrictEqual(actualKeys, expectedKeys)) {
     problems.push(`response keys are ${actualKeys.join(', ') || 'missing'}`);
   }
-  for (const key of ['practice', 'categories', 'services']) {
+  for (const key of ['practice', 'categories', 'services', 'intake_ready']) {
     if (!isDeepStrictEqual(bridgePayload?.[key], directPayload?.[key])) {
       problems.push(`${key} differs from the authoritative Supabase response`);
     }
@@ -493,6 +493,9 @@ function inspectSameOriginBridge(directPayload, bridgePayload, headers) {
   const siteKey = bridgePayload?.turnstile_site_key;
   if (siteKey !== null && (typeof siteKey !== 'string' || !siteKey.trim())) {
     problems.push('turnstile_site_key must be null or a non-empty string');
+  }
+  if (typeof directPayload?.intake_ready !== 'boolean' || typeof bridgePayload?.intake_ready !== 'boolean') {
+    problems.push('intake_ready must be an authoritative boolean');
   }
   if (/TURNSTILE_SECRET_KEY|INSURESPR_PROXY_PRIVATE_KEY_B64|secret-key/i.test(JSON.stringify(bridgePayload))) {
     problems.push('response contains a server-secret marker');
@@ -1332,6 +1335,7 @@ async function runSelfTest() {
 
   const readyServices = {
     practice: { privacy_notice_version: '2026-08-13' },
+    intake_ready: true,
     turnstile_site_key: '0x4AAAA-test',
     services: DEFAULT_REQUIRED_SERVICES.map((slug, index) => ({
       id: `service-${index}`,
@@ -1343,6 +1347,7 @@ async function runSelfTest() {
   assert.equal(validateServices(readyServices, DEFAULT_REQUIRED_SERVICES).ok, true);
   const pendingServices = structuredClone(readyServices);
   pendingServices.practice.privacy_notice_version = 'pending-approval';
+  pendingServices.intake_ready = false;
   pendingServices.turnstile_site_key = null;
   pendingServices.services[0].verification_status = 'needs_confirmation';
   assert.deepEqual(
@@ -1478,6 +1483,7 @@ async function runSelfTest() {
     practice: { privacy_notice_version: 'pending-approval' },
     categories: [{ id: 'category' }],
     services: [{ id: 'service' }],
+    intake_ready: false,
     turnstile_site_key: null,
   };
   const bridgedServices = structuredClone(directServices);

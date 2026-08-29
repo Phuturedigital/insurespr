@@ -18,6 +18,7 @@ const apiPattern = '**/functions/v1/insurespr-api/**';
 const approvedVersion = '2026-08-13';
 const approvedConfig = {
   practice: { privacy_notice_version: approvedVersion },
+  intake_ready: true,
   services: [{
     id: '11111111-1111-4111-8111-111111111111',
     name: 'X-Ray',
@@ -165,6 +166,7 @@ async function assertPendingForms(browser, base) {
   const context = await browser.newContext();
   await mockPublicApi(context, {
     practice: { privacy_notice_version: 'pending' },
+    intake_ready: false,
     services: approvedConfig.services,
     turnstile_site_key: 'test-site-key'
   });
@@ -184,6 +186,7 @@ async function assertMissingProtectionStaysClosed(browser, base) {
   const context = await browser.newContext();
   await mockPublicApi(context, {
     practice: { privacy_notice_version: approvedVersion },
+    intake_ready: true,
     services: approvedConfig.services,
     turnstile_site_key: '   '
   });
@@ -196,6 +199,27 @@ async function assertMissingProtectionStaysClosed(browser, base) {
   await context.close();
 }
 
+async function assertCompositeIntakeGateStaysClosed(browser, base) {
+  const context = await browser.newContext();
+  await mockPublicApi(context, {
+    practice: { privacy_notice_version: approvedVersion },
+    intake_ready: false,
+    services: approvedConfig.services,
+    turnstile_site_key: 'test-site-key'
+  });
+  const page = await context.newPage();
+  await page.goto(`${base}/book.html`, { waitUntil: 'domcontentloaded' });
+  await page.waitForFunction(() => document.getElementById('book-form')?.dataset.ready === 'false');
+  assert.equal(await page.locator('#book-form [data-form-gate]').evaluate((gate) => gate.disabled), true);
+  assert.match(
+    await page.locator('[data-form-gate-status="book-form"] [data-form-gate-copy]').textContent(),
+    /secure request service is still being prepared/i
+  );
+  assert.equal(await page.locator('#book-form [name="turnstile_token"]').count(), 0);
+  assert.equal(await page.locator('#booking-whatsapp').isDisabled(), true);
+  await context.close();
+}
+
 async function assertConfigFailureStaysClosed(browser, base) {
   const context = await browser.newContext();
   await context.route(apiPattern, (route) => route.fulfill({ status: 500, contentType: 'application/json', body: '{"error":{"message":"test"}}' }));
@@ -204,6 +228,58 @@ async function assertConfigFailureStaysClosed(browser, base) {
   await page.waitForFunction(() => document.getElementById('contact-form')?.dataset.ready === 'false');
   assert.equal(await page.locator('#contact-form [data-form-gate]').evaluate((gate) => gate.disabled), true);
   assert.equal(await page.locator('[data-form-gate-status="contact-form"] [data-form-gate-title]').textContent(), 'The online form could not be opened.');
+  await context.close();
+}
+
+async function assertRuntimeIntakeGateClosesForm(browser, base) {
+  const context = await browser.newContext();
+  await context.route('https://challenges.cloudflare.com/turnstile/**', async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: 'text/javascript; charset=utf-8',
+      body: "window.turnstile={render:function(_mount,options){options.callback('test-turnstile-token');return 1;},reset:function(){},remove:function(){}};"
+    });
+  });
+  await context.route(apiPattern, async (route) => {
+    const pathname = new URL(route.request().url()).pathname;
+    if (pathname.endsWith('/services')) {
+      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(approvedConfig) });
+      return;
+    }
+    if (pathname.endsWith('/events')) {
+      await route.fulfill({ status: 204, body: '' });
+      return;
+    }
+    if (pathname.endsWith('/contact-enquiries')) {
+      await route.fulfill({
+        status: 503,
+        contentType: 'application/json',
+        body: JSON.stringify({ error: {
+          code: 'INTAKE_ACTIVATION_NOT_READY',
+          message: 'Online forms are temporarily unavailable.'
+        } })
+      });
+      return;
+    }
+    await route.fulfill({ status: 500, contentType: 'application/json', body: '{}' });
+  });
+  const page = await context.newPage();
+  await page.goto(`${base}/contact.html`, { waitUntil: 'domcontentloaded' });
+  await page.locator('#contact-form[data-ready="true"]').waitFor();
+  await page.waitForFunction(() => document.querySelector('#contact-form [name="turnstile_token"]')?.value === 'test-turnstile-token');
+  await page.locator('#cname').fill('Runtime Gate Test');
+  await page.locator('#cemail').fill('runtime@example.test');
+  await page.locator('#cmsg').fill('Please help with a general enquiry.');
+  await page.locator('#cprivacy').check();
+  await page.locator('#contact-form button[type="submit"]').click();
+  await page.waitForFunction(() => document.getElementById('contact-form')?.dataset.ready === 'false');
+  assert.equal(await page.locator('#contact-form [data-form-gate]').evaluate((gate) => gate.disabled), true);
+  assert.equal(await page.locator('#cprivacy').isChecked(), true, 'an intake outage must not rewrite accepted privacy state');
+  assert.equal(await page.locator('#contact-form [name="turnstile_token"]').count(), 0);
+  assert.match(
+    await page.locator('[data-form-gate-status="contact-form"] [data-form-gate-title]').textContent(),
+    /temporarily unavailable/i
+  );
   await context.close();
 }
 
@@ -302,8 +378,10 @@ try {
   await assertClosedNativeForm(browser, base, true, true);
   await assertApprovedForms(browser, base);
   await assertPendingForms(browser, base);
+  await assertCompositeIntakeGateStaysClosed(browser, base);
   await assertMissingProtectionStaysClosed(browser, base);
   await assertConfigFailureStaysClosed(browser, base);
+  await assertRuntimeIntakeGateClosesForm(browser, base);
   await assertStalePolicyClosesForm(browser, base);
   await assertManagementTokens(browser, base);
   await assertMarketingSanitization(browser, base);

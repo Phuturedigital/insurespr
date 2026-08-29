@@ -365,13 +365,22 @@ workflow and domain transition must all be ready at the same time.
 | Method | Route | Purpose |
 |---|---|---|
 | `GET` | `/` | Health response |
-| `GET` | `/services` | Public service and practice configuration |
+| `GET` | `/services` | Public service/practice configuration and the aggregate `intake_ready` boolean |
 | `GET` | `/availability` | Published slots for one service and range |
 | `POST` | `/bookings` | Transactional booking request |
 | `POST` | `/employer-leads` | Structured employer quote lead |
 | `POST` | `/contact-enquiries` | Short non-clinical enquiry |
 | `POST` | `/booking-actions` | Token-based cancellation/reschedule request |
 | `POST` | `/events` | Privacy-minimised conversion event |
+
+`/services` obtains `intake_ready` from the same service-role-only database gate
+used immediately before public mutations. It returns only a boolean, is marked
+`no-store`, and fails to `false` if the readiness RPC is unavailable. The
+booking, workforce and contact forms stay disabled until privacy is approved,
+`intake_ready` is exactly `true`, and the public Turnstile site key is present.
+If readiness changes after configuration loads, a `503
+INTAKE_ACTIVATION_NOT_READY` response closes the form again without sending or
+discarding its entered fields.
 
 ### Applied strict-consent and attribution release package
 

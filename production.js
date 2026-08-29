@@ -301,6 +301,14 @@
       );
       return false;
     }
+    if (!config || config.intake_ready !== true) {
+      closeFormGate(
+        form,
+        'Online requests are not open yet.',
+        'The secure request service is still being prepared. Use one of the direct contact options below.'
+      );
+      return false;
+    }
     var turnstileKey = config && typeof config.turnstile_site_key === 'string'
       ? config.turnstile_site_key.trim()
       : '';
@@ -346,6 +354,32 @@
       form,
       'Privacy notice changed — reload and review it again.',
       'This request was not sent. Reload the page to review the current notice, or use a direct contact option below.'
+    );
+    return true;
+  }
+
+  function handleRuntimeGateClosed(form, error) {
+    if (!error || !['PRIVACY_NOTICE_NOT_READY', 'INTAKE_ACTIVATION_NOT_READY'].includes(error.code)) return false;
+    if (error.code === 'PRIVACY_NOTICE_NOT_READY') {
+      var consent = form.elements.privacy_accepted;
+      var hidden = form.elements.privacy_version;
+      if (consent) consent.checked = false;
+      if (hidden) {
+        hidden.value = '';
+        hidden.defaultValue = '';
+      }
+      delete form.dataset.privacyVersion;
+      var label = form.querySelector('[data-consent-policy-label]');
+      var versionTarget = form.querySelector('[data-consent-policy-version]');
+      if (versionTarget) versionTarget.textContent = '';
+      if (label) label.hidden = true;
+    }
+    removeTurnstile(form);
+    setBusy(form, false);
+    closeFormGate(
+      form,
+      'Online requests are temporarily unavailable.',
+      'This request was not sent. Use one of the direct contact options below, or reload after the service is available.'
     );
     return true;
   }
@@ -919,6 +953,7 @@
         window.location.assign('booking-confirmation.html');
       }).catch(function (error) {
         if (handlePrivacyNoticeChanged(form, error)) return;
+        if (handleRuntimeGateClosed(form, error)) return;
         if (error.code === 'SLOT_UNAVAILABLE') loadAvailability();
         resetTurnstile(form);
         setStatus(form, error.message, 'error');
@@ -945,6 +980,7 @@
         }
       }).catch(function (error) {
         if (handlePrivacyNoticeChanged(form, error)) return;
+        if (handleRuntimeGateClosed(form, error)) return;
         if (error.code === 'SLOT_UNAVAILABLE') loadAvailability();
         resetTurnstile(form);
         setStatus(form, error.message, 'error');
@@ -983,6 +1019,7 @@
         setBusy(form, false);
       }).catch(function (error) {
         if (handlePrivacyNoticeChanged(form, error)) return;
+        if (handleRuntimeGateClosed(form, error)) return;
         resetTurnstile(form);
         setStatus(form, error.message, 'error');
         setBusy(form, false);
@@ -1045,6 +1082,7 @@
         setBusy(form, false);
       }).catch(function (error) {
         if (handlePrivacyNoticeChanged(form, error)) return;
+        if (handleRuntimeGateClosed(form, error)) return;
         resetTurnstile(form);
         setStatus(form, error.message, 'error');
         setBusy(form, false);

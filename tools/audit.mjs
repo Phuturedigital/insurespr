@@ -40,10 +40,11 @@ const apiBase = `${apiOrigin}/functions/v1/insurespr-api`;
  */
 const auditConfig = {
   practice: {
-    privacy_notice_version: 'pending-approval',
+  privacy_notice_version: 'pending-approval',
   },
   categories: [],
   services: [],
+  intake_ready: false,
   turnstile_site_key: null,
 };
 

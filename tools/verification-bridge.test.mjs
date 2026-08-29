@@ -24,7 +24,7 @@ test('services are read through the upstream and receive only the public site ke
     env: { TURNSTILE_SITE_KEY: 'public-site-key' },
     fetchImpl: async (url, init) => {
       calls.push({ url: String(url), init });
-      return json({ services: [], turnstile_site_key: null });
+      return json({ services: [], intake_ready: false, turnstile_site_key: null });
     },
   });
 
@@ -34,6 +34,7 @@ test('services are read through the upstream and receive only the public site ke
   const body = await response.json();
   assert.equal(response.status, 200);
   assert.equal(body.turnstile_site_key, 'public-site-key');
+  assert.equal(body.intake_ready, false);
   assert.equal(calls.length, 1);
   assert.match(calls[0].url, /insurespr-api\/services$/);
   assert.equal(calls[0].init.headers.get('Origin'), 'https://www.insuresprhealth.co.za');
