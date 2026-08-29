@@ -195,6 +195,25 @@ workflow and domain transition must all be ready at the same time.
   GitHub quality workflow on every pull request. Repository tooling is still not
   evidence that a scheduled off-site production backup exists, so
   `RECOVERY-READINESS.json` remains blocked and unchanged.
+- Live migrations `20260829080652_index_notification_delivery_evidence_fk`,
+  `20260829080656_harden_recovery_activation_provenance` and
+  `20260829080700_record_recovery_activation_handoff` remove the last
+  unindexed-foreign-key advisor notice and install a private, rehearsal-first
+  recovery activation gate. Configurations are hash-bound, immutable and
+  require accepted route/objective/ownership plus verified secret-custody and
+  schedule claims. Execution evidence is append-only and stores only hashes,
+  controlled references and timestamps. Promotion requires a current backup,
+  matching verification, isolated restore-and-delete with delivery disabled,
+  failure-alert test and schedule-health result; revocation reopens the launch
+  dependency.
+- The public form API now calls the service-role-only
+  `public.public_intake_activation_ready()` before Turnstile, rate-limit or
+  mutation work once privacy is approved. The gate additionally requires no
+  open/blocking launch dependency and dynamically current recovery evidence,
+  so a stale or later-failed backup cannot be hidden behind a once-resolved
+  launch row. The deployed API is version 17. Production remains safely at zero
+  recovery configurations, zero execution-evidence rows and zero operational
+  submissions; `backup-recovery` is still open and blocking.
 - Live migration
   `20260829012324_add_private_privacy_operations_registers` implements the
   approved data-subject request and security-compromise procedures as four

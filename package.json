@@ -9,7 +9,7 @@
   "scripts": {
     "test": "npm run test:syntax && npm run test:unit && npm run test:deno && npm run test:browser",
     "test:syntax": "node tools/syntax-check.mjs",
-    "test:unit": "npm run test:release-audit && npm run test:release-monitor && npm run test:legacy-redirects && npm run test:launch-approvals && npm run test:google-business-profile && npm run test:service-activation-handoff && npm run test:privacy-activation-handoff && npm run test:availability-activation-handoff && npm run test:notification-activation-handoff && npm run test:recovery && npm run test:concept-preview && npm run test:service-expansion && npm run test:verification-bridge",
+    "test:unit": "npm run test:release-audit && npm run test:release-monitor && npm run test:legacy-redirects && npm run test:launch-approvals && npm run test:google-business-profile && npm run test:service-activation-handoff && npm run test:privacy-activation-handoff && npm run test:availability-activation-handoff && npm run test:notification-activation-handoff && npm run test:recovery-activation-handoff && npm run test:recovery && npm run test:concept-preview && npm run test:service-expansion && npm run test:verification-bridge",
     "test:release-audit": "node tools/release-audit.mjs --self-test",
     "test:release-monitor": "node --test tools/release-monitor.test.mjs",
     "test:legacy-redirects": "node --test tools/legacy-redirects.test.mjs",
@@ -19,6 +19,7 @@
     "test:privacy-activation-handoff": "node --test tools/privacy-activation-handoff.test.mjs",
     "test:availability-activation-handoff": "node --test tools/availability-activation-handoff.test.mjs",
     "test:notification-activation-handoff": "node --test tools/notification-activation-handoff.test.mjs",
+    "test:recovery-activation-handoff": "node --test tools/recovery-activation-handoff.test.mjs",
     "test:recovery": "node --test tools/recovery-backup.test.mjs",
     "test:recovery:docker": "node --test tools/recovery-backup-docker.test.mjs",
     "test:concept-preview": "node --test tools/concept-preview-safety.test.mjs",

@@ -504,6 +504,15 @@ async function requireSubmissionPolicy(deps: ApiDependencies): Promise<void> {
       'Online forms are not open yet. Please email motselisi@bonevc.co.za.',
     );
   }
+
+  const intakeReady = await deps.rpc<boolean>('public_intake_activation_ready', {});
+  if (intakeReady !== true) {
+    throw new ApiError(
+      503,
+      'INTAKE_ACTIVATION_NOT_READY',
+      'Online forms are temporarily unavailable. Please email motselisi@bonevc.co.za.',
+    );
+  }
 }
 
 async function handleBooking(

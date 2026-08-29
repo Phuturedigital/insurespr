@@ -191,3 +191,26 @@ configuration and source hashes. Active readiness additionally requires both
 dependencies resolved, `pg_cron`, `pg_net`, and the exact matching active Cron
 job. Production currently has zero configuration rows, attempts, notification
 Vault secret names or scheduler extensions; no outbound delivery was enabled.
+
+## Recovery activation handoff
+
+Migrations `20260829080652_index_notification_delivery_evidence_fk`,
+`20260829080656_harden_recovery_activation_provenance` and
+`20260829080700_record_recovery_activation_handoff` install the private recovery
+activation lifecycle and record the exact SHA-256
+`375b8102b5a57727b99e94ee4e99d0e7dae494ddf5673a318d6eefe81bf4dde2`
+of `RECOVERY-ACTIVATION-HANDOFF.json`.
+
+Two verified claims record the live Free-plan zero state and the technical
+provenance contract. Two missing claims preserve the absent route/objectives and
+absent operational ownership/custody/schedule/rehearsal evidence. The prepared
+packet deliberately does not contain any of the five claim keys that a real
+configuration must present before rehearsal.
+
+Both recovery tables use restrictive deny policies and no browser or service
+role has table access. Configuration is rehearsal-first and immutable;
+execution evidence is append-only. The service-role API may execute only the
+boolean intake gate, which also checks every launch dependency and dynamically
+current recovery evidence. Production currently has zero recovery
+configurations, zero recovery execution records, zero operational submissions,
+a pending privacy version and an open/blocking `backup-recovery` dependency.

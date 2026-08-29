@@ -992,6 +992,10 @@ export type Database = {
           recipient: string;
         }[];
       };
+      claim_proxy_attestation_nonce: {
+        Args: { p_expires_at: string; p_nonce_hash: string };
+        Returns: boolean;
+      };
       complete_notification_attempt: {
         Args: {
           p_attempt_id: string;
@@ -1026,6 +1030,29 @@ export type Database = {
         }[];
       };
       manage_booking: { Args: { p_payload: Json }; Returns: Json };
+      notification_delivery_activation_ready:
+        | {
+            Args: {
+              p_config_sha256: string;
+              p_email_from: string;
+              p_email_reply_to: string;
+              p_provider: string;
+              p_worker_source_sha256: string;
+            };
+            Returns: boolean;
+          }
+        | {
+            Args: {
+              p_config_sha256: string;
+              p_email_from: string;
+              p_email_reply_to: string;
+              p_mode: string;
+              p_provider: string;
+              p_worker_source_sha256: string;
+            };
+            Returns: boolean;
+          };
+      public_intake_activation_ready: { Args: never; Returns: boolean };
       record_analytics_event: { Args: { p_payload: Json }; Returns: undefined };
       staff_close_booking: {
         Args: {

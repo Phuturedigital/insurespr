@@ -119,6 +119,48 @@ Deno.test('database privacy-version errors map to stable API errors', async () =
   );
 });
 
+Deno.test('approved privacy still fails closed when a launch or recovery gate is not ready', async () => {
+  let gateCalls = 0;
+  let turnstileCalls = 0;
+  let rateLimitCalls = 0;
+  const response = await createHandler({
+    getAllowedOrigins: () => new Set(['https://www.insuresprhealth.co.za']),
+    dbFetch: () =>
+      Promise.resolve(
+        new Response(JSON.stringify([{ privacy_notice_version: 'privacy-2026-08-29-approved' }]), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' },
+        }),
+      ),
+    rpc: <T>(name: string) => {
+      assertEquals(name, 'public_intake_activation_ready');
+      gateCalls += 1;
+      return Promise.resolve(false as T);
+    },
+    verifyTurnstile: () => {
+      turnstileCalls += 1;
+      return Promise.resolve('must-not-be-used');
+    },
+    enforceRateLimit: () => {
+      rateLimitCalls += 1;
+      return Promise.resolve('must-not-be-used');
+    },
+    requestId: () => 'intake-gate-test',
+  })(
+    new Request('https://project.supabase.co/functions/v1/insurespr-api/bookings', {
+      method: 'POST',
+      headers: { Origin: 'https://www.insuresprhealth.co.za' },
+    }),
+  );
+  const body = await responseBody(response);
+  const error = body.error as JsonRecord;
+  assertEquals(response.status, 503);
+  assertEquals(error.code, 'INTAKE_ACTIVATION_NOT_READY');
+  assertEquals(gateCalls, 1);
+  assertEquals(turnstileCalls, 0);
+  assertEquals(rateLimitCalls, 0);
+});
+
 Deno.test('Turnstile fails closed when both production keys are absent', async () => {
   let thrown: unknown;
   try {
@@ -187,6 +229,7 @@ for (
         return Promise.resolve('test-ip-hash');
       },
       rpc: <T>(name: string, payload: JsonRecord) => {
+        if (name === 'public_intake_activation_ready') return Promise.resolve(true as T);
         capturedRpc = name;
         capturedPayloads.push(payload);
         return Promise.resolve({ idempotent: false } as T);

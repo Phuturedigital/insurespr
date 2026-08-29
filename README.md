@@ -257,6 +257,17 @@ dump and cannot make the recovery manifest ready; scheduling, off-site storage,
 key custody, monitoring, ownership, objectives and a completed authorized drill
 remain operational approvals.
 
+`RECOVERY-ACTIVATION-HANDOFF.json` and `RECOVERY-ACTIVATION.md` now provide the
+controlled promotion path. Live private tables bind an exact non-secret
+configuration to accepted evidence and append-only execution records. A
+configuration must rehearse first, and activation requires a current encrypted
+backup, matching artifact verification, an isolated restore with external
+delivery disabled and target deletion, a failure-alert test and scheduler-health
+evidence. `public.public_intake_activation_ready()` is the service-role-only
+runtime gate used before public form side effects; it fails closed when privacy,
+any launch dependency or recovery freshness is not ready. Production still has
+zero recovery configurations and zero recovery execution records.
+
 ### Deterministic browser and SEO gates
 
 Install the exact development dependency graph and matching Chromium runtime,

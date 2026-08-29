@@ -116,9 +116,14 @@ logical backup, RPO, RTO, recovery owner or successful restore drill is on file.
 4. Restore into an isolated authorized target, keep external notifications and
    intake disabled, run the database/application contracts, and record achieved
    RPO/RTO.
-5. Only after the drill succeeds may `RECOVERY-READINESS.json` and the private
-   platform observation be superseded by a new forward migration and the
-   `backup-recovery` launch dependency be closed.
+5. Complete `RECOVERY-ACTIVATION-HANDOFF.json` with evidence and peer review,
+   insert the exact configuration in rehearsal, append the five required
+   execution-evidence classes, and promote only while the 72-hour rehearsal
+   window is open. Promotion resolves `backup-recovery`; stale backup evidence
+   automatically makes the public mutation gate false.
+6. Only after the drill succeeds may `RECOVERY-READINESS.json` and the private
+   platform observation be superseded by a new forward migration.
 
-Follow `RECOVERY-RESTORE-DRILL.md` and the official Supabase backup guide:
+Follow `RECOVERY-RESTORE-DRILL.md`, `RECOVERY-ACTIVATION.md` and the official
+Supabase backup guide:
 <https://supabase.com/docs/guides/platform/backups>.
