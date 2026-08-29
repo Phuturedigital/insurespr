@@ -39,6 +39,8 @@ session storage as soon as it is rendered.
 - Staff operations runbook: `OPERATIONS-RUNBOOK.md`
 - Production browser integration: `production.js`
 - Launch and approval checklist: `PRODUCTION-READINESS.md`
+- Prepared Google Business Profile account handoff:
+  `GOOGLE-BUSINESS-PROFILE-ALIGNMENT.json` (excluded from Vercel; not applied)
 - Recovery ownership and restore drill: `RECOVERY-RESTORE-DRILL.md`
 - Fact provenance: `CONTENT-NOTES.md`
 - Supplied rate evidence review: `XOM-RATES-2026-REVIEW.md`

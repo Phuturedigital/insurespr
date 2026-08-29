@@ -482,8 +482,14 @@ registrations, licences, tariffs, schedules or provider/DNS evidence.
    - Migrate approved/licensed articles and images with dates, authors and
      canonical URLs intact.
    - Connect and verify the official domain only after a rollback plan exists.
-   - Update Google Business Profile links and verify Search Console/sitemap
-     ownership after cutover.
+   - Use `GOOGLE-BUSINESS-PROFILE-ALIGNMENT.json` as the prepared-not-applied
+     account handoff. It fixes canonical NAP, website-published weekday hours
+     and all 16 service destinations without guessing a Google category or
+     claiming editor access.
+   - In the controlled account, reconcile categories, hours and destinations;
+     retain the authorised editor and before/after evidence; then verify Search
+     Console/sitemap ownership. Keep `google-business-profile` open until that
+     account-side review passes.
 
 10. **Analytics and marketing approval**
     - Approve campaign naming, conversion definitions and access.

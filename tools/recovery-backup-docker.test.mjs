@@ -29,13 +29,22 @@ async function docker(args, options = {}) {
 }
 
 async function waitUntilReady(container) {
+  let consecutiveReadyChecks = 0;
   for (let attempt = 0; attempt < 40; attempt += 1) {
     try {
-      await docker(['exec', container, 'pg_isready', '-U', 'postgres']);
-      return;
+      await docker([
+        'exec', container,
+        'psql', '-U', 'postgres', '-d', 'postgres', '-At',
+        '-c', 'select 1;',
+      ]);
+      consecutiveReadyChecks += 1;
+      if (consecutiveReadyChecks >= 2) return;
     } catch {
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      consecutiveReadyChecks = 0;
     }
+    // The official image can briefly accept connections during bootstrap before
+    // restarting PostgreSQL. Require two successful SQL queries one second apart.
+    await new Promise((resolve) => setTimeout(resolve, 1_000));
   }
   throw new Error('Disposable PostgreSQL container did not become ready');
 }

@@ -48,6 +48,14 @@ no `PUBLIC`, `anon`, `authenticated` or `service_role` data privileges. They
 are intended for controlled database-owner review in Supabase Studio or SQL,
 not for the website or Edge Functions.
 
+Migration `20260829064000_record_google_business_profile_handoff` records the
+SHA-256 of `GOOGLE-BUSINESS-PROFILE-ALIGNMENT.json`. That machine-readable
+handoff is `prepared-not-applied`: it checks the website-side identity, phone,
+published weekday hours and 16 service destinations while leaving the profile
+resource, authorised editor, categories, special hours and account review as
+explicit nulls. The file is retained in git, excluded from Vercel and does not
+authorise or imply a Google account change.
+
 The recorded 19 claims currently resolve to:
 
 | Review status | Count | Meaning |
@@ -90,8 +98,9 @@ and evidenced before this form was supplied:
 - Test any proposed `info@insuresprhealth.co.za` mailbox end to end and supply
   provider, MX, SPF, DKIM, DMARC, sender, reply-to, worker-secret and scheduler
   evidence before changing the approved public booking mailbox.
-- Complete Google Business Profile account-side category, hours, destinations,
-  editor ownership and verification evidence.
+- Apply the prepared Google Business Profile handoff inside the controlled
+  account, then retain account-side category, hours, destinations, editor
+  ownership and before/after verification evidence.
 - Complete the final readiness decision, approver, date, version and scope
   limitations only after the evidence-bound dependencies close.
 
