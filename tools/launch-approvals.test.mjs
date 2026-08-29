@@ -236,3 +236,50 @@ test('verified Free-plan recovery gap is private, machine-readable and release-b
   }
   assert.match(ignored, /^RECOVERY-READINESS\.json$/m);
 });
+
+test('privacy requests and security incidents use private guarded registers with no retained probes', async () => {
+  const [migration, privacy, runbook, snippet, readiness, readme] = await Promise.all([
+    read('supabase/migrations/20260829012324_add_private_privacy_operations_registers.sql'),
+    read('PRIVACY-OPERATIONS.md'),
+    read('OPERATIONS-RUNBOOK.md'),
+    read('supabase/snippets/privacy_operations.sql'),
+    read('PRODUCTION-READINESS.md'),
+    read('README.md'),
+  ]);
+
+  for (const table of [
+    'private.privacy_request_register',
+    'private.privacy_request_events',
+    'private.security_incident_register',
+    'private.security_incident_events',
+  ]) {
+    assert.match(migration, new RegExp(`create table ${table.replace('.', '\\.')}`));
+    assert.match(migration, new RegExp(`alter table ${table.replace('.', '\\.')} enable row level security`));
+    assert.match(migration, new RegExp(`revoke all on table ${table.replace('.', '\\.')} from public, anon, authenticated, service_role`));
+  }
+
+  assert.match(migration, /privacy_request_register_deny_all/);
+  assert.match(migration, /privacy_request_events_deny_all/);
+  assert.match(migration, /security_incident_register_deny_all/);
+  assert.match(migration, /security_incident_events_deny_all/);
+  assert.match(migration, /create or replace function private\.privacy_operations_inventory/);
+  assert.match(migration, /security invoker/g);
+  assert.match(migration, /privacy and security lifecycle events are immutable/);
+  assert.match(migration, /invalid privacy request status transition/);
+  assert.match(migration, /invalid security incident status transition/);
+  assert.match(migration, /ROLLBACK_PRIVATE_COMPLIANCE_PROBE/);
+  assert.match(migration, /synthetic privacy operations probe was not rolled back/);
+  assert.match(migration, /confirmed compromise|determination = 'reasonably_believed'/);
+  assert.doesNotMatch(migration, /grant\s+(?:all|select|insert|update|delete|execute)[\s\S]*?(?:anon|authenticated|service_role)/i);
+
+  for (const document of [privacy, runbook, snippet, readiness, readme]) {
+    assert.match(document, /privacy_operations_inventory/);
+    assert.match(document, /privacy_request_register/);
+    assert.match(document, /security_incident_register/);
+  }
+  assert.match(privacy, /identity documents, disclosed records, medical details/i);
+  assert.match(runbook, /identity-document images, clinical records, mailbox bodies/);
+  assert.match(snippet, /never the document/i);
+  assert.match(snippet, /eServices portal/);
+  assert.match(readiness, /20260829012324_add_private_privacy_operations_registers/);
+});

@@ -159,6 +159,26 @@ workflow and domain transition must all be ready at the same time.
   recovery capability as a readiness blocker. A plan upgrade alone cannot pass:
   a verified restore point or encrypted off-site backup, approved RPO/RTO,
   named owner, explicit approval and successful restore drill are all required.
+- Live migration
+  `20260829012324_add_private_privacy_operations_registers` implements the
+  approved data-subject request and security-compromise procedures as four
+  owner-only private tables: `private.privacy_request_register`,
+  `private.privacy_request_events`, `private.security_incident_register` and
+  `private.security_incident_events`. Requests and incidents receive explicit lifecycle,
+  identity/determination, notification, assignment and closure state, while
+  append-only event tables retain only privacy-minimised state snapshots.
+  Guard triggers reject unsafe transitions and silent milestone rewrites.
+- All four privacy-operations tables have RLS, explicit deny-all policies and
+  ACLs restricted to the database owner; `anon`, `authenticated` and
+  `service_role` have no data privileges or inventory-function execution. The
+  live migration completed transaction-scoped request and incident workflows,
+  rolled every synthetic row back, and left all four tables empty. The security
+  advisor remains at zero findings.
+- `private.privacy_operations_inventory()` provides a count-only open, closed,
+  six-year-review and legal-hold view without returning request contacts or
+  incident narratives. `supabase/snippets/privacy_operations.sql` supplies the
+  controlled queue, history and lifecycle templates; it is not a public or
+  browser admin interface.
 - Supabase performance advisor: only expected `unused_index` informational
   notices on the newly created, empty operational database. Keep the indexes
   until real query statistics exist; reference:

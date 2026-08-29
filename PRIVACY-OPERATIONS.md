@@ -28,7 +28,7 @@ documented requirement takes precedence and access must be restricted.
 | Anonymous website analytics | 13 months from event creation | Delete or aggregate irreversibly |
 | Rate-limit and anti-abuse records | Shortest operational window; no more than 30 days | Delete automatically |
 | Booking-management credentials | Expire after 90 days; retain only cryptographic hashes | Delete expired hashes during housekeeping |
-| Audit and security-incident evidence | 6 years after closure, or longer under a documented legal hold | Restricted archive, then secure deletion |
+| Privacy-request, audit and security-incident evidence | 6 years after closure, or longer under a documented legal hold | Restricted archive, then secure deletion |
 | Database backups | Rolling 35 days once backup ownership is confirmed | Provider expiry; restore access restricted |
 
 No website intake record is to be treated as the complete clinical record. If a
@@ -93,6 +93,35 @@ eight characters.
    erase a record subject to a legal hold, active complaint, security incident
    or another documented statutory duty; restrict it instead.
 
+### Private request register
+
+The live database implements this procedure through
+`private.privacy_request_register` and the immutable,
+data-minimised `private.privacy_request_events` history:
+
+- Records are created and handled only by the database owner or an explicitly
+  approved operator in the Supabase SQL editor. The browser, `anon`,
+  `authenticated` and `service_role` have no table privileges.
+- Each request receives a `DSR-...` reference and an explicit type, workflow
+  state, identity-verification state, response outcome, accountable assignee
+  and lifecycle timestamps.
+- A request cannot be recorded as responded until identity is verified or the
+  Information Officer records that identity verification is not required. It
+  cannot be closed before a response milestone exists. Invalid lifecycle
+  regressions are rejected by the database.
+- The register stores only the minimum requester contact locator needed to
+  handle the request. Identity documents, disclosed records, medical details
+  and mailbox-message bodies must remain in approved controlled custody.
+- Every insert and update appends an immutable event containing only workflow
+  state, assignee, operator and reason. The event omits requester contact,
+  identity evidence and decision narrative.
+- `private.privacy_operations_inventory()` reports count-only open, closed,
+  six-year-review and held records for both privacy requests and security
+  incidents. It does not disclose payloads or authorise deletion.
+
+Use `supabase/snippets/privacy_operations.sql` as the controlled operating
+template. Do not bypass its lifecycle with direct status-only edits.
+
 ## Processor and transfer register
 
 | Processor | Purpose | Data boundary | Activation condition |
@@ -115,6 +144,29 @@ subjects as required; provider incidents must be escalated to InsureSPR without
 delay. Record notification time, scope, mitigation and follow-up actions in the
 incident log. Do not wait for a perfect investigation before escalating a
 reasonably suspected compromise.
+
+The live `private.security_incident_register` now provides that restricted log,
+with an immutable `private.security_incident_events` lifecycle. It records the
+discovery source and time, accountable owner, determination, affected record
+classes/count, containment, regulator and affected-person notification states,
+controlled portal reference and closure. The database prevents a confirmed
+compromise from being closed without a completed regulator notification and a
+completed or documented-impossible affected-person notification. Incident
+summaries must not contain names, contact details, credentials, raw logs or
+compromised record contents.
+
+All four privacy-operations tables use RLS, explicit deny-all policies and
+owner-only ACLs. Their trigger and inventory functions are also unavailable to
+the browser and service role. The production migration’s transaction-scoped
+request and incident probes completed their valid workflows and rolled back to
+zero retained records.
+
+The Information Regulator states that security-compromise notifications must be
+submitted through its eServices portal and that the Information Officer should
+notify affected data subjects in writing. Use the current official procedure
+and forms rather than copying a stale form into this repository:
+<https://inforegulator.org.za/popia/> and
+<https://inforegulator.org.za/popia-forms/>.
 
 ## Release control
 

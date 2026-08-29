@@ -38,6 +38,8 @@ has no database key and cannot query operational tables directly.
 - Owner decisions and evidence boundaries: `LAUNCH-APPROVALS.md`
 - Private operational evidence reconciliation: `OPERATIONAL-EVIDENCE-REGISTER.md`
 - Website retention and data-subject procedure: `PRIVACY-OPERATIONS.md`
+- Owner-only privacy-request and incident templates:
+  `supabase/snippets/privacy_operations.sql`
 - Turnstile, email and contact-channel activation: `PROVIDER-ACTIVATION.md`
 
 The database schema, public API and canonical frontend are deployed. The public
@@ -89,6 +91,16 @@ legal holds, and can purge only terminal delivery metadata, unlinked anonymous
 analytics, stale rate-limit rows and expired token hashes. No scheduler is
 installed, and bookings, customers, leads, enquiries, consent and audit records
 remain inventory-only. See `PRIVACY-OPERATIONS.md` and `OPERATIONS-RUNBOOK.md`.
+
+Data-subject requests and suspected security compromises have separate private
+registers, `private.privacy_request_register` and
+`private.security_incident_register`, with immutable, privacy-minimised event
+histories. Guard triggers
+reject unsafe state changes, and `private.privacy_operations_inventory()`
+returns only operational and six-year-retention review counts. The four tables,
+their event histories and helper functions are unavailable to `anon`,
+`authenticated` and `service_role`; operate them only through the controlled SQL
+templates in `supabase/snippets/privacy_operations.sql`.
 
 ```powershell
 node --check production.js

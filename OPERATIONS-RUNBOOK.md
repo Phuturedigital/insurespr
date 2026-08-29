@@ -26,6 +26,10 @@ practice approves and remove access promptly when responsibilities change.
    current revision/open-slot horizon, materialization freshness, provenance,
    and unresolved conflicts. Follow `AVAILABILITY-ACTIVATION.md`; do not invent
    or silently repair schedules.
+7. When a privacy request or suspected compromise is received, stop ordinary
+   queue handling only to the extent required for safe escalation and use
+   `supabase/snippets/privacy_operations.sql`. Do not place these records in the
+   ordinary contact-enquiry queue.
 
 The practice must still name the person responsible for each queue and approve
 response-time targets. Until then, this is a technical procedure, not a promise
@@ -268,6 +272,36 @@ control.
 - Use `RECOVERY-RESTORE-DRILL.md` for the technical inventory, isolated
   quarterly rehearsal, evidence checklist and production restoration order.
   Its blank owner/RPO/RTO/retention fields are launch dependencies, not defaults.
+
+### Private privacy-request and security-incident registers
+
+The live database contains four owner-only tables:
+
+- `private.privacy_request_register`
+- `private.privacy_request_events`
+- `private.security_incident_register`
+- `private.security_incident_events`
+
+Use `supabase/snippets/privacy_operations.sql` for queues, history and lifecycle
+templates. These records are deliberately outside the public API and
+service-role surface. Every update must identify a named operator and a concrete
+reason. Guard triggers reject invalid status transitions and prevent recorded
+receipt, identity, response, containment, notification and closure milestones
+from being silently rewritten. Event histories are immutable and omit request
+contact, decision narrative, incident summary and affected-person details.
+
+Do not store identity-document images, clinical records, mailbox bodies,
+credentials, raw logs or forensic exports in either register. Store only the
+minimum operational locator and a reference to controlled evidence custody.
+For a confirmed or reasonably believed compromise, use the current Information
+Regulator eServices and written affected-person notification process; the
+database register is tracking evidence, not the regulatory submission itself.
+
+Run `select * from private.privacy_operations_inventory();` during the
+Information Officer’s retention review. Its count-only six-year review queue is
+never deletion authority. Open or retain an `audit_security_evidence` legal hold
+using `privacy_request:<uuid>`, `security_incident:<uuid>`, or `*` before any
+approved disposal review.
 
 ## Operational evidence review
 
