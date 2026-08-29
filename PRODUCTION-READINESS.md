@@ -146,6 +146,19 @@ workflow and domain transition must all be ready at the same time.
   held disposal candidates and zero deletions. Public, browser and service-role
   privileges remain revoked; both private tables use explicit deny-all RLS
   policies. The post-migration Supabase security advisor reports zero findings.
+- Live migration
+  `20260829003006_record_backup_recovery_readiness` records a Management API
+  observation of the active production project, PostgreSQL `17.6.1.155`,
+  `eu-central-1` region and the organization Free plan in a private deny-all
+  evidence table. It creates the explicit `backup-recovery` launch dependency
+  because no managed daily backup/PITR, encrypted off-site logical export,
+  approved RPO/RTO, named recovery owner or successful restore drill is
+  verified. No credentials, backup payload or patient data are stored.
+- `RECOVERY-READINESS.json` makes that non-secret state machine-readable. The
+  release audit treats malformed evidence as a technical failure and incomplete
+  recovery capability as a readiness blocker. A plan upgrade alone cannot pass:
+  a verified restore point or encrypted off-site backup, approved RPO/RTO,
+  named owner, explicit approval and successful restore drill are all required.
 - Supabase performance advisor: only expected `unused_index` informational
   notices on the newly created, empty operational database. Keep the indexes
   until real query statistics exist; reference:

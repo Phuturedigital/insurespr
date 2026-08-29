@@ -65,6 +65,7 @@ Options:
   --mode <release|preview>      Release is strict; preview downgrades readiness blockers
   --required-services <csv>     Required public service slugs
   --legacy-manifest <path>      Optional JSON redirect manifest to validate
+  --recovery-manifest <path>    Optional JSON backup/recovery evidence manifest
   --timeout-ms <milliseconds>   Per-request timeout (default: 15000)
   --json                        Emit machine-readable JSON
   --report-only                 Always exit zero after producing the report
@@ -87,6 +88,7 @@ function parseArgs(argv) {
     mode: 'release',
     requiredServices: [...DEFAULT_REQUIRED_SERVICES],
     legacyManifest: null,
+    recoveryManifest: null,
     timeoutMs: 15_000,
     json: false,
     reportOnly: false,
@@ -131,6 +133,9 @@ function parseArgs(argv) {
         break;
       case '--legacy-manifest':
         config.legacyManifest = takeValue();
+        break;
+      case '--recovery-manifest':
+        config.recoveryManifest = takeValue();
         break;
       case '--timeout-ms':
         config.timeoutMs = Number.parseInt(takeValue(), 10);
@@ -525,6 +530,89 @@ function validateLegacyManifest(payload, expectedCount = null) {
     problems.push(`manifest has ${redirects.length} entries; inventory has ${expectedCount}`);
   }
   return { ok: problems.length === 0, redirects, problems };
+}
+
+function validateRecoveryManifest(payload) {
+  const contractProblems = [];
+  const readinessProblems = [];
+  if (!payload || typeof payload !== 'object' || Array.isArray(payload)) {
+    return {
+      ok: false,
+      contractProblems: ['recovery manifest must be a JSON object'],
+      readinessProblems,
+    };
+  }
+
+  const secretLikeKeys = [];
+  const inspectKeys = (value, trail = []) => {
+    if (!value || typeof value !== 'object') return;
+    for (const [key, nested] of Object.entries(value)) {
+      const nextTrail = [...trail, key];
+      if (/(?:password|secret|api.?key|database.?url|connection.?string)/i.test(key)) {
+        secretLikeKeys.push(nextTrail.join('.'));
+      }
+      inspectKeys(nested, nextTrail);
+    }
+  };
+  inspectKeys(payload);
+  if (secretLikeKeys.length > 0) {
+    contractProblems.push(`manifest contains forbidden secret-like field names: ${secretLikeKeys.join(', ')}`);
+  }
+
+  if (payload.schemaVersion !== 1) contractProblems.push('schemaVersion must be 1');
+  if (payload.provider !== 'supabase') contractProblems.push('provider must be supabase');
+  if (!/^[a-z]{20}$/.test(payload.projectRef ?? '')) contractProblems.push('projectRef must be a Supabase project reference');
+  if (typeof payload.projectStatus !== 'string' || !payload.projectStatus) contractProblems.push('projectStatus is required');
+  if (!/^[a-z]{2}-[a-z]+-[0-9]+$/.test(payload.region ?? '')) contractProblems.push('region must be a Supabase region');
+  if (typeof payload.databaseVersion !== 'string' || !payload.databaseVersion) contractProblems.push('databaseVersion is required');
+  if (typeof payload.organizationPlan !== 'string' || !payload.organizationPlan) contractProblems.push('organizationPlan is required');
+  if (Number.isNaN(Date.parse(payload.observedAt ?? ''))) contractProblems.push('observedAt must be an ISO timestamp');
+  if (!['blocked', 'ready'].includes(payload.status)) contractProblems.push('status must be blocked or ready');
+  if (typeof payload.activationAuthorized !== 'boolean') contractProblems.push('activationAuthorized must be boolean');
+  if (!payload.managedDailyBackups || typeof payload.managedDailyBackups !== 'object') {
+    contractProblems.push('managedDailyBackups object is required');
+  }
+  if (!payload.pointInTimeRecovery || typeof payload.pointInTimeRecovery !== 'object') {
+    contractProblems.push('pointInTimeRecovery object is required');
+  }
+  if (!payload.offsiteLogicalBackup || typeof payload.offsiteLogicalBackup !== 'object') {
+    contractProblems.push('offsiteLogicalBackup object is required');
+  }
+  if (!payload.recoveryApproval || typeof payload.recoveryApproval !== 'object') {
+    contractProblems.push('recoveryApproval object is required');
+  }
+  if (payload.evidence?.backupDocumentation !== 'https://supabase.com/docs/guides/platform/backups') {
+    contractProblems.push('official Supabase backup documentation reference is required');
+  }
+
+  if (contractProblems.length > 0) return { ok: false, contractProblems, readinessProblems };
+
+  const managedReady = payload.managedDailyBackups.included === true &&
+    payload.managedDailyBackups.verifiedRestorePoints === true;
+  const offsiteReady = payload.offsiteLogicalBackup.implemented === true &&
+    payload.offsiteLogicalBackup.encrypted === true &&
+    typeof payload.offsiteLogicalBackup.custodian === 'string' &&
+    payload.offsiteLogicalBackup.custodian.trim().length >= 2 &&
+    !Number.isNaN(Date.parse(payload.offsiteLogicalBackup.verifiedAt ?? ''));
+  const recovery = payload.recoveryApproval;
+
+  if (payload.status !== 'ready') readinessProblems.push('recovery status is blocked');
+  if (payload.activationAuthorized !== true) readinessProblems.push('recovery activation is not authorized');
+  if (!managedReady && !offsiteReady) {
+    readinessProblems.push('neither verified managed restore points nor an encrypted verified off-site logical backup is available');
+  }
+  if (payload.organizationPlan.toLowerCase() === 'free' && !offsiteReady) {
+    readinessProblems.push('the verified Free plan has no approved off-site backup substitute');
+  }
+  if (!Number.isInteger(recovery.rpoMinutes) || recovery.rpoMinutes <= 0) readinessProblems.push('RPO is not approved');
+  if (!Number.isInteger(recovery.rtoMinutes) || recovery.rtoMinutes <= 0) readinessProblems.push('RTO is not approved');
+  if (typeof recovery.owner !== 'string' || recovery.owner.trim().length < 2) readinessProblems.push('recovery owner is not assigned');
+  if (Number.isNaN(Date.parse(recovery.lastSuccessfulRestoreDrillAt ?? ''))) readinessProblems.push('no successful restore drill is recorded');
+  if (Number.isNaN(Date.parse(recovery.approvedAt ?? '')) || typeof recovery.approvedBy !== 'string' || recovery.approvedBy.trim().length < 2) {
+    readinessProblems.push('recovery approval is incomplete');
+  }
+
+  return { ok: readinessProblems.length === 0, contractProblems, readinessProblems };
 }
 
 async function auditPublicSite(config, results) {
@@ -1051,6 +1139,35 @@ async function auditLegacyManifest(config, results) {
   }
 }
 
+async function auditRecoveryManifest(config, results) {
+  const manifestPath = config.recoveryManifest
+    ? path.resolve(process.cwd(), config.recoveryManifest)
+    : path.join(PROJECT_ROOT, 'RECOVERY-READINESS.json');
+  if (!existsSync(manifestPath)) {
+    results.push(issue(config, 'recovery-readiness', 'Backup and recovery readiness', 'readiness',
+      'No machine-readable backup/recovery evidence manifest is available'));
+    return;
+  }
+
+  try {
+    const payload = JSON.parse(await readFile(manifestPath, 'utf8'));
+    const validation = validateRecoveryManifest(payload);
+    if (validation.contractProblems.length > 0) {
+      results.push(issue(config, 'recovery-contract', 'Backup and recovery evidence contract', 'technical',
+        `${validation.contractProblems.length} recovery manifest contract problem(s) found`, validation.contractProblems));
+    } else if (!validation.ok) {
+      results.push(issue(config, 'recovery-readiness', 'Backup and recovery readiness', 'readiness',
+        `${validation.readinessProblems.length} recovery requirement(s) remain open`, validation.readinessProblems));
+    } else {
+      results.push(pass('recovery-readiness', 'Backup and recovery readiness',
+        'A funded backup route, approved RPO/RTO, named owner and successful restore drill are verified'));
+    }
+  } catch (error) {
+    results.push(issue(config, 'recovery-manifest-json', 'Backup and recovery evidence contract', 'technical',
+      `Recovery manifest cannot be read as JSON: ${safeMessage(error)}`));
+  }
+}
+
 function summaryFor(results) {
   return results.reduce((summary, item) => {
     summary[item.status] += 1;
@@ -1188,6 +1305,53 @@ async function runSelfTest() {
   assert.equal(validateLegacyManifest(approvedHold, manifest.length).ok, false);
   assert.equal(inventoryExpectedCount('contains **153 unique sitemap-listed URLs** across two sites'), 153);
 
+  const readyRecovery = {
+    schemaVersion: 1,
+    status: 'ready',
+    activationAuthorized: true,
+    observedAt: '2026-08-29T00:23:00.000Z',
+    provider: 'supabase',
+    projectRef: 'ffdmmxffzewqiacsuvhr',
+    projectStatus: 'ACTIVE_HEALTHY',
+    region: 'eu-central-1',
+    databaseVersion: '17.6.1.155',
+    organizationPlan: 'pro',
+    managedDailyBackups: { included: true, verifiedRestorePoints: true },
+    pointInTimeRecovery: { included: false, verifiedRecoveryWindow: false },
+    offsiteLogicalBackup: { implemented: false, encrypted: false, verifiedAt: null, custodian: null },
+    recoveryApproval: {
+      owner: 'Recovery Owner',
+      rpoMinutes: 1440,
+      rtoMinutes: 240,
+      lastSuccessfulRestoreDrillAt: '2026-08-28T12:00:00.000Z',
+      approvedAt: '2026-08-29T00:00:00.000Z',
+      approvedBy: 'Practice Owner',
+    },
+    evidence: {
+      platformState: 'Supabase Management API',
+      backupDocumentation: 'https://supabase.com/docs/guides/platform/backups',
+    },
+  };
+  assert.equal(validateRecoveryManifest(readyRecovery).ok, true);
+  const blockedRecovery = structuredClone(readyRecovery);
+  blockedRecovery.status = 'blocked';
+  blockedRecovery.activationAuthorized = false;
+  blockedRecovery.organizationPlan = 'free';
+  blockedRecovery.managedDailyBackups = { included: false, verifiedRestorePoints: false };
+  blockedRecovery.recoveryApproval = {
+    owner: null,
+    rpoMinutes: null,
+    rtoMinutes: null,
+    lastSuccessfulRestoreDrillAt: null,
+    approvedAt: null,
+    approvedBy: null,
+  };
+  assert.equal(validateRecoveryManifest(blockedRecovery).ok, false);
+  assert.equal(validateRecoveryManifest(blockedRecovery).contractProblems.length, 0);
+  const unsafeRecovery = structuredClone(readyRecovery);
+  unsafeRecovery.databasePassword = 'must-never-appear';
+  assert.match(validateRecoveryManifest(unsafeRecovery).contractProblems.join(' '), /forbidden secret-like field/);
+
   const headers = new Headers({
     'strict-transport-security': 'max-age=31536000; includeSubDomains',
     'content-security-policy': "default-src 'self'; object-src 'none'; frame-ancestors 'none'",
@@ -1196,7 +1360,7 @@ async function runSelfTest() {
     'permissions-policy': 'camera=(), microphone=()',
   });
   assert.equal(inspectSecurityHeaders(headers).ok, true);
-  console.log('release-audit offline self-test: PASS (22 assertions)');
+  console.log('release-audit offline self-test: PASS (26 assertions)');
 }
 
 async function main() {
@@ -1224,6 +1388,7 @@ async function main() {
   await auditForms(config, results);
   await auditNotifications(config, results);
   await auditEmailDns(config, results);
+  await auditRecoveryManifest(config, results);
   await auditLegacyManifest(config, results);
   const summary = summaryFor(results);
   const report = {

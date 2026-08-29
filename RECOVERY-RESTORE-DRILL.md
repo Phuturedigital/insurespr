@@ -12,22 +12,51 @@ fields below before public intake opens.
 | Incident lead and deputy | Pending | Pending | Pending |
 | Recovery point objective (RPO) | Pending | Pending | Pending |
 | Recovery time objective (RTO) | Pending | Pending | Pending |
-| Supabase backup/PITR plan | Pending | Pending | Pending |
+| Supabase backup/PITR plan | Free plan verified; no managed daily backup or PITR | Pending | 29 August 2026 |
 | Encrypted evidence and export custodian | Pending | Pending | Pending |
 | Patient-data access during a drill | Pending | Pending | Pending |
 | DNS/Vercel rollback authority | Pending | Pending | Pending |
-| POPIA retention and deletion rules | Pending | Pending | Pending |
+| POPIA retention and deletion rules | Website schedule `2026-08-21.1` | Motselisi R. Mosiana | 21 August 2026 |
 
 Until these values are approved, forms remain fail-closed and no production
 patient data may be copied into a local, personal or unapproved test system.
+
+## Verified production state
+
+The Supabase Management API was checked on 29 August 2026 and reported project
+`ffdmmxffzewqiacsuvhr` as `ACTIVE_HEALTHY`, in `eu-central-1`, on PostgreSQL
+`17.6.1.155`. The owning organization is on the `free` plan. The official
+Supabase backup documentation currently includes managed daily backups for Pro,
+Team and Enterprise projects and recommends regular off-site logical exports
+for Free projects.
+
+No managed restore point, PITR window, encrypted off-site logical backup,
+approved RPO/RTO, recovery owner or completed restore drill has been verified
+for this project. `RECOVERY-READINESS.json` records that fail-closed state, and
+the database launch dependency `backup-recovery` blocks public intake.
+
+Close the dependency through one approved route:
+
+1. Upgrade to a plan with managed daily backups, verify the actual restore
+   points in the Dashboard, approve RPO/RTO and complete an isolated restore
+   drill; or
+2. Implement a scheduled, encrypted off-site logical export with a controlled
+   custodian, success/failure monitoring, documented retention, approved
+   RPO/RTO and a successful isolated restore drill.
+
+A subscription change alone is not evidence of recoverability. A dump file
+that has never been restored is also insufficient. Do not place a plaintext
+production dump, database URL or password in this repository, Vercel, a ticket,
+or a personal device.
 
 ## Recovery inventory
 
 - GitHub is the source of truth for the static site, migrations, Edge Function
   source, operational SQL and non-secret configuration.
 - Supabase project `ffdmmxffzewqiacsuvhr` contains the PostgreSQL schemas and
-  operational records. Confirm its plan and available restore points in the
-  Dashboard before relying on any RPO.
+  operational records. Its Free plan is verified and provides no managed daily
+  backup/PITR route; do not rely on any recovery point until one of the approved
+  closure routes above is implemented and tested.
 - Supabase database backups do not restore Edge Function deployments, project
   API keys, Auth configuration, function secrets or Storage objects. Inventory
   and reconfigure those separately; never export secret values into this repo.

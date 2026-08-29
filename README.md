@@ -130,7 +130,8 @@ node tools/release-audit.mjs --self-test
 `--email-reply-to` selects the approved receiving mailbox; `--dkim-host` selects
 the exact provider-issued DKIM hostname; and `--return-path-host` selects the
 provider-issued SPF/MX Return-Path. `--legacy-manifest` can point to a
-machine-readable redirect manifest. Preview mode downgrades practice-owned
+machine-readable redirect manifest, while `--recovery-manifest` selects the
+machine-readable backup/recovery evidence record. Preview mode downgrades practice-owned
 readiness items, while metadata, crawlability, DNS resolution, security and
 API-integrity checks remain strict. `--report-only` always exits zero for
 dashboards, and `--json` emits structured output.
@@ -146,6 +147,12 @@ through Cloudflare and Google DNS. An official-domain MX record is reported
 separately: it is not required while the approved Reply-To remains on
 `bonevc.co.za`, but its absence prevents publication of an
 `@insuresprhealth.co.za` receiving address.
+
+The preflight also fails closed on recovery readiness. The current management
+evidence records an active, healthy Supabase project on the Free plan, with no
+managed daily backup/PITR and no verified encrypted off-site export, approved
+RPO/RTO, named owner or successful restore drill. The non-secret state is held
+in `RECOVERY-READINESS.json`; it is kept out of the public Vercel artifact.
 
 ### Deterministic browser and SEO gates
 

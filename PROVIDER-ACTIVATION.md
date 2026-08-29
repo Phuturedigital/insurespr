@@ -76,3 +76,26 @@ response-time service level.
 The database and website must retain the exact E.164 values above. Any future
 change requires a new owner instruction, a forward-only migration and the full
 page/contact audit; do not silently replace the number in static markup alone.
+
+## Supabase backup and recovery
+
+The Supabase Management API verified on 29 August 2026 that the production
+organization is on the Free plan. Current Supabase documentation does not
+include managed daily backups or PITR for that plan. No encrypted off-site
+logical backup, RPO, RTO, recovery owner or successful restore drill is on file.
+
+1. The practice must approve either a paid managed-backup route or a controlled,
+   scheduled encrypted logical-export route.
+2. Name the recovery owner and deputy, approve RPO/RTO, record the backup
+   custodian and failure-alert recipient, and document access restrictions.
+3. Verify an actual managed restore point or encrypted export. Never commit a
+   database URL, password, dump, patient export or encryption private key.
+4. Restore into an isolated authorized target, keep external notifications and
+   intake disabled, run the database/application contracts, and record achieved
+   RPO/RTO.
+5. Only after the drill succeeds may `RECOVERY-READINESS.json` and the private
+   platform observation be superseded by a new forward migration and the
+   `backup-recovery` launch dependency be closed.
+
+Follow `RECOVERY-RESTORE-DRILL.md` and the official Supabase backup guide:
+<https://supabase.com/docs/guides/platform/backups>.

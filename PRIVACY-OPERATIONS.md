@@ -35,6 +35,12 @@ No website intake record is to be treated as the complete clinical record. If a
 record is transferred into a clinical or statutory occupational-health record,
 that destination’s approved retention policy governs the copied record.
 
+The 35-day database-backup row is an approved retention target, not a claim that
+backups currently exist. The production Supabase organization was verified on
+29 August 2026 as Free plan, which has no managed daily backup or PITR coverage.
+No encrypted off-site logical backup has been verified. Public intake therefore
+remains blocked by `backup-recovery`; see `RECOVERY-RESTORE-DRILL.md`.
+
 ## Retention enforcement
 
 The live database implements the schedule through private, owner-only controls:

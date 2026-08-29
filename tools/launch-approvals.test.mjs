@@ -182,3 +182,57 @@ test('retention enforcement is private, dry-run-first and cannot purge business 
   assert.match(runbook, /There is deliberately no scheduled purge/);
   assert.match(privacy, /Bookings, customers, booking history, actions, consent, employer leads/);
 });
+
+test('verified Free-plan recovery gap is private, machine-readable and release-blocking', async () => {
+  const [migration, manifestText, audit, drill, provider, readiness, ignored] = await Promise.all([
+    read('supabase/migrations/20260829003006_record_backup_recovery_readiness.sql'),
+    read('RECOVERY-READINESS.json'),
+    read('tools/release-audit.mjs'),
+    read('RECOVERY-RESTORE-DRILL.md'),
+    read('PROVIDER-ACTIVATION.md'),
+    read('PRODUCTION-READINESS.md'),
+    read('.vercelignore'),
+  ]);
+  const manifest = JSON.parse(manifestText);
+
+  assert.equal(manifest.schemaVersion, 1);
+  assert.equal(manifest.status, 'blocked');
+  assert.equal(manifest.activationAuthorized, false);
+  assert.equal(manifest.provider, 'supabase');
+  assert.equal(manifest.projectRef, 'ffdmmxffzewqiacsuvhr');
+  assert.equal(manifest.organizationPlan, 'free');
+  assert.equal(manifest.managedDailyBackups.included, false);
+  assert.equal(manifest.pointInTimeRecovery.included, false);
+  assert.equal(manifest.offsiteLogicalBackup.implemented, false);
+  assert.equal(manifest.recoveryApproval.rpoMinutes, null);
+  assert.equal(manifest.recoveryApproval.rtoMinutes, null);
+  assert.equal(manifest.recoveryApproval.owner, null);
+  assert.equal(manifest.recoveryApproval.lastSuccessfulRestoreDrillAt, null);
+  assert.doesNotMatch(manifestText, /password|secret|api.?key|database.?url|connection.?string/i);
+
+  assert.match(migration, /create table private\.platform_recovery_observations/);
+  assert.match(migration, /platform_recovery_observations_deny_all/);
+  assert.match(migration, /from public, anon, authenticated, service_role/);
+  assert.match(migration, /'backup-recovery'/);
+  assert.match(migration, /'open'/);
+  assert.match(migration, /true,/);
+  assert.match(migration, /organization_plan <> 'free'/);
+  assert.match(migration, /recovery evidence must not open public intake/);
+  assert.doesNotMatch(migration, /postgres(?:ql)?:\/\/|sb_secret_|eyJ[a-zA-Z0-9_-]{20,}|C:\\Users/i);
+
+  assert.match(audit, /--recovery-manifest/);
+  assert.match(audit, /function validateRecoveryManifest/);
+  assert.match(audit, /forbidden secret-like field names/);
+  assert.match(audit, /neither verified managed restore points nor an encrypted verified off-site logical backup is available/);
+  assert.match(audit, /no successful restore drill is recorded/);
+  assert.match(audit, /await auditRecoveryManifest\(config, results\)/);
+
+  for (const document of [drill, provider, readiness]) {
+    assert.match(document, /Free plan/);
+    assert.match(document, /backup-recovery/);
+    assert.match(document, /RPO/);
+    assert.match(document, /RTO/);
+    assert.match(document, /restore drill/i);
+  }
+  assert.match(ignored, /^RECOVERY-READINESS\.json$/m);
+});

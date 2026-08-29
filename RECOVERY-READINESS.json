@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "status": "blocked",
+  "activationAuthorized": false,
+  "observedAt": "2026-08-29T00:23:00.000Z",
+  "provider": "supabase",
+  "projectRef": "ffdmmxffzewqiacsuvhr",
+  "projectStatus": "ACTIVE_HEALTHY",
+  "region": "eu-central-1",
+  "databaseVersion": "17.6.1.155",
+  "organizationPlan": "free",
+  "managedDailyBackups": {
+    "included": false,
+    "verifiedRestorePoints": false
+  },
+  "pointInTimeRecovery": {
+    "included": false,
+    "verifiedRecoveryWindow": false
+  },
+  "offsiteLogicalBackup": {
+    "implemented": false,
+    "encrypted": false,
+    "verifiedAt": null,
+    "custodian": null
+  },
+  "recoveryApproval": {
+    "owner": null,
+    "rpoMinutes": null,
+    "rtoMinutes": null,
+    "lastSuccessfulRestoreDrillAt": null,
+    "approvedAt": null,
+    "approvedBy": null
+  },
+  "evidence": {
+    "platformState": "Supabase Management API",
+    "backupDocumentation": "https://supabase.com/docs/guides/platform/backups"
+  }
+}
