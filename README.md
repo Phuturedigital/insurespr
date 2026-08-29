@@ -47,6 +47,8 @@ session storage as soon as it is rendered.
   `SERVICE-ACTIVATION-HANDOFF.json` (excluded from Vercel; not approved)
 - Prepared privacy and processor activation handoff:
   `PRIVACY-ACTIVATION-HANDOFF.json` (excluded from Vercel; privacy still pending)
+- Prepared canonical-hostname Turnstile activation handoff:
+  `TURNSTILE-ACTIVATION-HANDOFF.json` (excluded from Vercel; widget and keys not created)
 - Prepared DXA availability, schedule and rollback handoff:
   `AVAILABILITY-ACTIVATION-HANDOFF.json` (excluded from Vercel; no slots created)
 - Recovery ownership and restore drill: `RECOVERY-RESTORE-DRILL.md`
@@ -69,6 +71,10 @@ session storage as soon as it is rendered.
   `supabase/snippets/launch_readiness.sql` (no submission fields, contact
   values, evidence locations or secrets)
 - Turnstile, email and contact-channel activation: `PROVIDER-ACTIVATION.md`
+- Turnstile packet validation:
+  `npm run test:turnstile-activation-handoff` for the committed draft, then
+  `node tools/turnstile-activation-handoff.mjs --mode approved --file <controlled-copy>`
+  before any credential deployment or dependency closure.
 
 The database schema, public API and canonical frontend are deployed. The public
 site is served at `https://www.insuresprhealth.co.za/`. Privacy publication

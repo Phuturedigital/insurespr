@@ -249,14 +249,16 @@ Turnstile protects the booking, workforce-lead and contact forms in addition to
 the existing honeypot and rate limits. Its two keys form one deployment unit.
 Do not configure or release them independently.
 
-1. Create the production widget in Cloudflare and restrict it to the approved
-   official hostnames. A protected preview must be an explicit, temporary
-   release configuration in both Turnstile and `ALLOWED_ORIGINS`; it is not in
-   the cloud default. Use Cloudflare's test keys with a local/mock API for
-   localhost rather than weakening the production hostname or Origin lists.
+1. Validate `TURNSTILE-ACTIVATION-HANDOFF.json` in draft mode, check the
+   authorized Cloudflare account for an existing equivalent widget, then create
+   at most one managed production widget restricted to
+   `www.insuresprhealth.co.za`. Production preview and localhost hostnames are
+   prohibited by this packet. Use Cloudflare's test keys with a local/mock API
+   rather than weakening the production hostname or Origin lists.
 2. Put both `TURNSTILE_SITE_KEY` and `TURNSTILE_SECRET_KEY` in the sensitive,
-   server-only Vercel environments for the same-origin function. The site key
-   is public configuration; the secret must never enter git, HTML,
+   server-only Vercel **Production** environment for the same-origin function.
+   Do not put the production pair in Preview. The site key is public
+   configuration; the secret must never enter git, HTML,
    `production.js`, a browser-exposed variable, logs or screenshots.
 3. Keep the generated `INSURESPR_PROXY_PRIVATE_KEY_B64` only in Vercel. Its
    public Ed25519 key is compiled into `insurespr-api`; Supabase also claims a
@@ -268,18 +270,23 @@ Do not configure or release them independently.
    BOT_CHECK_UNAVAILABLE`.
 5. From each explicitly approved release origin, call
    `GET /api/insurespr?route=services` and
-   verify that `turnstile_site_key` is non-null and `intake_ready` is exactly
-   `true`. The readiness field is the same boolean database decision enforced
-   on every mutation; it must never contain dependency or evidence details.
+   verify that `turnstile_site_key` is non-null and `intake_ready` is a boolean.
+   While any other blocking dependency remains open, `intake_ready` must stay
+   exactly `false`. The readiness field is the same boolean database decision
+   enforced on every mutation; it must never contain dependency or evidence
+   details.
    Confirm that the response never exposes `TURNSTILE_SECRET_KEY` or any other
    server credential, then load the booking, workforce and contact forms and
    verify that each renders a widget.
-6. Complete one synthetic form flow. Confirm that completion populates a token,
-   one submission consumes it, and an expiry, error or retry requires a new
-   token. Turnstile tokens are single-use and expire after five minutes; never
-   cache or reuse them between forms or requests.
-7. Test missing, invalid, expired and replayed tokens plus missing, expired,
-   altered and replayed proxy attestations. The API must reject them
+6. While the downstream readiness gate is still closed, complete one controlled
+   synthetic form flow. Confirm that Turnstile accepts the valid token, the API
+   then returns `503 INTAKE_ACTIVATION_NOT_READY`, and no operational row is
+   created. Confirm that one attempt consumes the token and an expiry, error or
+   retry requires a new token. Turnstile tokens are single-use and expire after
+   five minutes; never cache or reuse them between forms or requests.
+7. Test missing, invalid, expired, wrong-action, wrong-hostname and replayed
+   tokens plus missing, expired, altered and replayed proxy attestations. The
+   API must reject them
    without creating a booking, lead, enquiry, consent or notification row. Also
    simulate an unreachable or non-successful Siteverify response and confirm
    the API fails closed with a service error rather than accepting the form.
@@ -288,6 +295,11 @@ Do not configure or release them independently.
    contain form contents, Turnstile tokens, the secret or raw IP addresses;
    remove only the explicitly identified synthetic records through a reviewed,
    self-cleaning migration.
+9. Complete the non-secret custody references, deployment identifier, test
+   evidence and different-peer review in a controlled copy of the activation
+   packet. Run its approved validator before closing `anti-spam-secrets`. A
+   passing packet removes only the Turnstile blocker; it does not authorize
+   public intake while any other blocking dependency remains open.
 
 The API validates the Siteverify response hostname against the approved request
 origin and requires the distinct `book`, `employer` or `contact` action for the

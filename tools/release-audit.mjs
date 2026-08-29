@@ -23,8 +23,8 @@ const DEFAULT_API = 'https://ffdmmxffzewqiacsuvhr.supabase.co/functions/v1/insur
 const DEFAULT_NOTIFICATIONS = 'https://ffdmmxffzewqiacsuvhr.supabase.co/functions/v1/insurespr-notifications';
 const DEFAULT_EMAIL_REPLY_TO = 'motselisi@bonevc.co.za';
 const DNS_RESOLVERS = [
-  { name: 'Cloudflare', server: '1.1.1.1' },
-  { name: 'Google', server: '8.8.8.8' },
+  { name: 'Cloudflare', server: '1.1.1.1', dohUrl: 'https://cloudflare-dns.com/dns-query' },
+  { name: 'Google', server: '8.8.8.8', dohUrl: 'https://dns.google/resolve' },
 ];
 const DEFAULT_REQUIRED_SERVICES = [
   'dxa-bone-density',
@@ -1083,6 +1083,68 @@ async function resolveDnsRecord(resolver, hostname, type) {
   }
 }
 
+function decodeDohTxt(value) {
+  const text = String(value ?? '').trim();
+  const segments = [];
+  const quotedSegment = /"((?:\\.|[^"\\])*)"/g;
+  let match;
+  while ((match = quotedSegment.exec(text)) !== null) {
+    try {
+      segments.push(JSON.parse(`"${match[1]}"`));
+    } catch {
+      return text;
+    }
+  }
+  return segments.length > 0 ? segments.join('') : text;
+}
+
+async function resolveDohRecord(dohUrl, hostname, type, timeoutMs) {
+  try {
+    const url = new URL(dohUrl);
+    url.searchParams.set('name', hostname);
+    url.searchParams.set('type', type);
+    const fetched = await fetchPublic(url, {
+      headers: { Accept: 'application/dns-json' },
+    }, Math.min(timeoutMs, 10_000));
+    if (!fetched.response.ok) {
+      return { records: [], error: `HTTP_${fetched.response.status}: DNS-over-HTTPS request failed` };
+    }
+    const payload = JSON.parse(fetched.text);
+    if (payload.Status === 3) return { records: [], error: null };
+    if (payload.Status !== 0) return { records: [], error: `DOH_STATUS_${payload.Status}` };
+    const expectedType = type === 'MX' ? 15 : 16;
+    const answers = Array.isArray(payload.Answer)
+      ? payload.Answer.filter((answer) => answer?.type === expectedType)
+      : [];
+    if (type === 'TXT') {
+      return { records: answers.map((answer) => decodeDohTxt(answer.data)), error: null };
+    }
+    return {
+      records: answers.map((answer) => {
+        const [priority, ...exchangeParts] = String(answer.data ?? '').trim().split(/\s+/);
+        return {
+          priority: Number(priority),
+          exchange: exchangeParts.join(' ').replace(/\.$/, ''),
+        };
+      }).filter((answer) => Number.isFinite(answer.priority) && answer.exchange),
+      error: null,
+    };
+  } catch (error) {
+    return { records: [], error: `DOH_ERROR: ${safeMessage(error)}` };
+  }
+}
+
+async function resolveDnsRecordWithFallback(resolver, dohUrl, hostname, type, timeoutMs) {
+  const direct = await resolveDnsRecord(resolver, hostname, type);
+  if (direct.error === null && direct.records.length > 0) return direct;
+  const overHttps = await resolveDohRecord(dohUrl, hostname, type, timeoutMs);
+  if (overHttps.error === null) return overHttps;
+  return {
+    records: [],
+    error: [direct.error, overHttps.error].filter(Boolean).join('; '),
+  };
+}
+
 async function collectEmailDns(config) {
   const senderDomain = new URL(config.base).hostname.replace(/^www\./i, '');
   const replyDomain = config.emailReplyTo.split('@')[1];
@@ -1095,12 +1157,12 @@ async function collectEmailDns(config) {
     ['replyMx', replyDomain, 'MX'],
   ];
 
-  const resolverResults = await Promise.all(DNS_RESOLVERS.map(async ({ name, server }) => {
+  const resolverResults = await Promise.all(DNS_RESOLVERS.map(async ({ name, server, dohUrl }) => {
     const resolver = new Resolver({ timeout: Math.min(config.timeoutMs, 10_000), tries: 1 });
     resolver.setServers([server]);
     const entries = await Promise.all(queryDefinitions.map(async ([key, hostname, type]) => [
       key,
-      await resolveDnsRecord(resolver, hostname, type),
+      await resolveDnsRecordWithFallback(resolver, dohUrl, hostname, type, config.timeoutMs),
     ]));
     return [name, Object.fromEntries(entries)];
   }));
@@ -1359,6 +1421,9 @@ async function runSelfTest() {
   assert.equal(parsedDefaults.emailReplyTo, DEFAULT_EMAIL_REPLY_TO);
   assert.equal(parsedDefaults.dkimHost, 'resend._domainkey.insuresprhealth.co.za');
   assert.equal(parsedDefaults.returnPathHost, 'send.insuresprhealth.co.za');
+  assert.equal(decodeDohTxt('"v=DMARC1; p=none"'), 'v=DMARC1; p=none');
+  assert.equal(decodeDohTxt('"v=spf1 include:" "example.test ~all"'), 'v=spf1 include:example.test ~all');
+  assert.equal(decodeDohTxt('v=DKIM1; p=TESTKEY'), 'v=DKIM1; p=TESTKEY');
   const readyDnsRecords = {
     senderMx: { records: [], error: null },
     returnPathMx: { records: [{ exchange: 'feedback-smtp.example', priority: 10 }], error: null },
@@ -1499,7 +1564,7 @@ async function runSelfTest() {
   assert.equal(inspectSameOriginBridge(directServices, bridgedServices, bridgeHeaders).ok, true);
   bridgedServices.services[0].id = 'changed';
   assert.equal(inspectSameOriginBridge(directServices, bridgedServices, bridgeHeaders).ok, false);
-  console.log('release-audit offline self-test: PASS (28 assertions)');
+  console.log('release-audit offline self-test: PASS (31 assertions)');
 }
 
 async function main() {

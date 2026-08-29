@@ -6,10 +6,13 @@ git, HTML, browser JavaScript, screenshots or issue comments.
 
 ## Cloudflare Turnstile
 
-1. Create one managed Turnstile widget for exactly
-   `insuresprhealth.co.za` and `www.insuresprhealth.co.za`.
+1. Validate `TURNSTILE-ACTIVATION-HANDOFF.json`, confirm that no equivalent
+   widget already exists, and create at most one managed Turnstile widget for
+   exactly `www.insuresprhealth.co.za`. The apex permanently redirects to the
+   canonical `www` hostname and is not a widget hostname.
 2. Store `TURNSTILE_SITE_KEY` and `TURNSTILE_SECRET_KEY` together as sensitive,
-   server-only Vercel variables for Production and Preview. A partial pair is a
+   server-only Vercel variables for Production only. Preview and localhost are
+   deliberately excluded from the production packet. A partial pair is a
    deployment failure. Never use a `NEXT_PUBLIC_` or browser-exposed variable.
 3. Keep `INSURESPR_PROXY_PRIVATE_KEY_B64` in the same Vercel environments. Its
    matching Ed25519 public key is committed in the Supabase verifier; the

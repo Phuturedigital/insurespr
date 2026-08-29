@@ -483,21 +483,29 @@ change `verification_status` or create slots by itself.
      email is sent until the missing secrets and schedule are configured.
 
 7. **Anti-spam production secret**
-   - Cloudflare Turnstile is owner-approved; create its site/secret pair for the
-     official domains.
-   - Configure `TURNSTILE_SITE_KEY` and `TURNSTILE_SECRET_KEY` together in
-     Supabase Edge Function secrets, then redeploy `insurespr-api`. The site key
-     is deliberately returned to the browser by `GET /services`; the secret
-     must remain server-side. Never release only one key: a site key without a
-     secret displays a challenge but the API refuses submissions, while a
-     secret without a site key leaves the browser unable to obtain a token.
-     Missing both keys and either partial state fail closed with a configuration
-     error; privacy approval alone can never open unprotected forms.
+   - Cloudflare Turnstile is owner-approved. The committed
+     `TURNSTILE-ACTIVATION-HANDOFF.json` is prepared-not-created and restricts a
+     future managed widget to `www.insuresprhealth.co.za`, the exact
+     `book`/`contact`/`employer` actions and Vercel Production only. It rejects
+     plaintext credentials, previews and localhost.
+   - Configure `TURNSTILE_SITE_KEY` and `TURNSTILE_SECRET_KEY` together in the
+     Vercel Production environment, then redeploy the same-origin bridge. The
+     bridge deliberately injects only the public site key into `GET /services`;
+     its secret remains server-side and a verified request is forwarded through
+     the signed, single-use attestation path. Direct Supabase fallback keys stay
+     unconfigured unless separately reviewed and tested. Never release only one
+     key: a site key without a secret displays a challenge but the bridge
+     refuses submissions, while a secret without a site key leaves the browser
+     unable to obtain a token. Missing both keys and either partial state fail
+     closed with a configuration error; privacy approval alone can never open
+     unprotected forms.
    - Verify that `GET /services` returns a non-null `turnstile_site_key`, each
      public form renders the widget, and every retry obtains a fresh token.
-     Exercise missing, invalid, expired and replayed tokens plus a simulated
-     Turnstile provider outage; rejected verification must not create a
-     booking, lead, enquiry, consent or notification row.
+     Exercise missing, invalid, expired, wrong-action, wrong-hostname and
+     replayed tokens plus a simulated Turnstile provider outage. A valid token
+     must still stop at `INTAKE_ACTIVATION_NOT_READY` while other blockers are
+     open; no test may create a booking, lead, enquiry, consent or notification
+     row.
    - The API validates the Siteverify response's hostname against the approved
      request-origin hostname and requires the distinct `book`, `employer` or
      `contact` action for the route. Focused tests cover exact matches,
@@ -553,8 +561,8 @@ change `verification_status` or create slots by itself.
    the changes.
 3. Publish a small set of real slots and test book, double-book rejection,
    cancellation and reschedule behaviour with synthetic identities.
-4. Configure email and both Turnstile keys, redeploy `insurespr-api`, confirm
-   `/services` exposes the site key but never the secret, and test successful
+4. Configure email and both Turnstile keys, redeploy the Vercel same-origin
+   bridge, confirm `/services` exposes the site key but never the secret, and test successful
    submission, token expiry/replay, rejection, provider outage, notification
    retry and dead-letter handling.
 5. Run database security/performance advisors and inspect Edge Function/API
