@@ -166,3 +166,28 @@ verified sender and Reply-To, provider/worker secrets, notification schedule
 ownership, failure alerts and controlled delivery tests are complete. The
 absence of an inbound MX route also means `info@insuresprhealth.co.za` remains
 an unverified candidate rather than the public receiving mailbox.
+
+## Notification activation handoff
+
+Migrations `20260829072912_harden_notification_activation_provenance`,
+`20260829073933_add_notification_configuration_deny_policy`,
+`20260829074321_add_notification_rehearsal_stage` and
+`20260829074026_record_notification_activation_handoff` install and record the
+hash-bound notification activation path. The source packet
+`NOTIFICATION-ACTIVATION-HANDOFF.json` has SHA-256
+`bde0a6ecd538a0bd9be1af6cae2144fdabfbe25fc73f50a72d2c6d3e49725c6f`.
+
+Four verified claims record the exact fail-closed worker/database baseline,
+the limited public DNS evidence, the immutable activation-gate schema and the
+still-unapproved scheduler/operations state. Three remain linked to
+`email-delivery` and one to `notification-operations`; both dependencies remain
+open and blocking.
+
+The private configuration table contains no secrets and is denied to all API
+roles. A configuration must enter through a reviewed rehearsal window of at
+most 24 hours, then attach controlled delivery and failure-alert evidence before
+promotion to active. The worker's service-role-only gate binds the exact
+configuration and source hashes. Active readiness additionally requires both
+dependencies resolved, `pg_cron`, `pg_net`, and the exact matching active Cron
+job. Production currently has zero configuration rows, attempts, notification
+Vault secret names or scheduler extensions; no outbound delivery was enabled.

@@ -29,7 +29,10 @@ verified fact and does not override the application’s fail-closed controls.
   site key and secret key are required together; there is no bypass.
 - Resend is the approved transactional-email adapter. It remains disabled until
   its account, verified sending domain, sender/reply-to addresses, DNS records,
-  independent worker secret and schedule are all proven.
+  independent worker secret and schedule are all proven. A later configuration
+  must bind the exact non-secret controls, secret-generation fingerprints and
+  worker-source SHA-256 to evidence, pass a short-lived rehearsal, and then
+  match an active Vault-backed Cron job before readiness can become true.
 - DXA remains a staff-confirmed request pathway. No duration, horizon, notice,
   weekly hours, closure or generated slot is approved without the actual staff
   rota and equipment capacity.

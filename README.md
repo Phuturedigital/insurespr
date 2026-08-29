@@ -36,6 +36,8 @@ session storage as soon as it is rendered.
 - Database migrations: `supabase/migrations/`
 - Public Edge Function: `supabase/functions/insurespr-api/`
 - Fail-closed notification worker: `supabase/functions/insurespr-notifications/`
+- Prepared notification activation and rehearsal contract:
+  `NOTIFICATION-ACTIVATION-HANDOFF.json` and `NOTIFICATION-ACTIVATION.md`
 - Staff operations runbook: `OPERATIONS-RUNBOOK.md`
 - Production browser integration: `production.js`
 - Launch and approval checklist: `PRODUCTION-READINESS.md`
@@ -168,10 +170,14 @@ public verification key is committed. See `PROVIDER-ACTIVATION.md`.
 
 The notification worker is deployed, but its read-only `GET` readiness signal
 returns `ready:false` and authenticated delivery invocations return `503` until
-an approved sender, provider key, reply-to address and independent worker secret
-are configured. It uses atomic queue leases, provider idempotency keys, bounded
-backoff and a terminal `dead` state; deploying it does not authorize or enable
-outbound mail.
+an exact database-approved configuration/source hash, sender, provider key,
+reply-to address, independent worker secret and activation mode are configured.
+Reviewed configurations must pass a short-lived rehearsal before activation;
+active mode also requires both launch dependencies and the exact Vault-backed
+Cron job. The worker uses atomic queue leases, provider idempotency keys,
+bounded backoff and a terminal `dead` state; deploying it does not authorize or
+enable outbound mail. Modern opaque Supabase secret keys are sent through
+`apikey` only rather than being misparsed as Bearer JWTs.
 
 ## Production artifact
 

@@ -1,8 +1,11 @@
 import {
   type ClaimedNotification,
+  isNotificationActivationApproved,
   processClaimsInEntityOrder,
+  readConfig,
   readinessResponse,
   renderEmail,
+  rpcHeadersForKey,
   timingSafeEqual,
 } from './index.ts';
 
@@ -75,6 +78,88 @@ Deno.test('worker-secret comparison accepts only exact matches', () => {
     !timingSafeEqual('a'.repeat(32), 'a'.repeat(31)),
     'short secret accepted',
   );
+});
+
+Deno.test('modern opaque Supabase secret keys are never sent as bearer JWTs', () => {
+  const modern = rpcHeadersForKey('sb_secret_example');
+  assert(modern.apikey === 'sb_secret_example', 'modern secret key omitted from apikey');
+  assert(!('authorization' in modern), 'modern secret key was incorrectly sent as a bearer JWT');
+
+  const legacy = rpcHeadersForKey('legacy.jwt.value');
+  assert(legacy.apikey === 'legacy.jwt.value', 'legacy key omitted from apikey');
+  assert(
+    legacy.authorization === 'Bearer legacy.jwt.value',
+    'legacy service-role JWT omitted from Authorization',
+  );
+});
+
+Deno.test('worker configuration requires both approval-binding SHA-256 values', () => {
+  const keys = [
+    'SUPABASE_URL',
+    'SUPABASE_SERVICE_ROLE_KEY',
+    'NOTIFICATION_WORKER_SECRET',
+    'RESEND_API_KEY',
+    'EMAIL_FROM',
+    'EMAIL_REPLY_TO',
+    'NOTIFICATION_CONFIG_SHA256',
+    'NOTIFICATION_WORKER_SOURCE_SHA256',
+    'NOTIFICATION_ACTIVATION_MODE',
+  ];
+  const prior = new Map(keys.map((key) => [key, Deno.env.get(key)]));
+  try {
+    Deno.env.set('SUPABASE_URL', 'https://example.supabase.co');
+    Deno.env.set('SUPABASE_SERVICE_ROLE_KEY', 'legacy.jwt.value');
+    Deno.env.set('NOTIFICATION_WORKER_SECRET', 'w'.repeat(32));
+    Deno.env.set('RESEND_API_KEY', 're_test');
+    Deno.env.set('EMAIL_FROM', 'InsureSPR <bookings@send.insuresprhealth.co.za>');
+    Deno.env.set('EMAIL_REPLY_TO', 'motselisi@bonevc.co.za');
+    Deno.env.delete('NOTIFICATION_CONFIG_SHA256');
+    Deno.env.delete('NOTIFICATION_WORKER_SOURCE_SHA256');
+    assert(readConfig() === null, 'configuration without approval hashes was accepted');
+
+    Deno.env.set('NOTIFICATION_CONFIG_SHA256', 'a'.repeat(64));
+    Deno.env.set('NOTIFICATION_WORKER_SOURCE_SHA256', 'b'.repeat(64));
+    Deno.env.set('NOTIFICATION_ACTIVATION_MODE', 'rehearsal');
+    const config = readConfig();
+    assert(config !== null, 'complete hash-bound configuration was rejected');
+    assert(config.activationConfigSha256 === 'a'.repeat(64), 'config hash was not normalized');
+    assert(config.activationMode === 'rehearsal', 'activation mode was not preserved');
+  } finally {
+    for (const [key, value] of prior) {
+      if (value === undefined) Deno.env.delete(key);
+      else Deno.env.set(key, value);
+    }
+  }
+});
+
+Deno.test('database activation approval must match the exact worker configuration', async () => {
+  const config: Parameters<typeof isNotificationActivationApproved>[0] = {
+    supabaseUrl: 'https://example.supabase.co',
+    serviceRoleKey: 'legacy.jwt.value',
+    workerSecret: 'w'.repeat(32),
+    resendApiKey: 're_test',
+    emailFrom: 'InsureSPR <bookings@send.insuresprhealth.co.za>',
+    emailReplyTo: 'motselisi@bonevc.co.za',
+    activationConfigSha256: 'a'.repeat(64),
+    workerSourceSha256: 'b'.repeat(64),
+    activationMode: 'rehearsal',
+  };
+  let observedName = '';
+  let observedBody: Record<string, unknown> = {};
+  const approved = await isNotificationActivationApproved(config, 'rehearsal', (name, body) => {
+    observedName = name;
+    observedBody = body;
+    return Promise.resolve(true);
+  });
+  assert(approved, 'exact database approval was not accepted');
+  assert(observedName === 'notification_delivery_activation_ready', 'wrong approval RPC called');
+  assert(observedBody.p_config_sha256 === 'a'.repeat(64), 'configuration hash omitted');
+  assert(observedBody.p_worker_source_sha256 === 'b'.repeat(64), 'worker hash omitted');
+  assert(observedBody.p_email_reply_to === 'motselisi@bonevc.co.za', 'Reply-To omitted');
+  assert(observedBody.p_mode === 'rehearsal', 'rehearsal mode omitted');
+
+  const rejected = await isNotificationActivationApproved(config, 'active', () => Promise.resolve(false));
+  assert(!rejected, 'database rejection was ignored');
 });
 
 Deno.test('public readiness signal discloses only ready state and never invokes work', async () => {

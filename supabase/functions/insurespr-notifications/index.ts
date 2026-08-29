@@ -34,13 +34,16 @@ export type EmailContent = {
 
 export type DeliveryOutcome = 'sent' | 'failed' | 'lease_lost' | 'deferred';
 
-type WorkerConfig = {
+export type WorkerConfig = {
   supabaseUrl: string;
   serviceRoleKey: string;
   workerSecret: string;
   resendApiKey: string;
   emailFrom: string;
   emailReplyTo: string;
+  activationConfigSha256: string;
+  workerSourceSha256: string;
+  activationMode: 'rehearsal' | 'active';
 };
 
 class DeliveryError extends Error {
@@ -103,10 +106,11 @@ function getServiceRoleKey(): string {
 
   try {
     const parsed: unknown = JSON.parse(bundled);
-    const candidates = Array.isArray(parsed)
-      ? parsed
-      : parsed && typeof parsed === 'object'
-      ? Object.values(parsed)
+    const candidates = Array.isArray(parsed) ? parsed : parsed && typeof parsed === 'object'
+      ? [
+        (parsed as Record<string, unknown>).default,
+        ...Object.values(parsed as Record<string, unknown>),
+      ]
       : [];
     return candidates.find((value) => typeof value === 'string' && value.trim().length > 0)?.toString()
       .trim() || '';
@@ -115,7 +119,8 @@ function getServiceRoleKey(): string {
   }
 }
 
-function readConfig(): WorkerConfig | null {
+export function readConfig(): WorkerConfig | null {
+  const activationMode = Deno.env.get('NOTIFICATION_ACTIVATION_MODE')?.trim().toLowerCase() || '';
   const config: WorkerConfig = {
     supabaseUrl: Deno.env.get('SUPABASE_URL')?.replace(/\/$/, '') || '',
     serviceRoleKey: getServiceRoleKey(),
@@ -123,6 +128,9 @@ function readConfig(): WorkerConfig | null {
     resendApiKey: Deno.env.get('RESEND_API_KEY')?.trim() || '',
     emailFrom: Deno.env.get('EMAIL_FROM')?.trim() || '',
     emailReplyTo: Deno.env.get('EMAIL_REPLY_TO')?.trim() || '',
+    activationConfigSha256: Deno.env.get('NOTIFICATION_CONFIG_SHA256')?.trim().toLowerCase() || '',
+    workerSourceSha256: Deno.env.get('NOTIFICATION_WORKER_SOURCE_SHA256')?.trim().toLowerCase() || '',
+    activationMode: activationMode === 'rehearsal' ? 'rehearsal' : 'active',
   };
 
   if (
@@ -131,12 +139,27 @@ function readConfig(): WorkerConfig | null {
     config.workerSecret.length < 32 ||
     !config.resendApiKey ||
     !config.emailFrom ||
-    !config.emailReplyTo
+    !config.emailReplyTo ||
+    !/^[a-f0-9]{64}$/.test(config.activationConfigSha256) ||
+    !/^[a-f0-9]{64}$/.test(config.workerSourceSha256) ||
+    !['rehearsal', 'active'].includes(activationMode)
   ) {
     return null;
   }
 
   return config;
+}
+
+export function rpcHeadersForKey(key: string): Record<string, string> {
+  const headers: Record<string, string> = {
+    apikey: key,
+    'content-type': 'application/json',
+  };
+  // Modern opaque sb_secret keys are accepted through apikey. Sending one as
+  // a Bearer token makes the gateway try to parse it as a JWT and reject it.
+  // Legacy JWT service-role keys still require the Authorization header.
+  if (!key.startsWith('sb_secret_')) headers.authorization = `Bearer ${key}`;
+  return headers;
 }
 
 export function timingSafeEqual(left: string, right: string): boolean {
@@ -160,11 +183,7 @@ async function callRpc<T>(
 ): Promise<T> {
   const response = await fetch(`${config.supabaseUrl}/rest/v1/rpc/${name}`, {
     method: 'POST',
-    headers: {
-      apikey: config.serviceRoleKey,
-      authorization: `Bearer ${config.serviceRoleKey}`,
-      'content-type': 'application/json',
-    },
+    headers: rpcHeadersForKey(config.serviceRoleKey),
     body: JSON.stringify(body),
     signal: AbortSignal.timeout(10_000),
   });
@@ -179,6 +198,27 @@ async function callRpc<T>(
   }
 
   return await response.json() as T;
+}
+
+type ActivationRpc = (
+  name: string,
+  body: JsonRecord,
+) => Promise<unknown>;
+
+export async function isNotificationActivationApproved(
+  config: WorkerConfig,
+  mode: 'rehearsal' | 'active' = 'active',
+  rpc: ActivationRpc = (name, body) => callRpc<unknown>(config, name, body),
+): Promise<boolean> {
+  const result = await rpc('notification_delivery_activation_ready', {
+    p_config_sha256: config.activationConfigSha256,
+    p_worker_source_sha256: config.workerSourceSha256,
+    p_provider: PROVIDER_NAME,
+    p_email_from: config.emailFrom,
+    p_email_reply_to: config.emailReplyTo,
+    p_mode: mode,
+  });
+  return result === true;
 }
 
 function asRecord(value: Json | undefined): JsonRecord {
@@ -706,7 +746,16 @@ export async function handler(request: Request): Promise<Response> {
     // This public probe never invokes the queue and exposes no provider,
     // recipient or credential details. It exists solely for release/uptime
     // checks that must not possess the scheduler secret.
-    return readinessResponse(Boolean(readConfig()));
+    const config = readConfig();
+    let ready = false;
+    if (config) {
+      try {
+        ready = await isNotificationActivationApproved(config, 'active');
+      } catch {
+        logEvent('activation_readiness_unavailable');
+      }
+    }
+    return readinessResponse(ready);
   }
 
   if (request.method !== 'POST') {
@@ -723,6 +772,18 @@ export async function handler(request: Request): Promise<Response> {
   if (!timingSafeEqual(suppliedSecret, config.workerSecret)) {
     logEvent('authorization_rejected');
     return jsonResponse(401, { error: 'unauthorized' });
+  }
+
+  let activationApproved = false;
+  try {
+    activationApproved = await isNotificationActivationApproved(config, config.activationMode);
+  } catch {
+    logEvent('activation_check_failed');
+    return jsonResponse(503, { error: 'notification_activation_check_unavailable' });
+  }
+  if (!activationApproved) {
+    logEvent('activation_not_approved');
+    return jsonResponse(503, { error: 'notification_delivery_not_approved' });
   }
 
   const workerId = crypto.randomUUID();

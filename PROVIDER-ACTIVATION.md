@@ -52,12 +52,21 @@ policy, not evidence that outbound or inbound email works.
    received headers.
 5. Create an independent random `NOTIFICATION_WORKER_SECRET`; do not reuse a
    Supabase key, API key or password.
-6. Store `RESEND_API_KEY`, `EMAIL_FROM`, `EMAIL_REPLY_TO` and
-   `NOTIFICATION_WORKER_SECRET` in Supabase Edge Function secrets.
-7. Deploy the notification worker, run a controlled queued test, and verify
-   success, provider rejection, retry, ordering and dead-letter behavior.
-8. Only then install the documented once-per-minute scheduler with the worker
-   secret in Supabase Vault and record the Cron owner and alert recipient.
+6. Store `RESEND_API_KEY`, `EMAIL_FROM`, `EMAIL_REPLY_TO`,
+   `NOTIFICATION_WORKER_SECRET`, `NOTIFICATION_CONFIG_SHA256`,
+   `NOTIFICATION_WORKER_SOURCE_SHA256` and `NOTIFICATION_ACTIVATION_MODE` in
+   Supabase Edge Function secrets. Keep all values out of Git and evidence.
+7. Insert the exact reviewed configuration in the database's short-lived
+   `rehearsal` state, deploy the matching worker source, and run a controlled
+   synthetic queued test. Verify success, mailbox receipt, provider duplicate
+   suppression, retry, ordering, failure-alert and dead-letter behavior.
+8. Attach the controlled test evidence and promote that same immutable
+   configuration to `active`. Any sender, secret-generation, source, schedule
+   or owner change requires revocation and a new revision.
+9. Only then install the documented scheduler with the worker secret in
+   Supabase Vault, resolve both notification dependencies and record the Cron
+   owner and alert recipient. See `NOTIFICATION-ACTIVATION.md` for the exact
+   rehearsal, promotion and rollback contract.
 
 Run the non-mutating provider checks before and after every DNS/provider change:
 
