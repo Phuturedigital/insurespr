@@ -102,6 +102,16 @@ their event histories and helper functions are unavailable to `anon`,
 `authenticated` and `service_role`; operate them only through the controlled SQL
 templates in `supabase/snippets/privacy_operations.sql`.
 
+Verified privacy requests also have an owner-only record locator.
+`private.locate_privacy_request_records()` searches by a verified email and/or
+E.164 mobile value without retaining that value or a guessable hash, then links
+the relevant website records into a minimal review index. Guarded scope reviews
+through `private.review_privacy_request_record()` and immutable events are
+separate from any disclosure, correction, restriction or deletion action. The
+locator tables and functions are unavailable to
+`anon`, `authenticated` and `service_role`; use the controlled privacy
+operations snippet only as the database owner.
+
 ```powershell
 node --check production.js
 node --check site.js

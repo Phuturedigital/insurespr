@@ -273,12 +273,15 @@ control.
   quarterly rehearsal, evidence checklist and production restoration order.
   Its blank owner/RPO/RTO/retention fields are launch dependencies, not defaults.
 
-### Private privacy-request and security-incident registers
+### Private privacy-request, record-locator and security-incident controls
 
-The live database contains four owner-only tables:
+The live database contains owner-only privacy-operation tables, including:
 
 - `private.privacy_request_register`
 - `private.privacy_request_events`
+- `private.privacy_request_search_runs`
+- `private.privacy_request_record_links`
+- `private.privacy_request_record_link_events`
 - `private.security_incident_register`
 - `private.security_incident_events`
 
@@ -289,6 +292,17 @@ reason. Guard triggers reject invalid status transitions and prevent recorded
 receipt, identity, response, containment, notification and closure milestones
 from being silently rewritten. Event histories are immutable and omit request
 contact, decision narrative, incident summary and affected-person details.
+
+After identity verification, run
+`private.locate_privacy_request_records()` with only the verified email and/or
+E.164 mobile locator. The request must already be `under_review` or `actioning`.
+The function does not retain either search value; it creates a minimal record
+index and count-only search run. Review each linked record with
+`private.review_privacy_request_record()` and a named operator plus concrete
+reason. A scope label is not authority to export, disclose, change, restrict or
+delete the source record. Complete those actions only through a separately
+approved procedure and then record the outcome. Never give application or
+service-role access to these locator functions.
 
 Do not store identity-document images, clinical records, mailbox bodies,
 credentials, raw logs or forensic exports in either register. Store only the

@@ -179,6 +179,23 @@ workflow and domain transition must all be ready at the same time.
   incident narratives. `supabase/snippets/privacy_operations.sql` supplies the
   controlled queue, history and lifecycle templates; it is not a public or
   browser admin interface.
+- Live migration `20260829015008_add_private_data_subject_record_locator`
+  adds a guarded, owner-only search workflow for verified privacy requests. It
+  exposes only the owner-operated `private.locate_privacy_request_records()`
+  and `private.review_privacy_request_record()` procedures, which do not retain
+  the email or mobile search value.
+  locates directly matching customer, lead and enquiry records and traverses
+  their website booking, consent, notification, analytics and audit links
+  without retaining raw email/mobile search terms or low-entropy hashes.
+  Search runs, record links and review events are private, RLS-protected and
+  unavailable to `anon`, `authenticated` and `service_role`. Guarded human
+  review records scope only; the locator cannot disclose, correct or delete
+  source records. Its transaction-scoped migration probe completed and rolled
+  back with no synthetic records retained.
+- Migration `20260829015243_index_privacy_locator_foreign_keys` adds covering
+  indexes for each locator search-run and request-event foreign key reported by
+  the Supabase performance advisor; no personal data or access policy changes
+  are part of that hardening migration.
 - Supabase performance advisor: only expected `unused_index` informational
   notices on the newly created, empty operational database. Keep the indexes
   until real query statistics exist; reference:

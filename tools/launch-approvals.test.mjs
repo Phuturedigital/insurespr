@@ -283,3 +283,52 @@ test('privacy requests and security incidents use private guarded registers with
   assert.match(snippet, /eServices portal/);
   assert.match(readiness, /20260829012324_add_private_privacy_operations_registers/);
 });
+
+test('verified privacy requests use a private audited record locator without retaining search values', async () => {
+  const [migration, indexes, privacy, runbook, snippet, readiness, readme] = await Promise.all([
+    read('supabase/migrations/20260829015008_add_private_data_subject_record_locator.sql'),
+    read('supabase/migrations/20260829015243_index_privacy_locator_foreign_keys.sql'),
+    read('PRIVACY-OPERATIONS.md'),
+    read('OPERATIONS-RUNBOOK.md'),
+    read('supabase/snippets/privacy_operations.sql'),
+    read('PRODUCTION-READINESS.md'),
+    read('README.md'),
+  ]);
+
+  for (const table of [
+    'private.privacy_request_search_runs',
+    'private.privacy_request_record_links',
+    'private.privacy_request_record_link_events',
+  ]) {
+    assert.match(migration, new RegExp(`create table ${table.replace('.', '\\.')}`));
+    assert.match(migration, new RegExp(`alter table ${table.replace('.', '\\.')} enable row level security`));
+    assert.match(migration, new RegExp(`revoke all on table ${table.replace('.', '\\.')} from public, anon, authenticated, service_role`));
+  }
+
+  assert.match(migration, /create or replace function private\.locate_privacy_request_records/);
+  assert.match(migration, /create or replace function private\.review_privacy_request_record/);
+  assert.match(migration, /identity_status not in \('verified', 'not_required'\)/);
+  assert.match(migration, /status not in \('under_review', 'actioning'\)/);
+  assert.match(migration, /privacy request record-link events are immutable/);
+  assert.match(migration, /privacy_locator_probe_rollback/);
+  assert.match(migration, /service role must not access private privacy locator/);
+  assert.doesNotMatch(migration, /search_(?:email|mobile)_(?:value|hash)|email_hash|mobile_hash/i);
+  assert.doesNotMatch(migration, /grant\s+(?:all|select|insert|update|delete|execute)[\s\S]*?(?:anon|authenticated|service_role)/i);
+  for (const index of [
+    'privacy_request_record_links_first_search_run_idx',
+    'privacy_request_record_links_last_search_run_idx',
+    'privacy_request_record_link_events_request_idx',
+    'privacy_request_record_link_events_search_run_idx',
+  ]) {
+    assert.match(indexes, new RegExp(`create index ${index}`));
+  }
+
+  for (const document of [privacy, runbook, snippet, readiness, readme]) {
+    assert.match(document, /locate_privacy_request_records/);
+    assert.match(document, /review_privacy_request_record/);
+    assert.match(document, /does not retain|not retain|without retaining/i);
+  }
+  assert.match(readiness, /20260829015008_add_private_data_subject_record_locator/);
+  assert.match(readiness, /20260829015243_index_privacy_locator_foreign_keys/);
+  assert.match(privacy, /does not disclose,?\s*correct,?\s*restrict or delete/i);
+});

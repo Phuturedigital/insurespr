@@ -83,9 +83,10 @@ eight characters.
 2. Acknowledge the request within two working days and give it an internal
    reference. Verify identity proportionately before disclosing or changing a
    record; never request more identity information than necessary.
-3. Search the website booking, contact, employer, consent, notification and
-   analytics stores using authorised staff access. Record who searched, when,
-   and the decision.
+3. After identity is verified, use the private record locator to search the
+   website booking, contact, employer, consent, notification, analytics and
+   operational-audit stores. Record the named operator, reason and human scope
+   decision without retaining the raw email/mobile search value.
 4. Respond as soon as reasonably practicable. If access is refused, retention
    is legally required, or deletion cannot be completed, explain the basis and
    the route to complain to the Information Regulator.
@@ -118,6 +119,29 @@ data-minimised `private.privacy_request_events` history:
 - `private.privacy_operations_inventory()` reports count-only open, closed,
   six-year-review and held records for both privacy requests and security
   incidents. It does not disclose payloads or authorise deletion.
+
+The live owner-only locator extends that register with
+`private.locate_privacy_request_records()` and three private evidence tables:
+
+- A search can run only while the request is `under_review` or `actioning` and
+  identity is `verified` or formally `not_required`. It accepts a validated
+  email and/or E.164 mobile number for the transaction but stores neither the
+  values nor deterministic hashes that could be guessed.
+- It links matching customers, bookings and their history/tokens/actions,
+  employer leads, contact enquiries, consent, notification attempts, linked
+  analytics and operational audit events. The result is a minimal index of
+  record type, identifier, reference and match basis—not a copy of the record.
+- `private.privacy_request_search_runs` stores operator, reason, searched-field
+  flags, time and per-type counts. `private.privacy_request_record_links` holds
+  the scope-review queue, while `private.privacy_request_record_link_events`
+  preserves immutable discovery, reconfirmation and review events.
+- `private.review_privacy_request_record()` records guarded human decisions:
+  `in_scope`, `out_of_scope`, `restricted` or `actioned`. It does not disclose,
+  correct, restrict or delete the source record; those actions require a
+  separate approved legal and operational step.
+- The tables and functions are unavailable to the browser, `anon`,
+  `authenticated` and `service_role`. Run them only as the database owner using
+  the controlled templates.
 
 Use `supabase/snippets/privacy_operations.sql` as the controlled operating
 template. Do not bypass its lifecycle with direct status-only edits.
@@ -155,11 +179,11 @@ completed or documented-impossible affected-person notification. Incident
 summaries must not contain names, contact details, credentials, raw logs or
 compromised record contents.
 
-All four privacy-operations tables use RLS, explicit deny-all policies and
-owner-only ACLs. Their trigger and inventory functions are also unavailable to
+All privacy-operations tables use RLS, explicit deny-all policies and
+owner-only ACLs. Their trigger, locator, review and inventory functions are also unavailable to
 the browser and service role. The production migration’s transaction-scoped
-request and incident probes completed their valid workflows and rolled back to
-zero retained records.
+request, locator and incident probes completed their valid workflows and rolled
+back to zero retained records.
 
 The Information Regulator states that security-compromise notifications must be
 submitted through its eServices portal and that the Information Officer should

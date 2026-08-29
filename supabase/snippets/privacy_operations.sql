@@ -103,6 +103,53 @@ select * from private.privacy_operations_inventory();
 -- where id = 'REQUEST_UUID'
 -- returning reference, status, identity_status;
 
+-- 8a. Locate website records only after the request is under review/actioning
+-- and identity is verified (or the Information Officer has formally recorded
+-- that verification is not required). Search values are used inside this
+-- transaction but are not retained in the search audit. Use only the verified
+-- contact values supplied for this request.
+-- select *
+-- from private.locate_privacy_request_records(
+--   'REQUEST_UUID',
+--   'NAMED APPROVED OPERATOR',
+--   'Locate website records after completing requester identity verification',
+--   'VERIFIED-EMAIL@example.com', -- null when email is not an approved locator
+--   '+27834507861'                -- null when mobile is not an approved locator
+-- );
+
+-- 8b. Review the data-minimised record index. This returns record identifiers,
+-- references and scope status only; it does not export record contents.
+-- select
+--   link.id,
+--   link.record_type,
+--   link.record_identifier,
+--   link.source_reference,
+--   link.match_basis,
+--   link.review_status,
+--   link.first_located_at,
+--   link.last_located_at
+-- from private.privacy_request_record_links as link
+-- where link.request_id = 'REQUEST_UUID'
+-- order by link.record_type, link.record_identifier;
+
+-- 8c. Record a human scope decision for one located record. This does not
+-- disclose, correct, restrict or delete the source record. Those actions need
+-- a separately approved procedure and controlled evidence.
+-- select *
+-- from private.review_privacy_request_record(
+--   RECORD_LINK_ID,
+--   'in_scope', -- in_scope/out_of_scope/restricted/actioned
+--   'NAMED APPROVED OPERATOR',
+--   'Verified record relationship and recorded the approved request scope decision'
+-- );
+
+-- 8d. Review the immutable locator audit. It deliberately excludes the email,
+-- mobile number and record contents used during the search.
+-- select event.*
+-- from private.privacy_request_record_link_events as event
+-- where event.request_id = 'REQUEST_UUID'
+-- order by event.created_at, event.id;
+
 -- 9. Record the response. Use only the approved outcome and a defensible basis;
 -- do not paste disclosed records into decision_basis.
 -- update private.privacy_request_register
