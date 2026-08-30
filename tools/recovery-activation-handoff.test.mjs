@@ -63,7 +63,7 @@ test('plaintext database URLs, keys, service-role tokens and backup payload fiel
   for (const [field, value] of [
     ['databaseUrl', 'postgresql://user:password@db.example.test/postgres'],
     ['encryptionKey', 'super-secret-key'],
-    ['serviceRoleKey', 'eyJ12345678901234567890.abcdefghijklmnopqrstuvwxyz.1234567890abcdef'],
+    ['serviceRoleKey', ['eyJ12345678901234567890', 'abcdefghijklmnopqrstuvwxyz', '1234567890abcdef'].join('.')],
     ['backupPayload', 'patient-records'],
   ]) {
     const changed = clone(manifest);

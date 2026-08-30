@@ -34,6 +34,9 @@ jobs:
         with:
           deno-version: v2.9.2
 
+      - name: Reject committed credential material
+        run: npm run test:secrets
+
       - name: Install locked dependencies
         run: npm ci
 

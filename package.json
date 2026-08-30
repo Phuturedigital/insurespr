@@ -7,7 +7,8 @@
     "node": ">=20"
   },
   "scripts": {
-    "test": "npm run test:syntax && npm run test:unit && npm run test:deno && npm run test:browser",
+    "test": "npm run test:secrets && npm run test:syntax && npm run test:unit && npm run test:deno && npm run test:browser",
+    "test:secrets": "node tools/secret-scan.mjs && node --test tools/secret-scan.test.mjs",
     "test:syntax": "node tools/syntax-check.mjs",
     "test:unit": "npm run test:release-audit && npm run test:release-monitor && npm run test:legacy-redirects && npm run test:launch-approvals && npm run test:hpcsa-registration-evidence && npm run test:google-business-profile && npm run test:service-activation-handoff && npm run test:privacy-activation-handoff && npm run test:availability-activation-handoff && npm run test:turnstile-activation-handoff && npm run test:turnstile-provider-inventory && npm run test:notification-activation-handoff && npm run test:recovery-activation-handoff && npm run test:launch-readiness-snapshot && npm run test:recovery && npm run test:concept-preview && npm run test:service-expansion && npm run test:verification-bridge",
     "test:release-audit": "node tools/release-audit.mjs --self-test",

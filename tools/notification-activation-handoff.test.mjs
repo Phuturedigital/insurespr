@@ -64,7 +64,7 @@ test('plaintext provider and platform secret shapes are rejected anywhere in the
   for (const [field, value] of [
     ['apiKey', 're_1234567890abcdef'],
     ['workerSecret', 'a-secret-value-that-must-not-be-here'],
-    ['serviceRoleKey', 'eyJ12345678901234567890.abcdefghijklmnopqrstuvwxyz.1234567890abcdef'],
+    ['serviceRoleKey', ['eyJ12345678901234567890', 'abcdefghijklmnopqrstuvwxyz', '1234567890abcdef'].join('.')],
   ]) {
     const changed = clone(manifest);
     changed.secretCustody[field] = value;

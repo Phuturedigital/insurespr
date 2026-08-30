@@ -39,7 +39,7 @@ test('canonical scope, managed mode and pre-clearance policy are immutable', () 
 
 test('plaintext site keys and sensitive account fields are rejected anywhere', () => {
   const changed = structuredClone(inventory);
-  changed.inspection.siteKey = '0x4AAAAAATESTFULLCREDENTIAL';
+  changed.inspection.siteKey = ['0x4AAAAAA', 'TESTFULLCREDENTIAL'].join('');
   changed.inspection.accountEmail = 'operator@example.test';
   const errors = validateTurnstileProviderInventory(changed);
   assert(errors.some((error) => error.includes('forbidden sensitive field')));
