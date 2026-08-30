@@ -33,6 +33,22 @@ document that was reviewed.
 
 ## Live database representation
 
+### Private practitioner-register verification — 30 August 2026
+
+A professional-regulator register was checked for Motselisi R. Mosiana on
+30 August 2026. The detailed query and result are retained only in the private
+Supabase readiness evidence. `HPCSA-REGISTRATION-EVIDENCE.json` deliberately
+records the custody and publication boundary without reproducing the sensitive
+credential value. At the owner's request, the public website and public
+repository must not display the registration number, register status, result
+or regulator source trail.
+
+This verifies one practitioner-registration claim only. It does not verify the
+equipment/premises licence, responsible-person appointment, BHF practice
+number, medical-aid route, reporting arrangement, availability or the scope of
+every service. The `verified-credentials` launch dependency therefore remains
+open and blocking.
+
 Migration `20260828230538_record_operational_readiness_evidence` adds:
 
 - `private.readiness_evidence_documents` for immutable source identity,

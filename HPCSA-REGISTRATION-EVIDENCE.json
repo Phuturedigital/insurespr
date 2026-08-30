@@ -1,0 +1,22 @@
+{
+  "schema_version": 2,
+  "evidence_key": "hpcsa-practitioner-20260830",
+  "record": {
+    "subject": "Motselisi R. Mosiana",
+    "verified_at": "2026-08-30T22:04:08+02:00",
+    "custody": "Private Supabase readiness evidence",
+    "details": "Withheld from the public website and repository artifact at the owner's request."
+  },
+  "publication_scope": {
+    "public_use_allowed": false,
+    "allowed": [],
+    "reason": "The owner requested on 30 August 2026 that the website and public repository not publish the registration number, regulator status, register result or regulator source trail. Retain the detailed evidence in controlled private storage only."
+  },
+  "operational_boundary": [
+    "Does not verify equipment or premises licensing.",
+    "Does not verify a responsible-person appointment.",
+    "Does not verify BHF practice status or medical-aid eligibility.",
+    "Does not verify the scope or availability of advertised services.",
+    "Does not close the verified-credentials launch dependency."
+  ]
+}

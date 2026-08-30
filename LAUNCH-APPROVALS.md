@@ -56,7 +56,7 @@ verified fact and does not override the application’s fail-closed controls.
 | --- | --- | --- |
 | Information Officer | Information Regulator registration record and the legal identity of the responsible private body | Motselisi is shown as owner-designated Information Officer; intake version stays pending |
 | Turnstile | Official-domain site key and matching secret in Vercel plus the tested signed Vercel-to-Supabase verification path | All public mutations return a configuration error before writing |
-| Clinical operations | Equipment/use licence, responsible person, practitioner registrations, reporting route and approved service facts | `needs_confirmation`; no invented claims |
+| Clinical operations | A private regulator-register check is retained in the controlled evidence record. The owner has explicitly declined public display of the registration number, register status, result and regulator source trail. Equipment/use licence, responsible-person appointment, any other practitioner registrations, reporting route and approved service facts remain required. | `needs_confirmation`; keep the practitioner-register evidence private and do not infer the remaining controls |
 | Pricing and aid | Signed current patient tariff, billing/VAT interpretation and scheme arrangements | Prices unpublished or quote-only |
 | Availability | Duration, notice, horizon, buffers, weekly rota, closures and named schedule owner | No policies, rules or slots |
 | Email delivery | Resend account/key, verified sending domain, sender, reply-to, SPF, DKIM, DMARC, worker secret and Cron owner | Direct email to the approved receiving address is available; automated queue retained and worker not scheduled |

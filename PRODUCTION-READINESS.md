@@ -414,6 +414,15 @@ Submissions must remain closed until then.
 
 ## Owner decisions recorded; activation evidence still required
 
+On 30 August 2026, a direct regulator-register check was recorded as private
+operational evidence. The owner subsequently directed that the public website
+must not display the registration number, register status, result or regulator
+source trail. The owner page now contains no such public credential detail.
+This evidence does not establish an
+equipment or premises licence, responsible-person appointment, BHF status,
+medical-aid route, reporting workflow or the scope and availability of each
+service, so `verified-credentials` remains open.
+
 These also exist as rows in `public.launch_dependencies` so an operator can
 track them in the Supabase dashboard. Motselisi R. Mosiana recorded the owner
 decisions in `LAUNCH-APPROVALS.md` on 21 August 2026. The owner approved the
