@@ -1,0 +1,121 @@
+{
+  "schemaVersion": 1,
+  "status": "prepared-not-created",
+  "activationAuthorized": false,
+  "preparedAt": "2026-08-29T09:15:00Z",
+  "source": {
+    "canonicalOrigin": "https://www.insuresprhealth.co.za",
+    "canonicalHostname": "www.insuresprhealth.co.za",
+    "servicesEndpoint": "https://www.insuresprhealth.co.za/api/insurespr?route=services",
+    "protectedEndpoint": "https://www.insuresprhealth.co.za/api/insurespr",
+    "supabaseFunction": "insurespr-api",
+    "supabaseFunctionVersion": 18,
+    "verificationRegion": "fra1"
+  },
+  "approvedConfiguration": {
+    "widgetName": "InsureSPR Production Forms",
+    "widgetMode": "managed",
+    "allowedHostnames": [
+      "www.insuresprhealth.co.za"
+    ],
+    "allowedActions": [
+      "book",
+      "contact",
+      "employer"
+    ],
+    "previewHostnamesAllowed": false,
+    "localhostAllowed": false,
+    "siteKeyEnvironmentName": "TURNSTILE_SITE_KEY",
+    "secretKeyEnvironmentName": "TURNSTILE_SECRET_KEY",
+    "environmentTarget": "vercel-production-only"
+  },
+  "liveSnapshot": {
+    "widgetInventoryVerified": false,
+    "widgetReference": null,
+    "siteKeyPublishedByOfficialBridge": false,
+    "directApiSiteKeyPublished": false,
+    "vercelProductionSiteKeyConfigured": false,
+    "vercelProductionSecretKeyConfigured": false,
+    "directProtectedProbeCode": "BOT_CHECK_UNAVAILABLE",
+    "bridgeProtectedProbeCode": "BOT_CHECK_UNAVAILABLE",
+    "intakeReady": false,
+    "operationalRecordCount": 0
+  },
+  "widgetCreation": {
+    "created": false,
+    "widgetReference": null,
+    "siteKeyLastSix": null,
+    "createdBy": null,
+    "createdAt": null,
+    "configurationEvidenceRef": null
+  },
+  "secretCustody": {
+    "siteKeyStoredAt": null,
+    "siteKeyEvidenceRef": null,
+    "secretKeyFingerprintSha256": null,
+    "secretKeyStoredAt": null,
+    "secretKeyEvidenceRef": null,
+    "custodian": null,
+    "rotationOwner": null,
+    "rotationProcedureRef": null
+  },
+  "environmentDeployment": {
+    "vercelProductionSiteKeyConfigured": false,
+    "vercelProductionSecretKeyConfigured": false,
+    "vercelDeploymentId": null,
+    "deployedAt": null,
+    "deployedBy": null,
+    "deploymentEvidenceRef": null,
+    "supabaseFallbackKeysConfigured": false,
+    "supabaseFallbackEvidenceRef": null
+  },
+  "controlledVerification": {
+    "completed": false,
+    "testedAt": null,
+    "testedBy": null,
+    "evidenceRef": null,
+    "missingToken": {
+      "passed": false,
+      "expectedCode": "BOT_CHECK_REQUIRED"
+    },
+    "invalidToken": {
+      "passed": false,
+      "expectedCode": "BOT_CHECK_FAILED"
+    },
+    "expiredToken": {
+      "passed": false,
+      "expectedCode": "BOT_CHECK_FAILED"
+    },
+    "wrongAction": {
+      "passed": false,
+      "expectedCode": "BOT_CHECK_FAILED"
+    },
+    "wrongHostname": {
+      "passed": false,
+      "expectedCode": "BOT_CHECK_FAILED"
+    },
+    "replayedToken": {
+      "passed": false,
+      "expectedCode": "BOT_CHECK_FAILED"
+    },
+    "validToken": {
+      "passed": false,
+      "turnstileAccepted": false,
+      "expectedDownstreamCode": "INTAKE_ACTIVATION_NOT_READY"
+    },
+    "noUnintendedWrites": false,
+    "siteKeyAbsentFromServerErrors": false,
+    "secretAbsentFromResponsesAndLogs": false
+  },
+  "approval": null,
+  "activationSequence": [
+    "In the authorized Cloudflare account, confirm that no equivalent InsureSPR production widget already exists.",
+    "Create one managed widget named InsureSPR Production Forms and restrict its hostname list to www.insuresprhealth.co.za only.",
+    "Store the issued site key as TURNSTILE_SITE_KEY and the matching secret as TURNSTILE_SECRET_KEY in Vercel Production without copying either value into Git, SQL, evidence notes or chat.",
+    "Deploy the exact reviewed commit and confirm that the official same-origin services response publishes the site key while the direct Supabase response remains safe.",
+    "Run the missing, invalid, expired, wrong-action, wrong-hostname, replayed and valid-token tests with synthetic non-patient data and verify zero operational writes while the composite intake gate remains closed.",
+    "Record only the widget reference, last six site-key characters, secret SHA-256 fingerprint, secret-custody references, deployment identifier and controlled-test evidence.",
+    "Have a different reviewer approve the evidence packet and its rollback path before closing anti-spam-secrets.",
+    "Do not open public intake until privacy, service, availability, notification, recovery and every other blocking dependency is also closed."
+  ]
+}

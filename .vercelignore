@@ -1,6 +1,41 @@
 # Internal docs — stay in git, kept off the public demo URL.
 README.md
 CONTENT-NOTES.md
+PRODUCTION-READINESS.md
+OPERATIONS-RUNBOOK.md
+LEGACY-SEO-URL-INVENTORY.md
+LEGACY-REDIRECT-MANIFEST.json
+LEGACY-SNAPSHOT-EVIDENCE.json
+XOM-RATES-2026-REVIEW.md
+AVAILABILITY-ACTIVATION.md
+NOTIFICATION-ACTIVATION.md
+RECOVERY-ACTIVATION.md
+PERFORMANCE-BUDGETS.md
+RECOVERY-RESTORE-DRILL.md
+LAUNCH-APPROVALS.md
+PRIVACY-OPERATIONS.md
+PROVIDER-ACTIVATION.md
+OPERATIONAL-EVIDENCE-REGISTER.md
+RECOVERY-READINESS.json
+GOOGLE-BUSINESS-PROFILE-ALIGNMENT.json
+SERVICE-ACTIVATION-HANDOFF.json
+PRIVACY-ACTIVATION-HANDOFF.json
+AVAILABILITY-ACTIVATION-HANDOFF.json
+TURNSTILE-ACTIVATION-HANDOFF.json
+TURNSTILE-PROVIDER-INVENTORY.json
+HPCSA-REGISTRATION-EVIDENCE.json
+NOTIFICATION-ACTIVATION-HANDOFF.json
+RECOVERY-ACTIVATION-HANDOFF.json
+RELEASE-MONITOR-BASELINE.json
+supabase/
+
+# Historical concept-only pages and assets are retained in git for provenance,
+# but are not part of the production acquisition site.
+brand.html
+learn.html
+programmes.html
+scan.html
+pd-concepts/
 
 # Build/research tooling — never part of the deployed site.
 #
@@ -8,7 +43,11 @@ CONTENT-NOTES.md
 # and third-party stock preview JPEGs, none of which should be publicly
 # reachable. Anything added here must be assumed public unless it is listed.
 tools/
+tmp/
 node_modules/
+package.json
+package-lock.json
+.github/
 
 # OS / editor
 .DS_Store

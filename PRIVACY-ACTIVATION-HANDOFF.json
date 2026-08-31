@@ -1,0 +1,131 @@
+{
+  "schemaVersion": 1,
+  "status": "prepared-not-approved",
+  "activationAuthorized": false,
+  "preparedAt": "2026-08-29T07:00:00Z",
+  "publicNotice": {
+    "url": "https://www.insuresprhealth.co.za/privacy",
+    "publicationVersion": "2026-08-21.1",
+    "publicationWordingApprovedAt": "2026-08-21",
+    "databasePrivacyVersion": "pending-approval"
+  },
+  "ownerApprovedFacts": {
+    "responsiblePartyPublicName": "InsureSPR Precision Healthcare",
+    "designatedInformationOfficer": "Motselisi R. Mosiana",
+    "designationDate": "2026-08-21",
+    "privacyContact": "motselisi@bonevc.co.za",
+    "phoneE164": "+27834507861",
+    "informationRegulatorRegistrationClaimed": false,
+    "websiteRetentionScheduleApproved": true
+  },
+  "approvedWebsiteRetentionSchedule": {
+    "incompleteOrSpamSubmissions": "90 days",
+    "unconvertedEnquiriesAndEmployerLeads": "24 months after last activity",
+    "bookingHistoryAndConsent": "6 years after last booking activity",
+    "notificationMetadata": "12 months after terminal state",
+    "anonymousAnalytics": "13 months",
+    "rateLimitRecords": "no more than 30 days",
+    "bookingManagementCredentials": "expire after 90 days",
+    "privacyAuditAndSecurityEvidence": "6 years after closure unless a documented legal hold or other duty applies",
+    "databaseBackupsTarget": "rolling 35 days after backup ownership and recovery controls are approved",
+    "operationalBackupCurrentlyVerified": false
+  },
+  "legalIdentityApproval": {
+    "legalEntityName": null,
+    "registrationNumber": null,
+    "registrationEvidenceRef": null,
+    "registeredAddressEvidenceRef": null,
+    "publicPracticeAddressReconciliationRef": null,
+    "verifiedBy": null,
+    "verifiedAt": null
+  },
+  "informationOfficerApproval": {
+    "registrationStatus": "pending-evidence",
+    "regulatorReference": null,
+    "registrationEvidenceRef": null,
+    "paiaManualRef": null,
+    "verifiedBy": null,
+    "verifiedAt": null
+  },
+  "processorApprovals": [
+    {
+      "processor": "Supabase",
+      "purpose": "EU-hosted operational database and Edge Functions",
+      "currentTechnicalState": "active",
+      "contractAndTermsEvidenceRef": null,
+      "locationAndSubprocessorReviewRef": null,
+      "popiaSection72BasisRef": null,
+      "deletionAndIncidentRouteRef": null,
+      "approvedBy": null,
+      "approvedAt": null
+    },
+    {
+      "processor": "Vercel",
+      "purpose": "Website delivery, TLS, serverless verification bridge and request logs",
+      "currentTechnicalState": "active",
+      "contractAndTermsEvidenceRef": null,
+      "locationAndSubprocessorReviewRef": null,
+      "popiaSection72BasisRef": null,
+      "deletionAndIncidentRouteRef": null,
+      "approvedBy": null,
+      "approvedAt": null
+    },
+    {
+      "processor": "Cloudflare Turnstile",
+      "purpose": "Bot verification through Siteverify",
+      "currentTechnicalState": "not-active-keys-missing",
+      "contractAndTermsEvidenceRef": null,
+      "locationAndSubprocessorReviewRef": null,
+      "popiaSection72BasisRef": null,
+      "deletionAndIncidentRouteRef": null,
+      "approvedBy": null,
+      "approvedAt": null
+    },
+    {
+      "processor": "Resend",
+      "purpose": "Transactional email delivery",
+      "currentTechnicalState": "not-active-account-and-domain-evidence-missing",
+      "contractAndTermsEvidenceRef": null,
+      "locationAndSubprocessorReviewRef": null,
+      "popiaSection72BasisRef": null,
+      "deletionAndIncidentRouteRef": null,
+      "approvedBy": null,
+      "approvedAt": null
+    }
+  ],
+  "operationsApproval": {
+    "privacyRequestOwner": null,
+    "privacyRequestDeputy": null,
+    "privacyMailboxLiveTestRef": null,
+    "identityVerificationPolicyRef": null,
+    "accessCorrectionDeletionResponsePolicyRef": null,
+    "legalHoldOwner": null,
+    "retentionEnforcementOwner": null,
+    "securityIncidentOwner": null,
+    "securityCompromiseEscalationRef": null,
+    "processorIncidentEscalationRef": null,
+    "backupRecoveryApprovalRef": null,
+    "operatorAccessApprovalRef": null,
+    "responseTargetWorkingDays": null
+  },
+  "finalApproval": {
+    "approvedVersion": null,
+    "approvedBy": null,
+    "approvedAt": null,
+    "changeReference": null,
+    "processorActivationEvidenceRef": null,
+    "turnstileActivationEvidenceRef": null,
+    "notificationActivationEvidenceRef": null,
+    "databaseMigrationReviewRef": null
+  },
+  "activationSequence": [
+    "Resolve the conflicting legal registration years using an authoritative legal-entity record.",
+    "Retain Information Regulator registration evidence and PAIA manual reference without publishing unnecessary identifiers.",
+    "Approve every active or planned processor, its location and subprocessors, POPIA section 72 basis, deletion route and incident contact.",
+    "Assign privacy-request, retention, incident, recovery and operator-access owners and complete controlled mailbox and escalation tests.",
+    "Activate and verify Turnstile and transactional email before approving them as processors for intake.",
+    "Complete the final version, reviewer, timestamp and change references.",
+    "Validate the approved packet, apply a reviewed forward-only migration and keep the API fail-closed until every linked launch dependency is closed.",
+    "Run controlled no-PII rejection and valid-submission tests and verify consent records before announcing intake."
+  ]
+}

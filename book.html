@@ -3,19 +3,24 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Book a scan — InsureSPR Health concept demo by Phuture Digital</title>
-<meta name="description" content="Request a DXA bone density and body composition scan at InsureSPR Health in Randburg. Concept demo by Phuture Digital — this form does not submit anywhere.">
-<meta name="robots" content="noindex, nofollow">
+<title>Request a booking — InsureSPR Precision Healthcare</title>
+<meta name="description" content="Request an appointment for an eligible InsureSPR service in Randburg. Staff confirmation may still be required.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://www.insuresprhealth.co.za/book">
+<meta property="og:locale" content="en_ZA"><meta property="og:site_name" content="InsureSPR Precision Healthcare">
+<meta property="og:title" content="Request a booking — InsureSPR Precision Healthcare">
+<meta property="og:description" content="Request an appointment for an eligible InsureSPR service in Randburg. Staff confirmation may still be required.">
+<meta property="og:type" content="website"><meta property="og:url" content="https://www.insuresprhealth.co.za/book">
+<meta property="og:image" content="https://www.insuresprhealth.co.za/assets/reception.webp"><meta property="og:image:alt" content="Healthcare workers at a clinic reception desk.">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Request a booking — InsureSPR Precision Healthcare">
+<meta name="twitter:description" content="Request an appointment for an eligible InsureSPR service in Randburg. Staff confirmation may still be required.">
+<meta name="twitter:image" content="https://www.insuresprhealth.co.za/assets/reception.webp"><meta name="twitter:image:alt" content="Healthcare workers at a clinic reception desk.">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Outfit:wght@300;400;500;600&display=swap">
-<link rel="stylesheet" href="styles.css">
-<!-- Stamp `.js` BEFORE first paint. A deferred script cannot do this without a
-     flash of content: the stylesheet blocks rendering and the script does not. -->
-<script>document.documentElement.className += ' js';</script>
+<link rel="stylesheet" href="styles.css?v=20260829k"><script>document.documentElement.className += ' js';if(new URLSearchParams(location.search).has('embed'))document.documentElement.className += ' booking-embed';</script>
 </head>
-<body>
+<body class="has-mobile-actions">
 <!-- icons:start -->
 <svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true" focusable="false"><defs>
 <!-- Icon sprite. Single source of truth: edit here, then run
@@ -57,6 +62,14 @@
   <symbol id="i-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="m6 6 12 12M18 6 6 18"/></symbol>
   <symbol id="i-apple" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7.6c-1-1.4-2.5-2.1-4-1.9C5.4 6 3.6 8.3 3.6 11.6c0 4.4 3.3 9 5.8 9 1 0 1.8-.5 2.6-.5s1.6.5 2.6.5c2.5 0 5.8-4.6 5.8-9 0-3.3-1.8-5.6-4.4-5.9-1.5-.2-3 .5-4 1.9Z"/><path d="M12 7.6V5.2c0-1.4 1.2-2.6 2.8-2.8"/></symbol>
   <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.2M12 19.2v2.2M4.4 4.4l1.6 1.6M18 18l1.6 1.6M2.6 12h2.2M19.2 12h2.2M4.4 19.6 6 18M18 6l1.6-1.6"/></symbol>
+  <symbol id="i-xray" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="17" height="17" rx="3"/><path d="M9.2 7.5C7.7 8.7 7 10.2 7 12s.7 3.3 2.2 4.5M14.8 7.5c1.5 1.2 2.2 2.7 2.2 4.5s-.7 3.3-2.2 4.5M12 6.5v11M9.4 10.2h5.2M9.4 13.8h5.2"/></symbol>
+  <symbol id="i-workforce" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="3"/><circle cx="16.5" cy="9" r="2.5"/><path d="M3.5 19c.4-3.4 2-5.2 4.5-5.2s4.1 1.8 4.5 5.2M13.2 15.2c.8-.7 1.9-1.1 3.3-1.1 2.3 0 3.6 1.6 4 4.9"/></symbol>
+  <symbol id="i-route" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="12" r="2"/><circle cx="19" cy="6" r="2"/><circle cx="19" cy="18" r="2"/><path d="M7 12h3.5c3 0 3-6 6.5-6M10.5 12c3 0 3 6 6.5 6"/></symbol>
+  <symbol id="i-details" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4.5V3h6v1.5M8.5 9h7M8.5 13h7M8.5 17h4"/></symbol>
+  <symbol id="i-confirm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M7.5 3v4M16.5 3v4M3.5 9h17M8 15l2.2 2.2L16 12"/></symbol>
+  <symbol id="i-strong" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/><path d="m4 6 6-3 6 5 5-4"/></symbol>
+  <symbol id="i-prevent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 20 6v5c0 5-3.2 8.3-8 10-4.8-1.7-8-5-8-10V6l8-3Z"/><path d="m8.5 12 2.2 2.2 4.8-5"/></symbol>
+  <symbol id="i-reclaim" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17c2.5-4 5.2-6 8-6 2.2 0 4.3 1.1 6.2 3.2M15 5h5v5"/><path d="m20 5-5.2 5.2M5 20h14"/></symbol>
 </g>
 <g>
   <symbol id="i-facebook" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M14.1 8.6V6.9c0-.8.5-1 .9-1h2.1V2.7h-2.8c-3 0-3.7 2.2-3.7 3.7v2.2H8.8v3.3h1.8V21h3.3v-9.1h2.5l.3-3.3h-2.6Z"/></symbol>
@@ -68,281 +81,66 @@
 <!-- icons:end -->
 
 <a class="skip" href="#main">Skip to content</a>
-
-<!-- banner:start -->
-<div class="concept-banner">
-  <div class="wrap">
-    <svg class="icon" aria-hidden="true"><use href="#i-info"></use></svg>
-    <p><strong>Concept demo — not a real clinic website.</strong> Phuture Digital built this to show how InsureSPR Health&rsquo;s own content could be presented. It is not affiliated with, endorsed by, or operated by the practice, no appointment made here reaches anyone, and nothing on it is medical advice.</p>
-  </div>
-</div>
-<!-- banner:end -->
-
-<!-- nav:start -->
-<div class="nav-shell">
-  <div class="wrap">
-    <nav class="nav" aria-label="Main">
-      <a class="brand" href="index.html">
-        <img src="assets/mark.svg" alt="" width="34" height="34">
-        <span>
-          <span class="brand-name">Insure<span>SPR</span></span>
-          <span class="brand-sub">Precision Healthcare</span>
-        </span>
-      </a>
-
-      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links">
-        <svg class="icon" aria-hidden="true"><use href="#i-menu"></use></svg>
-        Menu
-      </button>
-
-      <div class="nav-links" id="nav-links" data-open="false">
-        <a href="index.html">Home</a>
-        <a href="programmes.html">Programmes</a>
-        <a href="scan.html">The scan</a>
-        <a href="about.html">About</a>
-        <a href="learn.html">Learn</a>
-        <a href="contact.html">Contact</a>
-        <a class="btn btn--primary btn--sm" href="book.html">Book a scan <span class="btn-badge"><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></span></a>
-      </div>
-
-      <a class="btn btn--primary btn--sm" href="book.html">Book a scan <span class="btn-badge"><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></span></a>
-    </nav>
-  </div>
-</div>
-<!-- nav:end -->
+<div class="nav-shell"><div class="wrap"><nav class="nav" aria-label="Main"><a class="brand" href="index.html"><img src="assets/mark.svg" alt="" width="34" height="34"><span><span class="brand-name">Insure<span>SPR</span></span><span class="brand-sub">Precision Healthcare</span></span></a><button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links"><svg class="icon" aria-hidden="true"><use href="#i-menu"></use></svg><span>Menu</span></button><div class="nav-links" id="nav-links" data-open="false"><a href="index.html">Home</a><a class="nav-spr" href="spr.html">SPR</a><a href="xray.html">X-Ray</a><a href="scanning.html">Body &amp; bone scan</a><a href="workforce.html">Workforce</a><a href="contact.html">Contact</a><a class="btn btn--primary btn--sm" href="book.html" aria-current="page"><svg class="icon" aria-hidden="true"><use href="#i-calendar"></use></svg><span>Request a booking</span></a></div><a class="btn btn--primary btn--sm" href="mailto:motselisi@bonevc.co.za" data-track="email_clicked"><svg class="icon" aria-hidden="true"><use href="#i-mail"></use></svg><span>Email now</span></a></nav></div></div>
 
 <main id="main">
-
-  <section class="pad-sm">
-    <div class="wrap">
-      <div class="split">
-        <div>
-          <p class="eyebrow">Book</p>
-          <h1>Book a scan</h1>
-          <p class="lede">Tell us roughly what you need and when suits you. Someone from the practice comes back to confirm a time.</p>
+  <section class="pad-sm page-intro"><div class="wrap"><div class="head-split"><div><h1>Request an appointment</h1></div><p class="lede">Choose an X-Ray or DXA procedure, or start with the health need that brought you here. The result will tell you whether the appointment is confirmed or still awaiting staff confirmation.</p></div></div></section>
+  <section class="pad-sm"><div class="wrap"><div class="split book-split">
+    <div class="card">
+      <div class="note booking-privacy-note" style="margin-bottom:1.5rem"><strong>Keep it practical.</strong> Do not enter diagnoses, test results, medical-aid numbers or identity numbers.</div>
+      <ol class="booking-progress" aria-label="Booking request steps"><li data-book-progress="1"><span>1</span><strong>Service</strong></li><li data-book-progress="2"><span>2</span><strong>Date</strong></li><li data-book-progress="3"><span>3</span><strong>Time</strong></li><li data-book-progress="4"><span>4</span><strong>Details</strong></li><li data-book-progress="5"><span>5</span><strong>Review</strong></li></ol>
+      <div class="note note--warn form-gate-notice" id="book-form-gate-status" data-form-gate-status="book-form" role="status"><strong data-form-gate-title>Checking online booking…</strong><span data-form-gate-copy>The secure form will open when the current services and privacy notice are ready.</span><span class="form-gate-options">For booking help now, <a href="tel:+27834507861" data-track="call_clicked">call Motselisi on 083 450 7861</a>, <a href="https://wa.me/27834507861?text=Hello%20InsureSPR%2C%20I%20would%20like%20help%20with%20a%20booking." target="_blank" rel="noopener" data-track="whatsapp_clicked">use WhatsApp</a> or <a href="mailto:motselisi@bonevc.co.za" data-track="email_clicked">send an email</a>.</span></div>
+      <form id="book-form" method="post" action="/form-unavailable" novalidate aria-busy="true" aria-describedby="book-form-gate-status">
+        <fieldset class="js-form-gate" data-form-gate disabled inert>
+        <input type="hidden" name="privacy_version" value="">
+        <div class="hp-field" aria-hidden="true"><label for="bwebsite">Website</label><input type="text" id="bwebsite" name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="booking-step" data-book-step="1"><div class="field"><label for="bservice">Which procedure or pathway do you need?</label><select id="bservice" name="service_id" required><option value="">Loading services…</option></select><p class="form-help">Not sure? Choose the pathway that sounds closest. Staff will confirm the appropriate examination before any appointment.</p></div>
+          <div class="service-facts" id="booking-service-facts" hidden><p><strong>Price:</strong> <span data-service-price></span></p><p><strong>Appointment:</strong> <span data-service-requirement></span></p><p class="verification-note" data-service-verification>Some operating details still require practice approval. Email the practice before travelling if you need certainty.</p></div>
+          <div class="booking-step-actions"><button class="btn btn--primary" type="button" data-book-next="2"><span>Choose a date</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></button></div>
         </div>
-        <div class="media media--wide reveal reveal-d1">
-          <img src="assets/clinic.webp" alt="A bright, modern clinic reception area." width="1600" height="1000" fetchpriority="high">
+        <div class="booking-step" data-book-step="2"><div class="field"><label for="bdate">Preferred date</label><input type="date" id="bdate" name="preferred_date" required></div>
+          <div class="booking-step-actions"><button class="btn btn--ghost btn--back" type="button" data-book-back="1"><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg><span>Back</span></button><button class="btn btn--primary" type="button" data-book-next="3"><span>Choose a time</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></button></div>
         </div>
-      </div>
+        <div class="booking-step" data-book-step="3"><div class="field" id="preferred-period-field"><label for="bperiod">Preferred time</label><select id="bperiod" name="preferred_time_period" required><option value="any">Any available time</option><option value="morning">Morning</option><option value="afternoon">Afternoon</option></select></div>
+          <div class="field" id="slot-field" hidden><fieldset><legend>Available time</legend><div class="slot-options" id="slot-options"></div></fieldset></div><p class="form-help" id="slot-note" hidden></p>
+          <div class="booking-step-actions"><button class="btn btn--ghost btn--back" type="button" data-book-back="2"><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg><span>Back</span></button><button class="btn btn--primary" type="button" data-book-next="4"><span>Add your details</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></button></div>
+        </div>
+        <div class="booking-step" data-book-step="4"><div class="field-row"><div class="field"><label for="bfirst">First name</label><input type="text" id="bfirst" name="first_name" autocomplete="given-name" maxlength="80" required></div><div class="field"><label for="bsurname">Surname</label><input type="text" id="bsurname" name="surname" autocomplete="family-name" maxlength="80" required></div></div>
+          <div class="field-row"><div class="field"><label for="bphone">Mobile number</label><input type="tel" id="bphone" name="mobile" autocomplete="tel" inputmode="tel" placeholder="e.g. 071 000 0000" required></div><div class="field"><label for="bemail">Email</label><input type="email" id="bemail" name="email" autocomplete="email" maxlength="254" required></div></div>
+          <div class="field"><label for="bstatus">Are you a new or returning patient?</label><select id="bstatus" name="patient_status" required><option value="">Choose one</option><option value="new">New patient</option><option value="returning">Returning patient</option></select></div>
+          <div class="field"><label for="bnotes">Practical note <span class="optional">(optional)</span></label><textarea id="bnotes" name="notes" maxlength="500" placeholder="Accessibility or scheduling information only"></textarea></div>
+          <label class="check-field" for="bprivacy"><input type="checkbox" id="bprivacy" name="privacy_accepted" required><span>I have read the <a href="privacy.html" target="_blank" rel="noopener">privacy notice</a> and agree that InsureSPR may use these details to handle this booking request.</span></label>
+          <p class="form-help form-consent-version" data-consent-policy-label hidden>Privacy notice version: <strong data-consent-policy-version></strong></p>
+          <div class="booking-step-actions"><button class="btn btn--ghost btn--back" type="button" data-book-back="3"><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg><span>Back</span></button><button class="btn btn--primary" type="button" data-book-next="5"><span>Review request</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></button></div>
+        </div>
+        <div class="booking-step" data-book-step="5">
+          <div class="booking-review" id="booking-review" aria-live="polite"><h2 class="card-title">Check before sending</h2><dl><div><dt>Service</dt><dd data-review-service></dd></div><div><dt>Date</dt><dd data-review-date></dd></div><div><dt>Time</dt><dd data-review-time></dd></div><div><dt>Patient</dt><dd data-review-patient></dd></div><div><dt>Contact</dt><dd data-review-contact></dd></div></dl><p class="form-help">Your practical note is sent securely with the request. It is never added to a WhatsApp link or copied message.</p></div>
+          <div class="booking-step-actions booking-actions"><button class="btn btn--ghost btn--back" type="button" data-book-back="4"><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg><span>Edit details</span></button><button class="btn btn--primary" type="submit"><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg><span>Send booking request</span></button><button class="btn btn--ghost" type="button" id="booking-whatsapp" aria-describedby="booking-whatsapp-note"><svg class="icon" aria-hidden="true"><use href="#i-whatsapp"></use></svg><span>Submit &amp; continue on WhatsApp</span></button></div>
+          <p class="form-help" id="booking-whatsapp-note">This securely saves the request first. The confirmation page prepares a short scheduling message that you deliberately copy and send in WhatsApp.</p>
+        </div>
+        <div class="note" id="book-status" hidden style="margin-top:1rem"></div>
+        </fieldset>
+      </form>
     </div>
-  </section>
-
-  <section class="pad-sm">
-    <div class="wrap">
-      <div class="split" style="align-items:start">
-        <div class="card reveal">
-          <h2 style="font-size:clamp(1.4rem,2.4vw,1.8rem)">Request an appointment</h2>
-          <div class="note note--warn" style="margin:1rem 0 1.5rem">
-            <svg class="icon" aria-hidden="true"><use href="#i-alert"></use></svg>
-            <span><span class="note-label">Not live</span><strong>This form does not go anywhere.</strong> This is a design concept, so nothing you type is sent, stored or seen by anyone — including us. To reach the practice, call <a href="tel:+27834507861">083 450 7861</a> or email <a href="mailto:health@insuresprhealth.co.za">health@insuresprhealth.co.za</a>.</span>
-          </div>
-          <form id="book-form" novalidate>
-            <div class="field-row">
-              <div class="field"><label for="bname">Your name</label><input type="text" id="bname" name="name" autocomplete="name"></div>
-              <div class="field"><label for="bphone">Phone</label><input type="tel" id="bphone" name="phone" autocomplete="tel"></div>
-            </div>
-            <div class="field"><label for="bemail">Email</label><input type="email" id="bemail" name="email" autocomplete="email"></div>
-            <div class="field">
-              <label for="bwhat">What are you after?</label>
-              <select id="bwhat" name="what">
-                <option>Not sure yet — happy to be advised</option>
-                <option>Bone density scan</option>
-                <option>Body composition scan</option>
-                <option>Osteoporosis clinic consultation</option>
-                <option>Fall risk / balance assessment</option>
-                <option>Sports and fitness assessment</option>
-              </select>
-            </div>
-            <div class="field"><label for="bwhen">When suits you</label><input type="text" id="bwhen" name="when" placeholder="e.g. weekday mornings"></div>
-            <div class="field"><label for="bnotes">Anything the practice should know</label><textarea id="bnotes" name="notes"></textarea></div>
-            <button class="btn btn--primary" type="submit">Request appointment <span class="btn-badge"><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></span></button>
-            <div class="note" id="book-status" hidden style="margin-top:1rem"></div>
-          </form>
-        </div>
-
-        <div class="reveal reveal-d1">
-          <div class="card" style="margin-bottom:1.15rem">
-            <p class="eyebrow eyebrow--plain">How long to set aside</p>
-            <h3>About an hour in total</h3>
-            <p style="color:var(--muted)">The scan itself is ten minutes of that. The rest is the conversation before and the explanation after — which is the part that makes the number useful.</p>
-          </div>
-          <div class="card" style="margin-bottom:1.15rem">
-            <p class="eyebrow eyebrow--plain">What to wear</p>
-            <h3>Your own clothes</h3>
-            <p style="color:var(--muted)">You stay dressed. Avoid anything with metal through the middle — zips, heavy buckles — and you are set.</p>
-          </div>
-          <div class="card">
-            <p class="eyebrow eyebrow--plain">Prefer to call</p>
-            <h3>083 450 7861</h3>
-            <p style="color:var(--muted)">Monday to Friday, 08:00–17:00. Usually the fastest way to get a time confirmed.</p>
-            <div class="btn-row" style="margin-top:1rem">
-              <a class="btn btn--primary btn--sm" href="tel:+27834507861">Call the practice <span class="btn-badge"><svg class="icon" aria-hidden="true"><use href="#i-phone"></use></svg></span></a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+    <aside>
+      <div class="card card--media-top"><div class="card-media"><img src="assets/reception.webp" alt="Two healthcare workers in scrubs at a clinic reception desk." width="1400" height="933" loading="lazy"></div><div class="card-media-body"><p class="eyebrow eyebrow--plain">What happens next</p><h2 class="card-title">Save the reference</h2><p>The confirmation screen gives you a booking reference and clearly shows whether staff confirmation is still required.</p><hr><p><strong>Booking contact: Motselisi Mosiana</strong><br><a href="tel:+27834507861" data-track="call_clicked">083 450 7861</a> · <a href="https://wa.me/27834507861?text=Hello%20InsureSPR%2C%20I%20would%20like%20help%20with%20a%20booking." target="_blank" rel="noopener" data-track="whatsapp_clicked">WhatsApp</a><br><a href="mailto:motselisi@bonevc.co.za" data-track="email_clicked">motselisi@bonevc.co.za</a></p></div></div>
+    </aside>
+  </div></div></section>
+  <!-- The published practice details, repeated verbatim from the homepage
+       strip. This page previously ended with a large empty band between the
+       form card and the footer; filling it with the address and hours is
+       useful precisely here, where someone has just chosen a date and is
+       working out whether they can attend. Nothing on this page is invented:
+       every value is one the practice already publishes. -->
+  <section class="pad-sm book-details band-ink"><div class="wrap"><dl class="statstrip">
+    <div><dt><svg class="icon" aria-hidden="true"><use href="#i-pin"></use></svg>Where</dt><dd class="statstrip-lead">7 Malibongwe Drive<small>EmedCentre, Randburg</small></dd></div>
+    <div><dt><svg class="icon" aria-hidden="true"><use href="#i-clock"></use></svg>Published hours</dt><dd class="statstrip-lead">08:00–17:00<small>Monday to Friday</small></dd></div>
+    <div><dt><svg class="icon" aria-hidden="true"><use href="#i-mail"></use></svg>Email</dt><dd class="statstrip-mail"><a href="mailto:motselisi@bonevc.co.za" data-track="email_clicked">motselisi@bonevc.co.za</a></dd></div>
+  </dl></div></section>
 </main>
-
-
-
-<!-- pd-network:start -->
-<section class="pd-network" aria-labelledby="pd-network-title">
-  <div class="pd-network-inner">
-    <p class="pd-network-eyebrow">Phuture Digital &middot; Concept work</p>
-    <h2 class="pd-network-title" id="pd-network-title">More concepts by Phuture Digital</h2>
-    <p class="pd-network-lede">Each of these is a complete site we designed and built to show what the finished thing looks like before anyone commits. Have a look at the others.</p>
-    <ul class="pd-network-grid">
-        <li class="pd-network-card">
-          <a href="https://khanya-concept.phuturedigital.co.za">
-            <img class="pd-network-thumb" src="/pd-concepts/khanya.webp" alt=""
-                 width="640" height="400" loading="lazy" decoding="async">
-            <span class="pd-network-body">
-              <span class="pd-network-name">Khanya Dental Studio</span>
-              <span class="pd-network-sector">Dental practice</span>
-              <span class="pd-network-go">View concept &rarr;</span>
-            </span>
-          </a>
-        </li>
-        <li class="pd-network-card">
-          <a href="https://hamba-concept.phuturedigital.co.za">
-            <img class="pd-network-thumb" src="/pd-concepts/hamba.webp" alt=""
-                 width="640" height="400" loading="lazy" decoding="async">
-            <span class="pd-network-body">
-              <span class="pd-network-name">Hamba Freight</span>
-              <span class="pd-network-sector">Last-mile logistics</span>
-              <span class="pd-network-go">View concept &rarr;</span>
-            </span>
-          </a>
-        </li>
-        <li class="pd-network-card">
-          <a href="https://umsuka-concept.phuturedigital.co.za">
-            <img class="pd-network-thumb" src="/pd-concepts/umsuka.webp" alt=""
-                 width="640" height="400" loading="lazy" decoding="async">
-            <span class="pd-network-body">
-              <span class="pd-network-name">UMSUKA Collection</span>
-              <span class="pd-network-sector">Boutique hospitality</span>
-              <span class="pd-network-go">View concept &rarr;</span>
-            </span>
-          </a>
-        </li>
-        <li class="pd-network-card">
-          <a href="https://thatha-concept.phuturedigital.co.za">
-            <img class="pd-network-thumb" src="/pd-concepts/thatha.webp" alt=""
-                 width="640" height="400" loading="lazy" decoding="async">
-            <span class="pd-network-body">
-              <span class="pd-network-name">THATHA</span>
-              <span class="pd-network-sector">Micro-retail units</span>
-              <span class="pd-network-go">View concept &rarr;</span>
-            </span>
-          </a>
-        </li>
-        <li class="pd-network-card">
-          <a href="https://africrest-concept.phuturedigital.co.za">
-            <img class="pd-network-thumb" src="/pd-concepts/africrest.webp" alt=""
-                 width="640" height="400" loading="lazy" decoding="async">
-            <span class="pd-network-body">
-              <span class="pd-network-name">Africrest</span>
-              <span class="pd-network-sector">Built-to-rent property</span>
-              <span class="pd-network-go">View concept &rarr;</span>
-            </span>
-          </a>
-        </li>
-        <li class="pd-network-card">
-          <a href="https://blueleaf-concept.phuturedigital.co.za">
-            <img class="pd-network-thumb" src="/pd-concepts/blueleaf.webp" alt=""
-                 width="640" height="400" loading="lazy" decoding="async">
-            <span class="pd-network-body">
-              <span class="pd-network-name">Blue Leaf Ice</span>
-              <span class="pd-network-sector">Ice supply &amp; delivery</span>
-              <span class="pd-network-go">View concept &rarr;</span>
-            </span>
-          </a>
-        </li>
-        <li class="pd-network-card">
-          <a href="https://thorn-grain-concept.phuturedigital.co.za">
-            <img class="pd-network-thumb" src="/pd-concepts/thorn-grain.webp" alt=""
-                 width="640" height="400" loading="lazy" decoding="async">
-            <span class="pd-network-body">
-              <span class="pd-network-name">Thorn &amp; Grain</span>
-              <span class="pd-network-sector">Online furniture store</span>
-              <span class="pd-network-go">View concept &rarr;</span>
-            </span>
-          </a>
-        </li>
-    </ul>
-    <div class="pd-network-cta">
-      <p>Want a site like this for your business?</p>
-      <a class="pd-network-btn" href="mailto:hello@phuturedigital.co.za">hello@phuturedigital.co.za</a>
-      <a class="pd-network-link" href="https://www.phuturedigital.co.za/portfolio" rel="noopener">See the full portfolio &rarr;</a>
-    </div>
-    <p class="pd-network-mark"><strong>Concept redesign.</strong> InsureSPR Health is a real practice. This is Phuture Digital&rsquo;s own take on their site, built to demonstrate design and build work. It is not their official site, is not affiliated with them, and nothing here is medical advice.</p>
-  </div>
-</section>
-<!-- pd-network:end -->
-<!-- footer:start -->
-<footer class="foot">
-  <div class="wrap foot-in">
-    <div class="foot-top">
-      <div>
-        <a class="brand" href="index.html">
-          <img src="assets/mark-light.svg" alt="" width="34" height="34">
-          <span>
-            <span class="brand-name">Insure<span>SPR</span></span>
-            <span class="brand-sub">Precision Healthcare</span>
-          </span>
-        </a>
-        <p style="margin-top:1rem;max-width:30ch">Bone and muscle health, measured properly and explained in plain English.</p>
-        <div class="foot-social">
-          <a href="https://www.facebook.com/InsureSPR/" rel="noopener" aria-label="InsureSPR Health on Facebook"><svg class="icon" aria-hidden="true"><use href="#i-facebook"></use></svg></a>
-          <a href="https://www.linkedin.com/company/InsureSPR" rel="noopener" aria-label="InsureSPR Health on LinkedIn"><svg class="icon" aria-hidden="true"><use href="#i-linkedin"></use></svg></a>
-          <a href="https://twitter.com/Bonevitalityc" rel="noopener" aria-label="InsureSPR Health on X"><svg class="icon" aria-hidden="true"><use href="#i-x"></use></svg></a>
-        </div>
-      </div>
-
-      <div>
-        <h4>Pages</h4>
-        <ul>
-          <li><a href="index.html">Home</a></li>
-          <li><a href="programmes.html">Programmes</a></li>
-          <li><a href="scan.html">The scan</a></li>
-          <li><a href="about.html">About</a></li>
-          <li><a href="learn.html">Learn</a></li>
-          <li><a href="contact.html">Contact</a></li>
-        </ul>
-      </div>
-
-      <div>
-        <h4>Programmes</h4>
-        <ul>
-          <li><a href="programmes.html#strong">InsureStrong</a></li>
-          <li><a href="programmes.html#prevent">InsurePrevent</a></li>
-          <li><a href="programmes.html#reclaim">InsureReclaim</a></li>
-          <li><a href="book.html">Book a scan</a></li>
-        </ul>
-      </div>
-
-      <div>
-        <h4>Find the practice</h4>
-        <ul>
-          <li><a href="https://maps.google.com/?q=7+Malibongwe+Drive+EmedCentre+Randburg" rel="noopener noreferrer" target="_blank">7 Malibongwe Drive, EmedCentre, Randburg</a></li>
-          <li><a href="tel:+27834507861">083 450 7861</a></li>
-          <li><a href="mailto:health@insuresprhealth.co.za">health@insuresprhealth.co.za</a></li>
-          <li><a href="contact.html">Monday to Friday, 08:00 – 17:00</a></li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="foot-bottom">
-      <p><strong>Concept demo.</strong> Designed and built by <a href="https://phuturedigital.co.za" rel="noopener noreferrer" target="_blank">Phuture Digital</a> as an independent redesign concept for InsureSPR Health. It is not the practice&rsquo;s official site and is not affiliated with or endorsed by them. Nothing here is medical advice — speak to a qualified healthcare professional. <a href="brand.html">See how it was designed and built &rarr;</a></p>
-      <p>© 2026 Phuture Digital. Practice name, contact details and article titles belong to InsureSPR Health.</p>
-    </div>
-  </div>
-</footer>
-<!-- footer:end -->
-
-<script src="site.js" defer></script>
+<nav class="mobile-quick-actions" aria-label="Quick actions"><a class="mobile-quick-action mobile-quick-action--primary" href="tel:+27834507861" data-track="call_clicked"><svg class="icon" aria-hidden="true"><use href="#i-phone"></use></svg><span>Call Motselisi</span></a><a class="mobile-quick-action" href="https://www.google.com/maps/dir/?api=1&amp;destination=7+Malibongwe+Drive+EmedCentre+Randburg" rel="noopener" target="_blank" data-track="directions_clicked"><svg class="icon" aria-hidden="true"><use href="#i-pin"></use></svg><span>Directions</span></a></nav>
+<footer class="foot"><div class="wrap foot-in"><div class="foot-top"><div><a class="brand" href="index.html"><img src="assets/mark-light.svg" alt="" width="34" height="34"><span><span class="brand-name">Insure<span>SPR</span></span><span class="brand-sub">Precision Healthcare</span></span></a><p class="foot-blurb">X-Ray, Medicals and Bone Density at EmedCentre in Randburg.</p></div><div><h4>Services</h4><ul><li><a href="spr.html">The SPR approach</a></li><li><a href="xray.html">X-Ray</a></li><li><a href="scanning.html">Body &amp; bone scans</a></li><li><a href="workforce.html">Workforce medicals</a></li></ul></div><div><h4>Information</h4><ul><li><a href="about.html">About the owner</a></li><li><a href="book.html">Request a booking</a></li><li><a href="contact.html">Contact &amp; directions</a></li><li><a href="privacy.html">Privacy notice</a></li></ul></div><div><h4>Find the practice</h4><ul><li><a href="https://maps.google.com/?q=7+Malibongwe+Drive+EmedCentre+Randburg" rel="noopener" target="_blank">7 Malibongwe Drive, EmedCentre, Randburg</a></li><li>Bookings: Motselisi Mosiana</li><li><a href="tel:+27834507861" data-track="call_clicked">083 450 7861</a></li><li><a href="https://wa.me/27834507861?text=Hello%20InsureSPR%2C%20I%20would%20like%20help%20with%20a%20booking." rel="noopener" target="_blank" data-track="whatsapp_clicked">WhatsApp bookings</a></li><li><a href="mailto:motselisi@bonevc.co.za" data-track="email_clicked">motselisi@bonevc.co.za</a></li><li>Monday–Friday, 08:00–17:00</li></ul></div></div><div class="foot-bottom"><p><strong>InsureSPR Precision Healthcare.</strong> This website provides service-navigation information and does not provide medical advice.</p><p><a href="privacy.html">Privacy</a> · © 2026 InsureSPR Precision Healthcare</p></div></div></footer>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://www.insuresprhealth.co.za/book#webpage","name":"Request a booking — InsureSPR Precision Healthcare","description":"Request an appointment for an eligible InsureSPR service in Randburg. Staff confirmation may still be required.","url":"https://www.insuresprhealth.co.za/book","isPartOf":{"@type":"WebSite","name":"InsureSPR Precision Healthcare","url":"https://www.insuresprhealth.co.za/"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://www.insuresprhealth.co.za/"},{"@type":"ListItem","position":2,"name":"Request a booking","item":"https://www.insuresprhealth.co.za/book"}]}]}</script>
+<script src="site.js?v=20260812f" defer></script><script src="production.js?v=20260831a" defer></script>
 </body>
 </html>

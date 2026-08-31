@@ -10,17 +10,16 @@
  * Usage:  node tools/contact-sheet.mjs              # review search candidates
  *         node tools/contact-sheet.mjs --assets     # review what actually shipped
  */
-import { createRequire } from 'node:module';
 import { readdir, readFile, writeFile, mkdir } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { loadPlaywright } from './load-playwright.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const PREVIEWS = join(ROOT, 'tools', 'previews');
 const OUT = join(ROOT, 'tools', 'sheets');
 
-const require = createRequire('file:///C:/Users/Acer/thatha/');
-const { chromium } = require('playwright');
+const { chromium } = loadPlaywright();
 
 /* --assets reviews the CONVERTED webp files rather than the JPEG candidates.
    Worth doing as its own pass: the winners are re-encoded and re-sized on the

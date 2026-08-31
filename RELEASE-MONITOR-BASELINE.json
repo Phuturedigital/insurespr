@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "site": "https://www.insuresprhealth.co.za",
+  "requiredChecks": [
+    "robots",
+    "sitemap",
+    "public-pages",
+    "http-redirect",
+    "apex-redirect",
+    "services-cors",
+    "services-cache",
+    "same-origin-bridge",
+    "privacy-version",
+    "turnstile-key",
+    "required-services",
+    "availability",
+    "form-gates",
+    "notifications",
+    "email-spf",
+    "email-return-path-mx",
+    "email-dkim",
+    "email-dmarc",
+    "email-reply-mx",
+    "email-sender-mx",
+    "recovery-readiness",
+    "legacy-manifest"
+  ],
+  "requiredPasses": [
+    "robots",
+    "sitemap",
+    "public-pages",
+    "http-redirect",
+    "apex-redirect",
+    "services-cors",
+    "services-cache",
+    "same-origin-bridge",
+    "email-dmarc",
+    "email-reply-mx",
+    "legacy-manifest"
+  ],
+  "allowedReadinessFailures": [
+    "privacy-version",
+    "turnstile-key",
+    "required-services",
+    "availability",
+    "form-gates",
+    "notifications",
+    "email-spf",
+    "email-return-path-mx",
+    "email-dkim",
+    "recovery-readiness"
+  ],
+  "allowedReadinessWarnings": [
+    "email-sender-mx"
+  ],
+  "policy": {
+    "allowKnownBlockerImprovement": true,
+    "failOnNewReadinessIssue": true,
+    "failOnTechnicalWarningOrFailure": true,
+    "failWhenRequiredCheckDisappears": true
+  }
+}

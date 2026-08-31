@@ -4,7 +4,7 @@
  *   node tools/stamp-chrome.mjs
  *
  * Eight hand-copied navs drift. One ends up missing a link or keeping a stale
- * phone number, and nobody notices because the page it is on renders fine. The
+ * contact route, and nobody notices because the page it is on renders fine. The
  * site has no build step and no templating language, so this script IS the
  * templating: it rewrites the region between the markers on every page and sets
  * aria-current from the filename as it goes.
@@ -24,9 +24,7 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 /* Single source of truth for the practice's published details. Every value is
    taken from the practice's own live site — nothing here is invented. */
 const PRACTICE = {
-  phone: '083 450 7861',
-  phoneHref: '+27834507861',
-  email: 'health@insuresprhealth.co.za',
+  email: 'motselisi@bonevc.co.za',
   address: '7 Malibongwe Drive, EmedCentre, Randburg',
   hours: 'Monday to Friday, 08:00 – 17:00',
   facebook: 'https://www.facebook.com/InsureSPR/',
@@ -119,7 +117,6 @@ ${NAV.map((n) => `          <li><a href="${n.href}">${n.label}</a></li>`).join('
         <h4>Find the practice</h4>
         <ul>
           <li><a href="https://maps.google.com/?q=7+Malibongwe+Drive+EmedCentre+Randburg" rel="noopener noreferrer" target="_blank">${PRACTICE.address}</a></li>
-          <li><a href="tel:${PRACTICE.phoneHref}">${PRACTICE.phone}</a></li>
           <li><a href="mailto:${PRACTICE.email}">${PRACTICE.email}</a></li>
           <li><a href="contact.html">${PRACTICE.hours}</a></li>
         </ul>

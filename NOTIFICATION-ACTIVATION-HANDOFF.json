@@ -1,0 +1,126 @@
+{
+  "schemaVersion": 1,
+  "status": "prepared-not-approved",
+  "activationAuthorized": false,
+  "preparedAt": "2026-08-29T07:42:00Z",
+  "source": {
+    "workerEndpoint": "https://ffdmmxffzewqiacsuvhr.supabase.co/functions/v1/insurespr-notifications",
+    "officialDomain": "www.insuresprhealth.co.za",
+    "senderDomainCandidate": "insuresprhealth.co.za",
+    "returnPathHostnameCandidate": "send.insuresprhealth.co.za",
+    "dkimHostnameCandidate": "resend._domainkey.insuresprhealth.co.za",
+    "timezone": "Africa/Johannesburg"
+  },
+  "liveSnapshot": {
+    "workerReadiness": "not_ready",
+    "workerReadyHeader": false,
+    "deployedFunctionVersion": 9,
+    "repositoryWorkerSourceSha256": "8946702d93327f8130ed108dba96952e9a06c3a9bda6d139bdf2e6988b01e8dd",
+    "notificationAttemptCount": 0,
+    "notificationConfigurationCount": 0,
+    "pgCronInstalled": false,
+    "pgNetInstalled": false,
+    "notificationCronJobCount": 0,
+    "notificationVaultSecretNameCount": 0
+  },
+  "approvedFacts": {
+    "providerAdapter": "resend",
+    "practiceRecipient": "motselisi@bonevc.co.za",
+    "emailReplyTo": "motselisi@bonevc.co.za",
+    "bookingOwner": "Motselisi Mosiana",
+    "publicPhone": "+27834507861"
+  },
+  "dnsEvidence": {
+    "dmarc": {
+      "verified": true,
+      "hostname": "_dmarc.insuresprhealth.co.za",
+      "record": "v=DMARC1; p=none",
+      "resolvers": ["1.1.1.1", "8.8.8.8"],
+      "observedAt": "2026-08-29T04:52:18Z",
+      "evidenceRef": "readiness:insurespr-dmarc-public-dns-20260829"
+    },
+    "spf": null,
+    "returnPathMx": null,
+    "dkim": null,
+    "officialInboundMx": null,
+    "approvedReplyDomainMx": {
+      "verified": true,
+      "domain": "bonevc.co.za",
+      "resolvers": ["1.1.1.1", "8.8.8.8"],
+      "evidenceRef": "release-audit:email-reply-mx"
+    }
+  },
+  "providerConfiguration": {
+    "providerAccountReference": null,
+    "providerDomainReference": null,
+    "senderDomain": null,
+    "returnPathHostname": null,
+    "dkimHostname": null,
+    "emailFrom": null,
+    "senderVerifiedAt": null,
+    "senderVerificationEvidenceRef": null
+  },
+  "secretCustody": {
+    "providerSecretName": "RESEND_API_KEY",
+    "providerApiKeyFingerprintSha256": null,
+    "providerSecretStoredAt": null,
+    "providerSecretEvidenceRef": null,
+    "workerSecretName": "NOTIFICATION_WORKER_SECRET",
+    "workerSecretFingerprintSha256": null,
+    "workerSecretStoredAt": null,
+    "workerSecretEvidenceRef": null,
+    "configHashSecretName": "NOTIFICATION_CONFIG_SHA256",
+    "workerHashSecretName": "NOTIFICATION_WORKER_SOURCE_SHA256",
+    "activationMode": null,
+    "vaultProjectUrlSecretName": null,
+    "vaultPublishableKeySecretName": null,
+    "vaultWorkerSecretName": null
+  },
+  "schedulerActivation": {
+    "authorized": false,
+    "scheduleName": null,
+    "scheduleExpression": null,
+    "scheduleTimezone": null,
+    "scheduleOwner": null,
+    "failureAlertOwner": null,
+    "failureAlertRecipient": null,
+    "failureAlertTestEvidenceRef": null,
+    "rollbackAuthority": null,
+    "rollbackProcedureEvidenceRef": null,
+    "pgCronEnabledEvidenceRef": null,
+    "pgNetEnabledEvidenceRef": null,
+    "cronJobEvidenceRef": null
+  },
+  "controlledDeliveryTest": {
+    "completed": false,
+    "testRecipient": null,
+    "providerMessageId": null,
+    "providerAcceptedAt": null,
+    "mailboxReceivedAt": null,
+    "duplicateSuppressionVerified": false,
+    "retryVerified": false,
+    "failurePathVerified": false,
+    "evidenceRef": null
+  },
+  "approval": null,
+  "activationContract": {
+    "databaseConfigurationTable": "private.notification_delivery_configurations",
+    "workerGateFunction": "public.notification_delivery_activation_ready",
+    "configHashBindingRequired": true,
+    "workerSourceHashBindingRequired": true,
+    "differentPeerReviewerRequired": true,
+    "plaintextSecretsForbidden": true,
+    "activeCronRequired": true,
+    "emailDeliveryDependencyMustResolve": true,
+    "notificationOperationsDependencyMustResolve": true,
+    "configurationImmutableAfterActivation": true,
+    "shortLivedRehearsalRequiredBeforeActivation": true,
+    "rollbackIsActiveToRevoked": true
+  },
+  "notes": [
+    "The approved booking and Reply-To mailbox remains motselisi@bonevc.co.za; no @insuresprhealth.co.za receiving mailbox is claimed.",
+    "The public DMARC p=none observation is monitoring evidence only and does not prove sender-domain or provider readiness.",
+    "No API key, worker secret, service-role key, Vault secret value or personal submission belongs in this handoff.",
+    "A final activation migration must insert one exact hash-bound active configuration, enable pg_cron and pg_net, create the named Vault-backed job, resolve both notification dependencies and retain controlled delivery and failure-alert evidence in one reviewed change."
+  ]
+}

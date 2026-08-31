@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "status": "prepared-not-applied",
+  "activationAuthorized": false,
+  "accountSideVerified": false,
+  "preparedAt": "2026-08-29T06:30:00Z",
+  "source": {
+    "website": "https://www.insuresprhealth.co.za/",
+    "servicesEndpoint": "https://www.insuresprhealth.co.za/api/insurespr?route=services",
+    "sitemap": "https://www.insuresprhealth.co.za/sitemap.xml",
+    "readinessEvidenceStatus": "account-editor-and-profile-evidence-missing"
+  },
+  "canonicalIdentity": {
+    "businessName": "InsureSPR Precision Healthcare",
+    "addressLine": "7 Malibongwe Drive, EmedCentre",
+    "locality": "Randburg",
+    "region": "Gauteng",
+    "countryCode": "ZA",
+    "phoneDisplay": "083 450 7861",
+    "phoneE164": "+27834507861",
+    "website": "https://www.insuresprhealth.co.za/"
+  },
+  "websitePublishedHours": {
+    "timezone": "Africa/Johannesburg",
+    "monday": "08:00-17:00",
+    "tuesday": "08:00-17:00",
+    "wednesday": "08:00-17:00",
+    "thursday": "08:00-17:00",
+    "friday": "08:00-17:00",
+    "saturday": null,
+    "sunday": null,
+    "accountSideVerified": false
+  },
+  "profileFieldsRequiringAccountEvidence": {
+    "profileResourceName": null,
+    "authorizedEditor": null,
+    "primaryCategory": null,
+    "additionalCategories": [],
+    "specialHours": [],
+    "appointmentLink": null,
+    "lastAccountReviewAt": null
+  },
+  "serviceDestinations": [
+    { "slug": "primary-healthcare-x-ray", "name": "Primary Healthcare X-Ray", "url": "https://www.insuresprhealth.co.za/primary-healthcare-x-ray", "publishToProfileAuthorized": false },
+    { "slug": "musculoskeletal-x-ray", "name": "Musculoskeletal X-Ray", "url": "https://www.insuresprhealth.co.za/musculoskeletal-x-ray", "publishToProfileAuthorized": false },
+    { "slug": "chest-x-ray", "name": "Chest X-Ray", "url": "https://www.insuresprhealth.co.za/chest-x-ray", "publishToProfileAuthorized": false },
+    { "slug": "orthopaedic-follow-up-x-ray", "name": "Orthopaedic Follow-Up X-Ray", "url": "https://www.insuresprhealth.co.za/orthopaedic-follow-up-x-ray", "publishToProfileAuthorized": false },
+    { "slug": "visa-chest-x-ray", "name": "Administrative & Foreign-Programme Chest X-Ray", "url": "https://www.insuresprhealth.co.za/visa-chest-x-ray", "publishToProfileAuthorized": false },
+    { "slug": "workplace-medicals", "name": "Workplace Medicals", "url": "https://www.insuresprhealth.co.za/workplace-medicals", "publishToProfileAuthorized": false },
+    { "slug": "workplace-chest-x-ray", "name": "Workplace Chest X-Ray", "url": "https://www.insuresprhealth.co.za/workplace-chest-x-ray", "publishToProfileAuthorized": false },
+    { "slug": "dxa-bone-density", "name": "DXA Bone Density", "url": "https://www.insuresprhealth.co.za/dxa-bone-density", "publishToProfileAuthorized": false },
+    { "slug": "dxa-body-composition", "name": "DXA Body Composition", "url": "https://www.insuresprhealth.co.za/dxa-body-composition", "publishToProfileAuthorized": false },
+    { "slug": "osteoporosis-care", "name": "Nurse-led Osteoporosis Care", "url": "https://www.insuresprhealth.co.za/osteoporosis-care", "publishToProfileAuthorized": false },
+    { "slug": "runner-athlete-bone-health", "name": "Runner & Athlete Bone Health", "url": "https://www.insuresprhealth.co.za/runner-athlete-bone-health", "publishToProfileAuthorized": false },
+    { "slug": "menopause-bone-health", "name": "Menopause & Bone Health", "url": "https://www.insuresprhealth.co.za/menopause-bone-health", "publishToProfileAuthorized": false },
+    { "slug": "treatment-related-bone-health", "name": "Treatment-Related Bone Health", "url": "https://www.insuresprhealth.co.za/treatment-related-bone-health", "publishToProfileAuthorized": false },
+    { "slug": "post-fracture-bone-health", "name": "Post-Fracture Bone Health", "url": "https://www.insuresprhealth.co.za/post-fracture-bone-health", "publishToProfileAuthorized": false },
+    { "slug": "body-composition-progress", "name": "Body Composition Progress", "url": "https://www.insuresprhealth.co.za/body-composition-progress", "publishToProfileAuthorized": false },
+    { "slug": "long-term-condition-bone-health", "name": "Long-Term Condition Bone Health", "url": "https://www.insuresprhealth.co.za/long-term-condition-bone-health", "publishToProfileAuthorized": false }
+  ],
+  "applicationChecklist": [
+    "Obtain evidence of the Google Business Profile and the authorized editor.",
+    "Compare the live profile name, address, phone, website and hours with canonicalIdentity.",
+    "Select categories only inside the live account; do not infer or pre-approve them from website copy.",
+    "Confirm service capability and verification status before publishing any service destination.",
+    "Apply changes in the account, capture account-side evidence and record the reviewer and date.",
+    "Keep the launch dependency open until the account-side comparison passes."
+  ]
+}

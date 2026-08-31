@@ -14,9 +14,16 @@ Book Appointment pages. Verified 7 Aug 2026.
 |---|---|
 | Address | 7 Malibongwe Drive, EmedCentre, Randburg |
 | Hours | 08:00 – 17:00 |
-| Phone | 083 450 7861 |
-| Email | health@insuresprhealth.co.za |
+| Booking contact | Motselisi Mosiana · 083 450 7861 · WhatsApp on the same number |
+| Email | motselisi@bonevc.co.za |
 | Social | Facebook `/InsureSPR` · LinkedIn `/company/InsureSPR` · Twitter `@Bonevitalityc` |
+
+The booking number, owner name and email are supported by the public QSIGHT
+supplier record at
+`https://www.webportunities.net/tab_pages/general/supplier_info/supplier_info.aspx?SupplierId=MjIyMjA%3D&prth_act=info`.
+The owner separately approved Motselisi as booking monitor and designated
+Information Officer on 21 August 2026. The designation is not described as an
+Information Regulator registration.
 
 ## The three programmes — the practice's own names and definitions
 
@@ -84,9 +91,102 @@ that would be an invented commercial claim, not a design placeholder.
   only — see `tools/sample-colours.mjs` for why thin gradient strokes must be
   sampled by peak chroma rather than by frequency.
 
+## Photography credits
+
+All frames are Pexels licence (free for commercial use, no attribution
+required). Credited here anyway — "where did this image come from" always gets
+asked. Every id is pinned in `tools/fetch-assets.mjs`, which also records why
+each was chosen and, for the near misses, why they were rejected.
+
+Sourced for the **production** service pages:
+
+| Asset | Photographer | Used on |
+| --- | --- | --- |
+| `xray-room.webp` | Pavel Danilyuk | xray hero, index route card |
+| `xray-position.webp` | Pavel Danilyuk | xray — Primary Healthcare X-Ray |
+| `xray-chest.webp` | cottonbro studio | xray — chest and administrative chest X-Ray routes |
+| `certificate.webp` | Paloma Gil | xray — Certificates |
+| `workforce-med.webp` | cottonbro studio | workforce, index route card |
+| `workforce-team.webp` | Harrun Muhammad | workforce — Staff x-rays |
+| `workforce-quote.webp` | Ron Lach | workforce — quote aside |
+| `scan-body.webp` | RDNE Stock project | scanning, index route card |
+| `reception.webp` | Cedric Fauntleroy | book |
+
+`strong.webp`, `prevent.webp` and `reclaim.webp` were sourced during the
+concept pass and sat unused until the SPR pillars were built; they carry the
+concept-era exercise register, which is correct on `spr.html` and nowhere else
+on the production site.
+
+**Three rejections worth keeping on record**, because each looked fine as a
+thumbnail:
+
+- A four-frame reception set (`6812426` and siblings) carries a **"DeKo+"
+  dental-clinic logo** on the wall. Another practice's branding — a dental one
+  — on InsureSPR's booking page.
+- Two body-composition frames (`7558818`, `5714350`) are bikini-and-caliper
+  shots. They read as an aesthetics or weight-loss service rather than a
+  clinical measurement, and this practice's own copy calls BMI
+  "population-based and outdated".
+- `6812457` is a dental **panoramic** unit. It was rejected once in the concept
+  pass and came back to the top of the same query.
+
 ## Not built
 
-The booking form and contact form have **no backend**. Both say so on the page
-rather than pretending to submit. This is deliberate: a concept that silently
-swallows a real person's health enquiry would be worse than one that admits it
-is a mockup.
+⚠️ **Superseded.** This section described the concept build, where the booking
+and contact forms had no backend and said so on the page. The production site
+on `codex/insurespr-production` submits to a real Supabase project
+(`insurespr-api`, `insurespr-notifications` and the migrations under
+`supabase/`), so a submission now creates a real record and can notify staff.
+Do not rely on the old "it is only a mockup" framing when editing these forms.
+
+## Johannesburg X-Ray and DXA pathway expansion — 21 August 2026
+
+The expanded catalogue separates **procedures** from **reasons people seek
+help**. This prevents the site from presenting the same DXA device as a dozen
+different scans and gives each audience an honest route:
+
+- Core request-led X-Ray: general, musculoskeletal, chest and orthopaedic
+  follow-up radiography.
+- Core DXA: bone density and body composition.
+- Audience pathways: runners and athletes, menopause and bone strength,
+  treatment-related bone risk, post-fracture bone health, long-term conditions,
+  and consistent body-composition progress measurement.
+- Employer pathway: practice-based, risk-led workplace chest radiography under
+  occupational-health governance.
+
+These are `needs_confirmation` catalogue routes. The owner's approval supports
+the direction and public explanation; it does **not** verify equipment modules,
+licence scope, operators, reporting arrangements, prices, medical-aid status,
+preparation, timing, result delivery or live appointment capacity.
+
+### Current legal correction: administrative chest X-Ray
+
+Do not describe a radiological report as a current South African visa or
+permanent-residence requirement. Government Notice R4847 of 20 May 2024
+deleted the radiological-report provisions from the Immigration Regulations.
+DHA Ministerial Immigration Directive 10 of 2026, published 17 July 2026,
+also waived the remaining medical-report requirement for temporary visas and
+permanent residence.
+
+The retained `/visa-chest-x-ray` URL is therefore an SEO-compatible route named
+**Administrative & Foreign-Programme Chest X-Ray**. It applies only when a
+named foreign embassy, employer, clinician or issuing authority supplies a
+current written requirement. Acceptance, reporting and signatory rules must be
+confirmed; no application outcome is promised.
+
+Official sources:
+
+- <https://www.gov.za/documents/notices/immigration-act-regulations-second-amendment-20-may-2024>
+- <https://www.dha.gov.za/images/gazettes/2026/55016-17-7-26.pdf>
+- <https://www.sahpra.org.za/document/guidelines-on-requests-for-medical-x-ray-examinations/>
+- <https://www.sahpra.org.za/document/guideline-for-code-of-practice-for-users-of-medical-xray-equipment/>
+
+### Claims that remain prohibited
+
+- Walk in and choose any X-Ray; no referral/request needed.
+- Preventative or full-body X-Ray screening without a valid clinical reason.
+- A chest X-Ray alone confirms or excludes TB.
+- DXA diagnoses RED-S, an acute stress fracture, obesity or sarcopenia by itself.
+- Guaranteed fat loss, muscle gain, performance or fracture prediction.
+- Mobile/on-site X-Ray, VFA, CT, MRI, ultrasound, mammography or other modalities
+  without documentary equipment, licence and practitioner confirmation.

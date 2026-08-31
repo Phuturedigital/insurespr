@@ -1,0 +1,112 @@
+{
+  "schemaVersion": 1,
+  "status": "prepared-not-approved",
+  "activationAuthorized": false,
+  "preparedAt": "2026-08-29T08:12:00Z",
+  "source": {
+    "provider": "supabase",
+    "projectRef": "ffdmmxffzewqiacsuvhr",
+    "region": "eu-central-1",
+    "databaseVersion": "17.6.1.155",
+    "organizationPlan": "free",
+    "timezone": "Africa/Johannesburg",
+    "repositoryTool": "tools/recovery-backup.mjs",
+    "repositoryToolSourceSha256": "65b52e4cdd797ebdcfd540bf6e0c095b1e19b6313f3f6a450672269a1e9ac350"
+  },
+  "liveSnapshot": {
+    "projectStatus": "ACTIVE_HEALTHY",
+    "managedDailyBackupsIncluded": false,
+    "verifiedManagedRestorePoints": false,
+    "pointInTimeRecoveryIncluded": false,
+    "verifiedPitrWindow": false,
+    "offsiteLogicalBackupVerified": false,
+    "recoveryConfigurationCount": 0,
+    "recoveryExecutionEvidenceCount": 0,
+    "operationalSubmissionCount": 0,
+    "backupRecoveryDependencyStatus": "open",
+    "backupRecoveryBlocksLaunch": true,
+    "privacyNoticeVersion": "pending-approval"
+  },
+  "routeDecision": {
+    "selectedRoute": null,
+    "providerPlanEvidenceRef": "readiness:platform-recovery-observation-20260829",
+    "managedRestorePointEvidenceRef": null,
+    "pitrWindowEvidenceRef": null,
+    "offsiteStorageProvider": null,
+    "offsiteStorageReference": null,
+    "backupRunnerReference": null
+  },
+  "recoveryObjectives": {
+    "maximumRecoveryPointAgeMinutes": null,
+    "recoveryTimeObjectiveMinutes": null,
+    "retentionDays": null,
+    "restoreDrillIntervalDays": null
+  },
+  "secretCustody": {
+    "encryptionKeyName": "INSURESPR_BACKUP_KEY_B64",
+    "encryptionKeyFingerprintSha256": null,
+    "keyStorageLocation": null,
+    "keyCustodian": null,
+    "databaseCredentialName": "INSURESPR_BACKUP_DATABASE_URL",
+    "databaseCredentialFingerprintSha256": null,
+    "databaseCredentialStorageLocation": null,
+    "plaintextSecretsForbidden": true
+  },
+  "scheduleAndOwnership": {
+    "schedulePlatform": null,
+    "scheduleReference": null,
+    "scheduleExpression": null,
+    "scheduleTimezone": null,
+    "recoveryOwner": null,
+    "recoveryDeputy": null,
+    "backupCustodian": null,
+    "scheduleOwner": null,
+    "failureAlertOwner": null,
+    "failureAlertRecipient": null,
+    "rollbackAuthority": null,
+    "scheduleHealthEvidenceRef": null
+  },
+  "controlledRehearsal": {
+    "authorized": false,
+    "completed": false,
+    "authorizedAt": null,
+    "expiresAt": null,
+    "isolatedTargetReference": null,
+    "authorizationEvidenceRef": null,
+    "backupRecoveryPointAt": null,
+    "backupArtifactSha256": null,
+    "backupManifestSha256": null,
+    "backupEvidenceRef": null,
+    "artifactVerificationEvidenceRef": null,
+    "restoreCompletedAt": null,
+    "externalDeliveryDisabled": false,
+    "isolatedTargetDeletedAt": null,
+    "restoreEvidenceRef": null,
+    "failureAlertTestEvidenceRef": null
+  },
+  "approval": null,
+  "activationContract": {
+    "databaseConfigurationTable": "private.recovery_activation_configurations",
+    "executionEvidenceTable": "private.recovery_execution_evidence",
+    "runtimeGateFunction": "public.public_intake_activation_ready",
+    "configHashBindingRequired": true,
+    "acceptedEvidenceDocumentRequired": true,
+    "differentPeerReviewerRequired": true,
+    "differentRecoveryDeputyRequired": true,
+    "plaintextBackupAndSecretsForbidden": true,
+    "shortLivedRehearsalRequired": true,
+    "backupArtifactVerificationRequired": true,
+    "isolatedRestoreAndDeletionRequired": true,
+    "failureAlertTestRequired": true,
+    "scheduleHealthEvidenceRequired": true,
+    "dynamicRecoveryPointFreshnessRequired": true,
+    "configurationImmutableAfterRehearsal": true,
+    "rollbackIsRehearsalOrActiveToRevoked": true
+  },
+  "notes": [
+    "The Free-plan project has no verified managed restore point or PITR window. A paid-plan change alone does not prove recoverability.",
+    "No production backup has been created by this packet. No production database credential or encryption key is present.",
+    "The off-site logical route remains a candidate until the practice approves storage, runner, key custody, retention, RPO/RTO, owners and monitoring.",
+    "Public mutations remain fail-closed. Activation requires current backup, authenticated artifact verification, an isolated restore with external delivery disabled, target deletion, failure-alert testing and schedule-health evidence."
+  ]
+}

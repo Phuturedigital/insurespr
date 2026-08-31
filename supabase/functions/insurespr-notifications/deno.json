@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "lib": ["deno.ns", "dom", "dom.iterable", "esnext"]
+  },
+  "lint": {
+    "rules": {
+      "tags": ["recommended"]
+    }
+  },
+  "fmt": {
+    "lineWidth": 110,
+    "singleQuote": true,
+    "semiColons": true
+  }
+}

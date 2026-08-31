@@ -1,4 +1,4 @@
-/* InsureSPR Health concept — all client-side behaviour.
+/* InsureSPR Precision Healthcare — shared client-side behaviour.
  *
  * Deliberately small. Every page is fully usable with this file blocked: the
  * nav stays expanded, reveal targets are visible (they are only hidden under
@@ -16,7 +16,8 @@
     var setOpen = function (open) {
       links.setAttribute('data-open', open ? 'true' : 'false');
       toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
-      toggle.querySelector('use').setAttribute('href', open ? '#i-close' : '#i-menu');
+      var iconUse = toggle.querySelector('use');
+      if (iconUse) iconUse.setAttribute('href', open ? '#i-close' : '#i-menu');
     };
 
     toggle.addEventListener('click', function () {
@@ -41,6 +42,103 @@
     var wide = window.matchMedia('(min-width: 1001px)');
     var sync = function () { if (wide.matches) setOpen(false); };
     wide.addEventListener ? wide.addEventListener('change', sync) : wide.addListener(sync);
+  }
+
+  /* --------------------------------------------------------- hero images -- */
+  var heroCarousel = document.querySelector('[data-hero-carousel]');
+  if (heroCarousel) {
+    var heroSlides = Array.prototype.slice.call(heroCarousel.querySelectorAll('.hero-slide'));
+    var heroDots = Array.prototype.slice.call(heroCarousel.querySelectorAll('.hero-dots button'));
+    var heroIndex = 0;
+    var heroTimer = null;
+    var heroCalm = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    var showHero = function (nextIndex) {
+      heroIndex = (nextIndex + heroSlides.length) % heroSlides.length;
+      heroSlides.forEach(function (slide, index) {
+        var active = index === heroIndex;
+        slide.classList.toggle('is-active', active);
+        slide.setAttribute('aria-hidden', active ? 'false' : 'true');
+      });
+      heroDots.forEach(function (dot, index) {
+        var active = index === heroIndex;
+        dot.classList.toggle('is-active', active);
+        dot.setAttribute('aria-pressed', active ? 'true' : 'false');
+      });
+    };
+    var stopHero = function () { if (heroTimer) window.clearInterval(heroTimer); heroTimer = null; };
+    var startHero = function () {
+      stopHero();
+      if (!heroCalm.matches && heroSlides.length > 1) {
+        heroTimer = window.setInterval(function () { showHero(heroIndex + 1); }, 5500);
+      }
+    };
+
+    heroDots.forEach(function (dot, index) {
+      dot.addEventListener('click', function () { showHero(index); startHero(); });
+    });
+    heroCarousel.addEventListener('pointerenter', stopHero);
+    heroCarousel.addEventListener('pointerleave', startHero);
+    heroCarousel.addEventListener('focusin', stopHero);
+    heroCarousel.addEventListener('focusout', startHero);
+    if (heroCalm.addEventListener) heroCalm.addEventListener('change', startHero);
+    startHero();
+  }
+
+  /* ---------------------------------------------------- booking bottom sheet -- */
+  var bookingTriggers = document.querySelectorAll('[data-booking-popover], a[href^="book.html"]');
+  if (bookingTriggers.length && !document.getElementById('book-form') && 'HTMLDialogElement' in window) {
+    var bookingDialog = null;
+    var bookingDialogTrigger = null;
+    var ensureBookingDialog = function () {
+      if (bookingDialog) return bookingDialog;
+      bookingDialog = document.createElement('dialog');
+      bookingDialog.className = 'booking-dialog';
+      bookingDialog.setAttribute('aria-label', 'Request an appointment');
+      bookingDialog.innerHTML = '<div class="booking-dialog-bar"><strong>Request an appointment</strong><button type="button" aria-label="Close booking">×</button></div><iframe title="InsureSPR booking steps" loading="eager"></iframe><span class="booking-dialog-focus-guard" tabindex="0"></span>';
+      document.body.appendChild(bookingDialog);
+      bookingDialog.querySelector('button').addEventListener('click', function () { bookingDialog.close(); });
+      bookingDialog.querySelector('.booking-dialog-focus-guard').addEventListener('focus', function () {
+        bookingDialog.querySelector('button').focus();
+      });
+      bookingDialog.addEventListener('click', function (event) { if (event.target === bookingDialog) bookingDialog.close(); });
+      bookingDialog.addEventListener('keydown', function (event) {
+        if (event.key !== 'Tab') return;
+        var stops = [bookingDialog.querySelector('button'), bookingDialog.querySelector('iframe')]
+          .filter(function (element) { return element && !element.disabled; });
+        if (!stops.length) return;
+        var first = stops[0];
+        var last = stops[stops.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first.focus();
+        }
+      });
+      bookingDialog.addEventListener('close', function () {
+        document.documentElement.classList.remove('booking-open');
+        if (bookingDialogTrigger && bookingDialogTrigger.isConnected) bookingDialogTrigger.focus();
+        bookingDialogTrigger = null;
+      });
+      return bookingDialog;
+    };
+
+    bookingTriggers.forEach(function (trigger) {
+      trigger.addEventListener('click', function (event) {
+        event.preventDefault();
+        var dialog = ensureBookingDialog();
+        bookingDialogTrigger = trigger;
+        var source = new URL(trigger.href, window.location.href);
+        source.searchParams.set('embed', '1');
+        source.searchParams.set('frame', '2');
+        var frame = dialog.querySelector('iframe');
+        if (frame.src !== source.href) frame.src = source.href;
+        document.documentElement.classList.add('booking-open');
+        dialog.showModal();
+      });
+    });
   }
 
   /* ------------------------------------------------------------- step rail -- */
@@ -69,35 +167,6 @@
     rail.addEventListener('scroll', sync, { passive: true });
     window.addEventListener('resize', sync);
     sync();
-  });
-
-  /* ----------------------------------------------------------------- forms -- */
-  /* The booking and contact forms are inert by design — this is a concept and
-     there is no backend. A form that looks real and silently swallows a
-     submission is a dark pattern, so the handler says so outright at the moment
-     the button is pressed, and repeats the real phone number. The same warning
-     already sits ABOVE the fields, so nobody types anything before finding out.
-
-     Honest failure mode: with JS blocked the form does a native GET to the same
-     page, the fields clear, and the notice above is still there to explain. */
-  Object.keys({ 'book-form': 1, 'contact-form': 1 }).forEach(function (id) {
-    var form = document.getElementById(id);
-    var status = document.getElementById(id.replace('-form', '-status'));
-    if (!form || !status) return;
-
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-      /* Static literal — no field value is interpolated, so there is no
-         injection surface. What the visitor typed stays in the form. */
-      status.innerHTML =
-        '<svg class="icon" aria-hidden="true"><use href="#i-info"></use></svg>' +
-        '<span><span class="note-label">Not live</span><strong>Nothing was sent.</strong> This is a design concept, so the form has nowhere to submit to — ' +
-        'your details were not stored or transmitted. To reach InsureSPR Health for real, call ' +
-        '<a href="tel:+27834507861">083 450 7861</a> or email ' +
-        '<a href="mailto:health@insuresprhealth.co.za">health@insuresprhealth.co.za</a>.</span>';
-      status.hidden = false;
-      status.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-    });
   });
 
   /* ------------------------------------------------------------ sticky nav -- */

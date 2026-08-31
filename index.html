@@ -3,19 +3,32 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>InsureSPR Health — concept demo by Phuture Digital</title>
-<meta name="description" content="A website design concept for InsureSPR Health, a bone and muscle health practice in Randburg. Independent concept demo by Phuture Digital — not the practice's official site.">
-<meta name="robots" content="noindex, nofollow">
+<title>InsureSPR Precision Healthcare — X-Ray, Medicals and Bone Density</title>
+<meta name="description" content="Choose individual x-ray services, workplace medicals, or DXA bone-density and body-composition scanning at InsureSPR in Randburg.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://www.insuresprhealth.co.za/">
+<meta property="og:locale" content="en_ZA">
+<meta property="og:site_name" content="InsureSPR Precision Healthcare">
+<meta property="og:title" content="InsureSPR Precision Healthcare">
+<meta property="og:description" content="X-Ray, Medicals and Bone Density at EmedCentre, Randburg.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.insuresprhealth.co.za/">
+<meta property="og:image" content="https://www.insuresprhealth.co.za/assets/hero-practice.webp">
+<meta property="og:image:alt" content="Two people talking in a bright practice waiting area.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="InsureSPR Precision Healthcare">
+<meta name="twitter:description" content="X-Ray, Medicals and Bone Density at EmedCentre, Randburg.">
+<meta name="twitter:image" content="https://www.insuresprhealth.co.za/assets/hero-practice.webp">
+<meta name="twitter:image:alt" content="Two people talking in a bright practice waiting area.">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Outfit:wght@300;400;500;600&display=swap">
-<link rel="stylesheet" href="styles.css">
-<!-- Stamp `.js` BEFORE first paint. A deferred script cannot do this without a
-     flash of content: the stylesheet blocks rendering and the script does not. -->
+<link rel="stylesheet" href="styles.css?v=20260829k">
 <script>document.documentElement.className += ' js';</script>
 </head>
-<body>
+<body class="home-page has-mobile-actions">
+<a class="skip" href="#main">Skip to content</a>
 <!-- icons:start -->
 <svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true" focusable="false"><defs>
 <!-- Icon sprite. Single source of truth: edit here, then run
@@ -57,6 +70,14 @@
   <symbol id="i-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="m6 6 12 12M18 6 6 18"/></symbol>
   <symbol id="i-apple" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7.6c-1-1.4-2.5-2.1-4-1.9C5.4 6 3.6 8.3 3.6 11.6c0 4.4 3.3 9 5.8 9 1 0 1.8-.5 2.6-.5s1.6.5 2.6.5c2.5 0 5.8-4.6 5.8-9 0-3.3-1.8-5.6-4.4-5.9-1.5-.2-3 .5-4 1.9Z"/><path d="M12 7.6V5.2c0-1.4 1.2-2.6 2.8-2.8"/></symbol>
   <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.2M12 19.2v2.2M4.4 4.4l1.6 1.6M18 18l1.6 1.6M2.6 12h2.2M19.2 12h2.2M4.4 19.6 6 18M18 6l1.6-1.6"/></symbol>
+  <symbol id="i-xray" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="17" height="17" rx="3"/><path d="M9.2 7.5C7.7 8.7 7 10.2 7 12s.7 3.3 2.2 4.5M14.8 7.5c1.5 1.2 2.2 2.7 2.2 4.5s-.7 3.3-2.2 4.5M12 6.5v11M9.4 10.2h5.2M9.4 13.8h5.2"/></symbol>
+  <symbol id="i-workforce" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="3"/><circle cx="16.5" cy="9" r="2.5"/><path d="M3.5 19c.4-3.4 2-5.2 4.5-5.2s4.1 1.8 4.5 5.2M13.2 15.2c.8-.7 1.9-1.1 3.3-1.1 2.3 0 3.6 1.6 4 4.9"/></symbol>
+  <symbol id="i-route" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="12" r="2"/><circle cx="19" cy="6" r="2"/><circle cx="19" cy="18" r="2"/><path d="M7 12h3.5c3 0 3-6 6.5-6M10.5 12c3 0 3 6 6.5 6"/></symbol>
+  <symbol id="i-details" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4.5V3h6v1.5M8.5 9h7M8.5 13h7M8.5 17h4"/></symbol>
+  <symbol id="i-confirm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M7.5 3v4M16.5 3v4M3.5 9h17M8 15l2.2 2.2L16 12"/></symbol>
+  <symbol id="i-strong" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/><path d="m4 6 6-3 6 5 5-4"/></symbol>
+  <symbol id="i-prevent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 20 6v5c0 5-3.2 8.3-8 10-4.8-1.7-8-5-8-10V6l8-3Z"/><path d="m8.5 12 2.2 2.2 4.8-5"/></symbol>
+  <symbol id="i-reclaim" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17c2.5-4 5.2-6 8-6 2.2 0 4.3 1.1 6.2 3.2M15 5h5v5"/><path d="m20 5-5.2 5.2M5 20h14"/></symbol>
 </g>
 <g>
   <symbol id="i-facebook" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M14.1 8.6V6.9c0-.8.5-1 .9-1h2.1V2.7h-2.8c-3 0-3.7 2.2-3.7 3.7v2.2H8.8v3.3h1.8V21h3.3v-9.1h2.5l.3-3.3h-2.6Z"/></symbol>
@@ -66,502 +87,98 @@
 </g>
 </defs></svg>
 <!-- icons:end -->
-
-<a class="skip" href="#main">Skip to content</a>
-
-<!-- banner:start -->
-<div class="concept-banner">
-  <div class="wrap">
-    <svg class="icon" aria-hidden="true"><use href="#i-info"></use></svg>
-    <p><strong>Concept demo — not a real clinic website.</strong> Phuture Digital built this to show how InsureSPR Health&rsquo;s own content could be presented. It is not affiliated with, endorsed by, or operated by the practice, no appointment made here reaches anyone, and nothing on it is medical advice.</p>
-  </div>
-</div>
-<!-- banner:end -->
-
-<!-- nav:start -->
-<div class="nav-shell">
-  <div class="wrap">
-    <nav class="nav" aria-label="Main">
-      <a class="brand" href="index.html">
-        <img src="assets/mark.svg" alt="" width="34" height="34">
-        <span>
-          <span class="brand-name">Insure<span>SPR</span></span>
-          <span class="brand-sub">Precision Healthcare</span>
-        </span>
-      </a>
-
-      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links">
-        <svg class="icon" aria-hidden="true"><use href="#i-menu"></use></svg>
-        Menu
-      </button>
-
-      <div class="nav-links" id="nav-links" data-open="false">
-        <a href="index.html" aria-current="page">Home</a>
-        <a href="programmes.html">Programmes</a>
-        <a href="scan.html">The scan</a>
-        <a href="about.html">About</a>
-        <a href="learn.html">Learn</a>
-        <a href="contact.html">Contact</a>
-        <a class="btn btn--primary btn--sm" href="book.html">Book a scan <span class="btn-badge"><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></span></a>
-      </div>
-
-      <a class="btn btn--primary btn--sm" href="book.html">Book a scan <span class="btn-badge"><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></span></a>
-    </nav>
-  </div>
-</div>
-<!-- nav:end -->
+<div class="nav-shell"><div class="wrap"><nav class="nav" aria-label="Main">
+  <a class="brand" href="index.html"><img src="assets/mark.svg" alt="" width="34" height="34"><span><span class="brand-name">Insure<span>SPR</span></span><span class="brand-sub">Precision Healthcare</span></span></a>
+  <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links"><svg class="icon" aria-hidden="true"><use href="#i-menu"></use></svg><span>Menu</span></button>
+  <div class="nav-links" id="nav-links" data-open="false"><a href="index.html" aria-current="page">Home</a><a class="nav-spr" href="spr.html">SPR</a><a href="xray.html">X-Ray</a><a href="scanning.html">Body &amp; bone scan</a><a href="workforce.html">Workforce</a><a href="contact.html">Contact</a><a class="btn btn--primary btn--sm" href="book.html"><svg class="icon" aria-hidden="true"><use href="#i-calendar"></use></svg><span>Request a booking</span></a></div>
+  <a class="btn btn--primary btn--sm" href="book.html"><svg class="icon" aria-hidden="true"><use href="#i-calendar"></use></svg><span>Request a booking</span></a>
+</nav></div></div>
 
 <main id="main">
-
-  <!-- ==================================================================
-       HERO. One rounded photo card, per the reference — not a full-bleed
-       band. The rounding is what makes it read as an object on the page.
-       =================================================================== -->
-  <section class="hero">
-    <div class="wrap">
-      <div class="hero-card" style="--focal: 62% 40%">
-        <img src="assets/hero.webp" alt="A woman in her sixties outdoors in exercise clothes, one hand on her hip, holding a rolled exercise mat." width="2000" height="1333" fetchpriority="high">
-        <div class="hero-copy">
-          <p class="eyebrow eyebrow--light">Bone &amp; muscle health &middot; Randburg</p>
-          <h1>Know what your bones are doing, years before they tell you.</h1>
-          <p class="lede">A ten-minute scan measures bone strength, muscle and fat properly — then a nurse explains what it means in words you already use.</p>
-          <div class="btn-row">
-            <a class="btn btn--light" href="book.html">Book a scan <span class="btn-badge"><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></span></a>
-            <a class="btn btn--on-ink" href="scan.html">What happens in a scan <span class="btn-badge"><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></span></a>
-          </div>
-          <p class="hero-note">
-            <svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg>
-            No needles. No tunnel. You stay in your own clothes.
-          </p>
-        </div>
-      </div>
+  <section class="hero"><div class="wrap"><div class="hero-card" style="--focal:62% 40%">
+    <div class="hero-copy">
+      <h1>Precision health. Clear next steps.</h1>
+      <p class="lede">X-rays, body and bone scans, and workforce medicals—one Randburg practice built to help you understand where you are and what to do next.</p>
+      <p class="hero-note">7 Malibongwe Drive, EmedCentre, Randburg</p>
+      <div class="hero-route-pills" aria-label="Explore a service"><a href="xray.html"><svg class="icon" aria-hidden="true"><use href="#i-xray"></use></svg><span>X-Ray</span></a><a href="scanning.html"><svg class="icon" aria-hidden="true"><use href="#i-bone"></use></svg><span>Body &amp; bone</span></a><a href="workforce.html"><svg class="icon" aria-hidden="true"><use href="#i-workforce"></use></svg><span>Workforce</span></a></div>
     </div>
-  </section>
-
-  <!-- ==================================================================
-       FACT STRIP. The reference runs a metrics row here. Every figure
-       below is one the practice actually publishes or that is true of a
-       DXA scan — no invented counts, ratings or client numbers.
-       =================================================================== -->
-  <section class="pad-sm">
-    <div class="wrap">
-      <dl class="statstrip reveal">
-        <div>
-          <dt>Scan time</dt>
-          <dd><span class="count" data-count="10" data-suffix=" min">10 min</span><small>Lying down, fully clothed</small></dd>
-        </div>
-        <div>
-          <dt>Method</dt>
-          <dd>DXA<small>The gold standard for bone density</small></dd>
-        </div>
-        <div>
-          <dt>Led by</dt>
-          <dd>A nurse<small>The same one, visit to visit</small></dd>
-        </div>
-        <div>
-          <dt>Open</dt>
-          <dd>08:00–17:00<small>Monday to Friday</small></dd>
-        </div>
-      </dl>
+    <div class="hero-visual" data-hero-carousel aria-label="The practice, its imaging and the people it serves">
+      <img class="hero-slide is-active" src="assets/hero-practice.webp" alt="Two people talking in a bright practice waiting area." width="2000" height="1333" fetchpriority="high" style="--slide-focal:66% 52%" aria-hidden="false">
+      <img class="hero-slide" src="assets/hero-reading.webp" alt="A radiographer reading images at a reporting console." width="2000" height="1333" loading="eager" style="--slide-focal:72% 50%" aria-hidden="true">
+      <img class="hero-slide" src="assets/hero-active-wide.webp" alt="Three active adults talking after exercise." width="1672" height="941" loading="lazy" style="--slide-focal:76% 50%" aria-hidden="true">
+      <a class="hero-booking-panel" href="book.html" data-booking-popover aria-label="Request a booking in four guided steps">
+        <span class="hero-booking-icon" aria-hidden="true"><svg class="icon"><use href="#i-confirm"></use></svg></span>
+        <span><small>Book in four guided steps</small><strong>Service → date → time</strong><em>Practice staff confirm your request.</em></span>
+        <span class="hero-booking-arrow" aria-hidden="true">→</span>
+      </a>
+      <div class="hero-dots" aria-label="Choose hero image"><span aria-hidden="true">01</span><button type="button" class="is-active" aria-label="Show people talking in the practice" aria-pressed="true"></button><button type="button" aria-label="Show radiographer reviewing images" aria-pressed="false"></button><button type="button" aria-label="Show active adults after exercise" aria-pressed="false"></button><span aria-hidden="true">03</span></div>
     </div>
-  </section>
+  </div></div></section>
 
-  <!-- ==================================================================
-       HEALTH PROGRAMMES. The reference's pricing grid, with decorative
-       tiles interleaved. The three programmes and their definitions are
-       the practice's own; the price slot is deliberately not a price.
-       =================================================================== -->
-  <section>
-    <div class="wrap">
-      <div class="section-head section-head--center reveal">
-        <p class="eyebrow eyebrow--plain">Health programmes</p>
-        <h2>Three ways in, depending on where you are</h2>
-        <p>These are the practice&rsquo;s own three programmes, in its own words — plus what each one actually involves.</p>
-      </div>
-
-      <div class="pgrid">
-        <article class="pcard reveal">
-          <p class="pcard-name">InsureStrong</p>
-          <h3>Build and maintain healthy bone and muscle mass</h3>
-          <p class="pcard-label">Who it&rsquo;s for</p>
-          <p>Anyone who wants to know their starting point and build on it — including people who train and want real numbers rather than a bathroom scale.</p>
-          <details>
-            <summary>What&rsquo;s included <svg class="icon" aria-hidden="true"><use href="#i-chevron"></use></svg></summary>
-            <ul>
-              <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg> DXA bone density scan</li>
-              <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg> DXA body composition — muscle, fat and bone, limb by limb</li>
-              <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg> Fitness and nutrition guidance built on your own measurements</li>
-              <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg> A repeat scan later, so you can see whether it worked</li>
-            </ul>
-          </details>
-          <div class="pcard-terms">
-            <p><strong>Ask about pricing.</strong> The practice does not publish its fees, so this concept does not invent any.</p>
-            <a class="btn btn--primary btn--sm" href="programmes.html#strong">Learn more <span class="btn-badge"><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></span></a>
-          </div>
-        </article>
-
-        <div class="ptile reveal reveal-d1" aria-hidden="true">
-          <img src="assets/tile-density.svg" alt="" width="600" height="440">
-        </div>
-
-        <article class="pcard reveal reveal-d2">
-          <p class="pcard-name">InsurePrevent</p>
-          <h3>Stop bone and muscle loss before it starts</h3>
-          <p class="pcard-label">Who it&rsquo;s for</p>
-          <p>People who want their fracture risk assessed properly — posture, mobility and bone strength together — before a stumble becomes a break.</p>
-          <details>
-            <summary>What&rsquo;s included <svg class="icon" aria-hidden="true"><use href="#i-chevron"></use></svg></summary>
-            <ul>
-              <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg> Nurse-led osteoporosis clinic consultation</li>
-              <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg> Posture, flexibility and balance assessment</li>
-              <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg> Bone density scanning</li>
-              <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg> Ongoing management of primary and secondary osteoporosis</li>
-            </ul>
-          </details>
-          <div class="pcard-terms">
-            <p><strong>One consultation, one price.</strong> The practice runs this as a single appointment with the scans and assessments included — its own stated approach.</p>
-            <a class="btn btn--primary btn--sm" href="programmes.html#prevent">Learn more <span class="btn-badge"><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></span></a>
-          </div>
-        </article>
-
-        <article class="pcard reveal">
-          <p class="pcard-name">InsureReclaim</p>
-          <h3>Restore what has been lost, so you can live boldly</h3>
-          <p class="pcard-label">Who it&rsquo;s for</p>
-          <p>People rebuilding after a fall, a fracture or a long stretch of doing less — where the goal is getting specific things back.</p>
-          <details>
-            <summary>What&rsquo;s included <svg class="icon" aria-hidden="true"><use href="#i-chevron"></use></svg></summary>
-            <ul>
-              <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg> A personal plan built around goals you set</li>
-              <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg> Monthly measurable checkpoints</li>
-              <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg> Targeted nutrition and corrective exercise</li>
-              <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg> Health coaching between appointments</li>
-            </ul>
-          </details>
-          <div class="pcard-terms">
-            <p><strong>Ask about pricing.</strong> Goals are set with you at the first consultation, so the plan is not a fixed package.</p>
-            <a class="btn btn--primary btn--sm" href="programmes.html#reclaim">Learn more <span class="btn-badge"><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></span></a>
-          </div>
-        </article>
-
-        <div class="ptile reveal reveal-d1" aria-hidden="true">
-          <img src="assets/tile-column.svg" alt="" width="600" height="440">
-        </div>
-
-        <article class="pcard reveal reveal-d2">
-          <p class="pcard-name">Not sure yet</p>
-          <h3>Most people start with the same scan anyway</h3>
-          <p class="pcard-label">Who it&rsquo;s for</p>
-          <p>Anyone who does not know which of the three they need — which is most people, and is exactly what the first consultation is for.</p>
-          <div class="pcard-terms">
-            <p><strong>Start with a conversation.</strong> Ten minutes on the phone will usually settle it faster than reading another page.</p>
-            <div class="btn-row">
-              <a class="btn btn--primary btn--sm" href="book.html">Book a scan <span class="btn-badge"><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></span></a>
-              <a class="btn btn--ghost btn--sm" href="tel:+27834507861">083 450 7861 <span class="btn-badge"><svg class="icon" aria-hidden="true"><use href="#i-phone"></use></svg></span></a>
-            </div>
-          </div>
-        </article>
-      </div>
+  <section class="pad-sm spr-section band-paper"><div class="wrap"><div class="spr-story reveal">
+    <div class="spr-visual-grid" aria-label="InsureSPR preventive-health journeys">
+      <figure class="spr-feature-photo"><img src="assets/performance-dxa.webp" alt="Two active adults reviewing training data in a gym." width="1536" height="1024" loading="lazy"></figure>
+      <div class="spr-metric"><strong>SPR</strong><span>3 connected moves</span><p>Measure. Understand. Act. Review.</p></div>
+      <figure class="spr-support-photo"><img src="assets/results.webp" alt="A clinician reviewing radiology images." width="1500" height="1000" loading="lazy"></figure>
     </div>
-  </section>
-
-  <!-- ==================================================================
-       HOW THE PLAN IS BUILT — the reference's step carousel. A real
-       scroll container, so it works by swipe with the buttons blocked.
-       =================================================================== -->
-  <section>
-    <div class="wrap">
-      <div class="head-split reveal">
-        <h2>How your plan gets built</h2>
-        <p>Four steps, about an hour in the practice, and you leave with the result explained rather than posted to you a week later.</p>
+    <div class="spr-content">
+      <div class="spr-intro"><p class="eyebrow">What SPR means</p><h2>Strong. Prevent. Reclaim.</h2><p>SPR connects the result to a useful next step. Start with a clear baseline, understand what it means, act earlier where appropriate, then review change over time.</p><a class="btn btn--ghost btn--sm" href="spr.html"><span>See the full SPR approach</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></a></div>
+      <div class="spr-flow" aria-label="Strong, Prevent, Reclaim flow">
+        <article class="spr-flow-step"><span class="spr-flow-icon" aria-hidden="true"><svg class="icon"><use href="#i-strong"></use></svg></span><span class="spr-flow-code">S · Measure</span><h3>Strong</h3><p>Establish a useful starting point.</p></article>
+        <div class="spr-flow-link" aria-hidden="true"><span>→</span></div>
+        <article class="spr-flow-step"><span class="spr-flow-icon" aria-hidden="true"><svg class="icon"><use href="#i-prevent"></use></svg></span><span class="spr-flow-code">P · Act early</span><h3>Prevent</h3><p>Turn evidence into an informed step.</p></article>
+        <div class="spr-flow-link" aria-hidden="true"><span>→</span></div>
+        <article class="spr-flow-step"><span class="spr-flow-icon" aria-hidden="true"><svg class="icon"><use href="#i-reclaim"></use></svg></span><span class="spr-flow-code">R · Track</span><h3>Reclaim</h3><p>Review progress and adjust.</p></article>
       </div>
-
-      <div style="display:flex;justify-content:flex-end;gap:.5rem;margin-bottom:1rem" class="reveal">
-        <button class="rbtn rbtn--flip" type="button" data-rail-prev="steps" aria-label="Previous step"><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></button>
-        <button class="rbtn" type="button" data-rail-next="steps" aria-label="Next step"><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></button>
-      </div>
-
-      <div class="steps reveal" id="steps" data-rail>
-        <article class="step">
-          <img src="assets/nurse.webp" alt="A nurse in conversation with a patient across a desk." width="1600" height="1067" loading="lazy">
-          <span class="step-chip">Step 1</span>
-          <div class="step-body">
-            <h3>We talk first</h3>
-            <p>What you have noticed, what you are worried about, what you take. Five minutes, and it decides what is worth measuring.</p>
-          </div>
-        </article>
-        <article class="step">
-          <img src="assets/scan.webp" alt="A person lying fully clothed on a flat, open scanning table." width="1600" height="1067" loading="lazy">
-          <span class="step-chip">Step 2</span>
-          <div class="step-body">
-            <h3>You lie down</h3>
-            <p>Ten minutes on an open table, fully clothed. A scanning arm passes above you. No tunnel, no needles, no dye.</p>
-          </div>
-        </article>
-        <article class="step">
-          <img src="assets/results.webp" alt="A clinician showing a patient a chart of their results on screen." width="1600" height="1067" loading="lazy">
-          <span class="step-chip">Step 3</span>
-          <div class="step-body">
-            <h3>We read it together</h3>
-            <p>Your numbers, on screen, explained while you are still in the room — not a report you decode alone at home.</p>
-          </div>
-        </article>
-        <article class="step">
-          <img src="assets/coach.webp" alt="A health coach talking with a client in a bright consulting room." width="1600" height="1067" loading="lazy">
-          <span class="step-chip">Step 4</span>
-          <div class="step-body">
-            <h3>You leave with a plan</h3>
-            <p>What to do, what to change, and when to come back and check. Written down, in the same plain language.</p>
-          </div>
-        </article>
-      </div>
+      <p class="spr-flow-result"><strong>One connected approach:</strong> measure what matters → understand the result → act → review progress.</p>
     </div>
-  </section>
+  </div></div></section>
 
-  <!-- ==================================================================
-       THE TRANSLATION IDEA — the organising thought of the whole site.
-       =================================================================== -->
-  <section>
-    <div class="wrap">
-      <div class="ink-panel reveal">
-        <div class="section-head" style="margin-bottom:2rem">
-          <p class="eyebrow eyebrow--light">Said plainly</p>
-          <h2>You should not need a medical degree to understand your own body</h2>
-          <p style="color:#a9bcd8">The practice&rsquo;s services keep their proper clinical names here. Each one gains a sentence explaining what it actually is, and a line on what you get out of it.</p>
-        </div>
-
-        <div class="plain" style="--line:rgb(255 255 255 / .16)">
-          <div class="plain-row">
-            <p class="plain-term" style="color:var(--cyan-lift)"><svg class="icon" aria-hidden="true"><use href="#i-scan"></use></svg> DXA bone density</p>
-            <div>
-              <p class="plain-def" style="color:#fff">A ten-minute scan measuring <strong style="color:#fff">how strong your bones are</strong>, so thinning is caught while there is still time to act on it.</p>
-              <p class="plain-gain" style="color:var(--cyan-lift)"><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg> <span>You leave knowing whether to act now or re-check in a few years — instead of finding out from a fracture.</span></p>
-            </div>
-          </div>
-          <div class="plain-row">
-            <p class="plain-term" style="color:var(--cyan-lift)"><svg class="icon" aria-hidden="true"><use href="#i-chart"></use></svg> DXA body composition</p>
-            <div>
-              <p class="plain-def" style="color:#fff">The same scan, showing <strong style="color:#fff">how much muscle, fat and bone you carry and where</strong>. What you are made of, not just what you weigh.</p>
-              <p class="plain-gain" style="color:var(--cyan-lift)"><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg> <span>A measurement that moves when the work is working. A scale can sit still for months while your body changes underneath it.</span></p>
-            </div>
-          </div>
-          <div class="plain-row">
-            <p class="plain-term" style="color:var(--cyan-lift)"><svg class="icon" aria-hidden="true"><use href="#i-balance"></use></svg> Fall-risk assessment</p>
-            <div>
-              <p class="plain-def" style="color:#fff">A proper test of <strong style="color:#fff">how likely you are to fall</strong> — posture, flexibility and balance — and which specific thing changes that answer.</p>
-              <p class="plain-gain" style="color:var(--cyan-lift)"><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg> <span>A straight answer on your risk and the one or two things that shift it, rather than being told to &ldquo;be careful&rdquo;.</span></p>
-            </div>
-          </div>
-        </div>
-
-        <div class="btn-row" style="margin-top:2rem">
-          <a class="btn btn--on-ink" href="programmes.html">Every service, translated <span class="btn-badge"><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></span></a>
-        </div>
-      </div>
+  <section id="choose-your-route" class="band-ink"><div class="wrap"><div class="head-split"><div><h2>Start with what you need</h2></div><p class="section-intro">Each route asks only for the information appropriate to that service. A request is not treated as a confirmed appointment until the practice confirms it.</p></div>
+    <div class="route-grid">
+      <a class="card route-card reveal" href="xray.html" aria-label="Explore request-led X-Ray services"><div class="route-card-media"><img src="assets/xray-room.webp" alt="A patient in a lead apron at an upright x-ray unit." width="1600" height="1068" loading="lazy"></div><div class="route-card-body"><span class="route-icon" aria-hidden="true"><svg class="icon"><use href="#i-xray"></use></svg></span><h3 class="card-title">X-Ray</h3><p class="route-card-copy">Request-led injury, chest and orthopaedic imaging with the clinical request checked first.</p><span class="route-action">Explore X-Ray <span aria-hidden="true">→</span></span></div></a>
+      <a class="card route-card reveal reveal-d1" href="scanning.html" aria-label="Explore body-composition and bone-density DXA scans"><div class="route-card-media"><img src="assets/scan-body.webp" alt="A person being measured at a body-composition analyser." width="1200" height="800" loading="lazy"></div><div class="route-card-body"><span class="route-icon" aria-hidden="true"><svg class="icon"><use href="#i-scan"></use></svg></span><h3 class="card-title">Body &amp; bone scan</h3><p class="route-card-copy">Go beyond weight to measure lean mass, body fat and bone density.</p><span class="route-action">Explore scans <span aria-hidden="true">→</span></span></div></a>
+      <a class="card route-card reveal reveal-d2" href="workforce.html" aria-label="Request a workplace medicals quote"><div class="route-card-media"><img src="assets/workforce-med.webp" alt="A clinician in scrubs taking a blood-pressure reading." width="1200" height="800" loading="lazy"></div><div class="route-card-body"><span class="route-icon" aria-hidden="true"><svg class="icon"><use href="#i-workforce"></use></svg></span><h3 class="card-title">Workforce medicals</h3><p class="route-card-copy">Plan medical services and request a tailored quote for your team.</p><span class="route-action">Employer quote <span aria-hidden="true">→</span></span></div></a>
     </div>
-  </section>
+  </div></section>
 
-  <!-- ==================================================================
-       WHY IT MATTERS.
-       =================================================================== -->
-  <section>
-    <div class="wrap">
-      <div class="split">
-        <div class="reveal">
-          <p class="eyebrow">Why this exists</p>
-          <h2>A fall is not the problem. What a fall costs you is.</h2>
-          <p>The practice puts it plainly: many people never regain their independence after a fall and a fracture. Bone loss has no symptoms until something breaks, which is why it gets called the silent disease.</p>
-          <p>Measuring it is the only way to know early — and early is when there is still plenty you can do.</p>
-          <ul class="tagrow" style="margin-top:1.25rem">
-            <li>Osteoporosis</li><li>Fall prevention</li><li>Mobility</li>
-            <li>Body composition</li><li>Health coaching</li>
-          </ul>
-          <div class="btn-row" style="margin-top:1.5rem">
-            <a class="btn btn--primary" href="about.html">About the practice <span class="btn-badge"><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></span></a>
-          </div>
-        </div>
-        <div class="media media--tall reveal reveal-d1">
-          <img src="assets/walk.webp" alt="An older couple walking together outdoors on a bright day." width="1400" height="1750" loading="lazy">
-        </div>
-      </div>
+  <section class="pad-sm pathway-section band-paper" aria-labelledby="home-pathways-title"><div class="wrap">
+    <div class="head-split"><div><p class="eyebrow eyebrow--plain">Find your SPR pathway</p><h2 id="home-pathways-title">Start with what brought you here</h2></div><p class="section-intro">The pathway helps you choose a useful measurement or imaging request. It does not assume that every person needs an X-ray or DXA scan. Swipe the routes on a phone.</p></div>
+    <div class="pathway-rail" aria-label="Health and performance pathways">
+      <a class="pathway-link" href="runner-athlete-bone-health.html"><span class="pathway-icon" aria-hidden="true"><svg class="icon"><use href="#i-move"></use></svg></span><span class="pathway-copy"><span class="pathway-kicker">Run · train · recover</span><strong>Runner &amp; athlete health</strong><p>Choose the separate route for injury imaging, bone-health DXA or body-composition progress.</p></span><span class="pathway-arrow" aria-hidden="true">→</span></a>
+      <a class="pathway-link" href="menopause-bone-health.html"><span class="pathway-icon" aria-hidden="true"><svg class="icon"><use href="#i-bone"></use></svg></span><span class="pathway-copy"><span class="pathway-kicker">Midlife health</span><strong>Menopause &amp; bone strength</strong><p>Understand when a risk-led bone-density discussion may be useful.</p></span><span class="pathway-arrow" aria-hidden="true">→</span></a>
+      <a class="pathway-link" href="body-composition-progress.html"><span class="pathway-icon" aria-hidden="true"><svg class="icon"><use href="#i-chart"></use></svg></span><span class="pathway-copy"><span class="pathway-kicker">Measure change</span><strong>Strength, muscle &amp; fat progress</strong><p>Build a consistent DXA baseline instead of relying on weight alone.</p></span><span class="pathway-arrow" aria-hidden="true">→</span></a>
+      <a class="pathway-link" href="treatment-related-bone-health.html"><span class="pathway-icon" aria-hidden="true"><svg class="icon"><use href="#i-shield"></use></svg></span><span class="pathway-copy"><span class="pathway-kicker">Clinician-led</span><strong>Bone health during treatment</strong><p>Ask about a baseline or follow-up when medicines or treatment may affect bone.</p></span><span class="pathway-arrow" aria-hidden="true">→</span></a>
+      <a class="pathway-link" href="post-fracture-bone-health.html"><span class="pathway-icon" aria-hidden="true"><svg class="icon"><use href="#i-refresh"></use></svg></span><span class="pathway-copy"><span class="pathway-kicker">After a low-trauma fracture</span><strong>Post-fracture bone check</strong><p>Explore the bone-health question after the urgent fracture care is complete.</p></span><span class="pathway-arrow" aria-hidden="true">→</span></a>
+      <a class="pathway-link" href="long-term-condition-bone-health.html"><span class="pathway-icon" aria-hidden="true"><svg class="icon"><use href="#i-heart"></use></svg></span><span class="pathway-copy"><span class="pathway-kicker">Individual risk</span><strong>Bone health with long-term conditions</strong><p>A private, non-stigmatising route for clinician-identified bone risk.</p></span><span class="pathway-arrow" aria-hidden="true">→</span></a>
     </div>
-  </section>
+  </div></section>
 
-  <!-- ==================================================================
-       CLOSE.
-       =================================================================== -->
-  <section>
-    <div class="wrap">
-      <div class="ink-panel reveal" style="text-align:center">
-        <h2 style="max-width:22ch;margin-inline:auto">Don&rsquo;t outlive your health</h2>
-        <p style="color:#a9bcd8;max-width:46ch;margin-inline:auto">The practice&rsquo;s own line, and the whole idea in five words. Ten minutes lying down is where it starts.</p>
-        <div class="btn-row" style="justify-content:center;margin-top:1.75rem">
-          <a class="btn btn--light" href="book.html">Book a scan <span class="btn-badge"><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></span></a>
-          <a class="btn btn--on-ink" href="contact.html">Ask a question first <span class="btn-badge"><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></span></a>
-        </div>
-      </div>
-    </div>
-  </section>
+  <section class="pad-sm"><div class="wrap"><div class="head-split"><div><p class="eyebrow">What happens next</p><h2>Three steps from choice to confirmation</h2></div><p class="section-intro">Choose a route, share only the essential practical details, then receive a reference that clearly says whether staff still need to confirm the request.</p></div>
+    <ol class="journey-flow reveal" aria-label="Three-step enquiry and booking journey">
+      <li class="journey-step"><div class="journey-step-top"><span class="journey-number">01</span><span class="journey-icon" aria-hidden="true"><svg class="icon"><use href="#i-route"></use></svg></span></div><h3>Choose the right route</h3><p>Start with X-Ray, a bone or body scan, or workforce medicals.</p></li>
+      <li class="journey-step"><div class="journey-step-top"><span class="journey-number">02</span><span class="journey-icon" aria-hidden="true"><svg class="icon"><use href="#i-details"></use></svg></span></div><h3>Share the essentials</h3><p>Give only the practical details needed for a booking request, quote or reply.</p></li>
+      <li class="journey-step"><div class="journey-step-top"><span class="journey-number">03</span><span class="journey-icon" aria-hidden="true"><svg class="icon"><use href="#i-confirm"></use></svg></span></div><h3>Receive the next step</h3><p>Save the reference and read whether the request is confirmed or awaiting staff action.</p></li>
+    </ol>
+  </div></section>
 
+  <section class="pad-sm home-contact-strip band-paper"><div class="wrap"><dl class="statstrip">
+    <div><dt><svg class="icon" aria-hidden="true"><use href="#i-pin"></use></svg>Where</dt><dd class="statstrip-lead">7 Malibongwe Drive<small>EmedCentre, Randburg</small></dd></div>
+    <div><dt><svg class="icon" aria-hidden="true"><use href="#i-clock"></use></svg>Published hours</dt><dd class="statstrip-lead">08:00–17:00<small>Monday to Friday</small></dd></div>
+    <div><dt><svg class="icon" aria-hidden="true"><use href="#i-mail"></use></svg>Email</dt><dd class="statstrip-lead"><a href="mailto:motselisi@bonevc.co.za" data-track="email_clicked">motselisi@bonevc.co.za</a></dd></div>
+    <div><dt><svg class="icon" aria-hidden="true"><use href="#i-confirm"></use></svg>Booking status</dt><dd class="statstrip-lead">Staff-confirmed<small>A request is not an appointment yet</small></dd></div>
+  </dl></div></section>
+
+  <section class="home-before-travel"><div class="wrap"><div class="split"><div><h2>Important operating details are confirmed, not guessed</h2><p class="lede">Where price, preparation, referral requirements, eligibility or timing has not been approved for public display, the website says so and asks the practice to confirm it.</p><div class="btn-row"><a class="btn btn--primary" href="book.html"><svg class="icon" aria-hidden="true"><use href="#i-calendar"></use></svg><span>Request a booking</span></a><a class="btn btn--ghost" href="contact.html"><svg class="icon" aria-hidden="true"><use href="#i-chat"></use></svg><span>Ask a short question</span></a></div></div><div class="card"><h3 class="card-title">Need urgent medical help?</h3><p>This website is for service enquiries and booking requests. It is not an emergency channel and does not provide medical advice. Contact an appropriate emergency service or qualified healthcare professional when urgent care is needed.</p></div></div></div></section>
 </main>
 
+<nav class="mobile-quick-actions" aria-label="Quick actions">
+  <a class="mobile-quick-action mobile-quick-action--primary" href="book.html" data-booking-popover><svg class="icon" aria-hidden="true"><use href="#i-confirm"></use></svg><span>Book</span></a>
+  <a class="mobile-quick-action" href="https://www.google.com/maps/dir/?api=1&amp;destination=7+Malibongwe+Drive+EmedCentre+Randburg" rel="noopener" target="_blank" data-track="directions_clicked"><svg class="icon" aria-hidden="true"><use href="#i-pin"></use></svg><span>Directions</span></a>
+</nav>
 
-
-<!-- pd-network:start -->
-<section class="pd-network" aria-labelledby="pd-network-title">
-  <div class="pd-network-inner">
-    <p class="pd-network-eyebrow">Phuture Digital &middot; Concept work</p>
-    <h2 class="pd-network-title" id="pd-network-title">More concepts by Phuture Digital</h2>
-    <p class="pd-network-lede">Each of these is a complete site we designed and built to show what the finished thing looks like before anyone commits. Have a look at the others.</p>
-    <ul class="pd-network-grid">
-        <li class="pd-network-card">
-          <a href="https://khanya-concept.phuturedigital.co.za">
-            <img class="pd-network-thumb" src="/pd-concepts/khanya.webp" alt=""
-                 width="640" height="400" loading="lazy" decoding="async">
-            <span class="pd-network-body">
-              <span class="pd-network-name">Khanya Dental Studio</span>
-              <span class="pd-network-sector">Dental practice</span>
-              <span class="pd-network-go">View concept &rarr;</span>
-            </span>
-          </a>
-        </li>
-        <li class="pd-network-card">
-          <a href="https://hamba-concept.phuturedigital.co.za">
-            <img class="pd-network-thumb" src="/pd-concepts/hamba.webp" alt=""
-                 width="640" height="400" loading="lazy" decoding="async">
-            <span class="pd-network-body">
-              <span class="pd-network-name">Hamba Freight</span>
-              <span class="pd-network-sector">Last-mile logistics</span>
-              <span class="pd-network-go">View concept &rarr;</span>
-            </span>
-          </a>
-        </li>
-        <li class="pd-network-card">
-          <a href="https://umsuka-concept.phuturedigital.co.za">
-            <img class="pd-network-thumb" src="/pd-concepts/umsuka.webp" alt=""
-                 width="640" height="400" loading="lazy" decoding="async">
-            <span class="pd-network-body">
-              <span class="pd-network-name">UMSUKA Collection</span>
-              <span class="pd-network-sector">Boutique hospitality</span>
-              <span class="pd-network-go">View concept &rarr;</span>
-            </span>
-          </a>
-        </li>
-        <li class="pd-network-card">
-          <a href="https://thatha-concept.phuturedigital.co.za">
-            <img class="pd-network-thumb" src="/pd-concepts/thatha.webp" alt=""
-                 width="640" height="400" loading="lazy" decoding="async">
-            <span class="pd-network-body">
-              <span class="pd-network-name">THATHA</span>
-              <span class="pd-network-sector">Micro-retail units</span>
-              <span class="pd-network-go">View concept &rarr;</span>
-            </span>
-          </a>
-        </li>
-        <li class="pd-network-card">
-          <a href="https://africrest-concept.phuturedigital.co.za">
-            <img class="pd-network-thumb" src="/pd-concepts/africrest.webp" alt=""
-                 width="640" height="400" loading="lazy" decoding="async">
-            <span class="pd-network-body">
-              <span class="pd-network-name">Africrest</span>
-              <span class="pd-network-sector">Built-to-rent property</span>
-              <span class="pd-network-go">View concept &rarr;</span>
-            </span>
-          </a>
-        </li>
-        <li class="pd-network-card">
-          <a href="https://blueleaf-concept.phuturedigital.co.za">
-            <img class="pd-network-thumb" src="/pd-concepts/blueleaf.webp" alt=""
-                 width="640" height="400" loading="lazy" decoding="async">
-            <span class="pd-network-body">
-              <span class="pd-network-name">Blue Leaf Ice</span>
-              <span class="pd-network-sector">Ice supply &amp; delivery</span>
-              <span class="pd-network-go">View concept &rarr;</span>
-            </span>
-          </a>
-        </li>
-        <li class="pd-network-card">
-          <a href="https://thorn-grain-concept.phuturedigital.co.za">
-            <img class="pd-network-thumb" src="/pd-concepts/thorn-grain.webp" alt=""
-                 width="640" height="400" loading="lazy" decoding="async">
-            <span class="pd-network-body">
-              <span class="pd-network-name">Thorn &amp; Grain</span>
-              <span class="pd-network-sector">Online furniture store</span>
-              <span class="pd-network-go">View concept &rarr;</span>
-            </span>
-          </a>
-        </li>
-    </ul>
-    <div class="pd-network-cta">
-      <p>Want a site like this for your business?</p>
-      <a class="pd-network-btn" href="mailto:hello@phuturedigital.co.za">hello@phuturedigital.co.za</a>
-      <a class="pd-network-link" href="https://www.phuturedigital.co.za/portfolio" rel="noopener">See the full portfolio &rarr;</a>
-    </div>
-    <p class="pd-network-mark"><strong>Concept redesign.</strong> InsureSPR Health is a real practice. This is Phuture Digital&rsquo;s own take on their site, built to demonstrate design and build work. It is not their official site, is not affiliated with them, and nothing here is medical advice.</p>
-  </div>
-</section>
-<!-- pd-network:end -->
-<!-- footer:start -->
-<footer class="foot">
-  <div class="wrap foot-in">
-    <div class="foot-top">
-      <div>
-        <a class="brand" href="index.html">
-          <img src="assets/mark-light.svg" alt="" width="34" height="34">
-          <span>
-            <span class="brand-name">Insure<span>SPR</span></span>
-            <span class="brand-sub">Precision Healthcare</span>
-          </span>
-        </a>
-        <p style="margin-top:1rem;max-width:30ch">Bone and muscle health, measured properly and explained in plain English.</p>
-        <div class="foot-social">
-          <a href="https://www.facebook.com/InsureSPR/" rel="noopener" aria-label="InsureSPR Health on Facebook"><svg class="icon" aria-hidden="true"><use href="#i-facebook"></use></svg></a>
-          <a href="https://www.linkedin.com/company/InsureSPR" rel="noopener" aria-label="InsureSPR Health on LinkedIn"><svg class="icon" aria-hidden="true"><use href="#i-linkedin"></use></svg></a>
-          <a href="https://twitter.com/Bonevitalityc" rel="noopener" aria-label="InsureSPR Health on X"><svg class="icon" aria-hidden="true"><use href="#i-x"></use></svg></a>
-        </div>
-      </div>
-
-      <div>
-        <h4>Pages</h4>
-        <ul>
-          <li><a href="index.html">Home</a></li>
-          <li><a href="programmes.html">Programmes</a></li>
-          <li><a href="scan.html">The scan</a></li>
-          <li><a href="about.html">About</a></li>
-          <li><a href="learn.html">Learn</a></li>
-          <li><a href="contact.html">Contact</a></li>
-        </ul>
-      </div>
-
-      <div>
-        <h4>Programmes</h4>
-        <ul>
-          <li><a href="programmes.html#strong">InsureStrong</a></li>
-          <li><a href="programmes.html#prevent">InsurePrevent</a></li>
-          <li><a href="programmes.html#reclaim">InsureReclaim</a></li>
-          <li><a href="book.html">Book a scan</a></li>
-        </ul>
-      </div>
-
-      <div>
-        <h4>Find the practice</h4>
-        <ul>
-          <li><a href="https://maps.google.com/?q=7+Malibongwe+Drive+EmedCentre+Randburg" rel="noopener noreferrer" target="_blank">7 Malibongwe Drive, EmedCentre, Randburg</a></li>
-          <li><a href="tel:+27834507861">083 450 7861</a></li>
-          <li><a href="mailto:health@insuresprhealth.co.za">health@insuresprhealth.co.za</a></li>
-          <li><a href="contact.html">Monday to Friday, 08:00 – 17:00</a></li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="foot-bottom">
-      <p><strong>Concept demo.</strong> Designed and built by <a href="https://phuturedigital.co.za" rel="noopener noreferrer" target="_blank">Phuture Digital</a> as an independent redesign concept for InsureSPR Health. It is not the practice&rsquo;s official site and is not affiliated with or endorsed by them. Nothing here is medical advice — speak to a qualified healthcare professional. <a href="brand.html">See how it was designed and built &rarr;</a></p>
-      <p>© 2026 Phuture Digital. Practice name, contact details and article titles belong to InsureSPR Health.</p>
-    </div>
-  </div>
-</footer>
-<!-- footer:end -->
-
-<script src="site.js" defer></script>
+<footer class="foot"><div class="wrap foot-in"><div class="foot-top"><div><a class="brand" href="index.html"><img src="assets/mark-light.svg" alt="" width="34" height="34"><span><span class="brand-name">Insure<span>SPR</span></span><span class="brand-sub">Precision Healthcare</span></span></a><p class="foot-blurb">X-Ray, Medicals and Bone Density at EmedCentre in Randburg.</p></div><div><h4>Services</h4><ul><li><a href="spr.html">The SPR approach</a></li><li><a href="xray.html">X-Ray</a></li><li><a href="scanning.html">Body &amp; bone scans</a></li><li><a href="workforce.html">Workforce medicals</a></li></ul></div><div><h4>Information</h4><ul><li><a href="about.html">About the owner</a></li><li><a href="book.html">Request a booking</a></li><li><a href="contact.html">Contact &amp; directions</a></li><li><a href="privacy.html">Privacy notice</a></li></ul></div><div><h4>Find the practice</h4><ul><li><a href="https://maps.google.com/?q=7+Malibongwe+Drive+EmedCentre+Randburg" rel="noopener" target="_blank">7 Malibongwe Drive, EmedCentre, Randburg</a></li><li>Bookings: Motselisi Mosiana</li><li><a href="tel:+27834507861" data-track="call_clicked">083 450 7861</a></li><li><a href="https://wa.me/27834507861?text=Hello%20InsureSPR%2C%20I%20would%20like%20help%20with%20a%20booking." rel="noopener" target="_blank" data-track="whatsapp_clicked">WhatsApp bookings</a></li><li><a href="mailto:motselisi@bonevc.co.za" data-track="email_clicked">motselisi@bonevc.co.za</a></li><li>Monday–Friday, 08:00–17:00</li></ul></div></div><div class="foot-bottom"><p><strong>InsureSPR Precision Healthcare.</strong> This website provides service-navigation information and does not provide medical advice.</p><p><a href="privacy.html">Privacy</a> · © 2026 InsureSPR Precision Healthcare</p></div></div></footer>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"MedicalBusiness","name":"InsureSPR Precision Healthcare","description":"X-Ray, Medicals and Bone Density","email":"motselisi@bonevc.co.za","telephone":"+27834507861","address":{"@type":"PostalAddress","streetAddress":"7 Malibongwe Drive, EmedCentre","addressLocality":"Randburg","addressRegion":"Gauteng","addressCountry":"ZA"},"openingHours":"Mo-Fr 08:00-17:00","url":"https://www.insuresprhealth.co.za/"}</script>
+<script src="site.js?v=20260812f" defer></script><script src="production.js?v=20260831a" defer></script>
 </body>
 </html>

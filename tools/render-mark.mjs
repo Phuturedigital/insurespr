@@ -8,15 +8,14 @@
  *
  * Usage:  node tools/render-mark.mjs
  */
-import { createRequire } from 'node:module';
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { loadPlaywright } from './load-playwright.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = join(ROOT, 'tools', 'sheets');
-const require = createRequire('file:///C:/Users/Acer/thatha/');
-const { chromium } = require('playwright');
+const { chromium } = loadPlaywright();
 
 const mark = await readFile(join(ROOT, 'assets', 'mark.svg'), 'utf8');
 const fav = await readFile(join(ROOT, 'assets', 'favicon.svg'), 'utf8');

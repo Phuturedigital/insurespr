@@ -18,9 +18,12 @@
  * nothing. Card markup is what actually changes when a concept is added.
  */
 import { readFileSync, writeFileSync, existsSync, readdirSync } from 'node:fs';
+import { homedir } from 'node:os';
 import { join } from 'node:path';
 
-const ROOT = 'C:/Users/Acer';
+/* The sibling concept repositories live directly under the current user's
+   home directory. Preserve that target without embedding an account name. */
+const ROOT = homedir();
 const WRITE = process.argv.includes('--write');
 const ONLY = process.argv.includes('--only')
   ? process.argv[process.argv.indexOf('--only') + 1]
@@ -36,8 +39,6 @@ const CONCEPTS = [
   /* `name` and `sector` are interpolated straight into markup — write entities,
      not raw characters. A bare `&` renders fine and is still invalid HTML. */
   { key: 'insurespr', name: 'InsureSPR Health',     sector: 'Bone &amp; muscle health', url: 'https://insurespr-concept.phuturedigital.co.za' },
-  { key: 'blueleaf',  name: 'Blue Leaf Ice',        sector: 'Ice supply &amp; delivery', url: 'https://blueleaf-concept.phuturedigital.co.za' },
-  { key: 'thorn-grain', name: 'Thorn &amp; Grain',  sector: 'Online furniture store', url: 'https://thorn-grain-concept.phuturedigital.co.za' },
 ];
 
 /* Fallback disclaimer, used ONLY when a page has no pd-network block yet.
@@ -69,13 +70,6 @@ const SITES = [
     mark: '<strong>Concept redesign.</strong> Africrest Properties is a real company. This is Phuture Digital&rsquo;s own take on their brand, built to demonstrate design and build work. It is not their official site and is not affiliated with them.' },
   { key: 'insurespr', dir: 'insurespr',
     mark: '<strong>Concept redesign.</strong> InsureSPR Health is a real practice. This is Phuture Digital&rsquo;s own take on their site, built to demonstrate design and build work. It is not their official site, is not affiliated with them, and nothing here is medical advice.' },
-  { key: 'blueleaf', dir: 'blueleaf',
-    mark: '<strong>Concept redesign.</strong> Blue Leaf Ice Company is a real business. This is Phuture Digital&rsquo;s own take on their site, built to demonstrate design and build work. It is not their official site, is not affiliated with them, and no order placed on it reaches anyone.' },
-  /* Thorn &amp; Grain is a working STORE, not a brochure — basket, filters and
-     search all function. The disclaimer therefore has to close the one thing a
-     visitor could reasonably act on: that nothing can actually be bought. */
-  { key: 'thorn-grain', dir: 'thorn-grain',
-    mark: '<strong>Concept demo.</strong> Thorn &amp; Grain is an invented brand, created by Phuture Digital to demonstrate design and build work. Nothing shown is for sale, there is no checkout behind the basket, and every workshop, price and figure is illustrative.' },
 ];
 
 const card = (c) => `        <li class="pd-network-card">
