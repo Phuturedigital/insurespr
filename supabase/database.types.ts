@@ -870,6 +870,11 @@ export type Database = {
           appointment_requirement: string | null;
           audience: string;
           booking_mode: string;
+          catalogue_confirmation_evidence_ref: string | null;
+          catalogue_confirmation_scope: string | null;
+          catalogue_confirmed_at: string | null;
+          catalogue_confirmed_by: string | null;
+          catalogue_status: string;
           cash_price_cents: number | null;
           cash_price_max_cents: number | null;
           category_id: string;
@@ -899,6 +904,11 @@ export type Database = {
           appointment_requirement?: string | null;
           audience: string;
           booking_mode: string;
+          catalogue_confirmation_evidence_ref?: string | null;
+          catalogue_confirmation_scope?: string | null;
+          catalogue_confirmed_at?: string | null;
+          catalogue_confirmed_by?: string | null;
+          catalogue_status?: string;
           cash_price_cents?: number | null;
           cash_price_max_cents?: number | null;
           category_id: string;
@@ -928,6 +938,11 @@ export type Database = {
           appointment_requirement?: string | null;
           audience?: string;
           booking_mode?: string;
+          catalogue_confirmation_evidence_ref?: string | null;
+          catalogue_confirmation_scope?: string | null;
+          catalogue_confirmed_at?: string | null;
+          catalogue_confirmed_by?: string | null;
+          catalogue_status?: string;
           cash_price_cents?: number | null;
           cash_price_max_cents?: number | null;
           category_id?: string;

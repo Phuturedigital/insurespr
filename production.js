@@ -326,6 +326,43 @@
     return true;
   }
 
+  function activateBookingWhatsAppFallback(form) {
+    var gate = formGate(form);
+    if (gate) {
+      gate.disabled = false;
+      gate.removeAttribute('inert');
+    }
+    form.setAttribute('aria-busy', 'false');
+    form.dataset.ready = 'fallback';
+    form.dataset.deliveryMode = 'whatsapp-fallback';
+
+    var serverSubmit = form.querySelector('button[type="submit"]');
+    if (serverSubmit) {
+      serverSubmit.hidden = true;
+      serverSubmit.disabled = true;
+    }
+
+    var assistedWhatsApp = form.querySelector('#booking-whatsapp');
+    if (assistedWhatsApp) {
+      assistedWhatsApp.disabled = false;
+      assistedWhatsApp.classList.remove('btn--ghost');
+      assistedWhatsApp.classList.add('btn--primary');
+      var label = assistedWhatsApp.querySelector('span');
+      if (label) label.textContent = 'Copy details & open WhatsApp';
+    }
+
+    var note = form.querySelector('#booking-whatsapp-note');
+    if (note) {
+      note.textContent = 'Your scheduling details are copied on this device and WhatsApp opens to Motselisi. Paste the message and choose Send. The website does not store this fallback request, and your practical note is not copied.';
+    }
+
+    setFormGateNotice(
+      form,
+      'Book through WhatsApp now.',
+      'Choose the service, date and time below. The last step copies a short scheduling message and opens Motselisi’s WhatsApp chat. The website will not store this fallback request.'
+    );
+  }
+
   function closeFormAfterConfigFailure(form) {
     closeFormGate(
       form,
@@ -817,10 +854,6 @@
     }
 
     getConfig().then(function (config) {
-      if (!approvedPrivacyVersion(config)) {
-        activatePrivacyForm(form, 'book', config);
-        return;
-      }
       var requested = new URLSearchParams(window.location.search).get('service');
       serviceSelect.textContent = '';
       var placeholder = document.createElement('option');
@@ -869,7 +902,11 @@
         renderServiceFacts();
         loadAvailability();
       }
-      activatePrivacyForm(form, 'book', config);
+      if (activatePrivacyForm(form, 'book', config)) {
+        form.dataset.deliveryMode = 'database';
+      } else {
+        activateBookingWhatsAppFallback(form);
+      }
     }).catch(function () {
       closeFormAfterConfigFailure(form);
     });
@@ -942,6 +979,43 @@
     if (whatsappContinue) whatsappContinue.addEventListener('click', function () {
       clearStatus(form);
       if (!validateWholeBooking()) return;
+      if (form.dataset.deliveryMode === 'whatsapp-fallback') {
+        var fallbackPayload = bookingPayload();
+        var fallbackMessage = directWhatsAppBookingMessage(
+          fallbackPayload,
+          selectText(serviceSelect),
+          preferredTimeLabel()
+        );
+        var opened = window.open('https://wa.me/27834507861', '_blank', 'noopener,noreferrer');
+        whatsappContinue.disabled = true;
+        copyText(fallbackMessage).then(function (copied) {
+          completed = copied || Boolean(opened);
+          var wording = copied
+            ? 'Booking details copied. Paste them into the WhatsApp chat and choose Send.'
+            : 'WhatsApp opened, but automatic copying was unavailable. Return here and try again, or call 083 450 7861.';
+          setStatus(form, wording, copied ? 'success' : 'error');
+          if (!opened) {
+            var status = document.getElementById('book-status');
+            if (status && !status.querySelector('[data-manual-whatsapp]')) {
+              var manualLink = document.createElement('a');
+              manualLink.href = 'https://wa.me/27834507861';
+              manualLink.target = '_blank';
+              manualLink.rel = 'noopener noreferrer';
+              manualLink.dataset.manualWhatsapp = '';
+              manualLink.textContent = 'Open Motselisi’s WhatsApp chat';
+              manualLink.style.display = 'block';
+              manualLink.style.marginTop = '.6rem';
+              status.appendChild(manualLink);
+            }
+          }
+          whatsappContinue.disabled = false;
+          track('booking_whatsapp_fallback_opened', fallbackPayload.service_id);
+        }).catch(function () {
+          setStatus(form, 'WhatsApp opened, but automatic copying was unavailable. Call 083 450 7861 if you need help.', 'error');
+          whatsappContinue.disabled = false;
+        });
+        return;
+      }
       if (!validateTurnstile(form)) return;
       setBusy(form, true);
       whatsappContinue.disabled = true;
@@ -1105,6 +1179,21 @@
       'Service: ' + draft.service,
       'Preferred date: ' + formatDate(draft.preferred_date),
       'Preferred time: ' + draft.preferred_time,
+      'Patient: ' + patientLabel,
+      '',
+      'Please confirm availability.'
+    ].join('\n');
+  }
+
+  function directWhatsAppBookingMessage(payload, serviceName, preferredTime) {
+    var patientLabel = payload.patient_status === 'returning' ? 'Returning patient' : 'New patient';
+    return [
+      'Hi InsureSPR, I would like to request a booking.',
+      '',
+      'Name: ' + [payload.first_name, payload.surname].filter(Boolean).join(' '),
+      'Service: ' + (serviceName || 'Requested service'),
+      'Preferred date: ' + formatDate(payload.preferred_date),
+      'Preferred time: ' + (preferredTime || 'Any available time'),
       'Patient: ' + patientLabel,
       '',
       'Please confirm availability.'

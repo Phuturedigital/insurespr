@@ -893,6 +893,60 @@ async function testStructuredWhatsAppContinuation(browser, base) {
   });
 }
 
+async function testDirectWhatsAppFallbackWhenSecureIntakeIsClosed(browser, base) {
+  const date = futureDate(28);
+  const fallbackConfig = {
+    ...approvedConfig,
+    practice: { ...approvedConfig.practice, privacy_notice_version: 'pending-approval' },
+    intake_ready: false,
+    turnstile_site_key: null
+  };
+
+  await withContext(browser, {
+    initScript: `
+      window.__openedUrls = [];
+      window.__copiedText = '';
+      window.open = function (url) { window.__openedUrls.push(url); return {}; };
+      Object.defineProperty(navigator, 'clipboard', {
+        configurable: true,
+        value: { writeText: async function (text) { window.__copiedText = text; } }
+      });
+    `,
+    api: { config: fallbackConfig, slots: [] }
+  }, async (context, calls) => {
+    const page = await context.newPage();
+    await page.goto(`${base}/book.html`, { waitUntil: 'domcontentloaded' });
+    await page.locator('#book-form[data-ready="fallback"]').waitFor();
+
+    assert.equal(await page.locator('#book-form [data-form-gate]').evaluate((gate) => gate.disabled), false);
+    assert.equal(await page.locator('#book-form button[type="submit"]').isHidden(), true);
+    assert.equal(await page.locator('#booking-whatsapp').isEnabled(), true);
+    assert.match(await page.locator('[data-form-gate-status="book-form"] [data-form-gate-title]').textContent(), /Book through WhatsApp now/i);
+
+    await selectServiceAndDate(page, { date, service: requestService, expectNoSlots: true });
+    await fillDetails(page, { preferredTime: 'morning' });
+    await page.locator('[data-book-next="5"]').click();
+    await waitForStep(page, 5);
+    await page.locator('#booking-whatsapp').click();
+    await page.waitForFunction(() => window.__copiedText && window.__openedUrls.length === 1);
+
+    assert.equal(calls.bookings.length, 0, 'fallback must not imply that a database booking was saved');
+    const handoff = await page.evaluate(() => ({ copied: window.__copiedText, opened: window.__openedUrls[0] }));
+    assert.equal(handoff.opened, 'https://wa.me/27834507861');
+    assert.match(handoff.copied, new RegExp(`Name: ${patient.firstName} ${patient.surname}`));
+    assert.match(handoff.copied, new RegExp(`Service: ${requestService.name}`));
+    assert.match(handoff.copied, /Preferred date:/);
+    assert.match(handoff.copied, /Preferred time: Morning/);
+    assert.match(handoff.copied, /Please confirm availability\./);
+    for (const forbidden of [patient.mobile, patient.email, patient.notes]) {
+      assert.equal(handoff.copied.toLowerCase().includes(forbidden.toLowerCase()), false, 'fallback message must exclude contact details and practical notes');
+    }
+    assert.equal(new URL(handoff.opened).search, '', 'fallback must not put patient data in the WhatsApp URL');
+    assert.match(await page.locator('#book-status').textContent(), /Booking details copied/i);
+    assert.equal(page.url(), `${base}/book.html`, 'fallback keeps the form available if the patient returns from WhatsApp');
+  });
+}
+
 async function testAbandonmentEventContainsNoPii(browser, base) {
   const date = futureDate(29);
   const slot = slotFor(date, '6', 14);
@@ -971,6 +1025,7 @@ const tests = [
   ['cancellation and reschedule wording', testCancellationAndRescheduleWording],
   ['Turnstile and honeypot bot failures', testTurnstileAndHoneypotBotFailures],
   ['structured WhatsApp continuation keeps booking data out of URLs', testStructuredWhatsAppContinuation],
+  ['direct WhatsApp fallback works while secure database intake is closed', testDirectWhatsAppFallbackWhenSecureIntakeIsClosed],
   ['abandonment analytics contains no PII', testAbandonmentEventContainsNoPii],
   ['partial JavaScript failure fails closed', testPartialJavaScriptFailureFailsClosed]
 ];

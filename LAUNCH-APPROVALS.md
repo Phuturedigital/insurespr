@@ -17,6 +17,11 @@ verified fact and does not override the application’s fail-closed controls.
   Services may remain published as `needs_confirmation`; this approval does not
   verify a licence, practitioner, report route, price, medical-aid arrangement,
   preparation instruction, result time or operating capacity.
+- On 31 August 2026 the owner explicitly reconfirmed all 16 published catalogue
+  entries. This confirms catalogue membership and permission to advertise each
+  route using its current conservative, staff-confirmed wording. It does not
+  change any service's separate clinical `verification_status`, price,
+  availability, referral, preparation, reporting or medical-aid evidence.
 - InsureSPR Precision Healthcare is the responsible party for website intake.
   The owner designated Motselisi R. Mosiana as Information Officer on
   21 August 2026. This records the internal designation; the site must not
